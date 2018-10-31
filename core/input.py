@@ -9,6 +9,37 @@ class Data:
         self.meta = meta
 
 
+class Dataset:
+
+    def __init__(self, dataset):
+        self.dataset = dataset
+
+    def get(self, label, filter={}, groups=None):
+        res = []
+        if groups is None:
+            return [ (data.data,data.meta[label]) for data in self.dataset]
+        else:
+            return
+        labels = [data.meta[label] for data in self.dataset]
+        groups = [self.name for index in range(0, len(self.images))]
+        return paths, labels, names
+
+    def meta(self):
+        # If nothing in list
+        if not self.dataset:
+            return None
+
+        # Init keys
+        valid_keys = self.dataset[0].meta.keys()
+
+        # Check all keys exist
+        for data in self.dataset:
+            keys = data.meta.keys()
+            valid_keys = list(set(valid_keys) & set(keys))
+
+        return valid_keys
+
+
 class Spectrum(Data):
 
     def __init__(self, data, wavelength, meta={}):
@@ -49,9 +80,6 @@ class Spectrum(Data):
         self.data = interp(wavelength, self.wavelength, self.data)
         self.wavelength = wavelength
 
-# class Datas:
-#
-#     def __init__(self):
 
 # class Patient:
 #     def __init__(self):
