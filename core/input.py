@@ -8,6 +8,12 @@ class Data:
         self.data = data
         self.meta = meta
 
+    def is_in_meta(self, check):
+        for key, value in check.items():
+            if self.meta[key] not in value:
+                return False
+        return True
+
 
 class Dataset:
 
@@ -15,14 +21,10 @@ class Dataset:
         self.dataset = dataset
 
     def get(self, label, filter={}, groups=None):
-        res = []
         if groups is None:
-            return [ (data.data,data.meta[label]) for data in self.dataset]
+            return [(data.data, data.meta[label]) for data in self.dataset if data.is_in_meta(filter)]
         else:
-            return
-        labels = [data.meta[label] for data in self.dataset]
-        groups = [self.name for index in range(0, len(self.images))]
-        return paths, labels, names
+            return [(data.data, data.meta[label], data.meta[groups]) for data in self.dataset if data.is_in_meta(filter)]
 
     def meta(self):
         # If nothing in list
