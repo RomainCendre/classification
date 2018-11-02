@@ -12,12 +12,10 @@ if __name__ == "__main__":
     spectra_temoins = Reader(';').read_table('{home}\\Data\\Neck\\Patients.csv'.format(home=home_path))
     spectra = spectra_patients + spectra_temoins
 
-    print(spectra.methods())
-#
-# # Preprocessed spectra
-# spectra_full.apply_average_filter(5)
-# spectra_full.apply_scaling()
-# spectra_full.change_wavelength_all(arange(start=445, stop=962, step=1))
+    spectra.apply_method(name='apply_average_filter', parameters=[5])
+    spectra.apply_method(name='apply_scaling')
+    spectra.apply_method(name='change_wavelength', parameters=[arange(start=445, stop=962, step=1)])
+
 # spectra_full.filter_label(['Sain', 'Cancer'])
 #
 # # Get testing cases

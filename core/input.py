@@ -53,9 +53,9 @@ class Dataset:
 
         return valid_methods
 
-    def apply_method(self, name, parameters):
+    def apply_method(self, name, parameters=[]):
         for data in self.dataset:
-            getattr(data, name)(parameters)
+            getattr(data, name)(*parameters)
 
 class Spectrum(Data):
 
