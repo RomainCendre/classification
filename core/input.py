@@ -20,27 +20,42 @@ class Dataset:
     def __init__(self, dataset):
         self.dataset = dataset
 
+    def __add__(self, other):
+        """Add two spectra object
+
+        Args:
+             other (:obj:'Spectra'): A second spectra object to add.
+        """
+        dataset = []
+        dataset.extend(self.dataset)
+        dataset.extend(other.dataset)
+        return Dataset(dataset)
+
     def get(self, label, filter={}, groups=None):
         if groups is None:
             return [(data.data, data.meta[label]) for data in self.dataset if data.is_in_meta(filter)]
         else:
             return [(data.data, data.meta[label], data.meta[groups]) for data in self.dataset if data.is_in_meta(filter)]
 
-    def meta(self):
+    def methods(self):
         # If nothing in list
         if not self.dataset:
             return None
 
         # Init keys
-        valid_keys = self.dataset[0].meta.keys()
+        data = self.dataset[0]
+        valid_methods = [ method for method in dir(data) if callable(getattr(data, method))]
 
         # Check all keys exist
         for data in self.dataset:
-            keys = data.meta.keys()
-            valid_keys = list(set(valid_keys) & set(keys))
+            methods = [ method for method in dir(data) if callable(getattr(data, method))]
+            valid_methods = list(set(valid_methods) & set(methods))
 
-        return valid_keys
+        return valid_methods
 
+    def apply_method(self, name, parameters):
+        for data in self.dataset:
+            getattr(data, name)(parameters)
 
 class Spectrum(Data):
 
