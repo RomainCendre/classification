@@ -3,10 +3,10 @@ from os import makedirs
 from os.path import expanduser, normpath, join, exists
 from sklearn.model_selection import GroupKFold
 
-from IO.otorhinolaryngology import Reader
-from IO.writer import ResultsWriter, StatisticsWriter
 from core.classification import Classifier
 from core.models import Models
+from IO.otorhinolaryngology import Reader
+from IO.writer import ResultsWriter, StatisticsWriter
 
 
 def compute_data(data_set, out_dir, name, filter_by, meta):
@@ -45,25 +45,18 @@ if __name__ == "__main__":
     spectra.apply_method(name='apply_scaling')
     spectra.apply_method(name='change_wavelength', parameters={'wavelength': arange(start=445, stop=962, step=1)})
 
-    # All data
-    name_exp = 'Results_All'
-    filters = {'label': ['Sain', 'Cancer']}
+    filters = {
+        'Results_All': {},
+        'Results_SvsC': {'label': ['Sain', 'Cancer']},
+        'Results_SvsP': {'label': ['Sain', 'Precancer']},
+        'Results_PvsC': {'label': ['Precancer', 'Cancer']},
+    }
     metas = ['patient_label', 'device', 'label', 'location']
-    compute_data(data_set=spectra, out_dir=output_dir, name=name_exp, filter_by=filters, meta=metas)
+
+    for item_name, item_filter in filters.items():
+        compute_data(data_set=spectra, out_dir=output_dir, name=item_name, filter_by=item_filter, meta=metas)
 
 
-
-#
-# # Get testing cases
-# processes = ClassificationProcess.get_testing_process()
-# pipe_pca, param_pca = ClassificationProcess.get_pca_process()
-#
-# inner_cv = GroupKFold(n_splits=5)
-# outer_cv = GroupKFold(n_splits=5)
-#
-# # multiprocessing requires the fork to happen in a __main__ protected
-# # block
-# if __name__ == "__main__":
 #
 #     # All data
 #     spectra = deepcopy(spectra_full)
