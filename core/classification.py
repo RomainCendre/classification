@@ -76,7 +76,7 @@ class Classifier:
         # Encode labels to go from string to int
         folds = []
         predictions = zeros(len(labels), dtype='int')
-        probabilities = zeros((len(labels), 2))
+        probabilities = zeros((len(labels), len(list(set(labels)))))
         for fold, (train, test) in enumerate(self.__outer_cv.split(X=features, y=labels, groups=groups)):
             grid_search = GridSearchCV(estimator=self.__pipeline, param_grid=self.__params, cv=self.__inner_cv,
                                        scoring=self.scoring, verbose=1, iid=False)
