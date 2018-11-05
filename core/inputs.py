@@ -35,11 +35,11 @@ class Dataset:
         for data in self.dataset:
             getattr(data, name)(**parameters)
 
-    def get(self, label, filter={}, groups=None):
-        if groups is None:
-            return [(data.data, data.meta[label]) for data in self.dataset if data.is_in_meta(filter)]
-        else:
-            return [(data.data, data.meta[label], data.meta[groups]) for data in self.dataset if data.is_in_meta(filter)]
+    def get_data(self, filter_by={}):
+        return [data.data for data in self.dataset if data.is_in_meta(filter_by)]
+
+    def get_meta(self, meta, filter_by={}):
+        return [data.meta[meta] for data in self.dataset if data.is_in_meta(filter_by)]
 
     def meta(self):
         # If nothing in list
