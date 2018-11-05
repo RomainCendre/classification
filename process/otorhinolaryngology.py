@@ -1,37 +1,57 @@
 from numpy import arange
+from os import makedirs
+from os.path import expanduser, normpath, join, exists
 from sklearn.model_selection import GroupKFold
 
-from os.path import expanduser
 from IO.otorhinolaryngology import Reader
 from IO.writer import ResultsWriter, StatisticsWriter
 from core.classification import Classifier
 from core.models import Models
 
+
+def compute_data(data_set, out_dir, name, filter_by, meta):
+    # Get process
+    pipe, param = Models.get_pls_process()
+
+    # Write statistics on current data
+    StatisticsWriter(data_set).write_result(metas=meta, dir_name=out_dir, name=name, filter_by=filter_by)
+
+    # Classify and write data results
+    classifier = Classifier(pipeline=pipe, params=param,
+                            inner_cv=GroupKFold(n_splits=5), outer_cv=GroupKFold(n_splits=5))
+    results = [classifier.evaluate(features=spectra.get_data(filter_by=filter_by),
+                                   labels=spectra.get_meta(meta='label', filter_by=filter_by),
+                                   groups=spectra.get_meta(meta='patient_name', filter_by=filter_by))]
+    ResultsWriter(results).write_results('Cancer', dir_name=out_dir, name=name)
+
+
 if __name__ == "__main__":
-    # Load data
+
     home_path = expanduser("~")
-    spectra_patients = Reader(';').read_table('{home}\\Data\\Neck\\Patients.csv'.format(home=home_path))
-    spectra_temoins = Reader(';').read_table('{home}\\Data\\Neck\\Patients.csv'.format(home=home_path))
+
+    # Output dir
+    output_dir = normpath('{home}/Results/Neck/'.format(home=home_path))
+    if not exists(output_dir):
+        makedirs(output_dir)
+
+    # Load data
+    data_dir = normpath('{home}/Data/Neck/'.format(home=home_path))
+    spectra_patients = Reader(';').read_table(join(data_dir, 'Patients.csv'))
+    spectra_temoins = Reader(';').read_table(join(data_dir, 'Temoins.csv'))
     spectra = spectra_patients + spectra_temoins
 
+    # Filter data
     spectra.apply_method(name='apply_average_filter', parameters={'size': 5})
     spectra.apply_method(name='apply_scaling')
     spectra.apply_method(name='change_wavelength', parameters={'wavelength': arange(start=445, stop=962, step=1)})
 
-    pipe_pca, param_pca = Models.get_pls_process()
-
     # All data
-    results = []
-    filter_by = {'label': ['Sain', 'Cancer']}
-    metas_stat = ['patient_label', 'device', 'label', 'location']
-    print(spectra.meta())
-    # classifier = Classifier(pipeline=pipe_pca, params=param_pca,
-    #                         inner_cv=GroupKFold(n_splits=5), outer_cv=GroupKFold(n_splits=5))
-    # results.append(classifier.evaluate(features=spectra.get_data(filter_by=filter_by),
-    #                                    labels=spectra.get_meta(meta='label', filter_by=filter_by),
-    #                                    groups=spectra.get_meta(meta='patient_name', filter_by=filter_by)))
-    StatisticsWriter(spectra).write_stats(metas=metas_stat, filter_by=filter_by)
-    ResultsWriter(results).write_results('Cancer', 'C:\\Users\\Romain\\Desktop\\', 'Results_All')
+    name_exp = 'Results_All'
+    filters = {'label': ['Sain', 'Cancer']}
+    metas = ['patient_label', 'device', 'label', 'location']
+    compute_data(data_set=spectra, out_dir=output_dir, name=name_exp, filter_by=filters, meta=metas)
+
+
 
 #
 # # Get testing cases
