@@ -1,4 +1,4 @@
-from numpy import correlate, ones, interp
+from numpy import correlate, ones, interp, asarray
 from sklearn import preprocessing
 
 
@@ -36,10 +36,10 @@ class Dataset:
             getattr(data, name)(**parameters)
 
     def get_data(self, filter_by={}):
-        return [data.data for data in self.dataset if data.is_in_meta(filter_by)]
+        return asarray([data.data for data in self.dataset if data.is_in_meta(filter_by)])
 
     def get_meta(self, meta, filter_by={}):
-        return [data.meta[meta] for data in self.dataset if data.is_in_meta(filter_by)]
+        return asarray([data.meta[meta] for data in self.dataset if data.is_in_meta(filter_by)])
 
     def meta(self):
         # If nothing in list
