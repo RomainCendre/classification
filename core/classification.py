@@ -79,7 +79,7 @@ class Classifier:
         probabilities = zeros((len(labels), 2))
         for fold, (train, test) in enumerate(self.__outer_cv.split(X=features, y=labels, groups=groups)):
             grid_search = GridSearchCV(estimator=self.__pipeline, param_grid=self.__params, cv=self.__inner_cv,
-                                       scoring=self.scoring, verbose=1)
+                                       scoring=self.scoring, verbose=1, iid=False)
             grid_search.fit(X=features[train], y=labels[train], groups=groups[train])
 
             # Folds storage
@@ -100,6 +100,7 @@ class Classifier:
         predictions = labels_encode.inverse_transform(predictions)
         name = "_".join(self.__pipeline.named_steps)
         return Results(labels, folds, predictions, map_index, probabilities, name)
+
 
 class ClassifierDeep:
 
