@@ -15,10 +15,10 @@ class Data:
         return True
 
 
-class Dataset:
+class DataSet:
 
-    def __init__(self, dataset):
-        self.dataset = dataset
+    def __init__(self, data_set):
+        self.data_set = data_set
 
     def __add__(self, other):
         """Add two spectra object
@@ -26,54 +26,61 @@ class Dataset:
         Args:
              other (:obj:'Spectra'): A second spectra object to add.
         """
-        dataset = []
-        dataset.extend(self.dataset)
-        dataset.extend(other.dataset)
-        return Dataset(dataset)
+        data_set = []
+        data_set.extend(self.data_set)
+        data_set.extend(other.data_set)
+        return DataSet(data_set)
 
     def apply_method(self, name, parameters={}):
-        for data in self.dataset:
+        for data in self.data_set:
             getattr(data, name)(**parameters)
 
     def get_data(self, filter_by={}):
-        return asarray([data.data for data in self.dataset if data.is_in_meta(filter_by)])
+        return asarray([data.data for data in self.__filter_by(filter_by)])
 
     def get_meta(self, meta, filter_by={}):
-        return asarray([data.meta[meta] for data in self.dataset if data.is_in_meta(filter_by)])
+        return asarray([data.meta[meta] for data in self.__filter_by(filter_by)])
 
-    def meta(self):
-        # If nothing in list
-        if not self.dataset:
-            return None
+    def meta(self, filter_by={}):
+        filtered_gen = self.__filter_by(filter_by)
         # Init keys
-        valid_keys = self.dataset[0].meta.keys()
+        try:
+            valid_keys = next(filtered_gen).meta.keys()
+        except StopIteration:
+            return None
+
         # Check all keys exist
-        for data in self.dataset:
+        for data in filtered_gen:
             keys = data.meta.keys()
             valid_keys = list(set(valid_keys) & set(keys))
         return valid_keys
 
     def methods(self):
         # If nothing in list
-        if not self.dataset:
+        if not self.data_set:
             return None
 
         # Init keys
-        data = self.dataset[0]
-        valid_methods = [ method for method in dir(data) if callable(getattr(data, method))]
+        data = self.data_set[0]
+        valid_methods = [method for method in dir(data) if callable(getattr(data, method))]
 
         # Check all keys exist
-        for data in self.dataset:
-            methods = [ method for method in dir(data) if callable(getattr(data, method))]
+        for data in self.data_set:
+            methods = [method for method in dir(data) if callable(getattr(data, method))]
             valid_methods = list(set(valid_methods) & set(methods))
 
         return valid_methods
+
+    def __filter_by(self, filter_by):
+        for data in self.data_set:
+            if data.is_in_meta(filter_by):
+                yield data
 
 
 class Spectrum(Data):
 
     def __init__(self, data, wavelength, meta={}):
-        super(Spectrum, self).__init__(data,meta)
+        super(Spectrum, self).__init__(data, meta)
         self.wavelength = wavelength
 
     def apply_average_filter(self, size):

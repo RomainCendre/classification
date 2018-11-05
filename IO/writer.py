@@ -8,25 +8,22 @@ from sklearn.metrics import auc, roc_curve
 
 class StatisticsWriter:
 
-    def __init__(self, spectra):
-        self.spectra = spectra
+    def __init__(self, data_set):
+        self.data_set = data_set
 
-    def write_result(self, dir_name, name):
-        self.write_stats(path=join(dir_name, name + "_stat.pdf"))
+    def write_result(self, metas, dir_name, name, filter_by={}):
+        self.write_stats(path=join(dir_name, name + "_stat.pdf"), metas=metas, filter_by=filter_by)
 
-    def write_stats(self, path=None):
-        # Get meta data to create chart
-        meta = self.spectra.get_meta_info()
-        nb_chart = len(meta.items())
+    def write_stats(self, metas, path=None, filter_by={}):
+        nb_chart = len(metas)
 
         # Browse each kind of parameter
-        for index, (title, list) in enumerate(meta.items()):
-            keys = Counter(list).keys()
-            values = Counter(list).values()
+        for index, meta in enumerate(metas):
+            counter = Counter(list(self.data_set.get_meta(meta=meta, filter_by=filter_by)))
             pyplot.subplot(ceil(nb_chart/2), 2, index+1)
-            pyplot.pie(values, labels=keys, autopct='%1.1f%%', startangle=90)
+            pyplot.pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
             pyplot.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-            pyplot.title(title)
+            pyplot.title(meta)
 
         if path is None:
             pyplot.show()

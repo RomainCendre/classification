@@ -3,7 +3,7 @@ from sklearn.model_selection import GroupKFold
 
 from os.path import expanduser
 from IO.otorhinolaryngology import Reader
-from IO.writer import ResultsWriter
+from IO.writer import ResultsWriter, StatisticsWriter
 from core.classification import Classifier
 from core.models import Models
 
@@ -18,20 +18,21 @@ if __name__ == "__main__":
     spectra.apply_method(name='apply_scaling')
     spectra.apply_method(name='change_wavelength', parameters={'wavelength': arange(start=445, stop=962, step=1)})
 
-    pipe_pca, param_pca = Models.get_pca_process()
+    pipe_pca, param_pca = Models.get_pls_process()
 
     # All data
     results = []
     filter_by = {'label': ['Sain', 'Cancer']}
-    classifier = Classifier(pipeline=pipe_pca, params=param_pca,
-                            inner_cv=GroupKFold(n_splits=5), outer_cv=GroupKFold(n_splits=5))
-    results.append(classifier.evaluate(features=spectra.get_data(filter_by=filter_by),
-                                       labels=spectra.get_meta(meta='label', filter_by=filter_by),
-                                       groups=spectra.get_meta(meta='patient_name', filter_by=filter_by)))
+    metas_stat = ['patient_label', 'device', 'label', 'location']
+    print(spectra.meta())
+    # classifier = Classifier(pipeline=pipe_pca, params=param_pca,
+    #                         inner_cv=GroupKFold(n_splits=5), outer_cv=GroupKFold(n_splits=5))
+    # results.append(classifier.evaluate(features=spectra.get_data(filter_by=filter_by),
+    #                                    labels=spectra.get_meta(meta='label', filter_by=filter_by),
+    #                                    groups=spectra.get_meta(meta='patient_name', filter_by=filter_by)))
+    StatisticsWriter(spectra).write_stats(metas=metas_stat, filter_by=filter_by)
     ResultsWriter(results).write_results('Cancer', 'C:\\Users\\Romain\\Desktop\\', 'Results_All')
 
-    # datas = dataset.get(label='Malignant', filter={'modality': 'Microscopy'})
-    # spectra.filter_label(['Sain', 'Cancer'])
 #
 # # Get testing cases
 # processes = ClassificationProcess.get_testing_process()
