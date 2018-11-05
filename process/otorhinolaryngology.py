@@ -15,8 +15,18 @@ if __name__ == "__main__":
     spectra.apply_method(name='apply_average_filter', parameters=[5])
     spectra.apply_method(name='apply_scaling')
     spectra.apply_method(name='change_wavelength', parameters=[arange(start=445, stop=962, step=1)])
+    print( spectra.meta() )
 
-# spectra_full.filter_label(['Sain', 'Cancer'])
+    # All data
+    results = []
+    classifier = SpectraClassifier(pipeline=pipe_pca, params=param_pca,
+                                   inner_cv=inner_cv, outer_cv=outer_cv)
+    results.append(classifier.evaluate(features=spectra.get_features(), labels=spectra.get_labels(),
+                                       groups=spectra.get_patients_names()))
+    SpectrumWriter(results).write_results('Cancer', 'C:\\Users\\Romain\\Desktop\\', 'Results_All')
+
+    #datas = dataset.get(label='Malignant', filter={'modality': 'Microscopy'})
+    #spectra.filter_label(['Sain', 'Cancer'])
 #
 # # Get testing cases
 # processes = ClassificationProcess.get_testing_process()

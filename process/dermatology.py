@@ -17,6 +17,12 @@ if __name__ == '__main__':
     home_path = expanduser("~")
     dataset = Reader(';').scan_folder('{home}\\Data\\Skin\\Patients'.format(home=home_path))
     datas = dataset.get(label='Malignant', filter={'modality': 'Microscopy'})
+
+    # Tensorboard tool launch
+    # tb_tool = TensorBoardTool(work_dir)
+    # tb_tool.write_batch()
+    # tb_tool.run()
+
     # labels[labels == ''] = '0'
     # # Adding process to watch our training process
     # work_dir = '{home}\\Graph\\{time}'.format(home=home_path, time=time())

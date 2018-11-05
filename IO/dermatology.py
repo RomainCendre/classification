@@ -6,7 +6,7 @@ from os.path import isdir, join
 from PIL import Image
 from numpy import genfromtxt, asarray, savetxt
 from pyocr import builders
-from core.input import Data, Dataset
+from core.inputs import Data, Dataset
 
 
 class Reader:

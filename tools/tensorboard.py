@@ -30,11 +30,11 @@ class TensorBoardTool:
         file.close()
 
 
-class TrainValTensorBoard(TensorBoard):
+class TensorBoardWriter(TensorBoard):
     def __init__(self, log_dir='./logs', **kwargs):
         # Make the original `TensorBoard` log to a subdirectory 'training'
         training_log_dir = os.path.join(log_dir, 'training')
-        super(TrainValTensorBoard, self).__init__(training_log_dir, **kwargs)
+        super(TensorBoardWriter, self).__init__(training_log_dir, **kwargs)
 
         # Log the validation metrics to a separate subdirectory
         self.val_log_dir = os.path.join(log_dir, 'validation')
@@ -42,7 +42,7 @@ class TrainValTensorBoard(TensorBoard):
     def set_model(self, model):
         # Setup writer for validation metrics
         self.val_writer = tensorflow.summary.FileWriter(self.val_log_dir)
-        super(TrainValTensorBoard, self).set_model(model)
+        super(TensorBoardWriter, self).set_model(model)
 
     def on_epoch_end(self, epoch, logs=None):
         # Pop the validation logs and handle them separately with
@@ -60,10 +60,10 @@ class TrainValTensorBoard(TensorBoard):
 
         # Pass the remaining logs to `TensorBoard.on_epoch_end`
         logs = {k: v for k, v in logs.items() if not k.startswith('val_')}
-        super(TrainValTensorBoard, self).on_epoch_end(epoch, logs)
+        super(TensorBoardWriter, self).on_epoch_end(epoch, logs)
 
     def on_train_end(self, logs=None):
-        super(TrainValTensorBoard, self).on_train_end(logs)
+        super(TensorBoardWriter, self).on_train_end(logs)
         self.val_writer.close()
 
 
