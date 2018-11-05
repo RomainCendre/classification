@@ -31,11 +31,27 @@ class Dataset:
         dataset.extend(other.dataset)
         return Dataset(dataset)
 
+    def apply_method(self, name, parameters=[]):
+        for data in self.dataset:
+            getattr(data, name)(*parameters)
+
     def get(self, label, filter={}, groups=None):
         if groups is None:
             return [(data.data, data.meta[label]) for data in self.dataset if data.is_in_meta(filter)]
         else:
             return [(data.data, data.meta[label], data.meta[groups]) for data in self.dataset if data.is_in_meta(filter)]
+
+    def meta(self):
+        # If nothing in list
+        if not self.dataset:
+            return None
+        # Init keys
+        valid_keys = self.dataset[0].meta.keys()
+        # Check all keys exist
+        for data in self.dataset:
+            keys = data.meta.keys()
+            valid_keys = list(set(valid_keys) & set(keys))
+        return valid_keys
 
     def methods(self):
         # If nothing in list
@@ -52,10 +68,6 @@ class Dataset:
             valid_methods = list(set(valid_methods) & set(methods))
 
         return valid_methods
-
-    def apply_method(self, name, parameters=[]):
-        for data in self.dataset:
-            getattr(data, name)(*parameters)
 
 class Spectrum(Data):
 
@@ -96,6 +108,7 @@ class Spectrum(Data):
         """
         self.data = interp(wavelength, self.wavelength, self.data)
         self.wavelength = wavelength
+
 
 
 # class Patient:
