@@ -3,6 +3,8 @@ from sklearn.model_selection import GroupKFold
 
 from os.path import expanduser
 from IO.otorhinolaryngology import Reader
+from IO.writer import ResultsWriter
+from core.classification import Classifier
 
 if __name__ == "__main__":
 
@@ -12,18 +14,18 @@ if __name__ == "__main__":
     spectra_temoins = Reader(';').read_table('{home}\\Data\\Neck\\Patients.csv'.format(home=home_path))
     spectra = spectra_patients + spectra_temoins
 
-    spectra.apply_method(name='apply_average_filter', parameters=[5])
+    spectra.apply_method(name='apply_average_filter', parameters={'size': 5})
     spectra.apply_method(name='apply_scaling')
-    spectra.apply_method(name='change_wavelength', parameters=[arange(start=445, stop=962, step=1)])
+    spectra.apply_method(name='change_wavelength', parameters={'wavelength': arange(start=445, stop=962, step=1)})
     print( spectra.meta() )
 
     # All data
     results = []
-    classifier = SpectraClassifier(pipeline=pipe_pca, params=param_pca,
-                                   inner_cv=inner_cv, outer_cv=outer_cv)
+    classifier = Classifier(pipeline=pipe_pca, params=param_pca,
+                                   inner_cv=GroupKFold(n_splits=5), outer_cv=GroupKFold(n_splits=5))
     results.append(classifier.evaluate(features=spectra.get_features(), labels=spectra.get_labels(),
                                        groups=spectra.get_patients_names()))
-    SpectrumWriter(results).write_results('Cancer', 'C:\\Users\\Romain\\Desktop\\', 'Results_All')
+    ResultsWriter(results).write_results('Cancer', 'C:\\Users\\Romain\\Desktop\\', 'Results_All')
 
     #datas = dataset.get(label='Malignant', filter={'modality': 'Microscopy'})
     #spectra.filter_label(['Sain', 'Cancer'])

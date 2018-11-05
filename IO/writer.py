@@ -4,7 +4,6 @@ import markups
 from matplotlib import pyplot
 from os.path import join
 from sklearn.metrics import auc, roc_curve
-from core.SpectrumCore import Spectra, Spectrum
 
 
 class StatisticsWriter:
