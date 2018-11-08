@@ -1,7 +1,29 @@
+from numpy import array
 from pywt import dwt
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cross_decomposition import PLSRegression
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from skimage.feature import greycomatrix, greycoprops
+import mahotas
+
+
+class ImageDescriptorTransform(BaseEstimator, TransformerMixin):
+
+    def transform(self, x, y=None, copy=True):
+        """
+        This method is the main part of this transformer.
+        Return a wavelet transform, as specified mode.
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+             copy (:obj): Not used.
+        """
+        features = []
+        gcm = greycomatrix(x, [5], [0], 256, symmetric=True, normed=True)
+        for cur_prop in ['contrast', 'dissimilarity', 'homogeneity', 'energy', 'correlation', 'ASM']:
+            features.extend(greycoprops(gcm, prop=cur_prop))
+        return array(features).ravel()
 
 
 class DWTTransform(BaseEstimator, TransformerMixin):

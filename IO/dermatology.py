@@ -6,7 +6,7 @@ from os.path import isdir, join
 from PIL import Image
 from numpy import genfromtxt, asarray, savetxt
 from pyocr import builders
-from core.inputs import Data, Dataset
+from core.inputs import Data, DataSet
 
 
 class Reader:
@@ -75,7 +75,7 @@ class Reader:
                 print('Patient {}'.format(subdir))
             datas.extend(patient_datas)
 
-        return Dataset(datas)
+        return DataSet(datas)
 
 
 class ConfocalBuilder(builders.TextBuilder):

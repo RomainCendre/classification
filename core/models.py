@@ -7,11 +7,13 @@ from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
+from skimage.feature import greycomatrix, greycoprops
 
 from core.transforms import DWTTransform, PLSTransform
 
 
 class Models:
+
 
     @staticmethod
     def get_testing_process():

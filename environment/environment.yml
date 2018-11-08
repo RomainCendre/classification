@@ -85,6 +85,7 @@ dependencies:
   - zeromq=4.2.5=he025d50_1
   - zlib=1.2.11=h8395fce_2
   - pip:
+    - "--editable=git+https://github.com/luispedro/mahotas.git"
     - cloudpickle==0.6.1
     - dask==0.19.4
     - html5lib==1.0.1
