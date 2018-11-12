@@ -1,6 +1,6 @@
 from os import makedirs
-from time import time
-from os.path import expanduser
+from time import gmtime, strftime, time
+from os.path import expanduser, normpath
 from sklearn.model_selection import GroupKFold
 
 from IO.dermatology import Reader
@@ -16,18 +16,13 @@ if __name__ == '__main__':
 
     # Load data references
     home_path = expanduser("~")
-    dataset = Reader(';').scan_folder('{home}\\Data\\Skin\\Patients'.format(home=home_path))
+    dataset = Reader(';').scan_folder(normpath('{home}/Data/Skin/Patients'.format(home=home_path)))
     datas = dataset.get(label='Malignant', filter={'modality': 'Microscopy'})
 
-    labels[labels == ''] = '0'
     # Adding process to watch our training process
-    work_dir = '{home}\\Graph\\{time}'.format(home=home_path, time=time())
+    current_time = strftime('%Y_%m_%d_%H_%M_%S', gmtime(time()))
+    work_dir = normpath('{output_dir}/Graph/{time}'.format(output_dir=output_dir, time=current_time))
     makedirs(work_dir)
-
-    # Tensorboard tool launch
-    # tb_tool = TensorBoardTool(work_dir)
-    # tb_tool.write_batch()
-    # tb_tool.run()
 
     # Tensorboard tool launch
     # tb_tool = TensorBoardTool(work_dir)

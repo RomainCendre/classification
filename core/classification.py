@@ -5,6 +5,7 @@ from keras.applications import InceptionResNetV2
 from keras.callbacks import EarlyStopping
 from keras.layers import Dense
 from keras.optimizers import SGD
+from keras_preprocessing.image import ImageDataGenerator
 from numpy import load, save, concatenate, uint8
 
 
@@ -69,9 +70,11 @@ class Classifier:
         labels_encode = preprocessing.LabelEncoder()
         labels_encode.fit(labels)
         labels = labels_encode.transform(labels)
-        groups_encode = preprocessing.LabelEncoder()
-        groups_encode.fit(groups)
-        groups = groups_encode.transform(groups)
+
+        if groups:
+            groups_encode = preprocessing.LabelEncoder()
+            groups_encode.fit(groups)
+            groups = groups_encode.transform(groups)
 
         # Encode labels to go from string to int
         folds = []
@@ -80,7 +83,11 @@ class Classifier:
         for fold, (train, test) in enumerate(self.__outer_cv.split(X=features, y=labels, groups=groups)):
             grid_search = GridSearchCV(estimator=self.__pipeline, param_grid=self.__params, cv=self.__inner_cv,
                                        scoring=self.scoring, verbose=1, iid=False)
-            grid_search.fit(X=features[train], y=labels[train], groups=groups[train])
+
+            if groups:
+                grid_search.fit(X=features[train], y=labels[train], groups=groups[train])
+            else:
+                grid_search.fit(X=features[train], y=labels[train])
 
             # Folds storage
             folds.append(test)
@@ -147,66 +154,6 @@ class ClassifierDeep:
         f, ax = plt.subplots(1, 2)
         ax.imshow(overlay(jet_heatmap, img))
 
-        # labels = array([0] * (nb_train_samples / 2) + [1] * (nb_train_samples / 2))
-        #
-        # model = Sequential()
-        # model.add(Flatten(input_shape=data.shape[1:]))
-        # model.add(Dense(256, activation='relu'))
-        # model.add(Dropout(0.5))
-        # model.add(Dense(1, activation='sigmoid'))
-        #
-        # model.compile(optimizer='rmsprop',
-        #               loss='binary_crossentropy', metrics=['accuracy'])
-        #
-        # model.fit(train_data, train_labels,
-        #           epochs=epochs,
-        #           batch_size=batch_size,
-        #           validation_data=(validation_data, validation_labels))
-        #
-        # # Encode labels to go from string to int
-        # labels_encode = preprocessing.LabelEncoder()
-        # labels_encode.fit(labels)
-        # labels = labels_encode.transform(labels)
-        # groups_encode = preprocessing.LabelEncoder()
-        # groups_encode.fit(groups)
-        # groups = groups_encode.transform(groups)
-        #
-        # # Encode labels to go from string to int
-        # folds = []
-        # predictions = zeros(len(labels), dtype='int')
-        # probabilities = zeros((len(labels), 2))
-        #
-        # for fold, (train, valid) in enumerate(self.__outer_cv.split(X=paths, y=labels, groups=groups)):
-        #     # Announce fold and work dir
-        #     print('Fold number {}'.format(fold+1))
-        #     current_dir = join(self.work_dir, 'Fold {fold}'.format(fold=(fold + 1)))
-        #
-        #     # Prepare data
-        #     generator = ResourcesGenerator(rescale=1. / 255)
-        #     train_generator = generator.flow_from_paths(paths[train], labels[train], batch_size=32)
-        #     valid_generator = generator.flow_from_paths(paths[valid], labels[valid], batch_size=32)
-        #
-        #     # Create model and fit
-        #     model = SkinClassifier.get_confocal_model()
-        #     callbacks = SkinClassifier.get_callbacks(current_dir)
-        #     model.fit_generator(generator=train_generator, epochs=100, validation_data=valid_generator, callbacks=callbacks)
-        #
-        #     # Folds storage
-        #     folds.append(valid)
-        #
-        #     # Compute ROC curve data
-        #     probas = model.predict_generator(valid_generator)
-        #     probabilities[valid] = probas
-        #     # Kept predictions
-        #     predictions[valid] = SkinClassifier.predict_classes(probas)
-        #
-        # map_index = unique(labels)
-        # map_index.sort()
-        # map_index = list(labels_encode.inverse_transform(map_index))
-        # labels = labels_encode.inverse_transform(labels)
-        # predictions = labels_encode.inverse_transform(predictions)
-        # return SkinResults(labels, folds, predictions, map_index, probabilities, "Deep")
-
 
     def get_confocal_model(self):
         # Set layers to non trainable
@@ -237,9 +184,11 @@ class ClassifierDeep:
         labels_encode = preprocessing.LabelEncoder()
         labels_encode.fit(labels)
         labels = labels_encode.transform(labels)
-        groups_encode = preprocessing.LabelEncoder()
-        groups_encode.fit(groups)
-        groups = groups_encode.transform(groups)
+
+        if groups:
+            groups_encode = preprocessing.LabelEncoder()
+            groups_encode.fit(groups)
+            groups = groups_encode.transform(groups)
 
         # Encode labels to go from string to int
         folds = []
@@ -257,8 +206,8 @@ class ClassifierDeep:
             valid_generator = generator.flow_from_paths(paths[valid], labels[valid], batch_size=32)
 
             # Create model and fit
-            model = Classifier.get_confocal_model()
-            callbacks = Classifier.get_callbacks(current_dir)
+            model = self.get_confocal_model()
+            callbacks = ClassifierDeep.get_callbacks(current_dir)
             model.fit_generator(generator=train_generator, epochs=100, validation_data=valid_generator, callbacks=callbacks)
 
             # Folds storage
@@ -268,7 +217,7 @@ class ClassifierDeep:
             probas = model.predict_generator(valid_generator)
             probabilities[valid] = probas
             # Kept predictions
-            predictions[valid] = Classifier.predict_classes(probas)
+            predictions[valid] = ClassifierDeep.predict_classes(probas)
 
         map_index = unique(labels)
         map_index.sort()
@@ -276,6 +225,7 @@ class ClassifierDeep:
         labels = labels_encode.inverse_transform(labels)
         predictions = labels_encode.inverse_transform(predictions)
         return Results(labels, folds, predictions, map_index, probabilities, "Deep")
+
 
     @staticmethod
     def predict_classes(probabilities):
