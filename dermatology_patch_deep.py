@@ -45,6 +45,5 @@ if __name__ == "__main__":
     tb_tool.run()
 
     classifier = ClassifierDeep(outer_cv=StratifiedKFold(n_splits=5), work_dir=work_dir)
-    classifier.evaluate(paths=paths, labels=labels)
     result = classifier.evaluate(paths=paths, labels=labels)
     ResultWriter(result).write_results(dir_name=output_dir, name='Test')
