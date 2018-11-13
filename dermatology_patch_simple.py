@@ -2,13 +2,15 @@ from glob import glob
 from os import makedirs
 from os.path import expanduser, normpath, exists, join
 
-from numpy import array, full, asarray, concatenate, geomspace
-from sklearn.model_selection import StratifiedKFold
+from numpy import array, full, asarray, concatenate, geomspace, logspace
+from sklearn.metrics import classification_report
+from sklearn.model_selection import StratifiedKFold, train_test_split, GridSearchCV
 
 import mahotas
 from PIL import Image
 from sklearn.pipeline import Pipeline
-from sklearn.svm import SVC
+from sklearn.preprocessing import Normalizer, StandardScaler
+from sklearn.svm import SVC, LinearSVC
 
 from IO.writer import ResultWriter
 from core.classification import Classifier
@@ -19,7 +21,7 @@ def read_haralick(input_dir, label):
     features = []
     for file in files:
         image = array(Image.open(file))
-        features.append(mahotas.features.haralick(image).flatten())
+        features.append(mahotas.features.haralick(image[:, :, 0]).mean(axis=0))
     features = asarray(features)
     return features, full(features.shape[0], label)
 
@@ -41,14 +43,15 @@ if __name__ == "__main__":
     features = concatenate((features, features_m), axis=0)
     labels = concatenate((labels, labels_m), axis=0)
 
-    # Classify data
-    pipe = Pipeline([
-    ('clf', SVC(kernel='rbf', class_weight='balanced', probability=True))
-    ])
+    features = StandardScaler().fit_transform(features)
+    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size = 0.40)
+
     # Define parameters to validate through grid CV
+    pipe = Pipeline([
+    ('clf', SVC(kernel='linear', probability=True))
+    ])
     parameters = {
-        'clf__C': geomspace(0.01, 1000, 6),
-        'clf__gamma': geomspace(0.01, 1000, 6)
+        'clf__C': geomspace(0.01, 1000, 6)
     }
 
     # Classify and write data results
@@ -56,3 +59,18 @@ if __name__ == "__main__":
                             inner_cv=StratifiedKFold(n_splits=5), outer_cv=StratifiedKFold(n_splits=5))
     result = classifier.evaluate(features=features, labels=labels)
     ResultWriter(result).write_results(dir_name=output_dir, name='Test')
+
+    # Define parameters to validate through grid CV
+    # pipe = Pipeline([
+    # ('clf', SVC(kernel='rbf', probability=True))
+    # ])
+    # parameters = {
+    #     'clf__C': logspace(-2, 10, 13),
+    #     'clf__gamma': logspace(-9, 3, 13)
+    # }
+    # # Classify and write data results
+    # classifier = Classifier(pipeline=pipe, params=parameters,
+    #                         inner_cv=StratifiedKFold(n_splits=5), outer_cv=StratifiedKFold(n_splits=5))
+    # result = classifier.evaluate(features=features, labels=labels)
+    # ResultWriter(result).write_results(dir_name=output_dir, name='Test')
+
