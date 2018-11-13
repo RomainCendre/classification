@@ -73,14 +73,14 @@ class ResultWriter:
             fpr, tpr, threshold = roc_curve(self.result.labels,
                                             self.result.probabilities[:, positive_index],
                                             pos_label=positive_class)
-            auc_val = auc(fpr, tpr)
 
-            axe.plot(fpr, tpr, label=r'ROC %s (AUC = %0.2f)' % (self.result.name, auc_val), lw=2, alpha=.8)
+            axe.plot(fpr, tpr, label=r'ROC %s (AUC = %0.2f)' % (self.result.name, auc(fpr, tpr)), lw=2, alpha=.8)
             axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r', label='Luck', alpha=.8)
-            axe.set(adjustable='box-forced', aspect='equal')
-            axe.set_xlabel('False Positive Rate (1-Specificity)')
-            axe.set_ylabel('True Positive Rate (Sensitivity)')
-            axe.set_title('Receiver operating characteristic - Label {label}'.format(label=positive_class))
+            axe.set(adjustable='box', aspect='equal')
+            axe.set_xlabel(title='False Positive Rate (1-Specificity)')
+            axe.set_ylabel(title='True Positive Rate (Sensitivity)')
+            axe.set_title(title='Receiver operating characteristic - Label {label}'.format(label=positive_class))
+            axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
 
         if path is None:
             pyplot.show()
