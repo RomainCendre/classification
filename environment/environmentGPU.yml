@@ -3,7 +3,8 @@ channels:
   - aaronzs
   - defaults
 dependencies:
-  - absl-py=0.4.1=py36_0
+
+  - absl-py=0.4.0=py36h28b3542_0
   - astor=0.7.1=py36_0
   - backcall=0.1.0=py36_0
   - blas=1.0=mkl
@@ -39,13 +40,13 @@ dependencies:
   - libsodium=1.0.16=h9d3ae62_0
   - libtiff=4.0.9=h36446d0_2
   - markdown=2.6.11=py36_0
-  - matplotlib=2.2.3=py36hd159220_0
-  - mkl=2019.0=117
+  - matplotlib=3.0.0=py36hd159220_0
+  - mkl=2018.0.3=1
   - mkl_fft=1.0.4=py36h1e22a9b_1
   - mkl_random=1.0.1=py36h77b88f5_1
-  - numpy=1.14.5=py36h9fa60d3_4
-  - numpy-base=1.14.5=py36h5c71026_4
-  - olefile=0.46=py36_0
+  - numpy=1.15.1=py36ha559c80_0
+  - numpy-base=1.15.1=py36h8128ebf_0
+  - olefile=0.45.1=py36_0
   - openssl=1.0.2p=hfa6e2cd_0
   - parso=0.3.1=py36_0
   - pickleshare=0.7.5=py36_0
@@ -62,8 +63,8 @@ dependencies:
   - pyyaml=3.13=py36hfa6e2cd_0
   - pyzmq=17.1.2=py36hfa6e2cd_0
   - qt=5.9.6=vc14h62aca36_0
-  - scikit-learn=0.19.1=py36hae9bb9f_0
-  - scipy=1.1.0=py36hc28095f_0
+  - scikit-learn=0.20.0=py36heebcf9a_1
+  - scipy=1.1.0=py36h4f6bf74_1
   - setuptools=40.2.0=py36_0
   - simplegeneric=0.8.1=py36_2
   - sip=4.19.8=py36h6538335_0
