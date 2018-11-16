@@ -56,10 +56,8 @@ if __name__ == "__main__":
     features_m, labels_m = extract_deepfeatures(malignant_dir, 'malin')
 
     features = concatenate((features, features_m), axis=0)
-    labels = concatenate((labels, labels_m), axis=0)
-
     features = StandardScaler().fit_transform(features)
-    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size = 0.40)
+    labels = concatenate((labels, labels_m), axis=0)
 
     pipe = Pipeline([('clf', SVC(kernel='linear', probability=True))])
     parameters = {'clf__C': geomspace(0.01, 1000, 6)}

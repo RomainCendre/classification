@@ -40,11 +40,10 @@ if __name__ == "__main__":
     malignant_dir = normpath('{home}/Data/Skin/Thumbnails/Malin'.format(home=home_path))
     features, labels = extract_haralick(benign_dir, 'benin')
     features_m, labels_m = extract_haralick(malignant_dir, 'malin')
-    features = concatenate((features, features_m), axis=0)
-    labels = concatenate((labels, labels_m), axis=0)
 
+    features = concatenate((features, features_m), axis=0)
     features = StandardScaler().fit_transform(features)
-    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size = 0.40)
+    labels = concatenate((labels, labels_m), axis=0)
 
     # Define parameters to validate through grid CV
     pipe = Pipeline([
