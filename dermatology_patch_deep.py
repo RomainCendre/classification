@@ -46,4 +46,4 @@ if __name__ == "__main__":
 
     classifier = ClassifierDeep(outer_cv=StratifiedKFold(n_splits=5), work_dir=work_dir)
     result = classifier.evaluate(paths=paths, labels=labels)
-    ResultWriter(result).write_results(dir_name=output_dir, name='Test')
+    ResultWriter(result).write_results(dir_name=output_dir, name='DeepLearning')

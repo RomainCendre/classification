@@ -16,7 +16,7 @@ from IO.writer import ResultWriter
 from core.classification import Classifier
 
 
-def read_haralick(input_dir, label):
+def extract_haralick(input_dir, label):
     files = glob(join(input_dir, '*.bmp'))
     features = []
     for file in files:
@@ -38,8 +38,8 @@ if __name__ == "__main__":
     # Load data
     benign_dir = normpath('{home}/Data/Skin/Thumbnails/Benin'.format(home=home_path))
     malignant_dir = normpath('{home}/Data/Skin/Thumbnails/Malin'.format(home=home_path))
-    features, labels = read_haralick(benign_dir, 'benin')
-    features_m, labels_m = read_haralick(malignant_dir, 'malin')
+    features, labels = extract_haralick(benign_dir, 'benin')
+    features_m, labels_m = extract_haralick(malignant_dir, 'malin')
     features = concatenate((features, features_m), axis=0)
     labels = concatenate((labels, labels_m), axis=0)
 
@@ -58,19 +58,5 @@ if __name__ == "__main__":
     classifier = Classifier(pipeline=pipe, params=parameters,
                             inner_cv=StratifiedKFold(n_splits=5), outer_cv=StratifiedKFold(n_splits=5))
     result = classifier.evaluate(features=features, labels=labels)
-    ResultWriter(result).write_results(dir_name=output_dir, name='Test')
-
-    # Define parameters to validate through grid CV
-    # pipe = Pipeline([
-    # ('clf', SVC(kernel='rbf', probability=True))
-    # ])
-    # parameters = {
-    #     'clf__C': logspace(-2, 10, 13),
-    #     'clf__gamma': logspace(-9, 3, 13)
-    # }
-    # # Classify and write data results
-    # classifier = Classifier(pipeline=pipe, params=parameters,
-    #                         inner_cv=StratifiedKFold(n_splits=5), outer_cv=StratifiedKFold(n_splits=5))
-    # result = classifier.evaluate(features=features, labels=labels)
-    # ResultWriter(result).write_results(dir_name=output_dir, name='Test')
+    ResultWriter(result).write_results(dir_name=output_dir, name='HaralickClassifier')
 
