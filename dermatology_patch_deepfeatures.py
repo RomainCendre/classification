@@ -9,10 +9,9 @@ from sklearn.decomposition import PCA
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
-from time import gmtime, strftime, time
 
 from numpy import geomspace, concatenate, full, asarray
-from sklearn.model_selection import StratifiedKFold, train_test_split
+from sklearn.model_selection import StratifiedKFold
 
 from IO.writer import ResultWriter
 from core.classification import Classifier
@@ -35,6 +34,7 @@ def extract_deepfeatures (input_dir, label):
 
 
 if __name__ == "__main__":
+    # TODO DummyClassifier
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
@@ -81,7 +81,7 @@ if __name__ == "__main__":
                      ('clf', SVC(kernel='linear', probability=True))])
 
     # Define parameters to validate through grid CV
-    parameters = {'pca__n_components': [0.90],
+    parameters = {'pca__n_components': [0.95],
                   'clf__C': geomspace(0.01, 1000, 6)}
 
     # Classify and write data results

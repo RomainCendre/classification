@@ -2,15 +2,14 @@ from glob import glob
 from os import makedirs
 from os.path import expanduser, normpath, exists, join
 
-from numpy import array, full, asarray, concatenate, geomspace, logspace
-from sklearn.metrics import classification_report
-from sklearn.model_selection import StratifiedKFold, train_test_split, GridSearchCV
+from numpy import array, full, asarray, concatenate, geomspace
+from sklearn.model_selection import StratifiedKFold
 
 import mahotas
 from PIL import Image
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import Normalizer, StandardScaler
-from sklearn.svm import SVC, LinearSVC
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
 
 from IO.writer import ResultWriter
 from core.classification import Classifier
