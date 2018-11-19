@@ -14,6 +14,7 @@ from sklearn.svm import SVC, LinearSVC
 
 from IO.writer import ResultWriter
 from core.classification import Classifier
+from tools.tensorboard import DataProjector
 
 
 def extract_haralick(input_dir, label):
@@ -31,7 +32,7 @@ if __name__ == "__main__":
     home_path = expanduser("~")
 
     # Output dir
-    output_dir = normpath('{home}/Results/Skin/Thumbnails'.format(home=home_path))
+    output_dir = normpath('{home}/Results/Skin/Thumbnails/Haralick_Classifier'.format(home=home_path))
     if not exists(output_dir):
         makedirs(output_dir)
 
@@ -41,21 +42,21 @@ if __name__ == "__main__":
     features, labels = extract_haralick(benign_dir, 'benin')
     features_m, labels_m = extract_haralick(malignant_dir, 'malin')
 
+    # Format Data
     features = concatenate((features, features_m), axis=0)
     features = StandardScaler().fit_transform(features)
     labels = concatenate((labels, labels_m), axis=0)
 
+    # Write data to visualize it
+    DataProjector.project_data(datas=features, labels=labels, path=join(output_dir, 'Projector'))
+
     # Define parameters to validate through grid CV
-    pipe = Pipeline([
-    ('clf', SVC(kernel='linear', probability=True))
-    ])
-    parameters = {
-        'clf__C': geomspace(0.01, 1000, 6)
-    }
+    pipe = Pipeline([('clf', SVC(kernel='linear', probability=True))])
+    parameters = {'clf__C': geomspace(0.01, 1000, 6)}
 
     # Classify and write data results
     classifier = Classifier(pipeline=pipe, params=parameters,
                             inner_cv=StratifiedKFold(n_splits=5), outer_cv=StratifiedKFold(n_splits=5))
     result = classifier.evaluate(features=features, labels=labels)
-    ResultWriter(result).write_results(dir_name=output_dir, name='HaralickClassifier')
+    ResultWriter(result).write_results(dir_name=output_dir, name='Results')
 
