@@ -21,8 +21,8 @@ class TensorBoardTool:
         # Remove http messages
         log = logging.getLogger('werkzeug').setLevel(logging.ERROR)
         # Start tensorboard server
-        tb = program.TensorBoard(default.PLUGIN_LOADERS, default.get_assets_zip_provider())
-        tb.configure(argv=['--logdir', self.dir_path])
+        tb = program.TensorBoard(default.get_plugins(), default.get_assets_zip_provider())
+        tb.configure(argv=[None, '--logdir', self.dir_path])
         url = tb.launch()
         sys.stdout.write('TensorBoard at %s \n' % url)
 

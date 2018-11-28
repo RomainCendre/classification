@@ -2,9 +2,16 @@ import numpy as np
 
 import os
 
-from keras_preprocessing.image import Iterator, backend, ImageDataGenerator, load_img, img_to_array, array_to_img
+from keras.utils import Sequence
+from keras_preprocessing.image import Iterator, ImageDataGenerator, load_img, img_to_array, array_to_img
 from numpy import asarray
 
+
+from keras_preprocessing import get_keras_submodule
+from keras_preprocessing.image import Iterator, ImageDataGenerator, load_img, img_to_array, array_to_img
+from numpy import asarray
+
+backend = get_keras_submodule('backend')
 
 class ResourcesGenerator(ImageDataGenerator):
 
@@ -15,7 +22,6 @@ class ResourcesGenerator(ImageDataGenerator):
                         save_to_dir=None,
                         save_prefix='',
                         save_format='png',
-                        follow_links=False,
                         subset=None,
                         interpolation='nearest'):
         return ResourcesIterator(
@@ -27,12 +33,11 @@ class ResourcesGenerator(ImageDataGenerator):
             save_to_dir=save_to_dir,
             save_prefix=save_prefix,
             save_format=save_format,
-            follow_links=follow_links,
             subset=subset,
             interpolation=interpolation)
 
 
-class ResourcesIterator(Iterator):
+class ResourcesIterator(Iterator, Sequence):
 
     def __init__(self, filenames, labels, image_data_generator,
                  target_size=(256, 256), color_mode='rgb',
@@ -40,7 +45,6 @@ class ResourcesIterator(Iterator):
                  batch_size=32, shuffle=True, seed=None,
                  data_format=None,
                  save_to_dir=None, save_prefix='', save_format='png',
-                 follow_links=False,
                  subset=None,
                  interpolation='nearest'):
         if data_format is None:

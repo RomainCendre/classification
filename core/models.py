@@ -1,4 +1,8 @@
 from itertools import product
+
+from keras import Model
+from keras.layers import Dense
+from keras.applications import InceptionV3
 from numpy import arange, geomspace
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.neighbors import KNeighborsClassifier
@@ -7,18 +11,34 @@ from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
-from skimage.feature import greycomatrix, greycoprops
-
 from core.transforms import DWTTransform, PLSTransform
 
 
-class Models:
+class DeepModels:
 
+    @staticmethod
+    def get_confocal_model():
+        # We get the deep extractor part as include_top is false
+        inception_model = InceptionV3(weights='imagenet', include_top=False, pooling='avg')
+
+        # Now we customize the output consider our application field
+        prediction_layers = Dense(2, activation='softmax', name='predictions')(inception_model.output)
+
+        # And defined model based on our input and next output
+        model = Model(inputs=inception_model.input, outputs=prediction_layers)
+        for layer in model.layers[:len(inception_model.layers)]:
+            layer.trainable = False
+        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+        return model, inception_model
+
+
+class SimpleModels:
 
     @staticmethod
     def get_testing_process():
-        extractors = Models.get_extractors()
-        estimators = Models.get_estimators()
+        extractors = SimpleModels.get_extractors()
+        estimators = SimpleModels.get_estimators()
 
         processes = []
         for prod in product(extractors, estimators):
