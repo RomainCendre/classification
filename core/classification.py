@@ -1,5 +1,6 @@
 import matplotlib.cm as cm
 from keras import Model
+from keras.models import clone_model
 from matplotlib import pyplot as plt
 from numpy import concatenate, uint8, unique, zeros
 from os.path import join
@@ -177,6 +178,10 @@ class ClassifierDeep:
             print('Fold number {}'.format(fold+1))
             current_dir = join(self.work_dir, 'Fold {fold}'.format(fold=(fold + 1)))
 
+            # Clone locally model
+            cur_model = clone_model(self.model)
+            cur_model.set_weights(self.model.get_weights())
+
             # Prepare data
             # train_seq = ImageSequence(paths[train], labels[train], batch_size=32)
             # valid_seq = ImageSequence(paths[valid], labels[valid], batch_size=32)
@@ -186,13 +191,13 @@ class ClassifierDeep:
 
             # Create model and fit
             callbacks = ClassifierDeep.get_callbacks(current_dir)
-            self.model.fit_generator(generator=train_generator, epochs=100, validation_data=valid_generator, callbacks=callbacks)
+            cur_model.fit_generator(generator=train_generator, epochs=100, validation_data=valid_generator, callbacks=callbacks)
 
             # Folds storage
             folds.append(valid)
 
             # Compute ROC curve data
-            probas = self.model.predict_generator(valid_generator)
+            probas = cur_model.predict_generator(valid_generator)
             probabilities[valid] = probas
             # Kept predictions
             predictions[valid] = ClassifierDeep.__predict_classes(probabilities=probas)
