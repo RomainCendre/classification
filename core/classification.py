@@ -181,11 +181,12 @@ class ClassifierDeep:
             # Clone locally model
             cur_model = clone_model(self.model)
             cur_model.set_weights(self.model.get_weights())
+            cur_model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
             # Prepare data
             # train_seq = ImageSequence(paths[train], labels[train], batch_size=32)
             # valid_seq = ImageSequence(paths[valid], labels[valid], batch_size=32)
-            generator = ResourcesGenerator(rescale=1. / 255, preprocessing_function=self.preprocess)
+            generator = ResourcesGenerator(preprocessing_function=self.preprocess)
             train_generator = generator.flow_from_paths(paths[train], labels[train], batch_size=32)
             valid_generator = generator.flow_from_paths(paths[valid], labels[valid], batch_size=32)
 

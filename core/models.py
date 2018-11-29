@@ -29,7 +29,6 @@ class DeepModels:
         model = Model(inputs=inception_model.input, outputs=prediction_layers)
         for layer in model.layers[:len(inception_model.layers)]:
             layer.trainable = False
-        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
         return model, preprocess_input, inception_model
 
