@@ -3,6 +3,7 @@ from itertools import product
 from keras import Model
 from keras.layers import Dense
 from keras.applications import InceptionV3
+from keras.applications.inception_v3 import preprocess_input
 from numpy import arange, geomspace
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.neighbors import KNeighborsClassifier
@@ -30,7 +31,7 @@ class DeepModels:
             layer.trainable = False
         model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-        return model, inception_model
+        return model, preprocess_input, inception_model
 
 
 class SimpleModels:

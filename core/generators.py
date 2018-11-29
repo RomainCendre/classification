@@ -3,10 +3,6 @@ import numpy as np
 import os
 
 from keras.utils import Sequence
-from keras_preprocessing.image import Iterator, ImageDataGenerator, load_img, img_to_array, array_to_img
-from numpy import asarray
-
-
 from keras_preprocessing import get_keras_submodule
 from keras_preprocessing.image import Iterator, ImageDataGenerator, load_img, img_to_array, array_to_img
 from numpy import asarray
@@ -171,11 +167,6 @@ class ResourcesIterator(Iterator, Sequence):
         return batch_x, batch_y
 
     def next(self):
-        """For python 2.x.
-
-        # Returns
-            The next batch.
-        """
         with self.lock:
             index_array = next(self.index_generator)
         # The transformation of images is not under thread lock

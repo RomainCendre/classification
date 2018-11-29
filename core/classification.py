@@ -101,12 +101,13 @@ class Classifier:
 
 class ClassifierDeep:
 
-    def __init__(self, model, outer_cv, work_dir, scoring=None):
+    def __init__(self, model, outer_cv, work_dir, preprocess, scoring=None):
         self.model = model
         self.outer_cv = outer_cv
         self.work_dir = work_dir
         self.scoring = scoring
         self.generator = ResourcesGenerator(rescale=1. / 255)
+        self.preprocess = preprocess
 
     def __get_features_extractor(self):
         model = Model(inputs=self.model.input)
@@ -179,7 +180,7 @@ class ClassifierDeep:
             # Prepare data
             # train_seq = ImageSequence(paths[train], labels[train], batch_size=32)
             # valid_seq = ImageSequence(paths[valid], labels[valid], batch_size=32)
-            generator = ResourcesGenerator(rescale=1. / 255)
+            generator = ResourcesGenerator(rescale=1. / 255, preprocessing_function=self.preprocess)
             train_generator = generator.flow_from_paths(paths[train], labels[train], batch_size=32)
             valid_generator = generator.flow_from_paths(paths[valid], labels[valid], batch_size=32)
 
