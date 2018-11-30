@@ -4,8 +4,10 @@ from os.path import expanduser, normpath, exists, join, isfile
 
 from PIL import Image
 from keras.applications.inception_v3 import InceptionV3, preprocess_input
+from keras.wrappers.scikit_learn import KerasClassifier
 from numpy import array, expand_dims, save, load
 from sklearn.decomposition import PCA
+from sklearn.dummy import DummyClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
@@ -15,13 +17,14 @@ from sklearn.model_selection import StratifiedKFold
 
 from IO.writer import ResultWriter
 from core.classification import Classifier
+from core.models import DeepModels
 from tools.limitations import Parameters
 from tools.tensorboard import DataProjector
 
 
 def extract_deepfeatures (input_dir, label):
     # Init model
-    model = InceptionV3(weights='imagenet', include_top=False, pooling='max')
+    model = InceptionV3(weights='imagenet', include_top=False, pooling='avg')
 
     files = glob(join(input_dir, '*.bmp'))
     features = []
@@ -73,16 +76,45 @@ if __name__ == "__main__":
     # Save data as projector to visualize them
     DataProjector.project_data(datas=features, labels=labels, path=join(output_dir, 'Projector'))
 
-    # Avoid this instructions in a first step to avoid kind of overfit
-    # pipe = Pipeline([('clf', SVC(kernel='linear', probability=True))])
-    # parameters = {'clf__C': geomspace(0.01, 1000, 6)}
+    ######
+    # Dummy learning pipe
+    pipe = Pipeline([('pca', PCA()),
+                     ('clf', DummyClassifier())])
 
+    # Define parameters to validate through grid CV
+    parameters = {'pca__n_components': [0.95]}
+
+    # Classify and write data results
+    classifier = Classifier(pipeline=pipe, params=parameters,
+                            inner_cv=StratifiedKFold(n_splits=5), outer_cv=StratifiedKFold(n_splits=5))
+    result = classifier.evaluate(features=features, labels=labels)
+    ResultWriter(result).write_results(dir_name=output_dir, name='Results')
+
+
+    ######
+    # Machine learning pipe
     pipe = Pipeline([('pca', PCA()),
                      ('clf', SVC(kernel='linear', probability=True))])
 
     # Define parameters to validate through grid CV
     parameters = {'pca__n_components': [0.95],
                   'clf__C': geomspace(0.01, 1000, 6)}
+
+    # Classify and write data results
+    classifier = Classifier(pipeline=pipe, params=parameters,
+                            inner_cv=StratifiedKFold(n_splits=5), outer_cv=StratifiedKFold(n_splits=5))
+    result = classifier.evaluate(features=features, labels=labels)
+    ResultWriter(result).write_results(dir_name=output_dir, name='Results')
+
+    ######
+    # Deep learning pipe
+    keras_model = KerasClassifier(build_fn=DeepModels.get_confocal_final, epochs=100, batch_size=10, verbose=0)
+    pipe = Pipeline([('pca', PCA()),
+                     ('clf', keras_model)])
+
+    # Define parameters to validate through grid CV
+    parameters = {'pca__n_components': [0.95]}
+                  # 'clf__optimizer' : ['SGD', 'RMSprop', 'Adagrad', 'Adadelta', 'Adam', 'Adamax', 'Nadam']}
 
     # Classify and write data results
     classifier = Classifier(pipeline=pipe, params=parameters,

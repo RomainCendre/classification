@@ -1,6 +1,6 @@
 from itertools import product
 
-from keras import Model
+from keras import Model, Sequential
 from keras.layers import Dense
 from keras.applications import InceptionV3
 from keras.applications.inception_v3 import preprocess_input
@@ -32,6 +32,13 @@ class DeepModels:
 
         return model, preprocess_input, inception_model
 
+    @staticmethod
+    def get_confocal_final(optimizer='adam'):
+        # Now we customize the output consider our application field
+        model = Sequential()
+        model.add(Dense(2, activation='softmax', name='predictions'))
+        model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+        return model
 
 class SimpleModels:
 

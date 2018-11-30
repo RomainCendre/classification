@@ -9,6 +9,7 @@ from numpy import asarray
 
 backend = get_keras_submodule('backend')
 
+
 class ResourcesGenerator(ImageDataGenerator):
 
     def flow_from_paths(self, filenames, labels,

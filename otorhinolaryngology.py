@@ -4,14 +4,14 @@ from os.path import expanduser, normpath, join, exists
 from sklearn.model_selection import GroupKFold
 
 from core.classification import Classifier
-from core.models import Models
+from core.models import SimpleModels
 from IO.otorhinolaryngology import Reader
 from IO.writer import ResultWriter, StatisticsWriter
 
 
 def compute_data(data_set, out_dir, name, filter_by, meta):
     # Get process
-    pipe, param = Models.get_pls_process()
+    pipe, param = SimpleModels.get_pls_process()
 
     # Write statistics on current data
     StatisticsWriter(data_set).write_result(metas=meta, dir_name=out_dir, name=name, filter_by=filter_by)

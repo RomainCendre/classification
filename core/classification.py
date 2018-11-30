@@ -1,6 +1,8 @@
 import matplotlib.cm as cm
 from keras import Model
+from keras.callbacks import ReduceLROnPlateau
 from keras.models import clone_model
+from keras.optimizers import Adam
 from matplotlib import pyplot as plt
 from numpy import concatenate, uint8, unique, zeros
 from os.path import join
@@ -62,7 +64,7 @@ class Classifier:
         labels_encode.fit(labels)
         labels = labels_encode.transform(labels)
 
-        if groups:
+        if groups is not None:
             groups_encode = preprocessing.LabelEncoder()
             groups_encode.fit(groups)
             groups = groups_encode.transform(groups)
@@ -75,7 +77,7 @@ class Classifier:
             grid_search = GridSearchCV(estimator=self.__pipeline, param_grid=self.__params, cv=self.__inner_cv,
                                        scoring=self.scoring, verbose=1, iid=False)
 
-            if groups:
+            if groups is not None:
                 grid_search.fit(X=features[train], y=labels[train], groups=groups[train])
             else:
                 grid_search.fit(X=features[train], y=labels[train])
@@ -153,6 +155,7 @@ class ClassifierDeep:
     def get_callbacks(directory):
         callbacks = []
         callbacks.append(TensorBoardWriter(log_dir=directory))
+        callbacks.append(ReduceLROnPlateau(monitor='loss', factor=0.1, patience=5, verbose=1, epsilon=1e-4, mode='min'))
         # callbacks.append(EarlyStopping(monitor='val_loss', min_delta=0.0001, patience=5, verbose=1, mode='auto'))
         return callbacks
 
@@ -163,7 +166,7 @@ class ClassifierDeep:
         labels_encode.fit(labels)
         labels = labels_encode.transform(labels)
 
-        if groups:
+        if groups is not None:
             groups_encode = preprocessing.LabelEncoder()
             groups_encode.fit(groups)
             groups = groups_encode.transform(groups)
@@ -181,7 +184,8 @@ class ClassifierDeep:
             # Clone locally model
             cur_model = clone_model(self.model)
             cur_model.set_weights(self.model.get_weights())
-            cur_model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
+            # opt_adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+            cur_model.compile(optimizer="adam", loss='categorical_crossentropy', metrics=['accuracy'])
 
             # Prepare data
             # train_seq = ImageSequence(paths[train], labels[train], batch_size=32)
