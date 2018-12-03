@@ -36,26 +36,27 @@ class Results:
         self.predictions = predictions
         self.probabilities = probabilities
 
-    def __std_scores(self, mean_dict):
-        scores = []
-        for fold in self.folds:
-            scores.append(classification_report(self.labels[fold], self.predictions[fold], output_dict=True))
-
-        # Browse reference dict
-        for label, val in mean_dict.items():
-            for metrics in val.keys():
-                values = [score[label][metrics] for score in scores]
-                mean_dict[label][metrics] = '{mean:0.2f}±{std:0.2f}'.format(mean=mean_dict[label][metrics], std=std(values))
-
-        return mean_dict
-
     def __report_values(self, use_std=True):
         report = classification_report(self.labels, self.predictions, output_dict=True)
-        # Return report in it simple way
+
         if use_std is False:
-            return report
-        # Return report with std
-        return self.__std_scores(report)
+            for label, val in report.items():
+                for metrics in val.keys():
+                    report[label][metrics] = '{mean:0.2f}'.format(mean=report[label][metrics])
+        else:
+            scores = []
+            for fold in self.folds:
+                scores.append(classification_report(self.labels[fold], self.predictions[fold], output_dict=True))
+
+            # Browse reference dict
+            for label, val in report.items():
+                for metrics in val.keys():
+                    values = [score[label][metrics] for score in scores]
+                    report[label][metrics] = '{mean:0.2f}±{std:0.2f}'.format(mean=report[label][metrics],
+                                                                             std=std(values))
+
+        # Return report
+        return report
 
     def report_values_fold(self, fold=None):
         return classification_report(self.labels[fold], self.predictions[fold], output_dict=True)
@@ -72,14 +73,14 @@ class Results:
             label_report = dict_report[label]
             report += '|' + label.capitalize()
             for key in label_report.keys():
-                report += '|{:.2f}'.format(label_report[key])
+                report += '|{value}'.format(value=label_report[key])
             report += '|\n'
 
         # Average
         avg_report = dict_report['weighted avg']
         report += '|' + 'weighted avg'.capitalize()
         for key in avg_report.keys():
-            report += '|{:.2f}'.format(avg_report[key])
+            report += '|{value}'.format(value=avg_report[key])
         report += '|\n'
 
         return report

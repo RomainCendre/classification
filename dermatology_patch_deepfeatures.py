@@ -88,7 +88,7 @@ if __name__ == "__main__":
     classifier = Classifier(pipeline=pipe, params=parameters,
                             inner_cv=StratifiedKFold(n_splits=5), outer_cv=StratifiedKFold(n_splits=5))
     result = classifier.evaluate(features=features, labels=labels)
-    ResultWriter(result).write_results(dir_name=output_dir, name='Results')
+    ResultWriter(result).write_results(dir_name=output_dir, name='Dummy')
 
 
     ######
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     classifier = Classifier(pipeline=pipe, params=parameters,
                             inner_cv=StratifiedKFold(n_splits=5), outer_cv=StratifiedKFold(n_splits=5))
     result = classifier.evaluate(features=features, labels=labels)
-    ResultWriter(result).write_results(dir_name=output_dir, name='Results')
+    ResultWriter(result).write_results(dir_name=output_dir, name='Machine Learning')
 
     ######
     # Deep learning pipe
@@ -120,4 +120,4 @@ if __name__ == "__main__":
     classifier = Classifier(pipeline=pipe, params=parameters,
                             inner_cv=StratifiedKFold(n_splits=5), outer_cv=StratifiedKFold(n_splits=5))
     result = classifier.evaluate(features=features, labels=labels)
-    ResultWriter(result).write_results(dir_name=output_dir, name='Results')
+    ResultWriter(result).write_results(dir_name=output_dir, name='Deep Learning')
