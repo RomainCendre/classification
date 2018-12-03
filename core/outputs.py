@@ -1,3 +1,6 @@
+from collections import defaultdict
+from itertools import chain
+
 from numpy import std, average, asarray
 from numpy.ma import array
 from sklearn.metrics import precision_recall_fscore_support, classification_report
@@ -33,49 +36,50 @@ class Results:
         self.predictions = predictions
         self.probabilities = probabilities
 
-    def std_scores(self):
+    def __std_scores(self, mean_dict):
         scores = []
         for fold in self.folds:
-            scores.append(precision_recall_fscore_support(self.labels[fold], self.predictions[fold],
-                                                          labels=self.ulabels, average=None))
-        scores = array(scores)
-        scores = std(scores, axis=0)
+            scores.append(classification_report(self.labels[fold], self.predictions[fold], output_dict=True))
 
-        return scores.tolist()
+        # Browse reference dict
+        for label, val in mean_dict.items():
+            for metrics in val.keys():
+                values = [score[label][metrics] for score in scores]
+                mean_dict[label][metrics] = '{mean:0.2f}±{std:0.2f}'.format(mean=mean_dict[label][metrics], std=std(values))
 
-    def mean_scores(self):
-        return precision_recall_fscore_support(self.labels, self.predictions,
-                                               labels=self.ulabels, average=None)
+        return mean_dict
 
-    def average_scores(self):
-        p, r, f1, s = precision_recall_fscore_support(self.labels, self.predictions,
-                                                      labels=self.ulabels, average=None)
-        return [average(p, weights=s), average(r, weights=s), average(f1, weights=s), sum(s)]
+    def __report_values(self, use_std=True):
+        report = classification_report(self.labels, self.predictions, output_dict=True)
+        # Return report in it simple way
+        if use_std is False:
+            return report
+        # Return report with std
+        return self.__std_scores(report)
+
+    def report_values_fold(self, fold=None):
+        return classification_report(self.labels[fold], self.predictions[fold], output_dict=True)
 
     def report_scores(self, use_std=True):
         print(classification_report(self.labels, self.predictions))
-        ap, ar, af1, asup = self.mean_scores()
-        sp, sr, sf1, ssup = self.std_scores()
+        dict_report = self.__report_values(use_std=use_std)
         headers = ["Labels", "Precision", "Recall", "F1-score", "Support"]
         report = 'h1. ' + self.name + '\n\n'
         report += '|_. ' + '|_. '.join(headers) + '|\n'
+
+        # Label
         for ind, label in enumerate(self.ulabels):
-            report += '|' + label
-            report += '| {:.2f}'.format(ap[ind])
-            if use_std:
-                report += '± {:.2f}'.format(sp[ind])
-            report += '| {:.2f}'.format(ar[ind])
-            if use_std:
-                report += '± {:.2f}'.format(sr[ind])
-            report += '| {:.2f}'.format(af1[ind])
-            if use_std:
-                report += '± {:.2f}'.format(sf1[ind])
-            report += '| {:d}'.format(asup[ind]) + '|\n'
+            label_report = dict_report[label]
+            report += '|' + label.capitalize()
+            for key in label_report.keys():
+                report += '|{:.2f}'.format(label_report[key])
+            report += '|\n'
+
         # Average
-        p, r, f1, s = self.average_scores()
-        report += '|Total|'
-        report += "{:.2f}".format(p) + '|'
-        report += "{:.2f}".format(r) + '|'
-        report += "{:.2f}".format(f1) + '|'
-        report += "{:d}".format(s) + '|\n\n'
+        avg_report = dict_report['weighted avg']
+        report += '|' + 'weighted avg'.capitalize()
+        for key in avg_report.keys():
+            report += '|{:.2f}'.format(avg_report[key])
+        report += '|\n'
+
         return report
