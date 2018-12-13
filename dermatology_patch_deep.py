@@ -25,6 +25,11 @@ if __name__ == "__main__":
     if not exists(output_dir):
         makedirs(output_dir)
 
+    # Activation dir
+    activation_dir = join(output_dir, 'Activation/')
+    if not exists(activation_dir):
+        makedirs(activation_dir)
+
     # Adding process to watch our training process
     current_time = strftime('%Y_%m_%d_%H_%M_%S', gmtime(time()))
     work_dir = normpath('{output_dir}/Graph/{time}'.format(output_dir=output_dir, time=current_time))
@@ -48,7 +53,7 @@ if __name__ == "__main__":
     # Get model for confocal microscopy
     model, preprocess, extractor = DeepModels.get_confocal_model()
 
-    classifier = ClassifierDeep(model=model, outer_cv=StratifiedKFold(n_splits=5), preprocess=preprocess, work_dir=work_dir)
-    # classifier.extract_features(paths=paths, labels=labels)
+    classifier = ClassifierDeep(model=model, outer_cv=StratifiedKFold(n_splits=5), preprocess=preprocess,
+                                activation_dir=activation_dir, work_dir=work_dir)
     result = classifier.evaluate(paths=paths, labels=labels)
     ResultWriter(result).write_results(dir_name=output_dir, name='DeepLearning')
