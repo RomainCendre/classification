@@ -88,31 +88,23 @@ class ConfocalBuilder(builders.TextBuilder):
 class DataManager:
 
     @staticmethod
-    def launch_converter(root_dir):
-        tools = pyocr.get_available_tools()
-        if len(tools) == 0:
-            print("No OCR tool found")
-        tool = tools[0]
-
-        langs = tool.get_available_languages()
-        lang = langs[0]
+    def launch_converter(root_dir, out_dir):
 
         # In resources
-        in_file = path.join(root_dir, 'Table.csv')
-        microscopyDir = path.join(root_dir, 'Confocal')
-        dermoscopyDir = path.join(root_dir, 'Dermoscopie')
-        photographyDir = path.join(root_dir, 'Photographie')
-
-        # Out resources
-        outDir = "C:\\Users\\Romain\\Data\\Skin\\Patients"
+        table_file = path.join(root_dir, 'Table.csv')
+        rcm_file = path.join(root_dir, 'RCM.csv')
+        microscopy_dir = path.join(root_dir, 'Microscopy')
+        dermoscopy_dir = path.join(root_dir, 'Dermoscopy')
+        photography_dir = path.join(root_dir, 'Photography')
 
         # Create output dir
-        if not path.exists(outDir):
-            makedirs(outDir)
+        if not path.exists(out_dir):
+            makedirs(out_dir)
 
         # Read csv
-        input_csv = genfromtxt(open(in_file, encoding='utf-8'), dtype='str', delimiter=';')
-        patient_length = input_csv.shape[0]
+        table_csv = genfromtxt(table_file, dtype='str', delimiter=';')
+        rcm_csv = genfromtxt(rcm_file, dtype='str', delimiter=';')
+        patient_length = table_csv.shape[0]
         # Print progress bar
         DataManager.print_progress_bar(0, patient_length, prefix='Progress:')
         for index in range(1, patient_length):
@@ -120,10 +112,10 @@ class DataManager:
             DataManager.print_progress_bar(index, patient_length, prefix='Progress:')
 
             # Store current line
-            row = input_csv[index, :]
+            row = table_csv[index, :]
 
             # Construct folder reference
-            outSubDir = path.join(outDir, str(index))
+            outSubDir = path.join(out_dir, str(index))
 
             # Create folder if necessary
             if not path.exists(outSubDir):
@@ -139,27 +131,27 @@ class DataManager:
             dir_modality = path.join(path.join(outSubDir, 'Photography'))
             if not path.exists(dir_modality):
                 makedirs(dir_modality)
-            files = glob.glob(photographyDir + "\\" + str(row[1]) + " (*.jpg", recursive=True)
+            files = glob.glob(photography_dir + "\\" + str(row[1]) + " (*.jpg", recursive=True)
             for file in files:
                 new_path = path.join(dir_modality, path.basename(file))
                 shutil.copy(file, new_path)
-                out_images.append(['Photography', path.relpath(new_path, outDir), 'NaN'])
+                out_images.append(['Photography', path.relpath(new_path, out_dir), 'NaN'])
 
             # Get dermoscopy files
             dir_modality = path.join(path.join(outSubDir, 'Dermoscopy'))
             if not path.exists(dir_modality):
                 makedirs(dir_modality)
-            files = glob.glob(dermoscopyDir + "\\" + str(row[1]) + " (*.jpg", recursive=True)
+            files = glob.glob(dermoscopy_dir + "\\" + str(row[1]) + " (*.jpg", recursive=True)
             for file in files:
                 new_path = path.join(dir_modality, path.basename(file))
                 shutil.copy(file, new_path)
-                out_images.append(['Dermoscopy', path.relpath(new_path, outDir), 'NaN'])
+                out_images.append(['Dermoscopy', path.relpath(new_path, out_dir), 'NaN'])
 
             # Get microscopy files
             dir_modality = path.join(path.join(outSubDir, 'Microscopy'))
             if not path.exists(dir_modality):
                 makedirs(dir_modality)
-            files = glob.glob(microscopyDir + "\\" + str(row[0]) + "\\**\\*.bmp", recursive=True)
+            files = glob.glob(microscopy_dir + "\\" + str(row[0]) + "\\**\\*.bmp", recursive=True)
             for file in files:
                 new_path = path.join(dir_modality, path.basename(file))
                 raw_image = Image.open(file)
@@ -169,25 +161,11 @@ class DataManager:
                     image = raw_image
                     digits = '0.0'
                 else:  # OCR version
-                    width_OCR = raw_image.size[0]
-                    height_OCR = 25
-                    im_OCR = raw_image.crop((18, height - 25, 100, height))
-                    w = im_OCR.size[0]
-                    h = im_OCR.size[1]
-                    im_OCR = im_OCR.resize((w * 20, h * 20), Image.BILINEAR)
-                    digits = tool.image_to_string(
-                        im_OCR,
-                        lang=lang,
-                        builder=ConfocalBuilder()
-                    )
-                    digits = digits.replace(' ', '')
-                    digits = digits.replace('um', '')
+                    digits = DataManager.read_ocr(raw_image.crop((18, height - 25, 100, height)))
+                    image = raw_image.crop((0, 0, width, height - 45))
 
-                    # digits is a python string
-                    im_crop = raw_image.crop((0, 0, width, height - 45))
-
-                im_crop.save(new_path, "BMP")
-                out_images.append(['Microscopy', path.relpath(new_path, outDir), digits])
+                image.save(new_path, "BMP")
+                out_images.append(['Microscopy', path.relpath(new_path, out_dir), digits])
 
             out_images = asarray(out_images)
             savetxt(path.join(outSubDir, 'images.csv'), out_images, fmt='%s', delimiter=';')
@@ -212,3 +190,26 @@ class DataManager:
         # Print New Line on Complete
         if iteration == total:
             print()
+
+    @staticmethod
+    def read_ocr(image):
+        # Find OCR tool
+        tools = pyocr.get_available_tools()
+        if len(tools) == 0:
+            print("No OCR tool found")
+        tool = tools[0]
+
+        langs = tool.get_available_languages()
+        lang = langs[0]
+
+        w = image.size[0]
+        h = image.size[1]
+        im_OCR = image.resize((w * 20, h * 20), Image.BILINEAR)
+        digits = tool.image_to_string(
+            im_OCR,
+            lang=lang,
+            builder=ConfocalBuilder()
+        )
+        digits = digits.replace(' ', '')
+        digits = digits.replace('um', '')
+        return digits
