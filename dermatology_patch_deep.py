@@ -54,7 +54,7 @@ if __name__ == "__main__":
     tb_tool.run()
 
     # Get model for confocal microscopy
-    model, preprocess, extractor = DeepModels.get_confocal_model()
+    model, preprocess, extractor = DeepModels.get_confocal_model(labels=labels)
 
     classifier = ClassifierDeep(model=model, outer_cv=StratifiedKFold(n_splits=5), preprocess=preprocess,
                                 activation_dir=activation_dir, work_dir=work_dir)
