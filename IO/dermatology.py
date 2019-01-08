@@ -32,10 +32,9 @@ class Reader:
 
         # Build spectrum
         images = []
-        for row in range(1, csv.shape[0]):
-            meta = {'patient_name': subdir,
-                    'modality': csv[row, 0]}
-            image = Data(data=join(parent_folder, csv[row, 1]),meta=meta)
+        for ind, row in csv.iterrows():
+            meta = row.to_dict()
+            image = Data(data=join(parent_folder, meta['Modality'], meta['Path']), meta=meta)
             images.append(image)
         return images
 
@@ -54,10 +53,10 @@ class Reader:
         # Browse subdirectories
         datas = []
         for subdir in subdirs:
-            patient_datas=[]
+            patient_datas = []
             try:
                 meta = self.__read_patient_file(join(folder_path, subdir))
-                patient_datas=self.__read_images_file(folder_path, subdir)
+                patient_datas = self.__read_images_file(folder_path, subdir)
                 # Update all meta data
                 [data.meta.update(meta) for data in patient_datas]
             except OSError:
@@ -146,7 +145,7 @@ class DataManager:
                     # Construct source and destination file path
                     source_file = path.join(microscopy_subfolder, images_ref)
                     if not path.isfile(source_file):
-                        print("Not existing:"+source_file)
+                        print("Not existing:" + source_file)
                         continue
                     destination_file = path.join(destination_subfolder, images_ref)
 
@@ -261,7 +260,7 @@ class DataManager:
         for reference in references:
             if '-' in reference:
                 refs = reference.split('-')
-                images.extend(range(int(refs[0]), int(refs[1])+1))
+                images.extend(range(int(refs[0]), int(refs[1]) + 1))
             else:
                 images.append(int(reference))
         return ['v{number}.bmp'.format(number=str(image).zfill(7)) for image in images]
