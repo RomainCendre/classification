@@ -1,9 +1,9 @@
 import glob
+import pandas
 import pyocr
 import shutil
 from os import listdir, makedirs, path
 from os.path import isdir, join
-import pandas as pd
 from PIL import Image
 from numpy import genfromtxt, asarray, savetxt
 from pyocr import builders
@@ -28,7 +28,7 @@ class Reader:
         images_file = join(parent_folder, subdir, 'images.csv')
 
         # Read csv
-        csv = genfromtxt(images_file, dtype='str', delimiter=self.delimiter)
+        csv = pandas.read_csv(images_file, dtype=str)
 
         # Build spectrum
         images = []
@@ -44,20 +44,8 @@ class Reader:
         patient_file = join(folder_path, 'patient.csv')
 
         # Read csv
-        csv = genfromtxt(patient_file, dtype='str', delimiter=self.delimiter)
-
-        # Size of csv meta
-        if len(csv.shape) == 1:
-            return {csv[0]: csv[1]}
-
-        csv_size = csv.shape[1]
-
-        # Build spectrum
-        dict = {}
-        for col in range(0, csv_size):
-            dict[csv[0, col]] = csv[1, col]
-
-        return dict
+        csv = pandas.read_csv(patient_file, dtype=str).iloc[0]
+        return csv.to_dict()
 
     def scan_folder(self, folder_path):
         # Subdirectories
@@ -128,7 +116,7 @@ class DataManager:
 
     def compute_microscopy(self, source_id, destination):
         # Read microscopy file for each patient
-        rcm_data = pd.read_csv(self.rcm_file, dtype=str)
+        rcm_data = pandas.read_csv(self.rcm_file, dtype=str)
         # Folder where are send new data
         destination_folder = path.join(destination, 'Microscopy')
         if not path.exists(destination_folder):
@@ -138,7 +126,7 @@ class DataManager:
         microscopy_labels = rcm_data[rcm_data['ID_RCM'] == source_id]
         microscopy_folder = path.join(self.microscopy_folder, source_id)
         for ind, row_label in microscopy_labels.iterrows():
-            if pd.isna(row_label['Folder']):
+            if pandas.isna(row_label['Folder']):
                 microscopy_subfolder = microscopy_folder
                 destination_subfolder = destination_folder
             else:
@@ -149,7 +137,7 @@ class DataManager:
 
             # Browse different labels...
             for label in self.labels:
-                if pd.isna(row_label[label]):
+                if pandas.isna(row_label[label]):
                     continue
                 images_refs = DataManager.ref_to_images(row_label[label])
 
@@ -186,7 +174,7 @@ class DataManager:
             makedirs(out_dir)
 
         # Read csv
-        table = pd.read_csv(self.table_file, dtype=str)
+        table = pandas.read_csv(self.table_file, dtype=str)
         nb_patients = table.shape[0]
 
         # Print progress bar
@@ -207,7 +195,7 @@ class DataManager:
             # Save metadata
             out_patient = asarray(
                 [['Sex', 'Age', 'Area', 'Diagnosis', 'Malignant'], [row[5], row[2], row[6], row[10], row[9]]])
-            savetxt(path.join(out_patient_folder, 'patient.csv'), out_patient, fmt='%s', delimiter=';')
+            savetxt(path.join(out_patient_folder, 'patient.csv'), out_patient, fmt='%s', delimiter=',')
 
             out_images = [['Modality', 'Path', 'Label', 'Depth(um)']]
             # Get photography files
@@ -220,7 +208,7 @@ class DataManager:
             out_images.extend(self.compute_microscopy(row['ID_RCM'], out_patient_folder))
 
             out_images = asarray(out_images)
-            savetxt(path.join(out_patient_folder, 'images.csv'), out_images, fmt='%s', delimiter=';')
+            savetxt(path.join(out_patient_folder, 'images.csv'), out_images, fmt='%s', delimiter=',')
 
     @staticmethod
     def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):
