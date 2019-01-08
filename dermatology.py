@@ -3,20 +3,24 @@ from time import gmtime, strftime, time
 from os.path import expanduser, normpath
 from sklearn.model_selection import GroupKFold
 
-from IO.dermatology import Reader
+from IO.dermatology import Reader, DataManager
 from core.classification import ClassifierDeep
 from tools.limitations import Parameters
 
 outer_cv = GroupKFold(n_splits=5)
 
 if __name__ == '__main__':
+    # Prepare data
+    home_path = expanduser("~")
+    origin_folder = normpath('{home}/Data/Skin/Saint_Etienne/Original'.format(home=home_path))
+    patient_folder = normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))
+    DataManager(origin_folder).launch_converter(patient_folder)
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
 
     # Load data references
-    home_path = expanduser("~")
-    dataset = Reader(';').scan_folder(normpath('{home}/Data/Skin/Patients'.format(home=home_path)))
+    dataset = Reader(';').scan_folder(patient_folder)
     datas = dataset.get(label='Malignant', filter={'modality': 'Microscopy'})
 
     # Adding process to watch our training process

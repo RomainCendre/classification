@@ -3,6 +3,7 @@ import pyocr
 import shutil
 from os import listdir, makedirs, path
 from os.path import isdir, join
+import pandas as pd
 from PIL import Image
 from numpy import genfromtxt, asarray, savetxt
 from pyocr import builders
@@ -87,88 +88,139 @@ class ConfocalBuilder(builders.TextBuilder):
 
 class DataManager:
 
-    @staticmethod
-    def launch_converter(root_dir, out_dir):
+    def __init__(self, root_folder):
+        self.table_file = path.join(root_folder, 'Table.csv')
+        self.rcm_file = path.join(root_folder, 'RCM.csv')
+        self.microscopy_folder = path.join(root_folder, 'Microscopy')
+        self.dermoscopy_folder = path.join(root_folder, 'Dermoscopy')
+        self.photography_folder = path.join(root_folder, 'Photography')
+        self.labels = ['LM', 'LB', 'Normal', 'Doubtful', 'Draw']
 
-        # In resources
-        table_file = path.join(root_dir, 'Table.csv')
-        rcm_file = path.join(root_dir, 'RCM.csv')
-        microscopy_dir = path.join(root_dir, 'Microscopy')
-        dermoscopy_dir = path.join(root_dir, 'Dermoscopy')
-        photography_dir = path.join(root_dir, 'Photography')
+    def compute_dermoscopy(self, source_id, destination):
+        destination_folder = path.join(destination, 'Dermoscopy')
+        if not path.exists(destination_folder):
+            makedirs(destination_folder)
 
+        images = []
+        folder = path.join(self.dermoscopy_folder, source_id)
+        files = glob.glob(folder + " (*.jpg", recursive=True)
+        for file in files:
+            destination_file = path.join(destination_folder, path.basename(file))
+            shutil.copy(file, destination_file)
+            images.append(['Dermoscopy', path.relpath(destination_file, destination_folder), 'NaN'])
+
+        return images
+
+    def compute_photography(self, source_id, destination):
+        destination_folder = path.join(destination, 'Photography')
+        if not path.exists(destination_folder):
+            makedirs(destination_folder)
+
+        images = []
+        folder = path.join(self.photography_folder, source_id)
+        files = glob.glob(folder + " (*.jpg", recursive=True)
+        for file in files:
+            destination_file = path.join(destination_folder, path.basename(file))
+            shutil.copy(file, destination_file)
+            images.append(['Photography', path.relpath(destination_file, destination_folder), 'NaN'])
+
+        return images
+
+    def compute_microscopy(self, source_id, destination):
+        # Read microscopy file for each patient
+        rcm_data = pd.read_csv(self.rcm_file, dtype=str)
+        # Folder where are send new data
+        destination_folder = path.join(destination, 'Microscopy')
+        if not path.exists(destination_folder):
+            makedirs(destination_folder)
+
+        images = []
+        microscopy_labels = rcm_data[rcm_data['ID_RCM'] == source_id]
+        microscopy_folder = path.join(self.microscopy_folder, source_id)
+        for ind, row_label in microscopy_labels.iterrows():
+            if pd.isna(row_label['Folder']):
+                microscopy_subfolder = microscopy_folder
+                destination_subfolder = destination_folder
+            else:
+                microscopy_subfolder = path.join(microscopy_folder, row_label['Folder'])
+                destination_subfolder = path.join(destination_folder, row_label['Folder'])
+                if not path.exists(destination_subfolder):
+                    makedirs(destination_subfolder)
+
+            # Browse different labels...
+            for label in self.labels:
+                if pd.isna(row_label[label]):
+                    continue
+                images_refs = DataManager.ref_to_images(row_label[label])
+
+                # .. then images
+                for images_ref in images_refs:
+                    # Construct source and destination file path
+                    source_file = path.join(microscopy_subfolder, images_ref)
+                    if not path.isfile(source_file):
+                        print("Not existing:"+source_file)
+                        continue
+                    destination_file = path.join(destination_subfolder, images_ref)
+
+                    # Open image
+                    raw_image = Image.open(source_file)
+                    width = raw_image.size[0]
+                    height = raw_image.size[1]
+
+                    # Try to read optical informations
+                    if height == 1000:  # Non-OCR version
+                        image = raw_image
+                        digits = '0.0'
+                    else:  # OCR version
+                        # digits = DataManager.read_ocr(raw_image.crop((18, height - 25, 100, height)))
+                        digits = '0.0'
+                        image = raw_image.crop((0, 0, width, height - 45))
+
+                    image.save(destination_file, "BMP")
+                    images.append(['Microscopy', path.relpath(destination_file, destination_folder), digits])
+        return images
+
+    def launch_converter(self, out_dir):
         # Create output dir
         if not path.exists(out_dir):
             makedirs(out_dir)
 
         # Read csv
-        table_csv = genfromtxt(table_file, dtype='str', delimiter=';')
-        rcm_csv = genfromtxt(rcm_file, dtype='str', delimiter=';')
-        patient_length = table_csv.shape[0]
-        # Print progress bar
-        DataManager.print_progress_bar(0, patient_length, prefix='Progress:')
-        for index in range(1, patient_length):
-            # Print progress bar
-            DataManager.print_progress_bar(index, patient_length, prefix='Progress:')
+        table = pd.read_csv(self.table_file, dtype=str)
+        nb_patients = table.shape[0]
 
-            # Store current line
-            row = table_csv[index, :]
+        # Print progress bar
+        DataManager.print_progress_bar(0, nb_patients, prefix='Progress:')
+
+        # Iterate table
+        for index, row in table.iterrows():
+            # Print progress bar
+            DataManager.print_progress_bar(index, nb_patients, prefix='Progress:')
 
             # Construct folder reference
-            outSubDir = path.join(out_dir, str(index))
+            out_patient_folder = path.join(out_dir, str(index))
 
             # Create folder if necessary
-            if not path.exists(outSubDir):
-                makedirs(outSubDir)
+            if not path.exists(out_patient_folder):
+                makedirs(out_patient_folder)
 
             # Save metadata
             out_patient = asarray(
                 [['Sex', 'Age', 'Area', 'Diagnosis', 'Malignant'], [row[5], row[2], row[6], row[10], row[9]]])
-            savetxt(path.join(outSubDir, 'patient.csv'), out_patient, fmt='%s', delimiter=';')
+            savetxt(path.join(out_patient_folder, 'patient.csv'), out_patient, fmt='%s', delimiter=';')
 
-            # Get photography files
             out_images = [['Modality', 'Path', 'Depth(um)']]
-            dir_modality = path.join(path.join(outSubDir, 'Photography'))
-            if not path.exists(dir_modality):
-                makedirs(dir_modality)
-            files = glob.glob(photography_dir + "\\" + str(row[1]) + " (*.jpg", recursive=True)
-            for file in files:
-                new_path = path.join(dir_modality, path.basename(file))
-                shutil.copy(file, new_path)
-                out_images.append(['Photography', path.relpath(new_path, out_dir), 'NaN'])
+            # Get photography files
+            out_images.extend(self.compute_photography(row['ID_Dermoscopy'], out_patient_folder))
 
             # Get dermoscopy files
-            dir_modality = path.join(path.join(outSubDir, 'Dermoscopy'))
-            if not path.exists(dir_modality):
-                makedirs(dir_modality)
-            files = glob.glob(dermoscopy_dir + "\\" + str(row[1]) + " (*.jpg", recursive=True)
-            for file in files:
-                new_path = path.join(dir_modality, path.basename(file))
-                shutil.copy(file, new_path)
-                out_images.append(['Dermoscopy', path.relpath(new_path, out_dir), 'NaN'])
+            out_images.extend(self.compute_dermoscopy(row['ID_Dermoscopy'], out_patient_folder))
 
             # Get microscopy files
-            dir_modality = path.join(path.join(outSubDir, 'Microscopy'))
-            if not path.exists(dir_modality):
-                makedirs(dir_modality)
-            files = glob.glob(microscopy_dir + "\\" + str(row[0]) + "\\**\\*.bmp", recursive=True)
-            for file in files:
-                new_path = path.join(dir_modality, path.basename(file))
-                raw_image = Image.open(file)
-                width = raw_image.size[0]
-                height = raw_image.size[1]
-                if height == 1000:  # Non-OCR version
-                    image = raw_image
-                    digits = '0.0'
-                else:  # OCR version
-                    digits = DataManager.read_ocr(raw_image.crop((18, height - 25, 100, height)))
-                    image = raw_image.crop((0, 0, width, height - 45))
-
-                image.save(new_path, "BMP")
-                out_images.append(['Microscopy', path.relpath(new_path, out_dir), digits])
+            out_images.extend(self.compute_microscopy(row['ID_RCM'], out_patient_folder))
 
             out_images = asarray(out_images)
-            savetxt(path.join(outSubDir, 'images.csv'), out_images, fmt='%s', delimiter=';')
+            savetxt(path.join(out_patient_folder, 'images.csv'), out_images, fmt='%s', delimiter=';')
 
     @staticmethod
     def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):
@@ -213,3 +265,15 @@ class DataManager:
         digits = digits.replace(' ', '')
         digits = digits.replace('um', '')
         return digits
+
+    @staticmethod
+    def ref_to_images(references):
+        images = []
+        references = references.split(';')
+        for reference in references:
+            if '-' in reference:
+                refs = reference.split('-')
+                images.extend(range(int(refs[0]), int(refs[1])+1))
+            else:
+                images.append(int(reference))
+        return ['v{number}.bmp'.format(number=str(image).zfill(7)) for image in images]
