@@ -14,14 +14,14 @@ if __name__ == '__main__':
     home_path = expanduser("~")
     origin_folder = normpath('{home}/Data/Skin/Saint_Etienne/Original'.format(home=home_path))
     patient_folder = normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))
-    DataManager(origin_folder).launch_converter(patient_folder)
+    # DataManager(origin_folder).launch_converter(patient_folder)
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
 
     # Load data references
-    dataset = Reader(';').scan_folder(patient_folder)
-    datas = dataset.get(label='Malignant', filter={'modality': 'Microscopy'})
+    dataset = Reader().scan_folder(patient_folder)
+    datas = dataset.get_data(filter_by={'Modality': 'Microscopy'})
 
     # Adding process to watch our training process
     current_time = strftime('%Y_%m_%d_%H_%M_%S', gmtime(time()))
