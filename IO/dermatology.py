@@ -107,7 +107,7 @@ class DataManager:
         for file in files:
             destination_file = path.join(destination_folder, path.basename(file))
             shutil.copy(file, destination_file)
-            images.append(['Dermoscopy', path.relpath(destination_file, destination_folder), 'NaN'])
+            images.append(['Dermoscopy', path.relpath(destination_file, destination_folder), 'NaN', 'NaN'])
 
         return images
 
@@ -122,7 +122,7 @@ class DataManager:
         for file in files:
             destination_file = path.join(destination_folder, path.basename(file))
             shutil.copy(file, destination_file)
-            images.append(['Photography', path.relpath(destination_file, destination_folder), 'NaN'])
+            images.append(['Photography', path.relpath(destination_file, destination_folder), 'NaN', 'NaN'])
 
         return images
 
@@ -177,7 +177,7 @@ class DataManager:
                         image = raw_image.crop((0, 0, width, height - 45))
 
                     image.save(destination_file, "BMP")
-                    images.append(['Microscopy', path.relpath(destination_file, destination_folder), digits])
+                    images.append(['Microscopy', path.relpath(destination_file, destination_folder), label, digits])
         return images
 
     def launch_converter(self, out_dir):
@@ -209,7 +209,7 @@ class DataManager:
                 [['Sex', 'Age', 'Area', 'Diagnosis', 'Malignant'], [row[5], row[2], row[6], row[10], row[9]]])
             savetxt(path.join(out_patient_folder, 'patient.csv'), out_patient, fmt='%s', delimiter=';')
 
-            out_images = [['Modality', 'Path', 'Depth(um)']]
+            out_images = [['Modality', 'Path', 'Label', 'Depth(um)']]
             # Get photography files
             out_images.extend(self.compute_photography(row['ID_Dermoscopy'], out_patient_folder))
 
