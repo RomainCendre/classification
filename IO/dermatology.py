@@ -198,8 +198,8 @@ class DataManager:
             patient = [{'Sex': row['Sex'],
                         'Age': row['Age'],
                         'Area': row['Area'],
-                        'Diagnosis': row['Diagnosis'],
-                        'Malignant': row['Binary_Diagnosis']}]
+                        'PatientDiagnosis': row['Diagnosis'],
+                        'PatientLabel': row['Binary_Diagnosis']}]
             # Write patient meta
             pandas.DataFrame(patient).to_csv(path.join(out_patient_folder, 'patient.csv'), index=False)
 

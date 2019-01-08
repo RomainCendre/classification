@@ -42,8 +42,11 @@ if __name__ == "__main__":
     malignant_dir = normpath('{home}/Data/Skin/Thumbnails/Malin'.format(home=home_path))
     malignant_files = glob(join(malignant_dir, '*.bmp'))
     malignant_label = full(len(malignant_files), 'malin')
-    paths = concatenate((benign_files, malignant_files), axis=0)
-    labels = concatenate((benign_label, malignant_label), axis=0)
+    follicule_dir = normpath('{home}/Data/Skin/Thumbnails/Follicule'.format(home=home_path))
+    follicule_files = glob(join(follicule_dir, '*.bmp'))
+    follicule_label = full(len(follicule_files), 'follicule')
+    paths = concatenate((benign_files, malignant_files, follicule_files), axis=0)
+    labels = concatenate((benign_label, malignant_label, follicule_label), axis=0)
 
     # Tensorboard tool launch
     tb_tool = TensorBoardTool(work_dir)

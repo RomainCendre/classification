@@ -1,6 +1,6 @@
 from os import makedirs
 from time import gmtime, strftime, time
-from os.path import expanduser, normpath
+from os.path import exists, expanduser, normpath
 from sklearn.model_selection import GroupKFold
 
 from IO.dermatology import Reader, DataManager
@@ -10,11 +10,17 @@ from tools.limitations import Parameters
 outer_cv = GroupKFold(n_splits=5)
 
 if __name__ == '__main__':
-    # Prepare data
+
     home_path = expanduser("~")
+    # Output dir
+    output_dir = normpath('{home}/Results/Skin/Saint_Etienne/Deep/'.format(home=home_path))
+    if not exists(output_dir):
+        makedirs(output_dir)
+
+    # Prepare data
     origin_folder = normpath('{home}/Data/Skin/Saint_Etienne/Original'.format(home=home_path))
     patient_folder = normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))
-    # DataManager(origin_folder).launch_converter(patient_folder)
+    DataManager(origin_folder).launch_converter(patient_folder)
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
