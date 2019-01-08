@@ -12,15 +12,13 @@ from core.inputs import Data, DataSet
 
 class Reader:
 
-    def __init__(self, delimiter):
+    def __init__(self):
         """Make an initialisation of SpectrumReader object.
 
         Take a string that represent delimiter
 
         Args:
-             delimiter (:obj:'str'): The delimiter string.
         """
-        self.delimiter = delimiter
 
     def __read_images_file(self, parent_folder, subdir):
 
@@ -34,6 +32,7 @@ class Reader:
         images = []
         for ind, row in csv.iterrows():
             meta = row.to_dict()
+            print(meta)
             image = Data(data=join(parent_folder, meta['Modality'], meta['Path']), meta=meta)
             images.append(image)
         return images
@@ -94,7 +93,8 @@ class DataManager:
         for file in files:
             destination_file = path.join(destination_folder, path.basename(file))
             shutil.copy(file, destination_file)
-            images.append(['Dermoscopy', path.relpath(destination_file, destination_folder), 'NaN', 'NaN'])
+            images.append({'Modality': 'Dermoscopy',
+                           'Path': path.relpath(destination_file, destination_folder)})
 
         return images
 
@@ -109,7 +109,8 @@ class DataManager:
         for file in files:
             destination_file = path.join(destination_folder, path.basename(file))
             shutil.copy(file, destination_file)
-            images.append(['Photography', path.relpath(destination_file, destination_folder), 'NaN', 'NaN'])
+            images.append({'Modality': 'Photography',
+                           'Path': path.relpath(destination_file, destination_folder)})
 
         return images
 
@@ -164,7 +165,10 @@ class DataManager:
                         image = raw_image.crop((0, 0, width, height - 45))
 
                     image.save(destination_file, "BMP")
-                    images.append(['Microscopy', path.relpath(destination_file, destination_folder), label, digits])
+                    images.append({'Modality': 'Microscopy',
+                                   'Path': path.relpath(destination_file, destination_folder),
+                                   'Label': label,
+                                   'Depth(um)': digits})
         return images
 
     def launch_converter(self, out_dir):
@@ -192,22 +196,27 @@ class DataManager:
                 makedirs(out_patient_folder)
 
             # Save metadata
-            out_patient = asarray(
-                [['Sex', 'Age', 'Area', 'Diagnosis', 'Malignant'], [row[5], row[2], row[6], row[10], row[9]]])
-            savetxt(path.join(out_patient_folder, 'patient.csv'), out_patient, fmt='%s', delimiter=',')
+            patient = [{'Sex': row['Sex'],
+                        'Age': row['Age'],
+                        'Area': row['Area'],
+                        'Diagnosis': row['Diagnosis'],
+                        'Malignant': row['Binary_Diagnosis']}]
+            # Write patient meta
+            pandas.DataFrame(patient).to_csv(path.join(out_patient_folder, 'patient.csv'), index=False)
 
-            out_images = [['Modality', 'Path', 'Label', 'Depth(um)']]
+            images = []
+
             # Get photography files
-            out_images.extend(self.compute_photography(row['ID_Dermoscopy'], out_patient_folder))
+            images.extend(self.compute_photography(row['ID_Dermoscopy'], out_patient_folder))
 
             # Get dermoscopy files
-            out_images.extend(self.compute_dermoscopy(row['ID_Dermoscopy'], out_patient_folder))
+            images.extend(self.compute_dermoscopy(row['ID_Dermoscopy'], out_patient_folder))
 
             # Get microscopy files
-            out_images.extend(self.compute_microscopy(row['ID_RCM'], out_patient_folder))
+            images.extend(self.compute_microscopy(row['ID_RCM'], out_patient_folder))
 
-            out_images = asarray(out_images)
-            savetxt(path.join(out_patient_folder, 'images.csv'), out_images, fmt='%s', delimiter=',')
+            # Write images list
+            pandas.DataFrame(images).to_csv(path.join(out_patient_folder, 'images.csv'), index=False)
 
     @staticmethod
     def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):
