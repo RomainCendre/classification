@@ -195,11 +195,12 @@ class DataManager:
                 makedirs(out_patient_folder)
 
             # Save metadata
-            patient = [{'Sex': row['Sex'],
+            patient = [{'Patient': str(index),
                         'Age': row['Age'],
                         'Area': row['Area'],
                         'PatientDiagnosis': row['Diagnosis'],
-                        'PatientLabel': row['Binary_Diagnosis']}]
+                        'PatientLabel': row['Binary_Diagnosis'],
+                        'Sex': row['Sex']}]
             # Write patient meta
             pandas.DataFrame(patient).to_csv(path.join(out_patient_folder, 'patient.csv'), index=False)
 
