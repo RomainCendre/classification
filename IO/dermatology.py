@@ -32,7 +32,7 @@ class Reader:
         images = []
         for ind, row in csv.iterrows():
             meta = row.to_dict()
-            image = Data(data=join(parent_folder, meta['Modality'], meta['Path']), meta=meta)
+            image = Data(data=join(parent_folder, subdir, meta['Modality'], meta['Path']), meta=meta)
             images.append(image)
         return images
 
