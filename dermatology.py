@@ -27,9 +27,10 @@ if __name__ == '__main__':
         makedirs(activation_dir)
 
     # Prepare data
-    origin_folder = normpath('{home}/Data/Skin/Saint_Etienne/Original'.format(home=home_path))
     patient_folder = normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))
-    DataManager(origin_folder).launch_converter(patient_folder)
+    if not exists(patient_folder):
+        origin_folder = normpath('{home}/Data/Skin/Saint_Etienne/Original'.format(home=home_path))
+        DataManager(origin_folder).launch_converter(patient_folder)
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
