@@ -62,7 +62,6 @@ class Results:
         return classification_report(self.labels[fold], self.predictions[fold], output_dict=True)
 
     def report_scores(self, use_std=True):
-        print(classification_report(self.labels, self.predictions))
         dict_report = self.__report_values(use_std=use_std)
         headers = ["Labels", "Precision", "Recall", "F1-score", "Support"]
         report = 'h1. ' + self.name + '\n\n'

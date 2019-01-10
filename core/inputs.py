@@ -38,7 +38,7 @@ class DataSet:
     def get_data(self, filter_by={}):
         return asarray([data.data for data in self.__filter_by(filter_by)])
 
-    def get_meta(self, meta, filter_by={}):
+    def get_meta(self, meta: object, filter_by: object = {}) -> object:
         return asarray([data.meta[meta] for data in self.__filter_by(filter_by)])
 
     def meta(self, filter_by={}):
