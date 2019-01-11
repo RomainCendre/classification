@@ -1,6 +1,5 @@
 name: Skin
 channels:
-  - romaincendre
   - defaults
 dependencies:
   - keras=2.2.4
