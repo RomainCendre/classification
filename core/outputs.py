@@ -16,7 +16,7 @@ class Results:
 
     """
 
-    def __init__(self, labels, folds, predictions, map_index, probabilities, name=''):
+    def __init__(self, references, labels, folds, predictions, map_index, probabilities, name=''):
         """Make an initialisation of SpectrumReader object.
 
         Take a string that represent delimiter
@@ -28,6 +28,7 @@ class Results:
              map_index
              probabilities (:obj:'ndarray'): The probabilities of each class.
         """
+        self.references = references
         self.labels = labels
         self.ulabels = unique_labels(self.labels)
         self.folds = folds
@@ -58,8 +59,8 @@ class Results:
         # Return report
         return report
 
-    def report_values_fold(self, fold=None):
-        return classification_report(self.labels[fold], self.predictions[fold], output_dict=True)
+    def misclassified_indices(self):
+        return [index for index, (i, j) in enumerate(zip(self.labels, self.predictions)) if i == j]
 
     def report_scores(self, use_std=True):
         dict_report = self.__report_values(use_std=use_std)
@@ -83,3 +84,6 @@ class Results:
         report += '|\n'
 
         return report
+
+    def report_values_fold(self, fold=None):
+        return classification_report(self.labels[fold], self.predictions[fold], output_dict=True)
