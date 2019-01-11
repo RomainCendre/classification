@@ -6,6 +6,7 @@ from keras.utils import Sequence
 from keras_preprocessing import get_keras_submodule
 from keras_preprocessing.image import Iterator, ImageDataGenerator, load_img, img_to_array, array_to_img
 from numpy import asarray
+from PIL import Image as pil_image
 
 backend = get_keras_submodule('backend')
 
@@ -13,7 +14,7 @@ backend = get_keras_submodule('backend')
 class ResourcesGenerator(ImageDataGenerator):
 
     def flow_from_paths(self, filenames, labels,
-                        target_size=(256, 256), color_mode='rgb',
+                        target_size=None, color_mode='rgb',
                         classes=None, class_mode='categorical',
                         batch_size=32, shuffle=True, seed=None,
                         save_to_dir=None,
@@ -37,7 +38,7 @@ class ResourcesGenerator(ImageDataGenerator):
 class ResourcesIterator(Iterator, Sequence):
 
     def __init__(self, filenames, labels, image_data_generator,
-                 target_size=(256, 256), color_mode='rgb',
+                 target_size=None, color_mode='rgb',
                  classes=None, class_mode='categorical',
                  batch_size=32, shuffle=True, seed=None,
                  data_format=None,
@@ -48,27 +49,18 @@ class ResourcesIterator(Iterator, Sequence):
             data_format = backend.image_data_format()
 
         self.image_data_generator = image_data_generator
-        self.target_size = tuple(target_size)
         if color_mode not in {'rgb', 'rgba', 'grayscale'}:
             raise ValueError('Invalid color mode:', color_mode,
                              '; expected "rgb", "rgba", or "grayscale".')
         self.color_mode = color_mode
         self.data_format = data_format
-        if self.color_mode == 'rgba':
-            if self.data_format == 'channels_last':
-                self.image_shape = self.target_size + (4,)
-            else:
-                self.image_shape = (4,) + self.target_size
-        elif self.color_mode == 'rgb':
-            if self.data_format == 'channels_last':
-                self.image_shape = self.target_size + (3,)
-            else:
-                self.image_shape = (3,) + self.target_size
+
+        if target_size is not None:
+            self.target_size = tuple(target_size)
+            self.image_shape = self._build_shape(self.target_size)
         else:
-            if self.data_format == 'channels_last':
-                self.image_shape = self.target_size + (1,)
-            else:
-                self.image_shape = (1,) + self.target_size
+            self.target_size = None
+
         self.classes = classes
         if class_mode not in {'categorical', 'binary', 'sparse',
                               'input', None}:
@@ -121,15 +113,16 @@ class ResourcesIterator(Iterator, Sequence):
                                                  seed)
 
     def _get_batches_of_transformed_samples(self, index_array):
-        batch_x = np.zeros(
-            (len(index_array),) + self.image_shape,
-            dtype=backend.floatx())
+
+        target_size = self._get_shape(index_array)
+        batch_x = np.zeros((len(index_array),) + self._build_shape(target_size), dtype=backend.floatx())
+
         # build batch of image data
         for i, j in enumerate(index_array):
             fname = self.filenames[j]
             img = load_img(fname,
                            color_mode=self.color_mode,
-                           target_size=self.target_size,
+                           target_size=target_size,
                            interpolation=self.interpolation)
             x = img_to_array(img, data_format=self.data_format)
             # Pillow images should be closed after `load_img`,
@@ -173,3 +166,34 @@ class ResourcesIterator(Iterator, Sequence):
         # The transformation of images is not under thread lock
         # so it can be done in parallel
         return self._get_batches_of_transformed_samples(index_array)
+
+    def _get_shape(self, index_array):
+        if self.target_size is not None:
+            return self.target_size
+        else:
+            max_width, max_height = 0, 0
+            for i in index_array:
+                fname = self.filenames[i]
+                with pil_image.open(fname) as img:
+                    width, height = img.size
+                    max_width = max(max_width, width)
+                    max_height = max(max_height, height)
+
+            return (max_height, max_width)
+
+    def _build_shape(self, target_size):
+        if self.color_mode == 'rgba':
+            if self.data_format == 'channels_last':
+                return target_size + (4,)
+            else:
+                return (4,) + target_size
+        elif self.color_mode == 'rgb':
+            if self.data_format == 'channels_last':
+                return target_size + (3,)
+            else:
+                return (3,) + target_size
+        else:
+            if self.data_format == 'channels_last':
+                return target_size + (1,)
+            else:
+                return (1,) + target_size
