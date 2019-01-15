@@ -147,7 +147,7 @@ class ResultWriter:
             # Browse reference dict
             for label, val in report.items():
                 for metrics in val.keys():
-                    values = [score[label][metrics] for score in scores]
+                    values = [score[label][metrics] for score in scores if label in score.keys()]
                     report[label][metrics] = '{mean:0.2f}±{std:0.2f}'.format(mean=report[label][metrics],
                                                                              std=std(values))
 
