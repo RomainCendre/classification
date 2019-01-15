@@ -9,19 +9,19 @@ from IO.otorhinolaryngology import Reader
 from IO.writer import ResultWriter, StatisticsWriter
 
 
-def compute_data(data_set, out_dir, name, filter_by, meta):
+def compute_data(data_set, out_dir, name, filter_by, keys):
     # Get process
     pipe, param = SimpleModels.get_pls_process()
 
     # Write statistics on current data
-    StatisticsWriter(data_set).write_result(metas=meta, dir_name=out_dir, name=name, filter_by=filter_by)
+    StatisticsWriter(data_set).write_result(keys=keys, dir_name=out_dir, name=name, filter_by=filter_by)
 
     # Classify and write data results
     classifier = Classifier(pipeline=pipe, params=param,
                             inner_cv=GroupKFold(n_splits=5), outer_cv=GroupKFold(n_splits=5))
-    result = classifier.evaluate(features=spectra.get_data(filter_by=filter_by),
-                                 labels=spectra.get_meta(meta='label', filter_by=filter_by),
-                                 groups=spectra.get_meta(meta='patient_name', filter_by=filter_by))
+    result = classifier.evaluate(features=spectra.get_data(key='Data', filter_by=filter_by),
+                                 labels=spectra.get_data(key='label', filter_by=filter_by),
+                                 groups=spectra.get_data(key='patient_name', filter_by=filter_by))
     ResultWriter(result).write_results(dir_name=out_dir, name=name)
 
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         'Results_SvsP': {'label': ['Sain', 'Precancer']},
         'Results_PvsC': {'label': ['Precancer', 'Cancer']},
     }
-    metas = ['patient_label', 'device', 'label', 'location']
+    keys = ['patient_label', 'device', 'label', 'location']
 
     for item_name, item_filter in filters.items():
-        compute_data(data_set=spectra, out_dir=output_dir, name=item_name, filter_by=item_filter, meta=metas)
+        compute_data(data_set=spectra, out_dir=output_dir, name=item_name, filter_by=item_filter, keys=keys)

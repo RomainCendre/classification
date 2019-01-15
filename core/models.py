@@ -18,12 +18,12 @@ from core.transforms import DWTTransform, PLSTransform
 class DeepModels:
 
     @staticmethod
-    def get_confocal_model():
+    def get_confocal_model(labels):
         # We get the deep extractor part as include_top is false
-        inception_model = InceptionV3(weights='imagenet', include_top=False, pooling='avg')
+        inception_model = InceptionV3(weights='imagenet', include_top=False, pooling='max')
 
         # Now we customize the output consider our application field
-        prediction_layers = Dense(2, activation='softmax', name='predictions')(inception_model.output)
+        prediction_layers = Dense(DeepModels.__get_class_number(labels), activation='softmax', name='predictions')(inception_model.output)
 
         # And defined model based on our input and next output
         model = Model(inputs=inception_model.input, outputs=prediction_layers)
@@ -39,6 +39,11 @@ class DeepModels:
         model.add(Dense(2, activation='softmax', name='predictions'))
         model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
         return model
+
+    @staticmethod
+    def __get_class_number(labels):
+        return len(set(labels))
+
 
 class SimpleModels:
 

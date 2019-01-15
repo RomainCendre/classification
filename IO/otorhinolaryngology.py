@@ -1,7 +1,7 @@
 from numpy import genfromtxt
 from os.path import join, splitext
 
-from core.inputs import Spectrum, DataSet
+from core.structures import Spectrum, DataSet
 
 
 class Reader:
@@ -76,6 +76,6 @@ class Reader:
                     'location': csv[row_index, 4]}
 
             patient_datas = self.read_file(join(base_folder, current_file))
-            [data.meta.update(meta) for data in patient_datas]
+            [data.data.update(meta) for data in patient_datas]
             spectra.extend(patient_datas)
         return DataSet(spectra)
