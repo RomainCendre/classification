@@ -4,18 +4,18 @@ from keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from keras.models import clone_model
 from keras.optimizers import Adam
 from matplotlib import pyplot as plt
-from numpy import concatenate, uint8, unique, zeros, arange
+from numpy import concatenate, uint8, unique, zeros, arange, mean, repeat, newaxis, array
 from os.path import join
 
 from scipy.misc import imsave
 from sklearn import preprocessing
 from sklearn.model_selection import GridSearchCV
 from vis.utils.utils import load_img
-from vis.visualization import visualize_cam, overlay
+from vis.visualization import visualize_cam, visualize_activation, overlay
 from vis.utils import utils
 
 from core.generators import ResourcesGenerator
-from core.outputs import Results
+from core.structures import Results, Result
 from tools.tensorboard import TensorBoardWriter
 
 
@@ -63,9 +63,9 @@ class Classifier:
 
         """
         # Encode labels to go from string to int
-        labels_encode = preprocessing.LabelEncoder()
-        labels_encode.fit(labels)
-        labels = labels_encode.transform(labels)
+        encoder = preprocessing.LabelEncoder()
+        encoder.fit(labels)
+        encoded_labels = encoder.transform(labels)
 
         if groups is not None:
             groups_encode = preprocessing.LabelEncoder()
@@ -73,36 +73,34 @@ class Classifier:
             groups = groups_encode.transform(groups)
 
         # Encode labels to go from string to int
-        folds = []
-        predictions = zeros(len(labels), dtype='int')
-        probabilities = zeros((len(labels), len(list(set(labels)))))
+        results = []
         for fold, (train, test) in enumerate(self.__outer_cv.split(X=features, y=labels, groups=groups)):
             grid_search = GridSearchCV(estimator=self.__pipeline, param_grid=self.__params, cv=self.__inner_cv,
                                        scoring=self.scoring, verbose=1, iid=False)
 
             if groups is not None:
-                grid_search.fit(X=features[train], y=labels[train], groups=groups[train])
+                grid_search.fit(X=features[train], y=encoded_labels[train], groups=groups[train])
             else:
-                grid_search.fit(X=features[train], y=labels[train])
+                grid_search.fit(X=features[train], y=encoded_labels[train])
 
-            # Folds storage
-            folds.append(test)
+            for index in test:
+                result = {}
+                result.update({"Fold": fold})
+                result.update({"Label": labels[index]})
+                # result.update({"Reference": valid_generator.filenames[index]})
+                # Compute probabilities for ROC curve data
+                result.update({"Probability": grid_search.predict_proba(features[newaxis, index])[0]})
+                # Kept predictions
+                result.update({"Prediction": encoder.inverse_transform(grid_search.predict(features[newaxis, index]))[0]})
+                results.append(Result(result))
 
-            # Compute ROC curve data
-            probabilities[test] = grid_search.predict_proba(features[test])
+            print(grid_search.best_params_)
 
-            # Kept predictions
-            predictions[test] = grid_search.predict(features[test])
-
-            print(grid_search.best_params_ )
-
-        map_index = unique(labels)
+        map_index = unique(encoded_labels)
         map_index.sort()
-        map_index = list(labels_encode.inverse_transform(map_index))
-        labels = labels_encode.inverse_transform(labels)
-        predictions = labels_encode.inverse_transform(predictions)
+        map_index = list(encoder.inverse_transform(map_index))
         name = "_".join(self.__pipeline.named_steps)
-        return Results(labels, folds, predictions, map_index, probabilities, name)
+        return Results(results, map_index, name)
 
 
 class ClassifierDeep:
@@ -115,16 +113,6 @@ class ClassifierDeep:
         self.generator = ResourcesGenerator(rescale=1. / 255)
         self.activation_dir = activation_dir
         self.preprocess = preprocess
-
-    def __get_features_extractor(self):
-        model = Model(inputs=self.model.input)
-        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
-        return model
-
-    def __get_classifier(self):
-        model = Model(outputs=self.model.output)
-        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
-        return model
 
     def extract_features(self, paths, labels):
         # Generate an iterator
@@ -145,31 +133,51 @@ class ClassifierDeep:
         return bottleneck, labels
 
     @staticmethod
-    def get_callbacks(directory):
+    def __get_activation_map(model, seed_input, predict, image):
+        if image.ndim == 2:
+            image = repeat(image[:, :, newaxis], 3, axis=2)
+        grads = visualize_cam(model, len(model.layers)-1, filter_indices=predict, seed_input=seed_input, backprop_modifier='guided')#, penultimate_layer_idx=None, backprop_modifier=None, grad_modifier=None)
+        jet_heatmap = uint8(cm.jet(grads)[..., :3] * 255)
+        return overlay(jet_heatmap, image)
+
+    @staticmethod
+    def __get_callbacks(directory):
         callbacks = []
+
         callbacks.append(TensorBoardWriter(log_dir=directory))
         # callbacks.append(ReduceLROnPlateau(monitor='loss', factor=0.1, patience=5, verbose=1, epsilon=1e-4, mode='min'))
         # callbacks.append(EarlyStopping(monitor='val_loss', min_delta=0.0001, patience=5, verbose=1, mode='auto'))
         return callbacks
 
+    def __get_classifier(self):
+        model = Model(outputs=self.model.output)
+        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        return model
+
+    @staticmethod
+    def __get_class_number(labels):
+        return len(set(labels))
+
+    def __get_features_extractor(self):
+        model = Model(inputs=self.model.input)
+        model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        return model
+
     def evaluate(self, paths, labels, groups=None):
 
         # Encode labels to go from string to int
-        labels_encode = preprocessing.LabelEncoder()
-        labels_encode.fit(labels)
-        labels = labels_encode.transform(labels)
+        encoder = preprocessing.LabelEncoder()
+        encoder.fit(labels)
+        encoded_labels = encoder.transform(labels)
 
         if groups is not None:
             groups_encode = preprocessing.LabelEncoder()
             groups_encode.fit(groups)
             groups = groups_encode.transform(groups)
 
-        # Encode labels to go from string to int
-        folds = []
-        predictions = zeros(len(labels), dtype='int')
-        probabilities = zeros((len(labels), 2))
+        results = []
 
-        for fold, (train, valid) in enumerate(self.outer_cv.split(X=paths, y=labels, groups=groups)):
+        for fold, (train, valid) in enumerate(self.outer_cv.split(X=paths, y=encoded_labels, groups=groups)):
             # Announce fold and work dir
             print('Fold number {}'.format(fold+1))
             current_dir = join(self.work_dir, 'Fold {fold}'.format(fold=(fold + 1)))
@@ -181,41 +189,93 @@ class ClassifierDeep:
 
             # Prepare data
             generator = ResourcesGenerator(preprocessing_function=self.preprocess)
-            train_generator = generator.flow_from_paths(paths[train], labels[train], target_size=(250, 250), batch_size=32)
-            valid_generator = generator.flow_from_paths(paths[valid], labels[valid], target_size=(250, 250), batch_size=1, shuffle=False)
+            train_generator = generator.flow_from_paths(paths[train], labels[train],
+                                                        batch_size=6)
+            valid_generator = generator.flow_from_paths(paths[valid], labels[valid],
+                                                        batch_size=1, shuffle=False)
 
             # Create model and fit
             model.fit_generator(generator=train_generator, epochs=100, validation_data=valid_generator,
-                                      callbacks= ClassifierDeep.get_callbacks(current_dir))
-
+                                callbacks=ClassifierDeep.__get_callbacks(current_dir))
             # Folds storage
-            folds.append(valid)
             for index in arange(len(valid_generator)):
                 x, y = valid_generator[index]
+                result = {}
+                result.update({"Fold": fold})
+                result.update({"Label": labels[index]})
+                result.update({"Reference": valid_generator.filenames[index]})
                 probability = model.predict(x)
-                probabilities[valid[index]] = probability
+                result.update({"Probability": probability[0]})
                 # Kept predictions
                 pred_class = ClassifierDeep.__predict_classes(probabilities=probability)
-                predictions[valid[index]] = pred_class
+                result.update({"Prediction": encoder.inverse_transform(array([pred_class]))[0]})
+                results.append(Result(result))
 
-                if self.activation_dir:
-                    activation = ClassifierDeep.__get_activation_map(model=model, seed_input=x, predict=pred_class,
-                                                                     image=load_img(paths[valid[index]]))
-                    imsave('{dir}{number}_{label}.png'.format(dir=self.activation_dir, number=valid[index],
-                                                              label=labels_encode.inverse_transform(predictions)), activation)
+                # if self.activation_dir:
+                #     activation = ClassifierDeep.__get_activation_map(model=model, seed_input=x, predict=pred_class,
+                #                                                      image=load_img(paths[valid[index]]))
+                #     imsave('{dir}{number}_{label}.png'.format(dir=self.activation_dir, number=valid[index],
+                #                                               label=labels_encode.inverse_transform(pred_class)), activation)
+                    # test_activate = visualize_activation(model, len(model.layers)-1,pred_class)
+                    # imsave('{dir}Test_{number}_{label}.png'.format(dir=self.activation_dir, number=valid[index],
+                    #                                           label=labels_encode.inverse_transform(pred_class)), test_activate)
 
-        map_index = unique(labels)
+        map_index = unique(encoded_labels)
         map_index.sort()
-        map_index = list(labels_encode.inverse_transform(map_index))
-        labels = labels_encode.inverse_transform(labels)
-        predictions = labels_encode.inverse_transform(predictions)
-        return Results(labels, folds, predictions, map_index, probabilities, "Deep")
+        map_index = list(encoder.inverse_transform(map_index))
+        return Results(results, map_index, "Deep")
 
-    @staticmethod
-    def __get_activation_map(model, seed_input, predict, image):
-        grads = visualize_cam(model, len(model.layers)-1, filter_indices=predict, seed_input=seed_input)#, penultimate_layer_idx=None, backprop_modifier=None, grad_modifier=None)
-        jet_heatmap = uint8(cm.jet(grads)[..., :3] * 255)
-        return overlay(jet_heatmap, image)
+    def evaluate_patch(self, paths_train, labels_train, paths_test, labels_test):
+
+        # Encode labels to go from string to int
+        encoder = preprocessing.LabelEncoder()
+        encoder.fit(labels_train)
+        encoded_labels_train = encoder.transform(labels_train)
+        encoded_labels_test = encoder.transform(labels_test)
+        malignant = encoder.transform(['LM'])[0]
+        normal = encoder.transform(['Normal'])[0]
+
+        # Clone locally model
+        model = clone_model(self.model)
+        model.set_weights(self.model.get_weights())
+        model.compile(optimizer="adam", loss='categorical_crossentropy', metrics=['accuracy'])
+
+        # Prepare data
+        patch_size = 250
+        generator = ResourcesGenerator(preprocessing_function=self.preprocess)
+        train_generator = generator.flow_from_paths(paths_train, encoded_labels_train, batch_size=6)
+
+        # Create model and fit
+        # model.fit_generator(generator=train_generator, epochs=100,
+        #                     callbacks=ClassifierDeep.__get_callbacks(self.work_dir))
+
+        # Encode labels to go from string to int
+        results = []
+        test_generator = generator.flow_from_paths(paths_test, encoded_labels_test, batch_size=1, shuffle=False)
+        for index in arange(len(test_generator)):
+            x, y = test_generator[index]
+
+            result = {}
+            result.update({"Label": encoder.inverse_transform([y.argmax()])[0]})
+            result.update({"Reference": test_generator.filenames[index]})
+
+            prediction = []
+            for i in range(0, 4):
+                for j in range(0, 4):
+                    x_patch = x[:, i*patch_size:(i+1)*patch_size, j*patch_size:(j+1)*patch_size, :]
+                    prediction.append(ClassifierDeep.__predict_classes(probabilities=model.predict(x_patch)))
+
+            probability = model.predict(x)
+            result.update({"Probability": probability})
+            # Kept predictions
+            pred_class = ClassifierDeep.__predict_classes(probabilities=probability)
+            result.update({"Prediction": malignant if prediction.count(malignant) > 0 else normal})
+            results.append(Result(result))
+
+        map_index = unique(encoded_labels_train)
+        map_index.sort()
+        map_index = list(encoder.inverse_transform(map_index))
+        return Results(results, map_index, "DeepPatch")
 
     @staticmethod
     def __predict_classes(probabilities):

@@ -39,9 +39,9 @@ if __name__ == '__main__':
     filter_by = {'Modality': 'Microscopy',
                  'Label': ['LM', 'Normal']}
     dataset = Reader().scan_folder(patient_folder)
-    paths = dataset.get_data(filter_by=filter_by)
-    labels = dataset.get_meta(meta='Label', filter_by=filter_by)
-    groups = dataset.get_meta(meta='Patient', filter_by=filter_by)
+    paths = dataset.get_data(key='Data', filter_by=filter_by)
+    labels = dataset.get_data(key='Label', filter_by=filter_by)
+    groups = dataset.get_data(key='Patient', filter_by=filter_by)
     # Adding process to watch our training process
     current_time = strftime('%Y_%m_%d_%H_%M_%S', gmtime(time()))
     work_dir = normpath('{output_dir}/Graph/{time}'.format(output_dir=output_dir, time=current_time))
@@ -53,8 +53,8 @@ if __name__ == '__main__':
     tb_tool.run()
 
     # Save statistics
-    metas = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
-    StatisticsWriter(dataset).write_result(metas=metas, dir_name=output_dir,
+    keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
+    StatisticsWriter(dataset).write_result(keys=keys, dir_name=output_dir,
                                            name='DeepLearning', filter_by=filter_by)
 
     # Get classification model for confocal

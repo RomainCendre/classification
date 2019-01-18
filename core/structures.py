@@ -14,6 +14,9 @@ class Data:
                 return False
         return True
 
+    def update(self, data):
+        self.data.update(data)
+
 
 class DataSet:
 
