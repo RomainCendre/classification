@@ -84,6 +84,9 @@ class ResultWriter:
         probabilities = self.result.get_data(key='Probability')
 
         figure, axes = pyplot.subplots(ncols=len(positives_classes), figsize=(21, 7), sharex=True, sharey=True)
+        if len(positives_classes) == 1:
+            axes = [axes]
+
         for index, axe in enumerate(axes):
             # Get AUC results for current positive class
             positive_class = positives_classes[index]

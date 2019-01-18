@@ -7,7 +7,7 @@ from os.path import isdir, join
 from PIL import Image
 from numpy import genfromtxt, asarray, savetxt
 from pyocr import builders
-from core.inputs import Data, DataSet
+from core.structures import Data, DataSet
 
 
 class Reader:
@@ -31,8 +31,9 @@ class Reader:
         # Build spectrum
         images = []
         for ind, row in csv.iterrows():
-            meta = row.to_dict()
-            image = Data(data=join(parent_folder, subdir, meta['Modality'], meta['Path']), meta=meta)
+            data = row.to_dict()
+            data.update({'Data': join(parent_folder, subdir, data['Modality'], data['Path'])})
+            image = Data(data=data)
             images.append(image)
         return images
 
@@ -56,7 +57,7 @@ class Reader:
                 meta = self.__read_patient_file(join(folder_path, subdir))
                 patient_datas = self.__read_images_file(folder_path, subdir)
                 # Update all meta data
-                [data.meta.update(meta) for data in patient_datas]
+                [data.data.update(meta) for data in patient_datas]
             except OSError:
                 print('Patient {}'.format(subdir))
             datas.extend(patient_datas)
