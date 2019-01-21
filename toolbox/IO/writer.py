@@ -53,13 +53,13 @@ class ResultWriter:
         self.write_misclassified(path=join(dir_name, name + "{name}_misclassified.csv".format(name=name)))
 
     def write_misclassified(self, path=None):
-        if not self.result.is_valid_keys(['Label', 'Prediction', 'Reference']):
+        if not self.results.is_valid_keys(['Label', 'Prediction', 'Reference']):
             print('Missing tag for misclassification report.')
             return
 
-        labels = self.result.get_data(key='Label')
-        predictions = self.result.get_data(key='Prediction')
-        references = self.result.get_data(key='Reference')
+        labels = self.inputs.get_decode_label(self.results.get_data(key='Label'))
+        predictions = self.inputs.get_decode_label(self.results.get_data(key='Prediction'))
+        references = self.results.get_data(key='Reference')
         misclassified = [index for index, (i, j) in enumerate(zip(labels, predictions)) if i == j]
         data = {'paths': references[misclassified],
                 'labels': labels[misclassified],
@@ -84,12 +84,12 @@ class ResultWriter:
 
     def write_roc(self, positives_classes=[], path=None):
         if not positives_classes:
-            positives_indices = self.result.get_unique_values('Label')
+            positives_indices = self.results.get_unique_values('Label')
         else:
             positives_indices = self.inputs.get_encode_label(positives_classes)
 
-        labels = self.result.get_data(key='Label')
-        probabilities = self.result.get_data(key='Probability')
+        labels = self.results.get_data(key='Label')
+        probabilities = self.results.get_data(key='Probability')
 
         figure, axes = pyplot.subplots(ncols=len(positives_classes), figsize=(21, 7), sharex=True, sharey=True)
         if len(positives_classes) == 1:
@@ -103,7 +103,7 @@ class ResultWriter:
                                             probabilities[:, positive_index],
                                             pos_label=positive_class)
 
-            axe.plot(fpr, tpr, label=r'ROC %s (AUC = %0.2f)' % (self.result.name, auc(fpr, tpr)), lw=2, alpha=.8)
+            axe.plot(fpr, tpr, label=r'ROC %s (AUC = %0.2f)' % (self.results.name, auc(fpr, tpr)), lw=2, alpha=.8)
             axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r', label='Luck', alpha=.8)
             axe.set(adjustable='box',
                     aspect='equal',
@@ -121,11 +121,12 @@ class ResultWriter:
     def report_scores(self, use_std=True):
         dict_report = self.__get_report_values(use_std=use_std)
         headers = ['Labels', 'Precision', 'Recall', 'F1-score', 'Support']
-        report = 'h1. ' + self.result.name + '\n\n'
+        report = 'h1. ' + self.results.name + '\n\n'
         report += '|_. ' + '|_. '.join(headers) + '|\n'
 
         # Label
-        ulabels = self.result.get_unique_values('Label')
+        ulabels = self.results.get_unique_values('Label')
+        ulabels = self.inputs.get_decode_label(ulabels)
         for ind, label in enumerate(ulabels):
             label_report = dict_report[label]
             report += '|' + label.capitalize()
@@ -151,7 +152,7 @@ class ResultWriter:
                     report[label][metrics] = '{mean:0.2f}'.format(mean=report[label][metrics])
         else:
             scores = []
-            unique_folds = self.result.get_unique_values('Fold')
+            unique_folds = self.results.get_unique_values('Fold')
             for fold in unique_folds:
                 scores.append(self.__report_values_fold(fold=fold))
 
@@ -167,13 +168,14 @@ class ResultWriter:
 
     def __report_values_fold(self, fold=None):
         if fold is None:
-            labels = self.result.get_data(key='Label')
-            predictions = self.result.get_data(key='Prediction')
+            labels = self.results.get_data(key='Label')
+            predictions = self.results.get_data(key='Prediction')
         else:
             filter_by = {'Fold': [fold]}
-            labels = self.result.get_data(key='Label', filter_by=filter_by)
-            predictions = self.result.get_data(key='Prediction', filter_by=filter_by)
-        return classification_report(labels, predictions, output_dict=True)
+            labels = self.results.get_data(key='Label', filter_by=filter_by)
+            predictions = self.results.get_data(key='Prediction', filter_by=filter_by)
+        return classification_report(self.inputs.get_decode_label(labels),
+                                     self.inputs.get_decode_label(predictions), output_dict=True)
 
 
 class VisualizationWriter:

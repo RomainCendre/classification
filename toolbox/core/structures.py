@@ -131,7 +131,7 @@ class Spectrum(Data):
 # Manage data for input on machine learning pipes
 class Inputs:
 
-    def __init__(self, data_set, data_tag, label_tag, group_tag='', references_tags=[], filter_by=None):
+    def __init__(self, data_set, data_tag, label_tag, group_tag='', references_tags=[], filter_by={}):
         self.data_set = data_set
         self.data_tag = data_tag
         self.label_tag = label_tag

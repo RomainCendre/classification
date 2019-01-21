@@ -1,3 +1,4 @@
+from tempfile import gettempdir
 from os import makedirs
 from os.path import expanduser, normpath, exists, join
 
@@ -12,11 +13,13 @@ from toolbox.core.structures import Inputs
 if __name__ == "__main__":
 
     home_path = expanduser("~")
+    temp_path = gettempdir()
 
     # Output dir
-    output_dir = normpath('{home}/Results/Neck/'.format(home=home_path))
+    output_dir = normpath('{temp}/Results/Neck/'.format(temp=temp_path))
     if not exists(output_dir):
         makedirs(output_dir)
+    print('Output directory: {out}'.format(out=output_dir))
 
     # Load data
     data_dir = normpath('{home}/Data/Neck/'.format(home=home_path))
