@@ -128,6 +128,55 @@ class Spectrum(Data):
         self.data['Wavelength'] = wavelength
 
 
+# Manage data for input on machine learning pipes
+class Inputs:
+
+    def __init__(self, data_set, data_tag, label_tag, group_tag='', references_tags=[], filter_by=None):
+        self.data_set = data_set
+        self.data_tag = data_tag
+        self.label_tag = label_tag
+        self.references_tags = references_tags
+        self.group_tag = group_tag
+        self.filter_by = filter_by
+        self.groups_encoder = preprocessing.LabelEncoder()
+        self.labels_encoder = preprocessing.LabelEncoder()
+        self.labels_encoder.fit(self.data_set.get_data(key=self.label_tag, filter_by=self.filter_by))
+
+    def get_datas(self):
+        return self.data_set.get_data(key=self.data_tag, filter_by=self.filter_by)
+
+    def get_decode_label(self, indices):
+        return self.labels_encoder.inverse_transform(indices)
+
+    def get_encode_label(self, indices):
+        return self.labels_encoder.transform(indices)
+
+    def get_groups(self):
+        if not self.group_tag:
+            return None
+        groups = self.data_set.get_data(key=self.group_tag, filter_by=self.filter_by)
+        self.groups_encoder.fit(groups)
+        return self.groups_encoder.transform(groups)
+
+    def get_labels(self):
+        labels = self.data_set.get_data(key=self.label_tag, filter_by=self.filter_by)
+        return self.labels_encoder.transform(labels)
+
+    def get_reference(self):
+        if not self.references_tags:
+            return None
+
+        references = [self.data_set.get_data(key=reference, filter_by=self.filter_by) for reference in self.references_tags]
+        return ['-'.join(map(str, x)) for x in zip(*references)]
+
+
+class InputsGenerators:
+
+    def __init__(self, data_set, data_tag, label_tag, group_tag='', references_tags=[], filter_by=None):
+        self.data_set = data_set
+        self.data_tag = data_tag
+
+
 class Result(Data):
 
     def __init__(self, result={}):
@@ -143,7 +192,7 @@ class Results(DataSet):
 
     """
 
-    def __init__(self, results, map_index, name=''):
+    def __init__(self, results, name=''):
         """Make an initialisation of SpectrumReader object.
 
         Take a string that represent delimiter
@@ -153,4 +202,3 @@ class Results(DataSet):
         """
         super().__init__(results)
         self.name = name
-        self.map_index = map_index

@@ -6,13 +6,14 @@ from keras.applications import InceptionV3
 from keras.applications.inception_v3 import preprocess_input
 from numpy import arange, geomspace
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.dummy import DummyClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
-from core.transforms import DWTTransform, PLSTransform
+from toolbox.core.transforms import DWTTransform, PLSTransform
 
 
 class DeepModels:
@@ -46,6 +47,13 @@ class DeepModels:
 
 
 class SimpleModels:
+
+    @staticmethod
+    def get_dummy_process():
+        pipe = Pipeline([('clf', DummyClassifier())])
+        # Define parameters to validate through grid CV
+        parameters = {}
+        return pipe, parameters
 
     @staticmethod
     def get_testing_process():

@@ -1,7 +1,7 @@
 from os.path import expanduser
 
-from IO import dermatology
-from IO import otorhinolaryngology
+from toolbox.IO import dermatology
+from toolbox.IO import otorhinolaryngology
 
 if __name__ == '__main__':
     # Load data references

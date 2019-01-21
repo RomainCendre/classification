@@ -11,9 +11,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-from IO.writer import ResultWriter
-from core.classification import Classifier
-from tools.tensorboard import DataProjector
+from toolbox.IO.writer import ResultWriter
+from toolbox.core.classification import Classifier
+from toolbox.tools.tensorboard import DataProjector
 
 
 def extract_haralick(input_dir, label):

@@ -3,11 +3,16 @@ from math import ceil
 import markups
 import pandas
 import pickle
-from matplotlib import pyplot
+from matplotlib import pyplot, cm
 from os.path import join
 
-from numpy import std
+from matplotlib.image import imsave
+from numpy import std, repeat, newaxis, uint8, arange
 from sklearn.metrics import auc, roc_curve, classification_report
+from vis.utils.utils import load_img
+from vis.visualization import visualize_cam, overlay
+
+from toolbox.core.generators import ResourcesGenerator
 
 
 class StatisticsWriter:
@@ -38,8 +43,9 @@ class StatisticsWriter:
 
 class ResultWriter:
 
-    def __init__(self, result):
-        self.result = result
+    def __init__(self, inputs, results):
+        self.inputs = inputs
+        self.results = results
 
     def write_results(self, dir_name, name, pos_label=[], use_std=True):
         self.write_report(use_std=use_std, path=join(dir_name, "{name}_report.html".format(name=name)))
@@ -78,7 +84,9 @@ class ResultWriter:
 
     def write_roc(self, positives_classes=[], path=None):
         if not positives_classes:
-            positives_classes = self.result.get_unique_values('Label')
+            positives_indices = self.result.get_unique_values('Label')
+        else:
+            positives_indices = self.inputs.get_encode_label(positives_classes)
 
         labels = self.result.get_data(key='Label')
         probabilities = self.result.get_data(key='Probability')
@@ -89,8 +97,8 @@ class ResultWriter:
 
         for index, axe in enumerate(axes):
             # Get AUC results for current positive class
-            positive_class = positives_classes[index]
-            positive_index = self.result.map_index.index(positive_class)
+            positive_index = positives_indices[index]
+            positive_class = self.inputs.get_decode_label([positive_index])[0]
             fpr, tpr, threshold = roc_curve(labels,
                                             probabilities[:, positive_index],
                                             pos_label=positive_class)
@@ -166,6 +174,36 @@ class ResultWriter:
             labels = self.result.get_data(key='Label', filter_by=filter_by)
             predictions = self.result.get_data(key='Prediction', filter_by=filter_by)
         return classification_report(labels, predictions, output_dict=True)
+
+
+class VisualizationWriter:
+
+    def __init__(self, model, preprocess):
+        self.model = model
+        self.preprocess = preprocess
+
+    def __get_activation_map(self, seed_input, predict, image):
+        if image.ndim == 2:
+            image = repeat(image[:, :, newaxis], 3, axis=2)
+        grads = visualize_cam(self.model, len(self.model.layers) - 1, filter_indices=predict, seed_input=seed_input,
+                              backprop_modifier='guided')  # , penultimate_layer_idx=None, backprop_modifier=None, grad_modifier=None)
+        jet_heatmap = uint8(cm.jet(grads)[..., :3] * 255)
+        return overlay(jet_heatmap, image)
+
+    def write_activations_maps(self, directory):
+        # Prepare data
+        generator = ResourcesGenerator(preprocessing_function=self.preprocess)
+        valid_generator = generator.flow_from_paths(paths, labels, batch_size=1, shuffle=False)
+        # Folds storage
+        for index in arange(len(valid_generator)):
+            x, y = valid_generator[index]
+            for classe in classes:
+                activation = self.__get_activation_map(seed_input=x, predict=pred_class,
+                                                                 image=load_img(paths[valid[index]]))
+                dir_path = join(directory, classe)
+                file_path = join(dir_path, '{number}_{label}.png'.format(number=valid[index],
+                                                   label=labels_encode.inverse_transform(pred_class)))
+                imsave(file_path, activation)
 
 
 class ObjectManager:

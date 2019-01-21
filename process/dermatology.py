@@ -3,12 +3,12 @@ from time import gmtime, strftime, time
 from os.path import exists, expanduser, normpath, join
 from sklearn.model_selection import GroupKFold, StratifiedKFold
 
-from IO.dermatology import Reader, DataManager
-from IO.writer import ResultWriter, StatisticsWriter
-from core.classification import ClassifierDeep
-from core.models import DeepModels
-from tools.limitations import Parameters
-from tools.tensorboard import TensorBoardTool
+from toolbox.IO.dermatology import Reader, DataManager
+from toolbox.IO.writer import ResultWriter, StatisticsWriter, VisualizationWriter
+from toolbox.core.classification import ClassifierDeep
+from toolbox.core.models import DeepModels
+from toolbox.tools.limitations import Parameters
+from toolbox.tools.tensorboard import TensorBoardTool
 
 outer_cv = GroupKFold(n_splits=5)
 
@@ -42,6 +42,7 @@ if __name__ == '__main__':
     paths = dataset.get_data(key='Data', filter_by=filter_by)
     labels = dataset.get_data(key='Label', filter_by=filter_by)
     groups = dataset.get_data(key='Patient', filter_by=filter_by)
+
     # Adding process to watch our training process
     current_time = strftime('%Y_%m_%d_%H_%M_%S', gmtime(time()))
     work_dir = normpath('{output_dir}/Graph/{time}'.format(output_dir=output_dir, time=current_time))
@@ -61,7 +62,11 @@ if __name__ == '__main__':
     model, preprocess, extractor = DeepModels.get_confocal_model(labels=labels)
 
     classifier = ClassifierDeep(model=model, outer_cv=StratifiedKFold(n_splits=5, shuffle=True),
-                                preprocess=preprocess, activation_dir=activation_dir,
-                                work_dir=work_dir)
+                                preprocess=preprocess, work_dir=work_dir)
     result = classifier.evaluate(paths=paths, labels=labels, groups=groups)
     ResultWriter(result).write_results(dir_name=output_dir, name='DeepLearning')
+
+
+    # Fit model and evaluate visualization
+    model = classifier.fit(paths=paths, labels=labels)
+    VisualizationWriter(model=model).write_activations_maps(dir=activation_dir)

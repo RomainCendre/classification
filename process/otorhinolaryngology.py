@@ -3,13 +3,17 @@ from os import makedirs
 from os.path import expanduser, normpath, join, exists
 from sklearn.model_selection import GroupKFold
 
-from core.classification import Classifier
-from core.models import SimpleModels
-from IO.otorhinolaryngology import Reader
-from IO.writer import ResultWriter, StatisticsWriter
+from toolbox.core.classification import Classifier
+from toolbox.core.models import SimpleModels
+from toolbox.IO.otorhinolaryngology import Reader
+from toolbox.IO.writer import ResultWriter, StatisticsWriter
+from toolbox.core.structures import Inputs
 
 
 def compute_data(data_set, out_dir, name, filter_by, keys):
+    inputs = Inputs(data_set, data_tag='Data', label_tag='label', group_tag='patient_name',
+                     references_tags=['patient_name', 'spectrum_id'], filter_by=filter_by)
+
     # Get process
     pipe, param = SimpleModels.get_pls_process()
 
@@ -19,10 +23,8 @@ def compute_data(data_set, out_dir, name, filter_by, keys):
     # Classify and write data results
     classifier = Classifier(pipeline=pipe, params=param,
                             inner_cv=GroupKFold(n_splits=5), outer_cv=GroupKFold(n_splits=5))
-    result = classifier.evaluate(features=spectra.get_data(key='Data', filter_by=filter_by),
-                                 labels=spectra.get_data(key='label', filter_by=filter_by),
-                                 groups=spectra.get_data(key='patient_name', filter_by=filter_by))
-    ResultWriter(result).write_results(dir_name=out_dir, name=name)
+    result = classifier.evaluate(inputs)
+    ResultWriter(inputs, result).write_results(dir_name=out_dir, name=name)
 
 
 if __name__ == "__main__":

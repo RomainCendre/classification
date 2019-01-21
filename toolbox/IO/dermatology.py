@@ -7,7 +7,7 @@ from os.path import isdir, join
 from PIL import Image
 from numpy import genfromtxt, asarray, savetxt
 from pyocr import builders
-from core.structures import Data, DataSet
+from toolbox.core.structures import Data, DataSet
 
 
 class Reader:

@@ -1,7 +1,7 @@
 from numpy import genfromtxt
 from os.path import join, splitext
 
-from core.structures import Spectrum, DataSet
+from toolbox.core.structures import Spectrum, DataSet
 
 
 class Reader:

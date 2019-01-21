@@ -15,11 +15,11 @@ from sklearn.svm import SVC
 from numpy import geomspace, concatenate, full, asarray
 from sklearn.model_selection import StratifiedKFold
 
-from IO.writer import ResultWriter
-from core.classification import Classifier
-from core.models import DeepModels
-from tools.limitations import Parameters
-from tools.tensorboard import DataProjector
+from toolbox.IO.writer import ResultWriter
+from toolbox.core.classification import Classifier
+from toolbox.core.models import DeepModels
+from toolbox.tools.limitations import Parameters
+from toolbox.tools.tensorboard import DataProjector
 
 
 def extract_deepfeatures (input_dir, label):
