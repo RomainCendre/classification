@@ -23,16 +23,8 @@ if __name__ == "__main__":
 
     # Load data
     data_dir = normpath('{home}/Data/Neck/'.format(home=home_path))
-    spectra_patients = Reader(';').read_table(join(data_dir, 'Patients.csv'))
-    spectra_temoins = Reader(';').read_table(join(data_dir, 'Temoins.csv'))
-    spectra = spectra_patients + spectra_temoins
+    spectra = Reader(';').read_table(join(data_dir, 'Patients.csv'))
 
-    filters = {
-        'Results_All': {},
-        'Results_SvsC': {'label': ['Sain', 'Cancer']},
-        'Results_SvsP': {'label': ['Sain', 'Precancer']},
-        'Results_PvsC': {'label': ['Precancer', 'Cancer']},
-    }
     keys = ['patient_label', 'device', 'label', 'location']
 
     inputs = Inputs(spectra, data_tag='Data', label_tag='label', group_tag='patient_name',

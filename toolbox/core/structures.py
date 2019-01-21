@@ -56,8 +56,8 @@ class DataSet:
         return valid_keys
 
     def is_valid_keys(self, check_keys):
-        for key in self.get_keys():
-            if key not in check_keys:
+        for key in check_keys:
+            if key not in self.get_keys():
                 return False
         return True
 
