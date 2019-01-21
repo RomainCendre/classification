@@ -38,10 +38,10 @@ if __name__ == "__main__":
 
     # Save statistics
     keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
-    StatisticsWriter(data_set).write_result(keys=keys, dir_name=output_dir, name='Test')
+    StatisticsWriter(data_set).write_result(keys=keys, dir_name=output_dir, filter_by=filter_by, name='Test')
 
     # Get classification model for confocal
-    model, preprocess, extractor = DeepModels.get_dummy(inputs)
+    model, preprocess, extractor = DeepModels.get_dummy_model(inputs)
 
     classifier = ClassifierDeep(model=model, outer_cv=StratifiedKFold(n_splits=5, shuffle=True),
                                 preprocess=preprocess, work_dir=output_dir)

@@ -23,8 +23,9 @@ class DeepModels:
     @staticmethod
     def get_dummy_model(inputs):
         # Extract labels
-        labels = inputs.get_labels()
-        return DeepDummy(labels), None, None
+        model = Sequential()
+        model.add(RandomLayer(len(inputs.get_unique_labels())))
+        return model, None, None
 
 
     @staticmethod

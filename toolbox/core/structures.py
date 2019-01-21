@@ -165,6 +165,10 @@ class Inputs:
         labels = self.data_set.get_data(key=self.label_tag, filter_by=self.filter_by)
         return self.labels_encoder.transform(labels)
 
+    def get_unique_labels(self):
+        labels = self.data_set.get_unique_values(key=self.label_tag, filter_by=self.filter_by)
+        return self.labels_encoder.transform(labels)
+
     def get_reference(self):
         if not self.references_tags:
             return None
