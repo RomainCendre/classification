@@ -219,3 +219,8 @@ class RandomLayer(Layer):
 
     def compute_output_shape(self, input_shape):
         return (input_shape[0], self.output_dim)
+
+    def get_config(self):
+        base_config = super().get_config()
+        base_config['output_dim'] = self.output_dim
+        return base_config
