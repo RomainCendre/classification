@@ -49,8 +49,8 @@ class ResultWriter:
 
     def write_results(self, dir_name, name, pos_label=[], use_std=True):
         self.write_report(use_std=use_std, path=join(dir_name, "{name}_report.html".format(name=name)))
-        self.write_roc(pos_label, path=join(dir_name, name + "{name}_roc.pdf".format(name=name)))
-        self.write_misclassified(path=join(dir_name, name + "{name}_misclassified.csv".format(name=name)))
+        self.write_roc(pos_label, path=join(dir_name, "{name}_roc.pdf".format(name=name)))
+        self.write_misclassified(path=join(dir_name, "{name}_misclassified.csv".format(name=name)))
 
     def write_misclassified(self, path=None):
         if not self.results.is_valid_keys(['Label', 'Prediction', 'Reference']):
@@ -67,6 +67,10 @@ class ResultWriter:
         pandas.DataFrame(data).to_csv(path_or_buf=path)
 
     def write_report(self, use_std=True, path=None):
+        if not self.results.is_valid_keys(['Label', 'Prediction']):
+            print('Missing tag for global report.')
+            return
+
         # Initialize converter of markup
         markup = markups.TextileMarkup()
 
@@ -83,6 +87,10 @@ class ResultWriter:
                 text_file.write("%s" % mk_report.get_document_body())
 
     def write_roc(self, positives_classes=[], path=None):
+        if not self.results.is_valid_keys(['Label', 'Prediction']):
+            print('Missing tag for Roc Curves report.')
+            return
+
         if not positives_classes:
             positives_indices = self.results.get_unique_values('Label')
         else:
