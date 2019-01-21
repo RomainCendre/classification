@@ -1,10 +1,12 @@
 from itertools import product
 
 from keras import Model, Sequential
+from keras.engine import Layer
 from keras.layers import Dense
 from keras.applications import InceptionV3
 from keras.applications.inception_v3 import preprocess_input
 from numpy import arange, geomspace
+from numpy.matlib import rand
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -19,7 +21,17 @@ from toolbox.core.transforms import DWTTransform, PLSTransform
 class DeepModels:
 
     @staticmethod
-    def get_confocal_model(labels):
+    def get_dummy_model(inputs):
+        # Extract labels
+        labels = inputs.get_labels()
+        return DeepDummy(labels), None, None
+
+
+    @staticmethod
+    def get_confocal_model(inputs):
+        # Extract labels
+        labels = inputs.get_labels()
+
         # We get the deep extractor part as include_top is false
         inception_model = InceptionV3(weights='imagenet', include_top=False, pooling='max')
 
@@ -185,3 +197,24 @@ class SimpleModels:
                                'DWT__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']
                            }))
         return extractors
+
+
+class RandomLayer(Layer):
+
+    def __init__(self, output_dim, **kwargs):
+        self.output_dim = output_dim
+        super().__init__(**kwargs)
+
+    def build(self, input_shape):
+        # Create a trainable weight variable for this layer.
+        self.kernel = self.add_weight(name='kernel',
+                                      shape=(input_shape[1], self.output_dim),
+                                      initializer='uniform',
+                                      trainable=True)
+        super().build(input_shape)  # Be sure to call this at the end
+
+    def call(self, x):
+        return rand(self.output_dim)
+
+    def compute_output_shape(self, input_shape):
+        return (input_shape[0], self.output_dim)

@@ -7,6 +7,7 @@ from toolbox.IO.dermatology import Reader, DataManager
 from toolbox.IO.writer import ResultWriter, StatisticsWriter, VisualizationWriter
 from toolbox.core.classification import ClassifierDeep
 from toolbox.core.models import DeepModels
+from toolbox.core.structures import Inputs
 from toolbox.tools.limitations import Parameters
 from toolbox.tools.tensorboard import TensorBoardTool
 
@@ -38,10 +39,10 @@ if __name__ == '__main__':
     # Load data references
     filter_by = {'Modality': 'Microscopy',
                  'Label': ['LM', 'Normal']}
+
     dataset = Reader().scan_folder(patient_folder)
-    paths = dataset.get_data(key='Data', filter_by=filter_by)
-    labels = dataset.get_data(key='Label', filter_by=filter_by)
-    groups = dataset.get_data(key='Patient', filter_by=filter_by)
+    inputs = Inputs(dataset, data_tag='Data', label_tag='Label', group_tag='Patient',
+                    references_tags=['Data'], filter_by=filter_by)
 
     # Adding process to watch our training process
     current_time = strftime('%Y_%m_%d_%H_%M_%S', gmtime(time()))
@@ -59,14 +60,14 @@ if __name__ == '__main__':
                                            name='DeepLearning', filter_by=filter_by)
 
     # Get classification model for confocal
-    model, preprocess, extractor = DeepModels.get_confocal_model(labels=labels)
+    model, preprocess, extractor = DeepModels.get_confocal_model(inputs)
 
     classifier = ClassifierDeep(model=model, outer_cv=StratifiedKFold(n_splits=5, shuffle=True),
                                 preprocess=preprocess, work_dir=work_dir)
-    result = classifier.evaluate(paths=paths, labels=labels, groups=groups)
+    result = classifier.evaluate(inputs)
     ResultWriter(result).write_results(dir_name=output_dir, name='DeepLearning')
 
 
     # Fit model and evaluate visualization
-    model = classifier.fit(paths=paths, labels=labels)
+    model = classifier.fit(inputs)
     VisualizationWriter(model=model).write_activations_maps(dir=activation_dir)
