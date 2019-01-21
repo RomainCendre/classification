@@ -99,7 +99,7 @@ class ResultWriter:
         labels = self.results.get_data(key='Label')
         probabilities = self.results.get_data(key='Probability')
 
-        figure, axes = pyplot.subplots(ncols=len(positives_classes), figsize=(21, 7), sharex=True, sharey=True)
+        figure, axes = pyplot.subplots(ncols=len(positives_indices), figsize=(21, 7), sharex=True, sharey=True)
         if len(positives_classes) == 1:
             axes = [axes]
 
@@ -109,7 +109,7 @@ class ResultWriter:
             positive_class = self.inputs.get_decode_label([positive_index])[0]
             fpr, tpr, threshold = roc_curve(labels,
                                             probabilities[:, positive_index],
-                                            pos_label=positive_class)
+                                            pos_label=positive_index)
 
             axe.plot(fpr, tpr, label=r'ROC %s (AUC = %0.2f)' % (self.results.name, auc(fpr, tpr)), lw=2, alpha=.8)
             axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r', label='Luck', alpha=.8)
