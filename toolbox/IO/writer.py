@@ -60,11 +60,11 @@ class ResultWriter:
         labels = self.inputs.get_decode_label(self.results.get_data(key='Label'))
         predictions = self.inputs.get_decode_label(self.results.get_data(key='Prediction'))
         references = self.results.get_data(key='Reference')
-        misclassified = [index for index, (i, j) in enumerate(zip(labels, predictions)) if i == j]
+        misclassified = [index for index, (i, j) in enumerate(zip(labels, predictions)) if i != j]
         data = {'paths': references[misclassified],
                 'labels': labels[misclassified],
                 'predictions': predictions[misclassified]}
-        pandas.DataFrame(data).to_csv(path_or_buf=path)
+        pandas.DataFrame(data).to_csv(path_or_buf=path, index=False)
 
     def write_report(self, use_std=True, path=None):
         if not self.results.is_valid_keys(['Label', 'Prediction']):
