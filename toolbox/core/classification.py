@@ -7,7 +7,7 @@ from sklearn import preprocessing
 from sklearn.model_selection import GridSearchCV
 
 from toolbox.core.generators import ResourcesGenerator
-from toolbox.core.structures import Results, Result
+from toolbox.core.structures import Results, Result, Data
 from toolbox.tools.tensorboard import TensorBoardWriter
 
 

@@ -5,8 +5,11 @@ from sklearn.utils.multiclass import unique_labels
 
 class Data:
 
-    def __init__(self, data={}):
-        self.data = data
+    def __init__(self, data=None):
+        if data is None:
+            self.data = {}
+        else:
+            self.data = data
 
     def is_in_data(self, check):
         for key, value in check.items():
@@ -179,7 +182,7 @@ class InputsGenerators:
 
 class Result(Data):
 
-    def __init__(self, result={}):
+    def __init__(self, result=None):
         super().__init__(result)
 
 
