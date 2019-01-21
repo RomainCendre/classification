@@ -147,7 +147,7 @@ class ClassifierDeep:
             print('Fold number {}'.format(fold+1))
             self.work_dir = join(self.work_dir, 'Fold {fold}'.format(fold=(fold + 1)))
             # Fit model
-            model = self.fit(datas[train], labels[train])
+            model = self.__fit(datas[train], labels[train])
 
             # Prepare data
             generator = ResourcesGenerator(preprocessing_function=self.preprocess)
@@ -174,6 +174,8 @@ class ClassifierDeep:
         # Extract data for fit
         datas = inputs.get_datas()
         labels = inputs.get_labels()
+
+    def __fit(self, datas, labels, batch_size=32, epochs=100):
 
         # Clone locally model
         model = clone_model(self.model)
