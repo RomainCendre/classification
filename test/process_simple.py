@@ -28,7 +28,7 @@ if __name__ == "__main__":
     # Parameters
     name = 'Test'
 
-    keys = ['patient_label', 'device', 'label', 'location']
+    keys = ['patient_label', 'operator', 'label', 'location']
 
     inputs = Inputs(spectra, data_tag='Data', label_tag='label', group_tag='patient_name',
                     references_tags=['patient_name', 'spectrum_id'])

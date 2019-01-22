@@ -1,6 +1,8 @@
 import pandas
 from os.path import join, splitext
 
+from numpy.ma import array
+
 from toolbox.core.structures import Spectrum, DataSet
 
 
@@ -37,7 +39,7 @@ class Reader:
             A spectra object.
         """
         # Read csv
-        csv = pandas.read_csv(file_path, dtype=str)
+        csv = array(pandas.read_csv(file_path, header=None, dtype=str).values)
         spectra = []
         # Build spectrum
         for x in range(self.COLUMN_FIRST, csv.shape[1]):
@@ -70,7 +72,7 @@ class Reader:
             # Get patient meta data
             meta = {'patient_name': row['fichier'],
                     'patient_label': row['pathologie'],
-                    'operateur': row['operateur'],
+                    'operator': row['operateur'],
                     'location': row['provenance']}
 
             patient_datas = self.read_file(join(base_folder, current_file))
