@@ -1,10 +1,12 @@
 from collections import Counter
 from math import ceil
+from os import makedirs
+
 import markups
 import pandas
 import pickle
 from matplotlib import pyplot, cm
-from os.path import join
+from os.path import join, exists
 
 from matplotlib.image import imsave
 from numpy import std, repeat, newaxis, uint8, arange
@@ -188,7 +190,7 @@ class ResultWriter:
 
 class VisualizationWriter:
 
-    def __init__(self, model, preprocess):
+    def __init__(self, model, preprocess=None):
         self.model = model
         self.preprocess = preprocess
 
@@ -200,19 +202,28 @@ class VisualizationWriter:
         jet_heatmap = uint8(cm.jet(grads)[..., :3] * 255)
         return overlay(jet_heatmap, image)
 
-    def write_activations_maps(self, directory):
+    def write_activations_maps(self, directory, inputs):
+        # Extract data for fit
+        paths = inputs.get_datas()
+        labels = inputs.get_labels()
+        ulabels = inputs.get_unique_labels()
+
         # Prepare data
         generator = ResourcesGenerator(preprocessing_function=self.preprocess)
         valid_generator = generator.flow_from_paths(paths, labels, batch_size=1, shuffle=False)
+
         # Folds storage
         for index in arange(len(valid_generator)):
             x, y = valid_generator[index]
-            for classe in classes:
-                activation = self.__get_activation_map(seed_input=x, predict=pred_class,
-                                                                 image=load_img(paths[valid[index]]))
-                dir_path = join(directory, classe)
-                file_path = join(dir_path, '{number}_{label}.png'.format(number=valid[index],
-                                                   label=labels_encode.inverse_transform(pred_class)))
+
+            for label_index in ulabels:
+                dir_path = join(directory, inputs.get_decode_label(label_index)[0])
+                if not exists(dir_path):
+                    makedirs(dir_path)
+
+                activation = self.__get_activation_map(seed_input=x, predict=label_index,
+                                                       image=load_img(paths[index]))
+                file_path = join(dir_path, '{number}.png'.format(number=paths[index]))
                 imsave(file_path, activation)
 
 

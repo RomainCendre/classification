@@ -17,6 +17,9 @@ if __name__ == '__main__':
 
     home_path = expanduser("~")
 
+    # Experience name
+    name = 'DeepLearning'
+
     # Output dir
     output_dir = normpath('{home}/Results/Skin/Saint_Etienne/Deep/'.format(home=home_path))
     if not exists(output_dir):
@@ -36,14 +39,17 @@ if __name__ == '__main__':
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
 
-    # Load data references
+    # Step 1 - Load data and statistics
+    keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
     filter_by = {'Modality': 'Microscopy',
                  'Label': ['LM', 'Normal']}
-
-    dataset = Reader().scan_folder(patient_folder)
-    inputs = Inputs(dataset, data_tag='Data', label_tag='Label', group_tag='Patient',
+    data_set = Reader().scan_folder(patient_folder)
+    inputs = Inputs(data_set, data_tag='Data', label_tag='Label', group_tag='Patient',
                     references_tags=['Data'], filter_by=filter_by)
+    StatisticsWriter(data_set).write_result(keys=keys, dir_name=output_dir,
+                                            name=name, filter_by=filter_by)
 
+    # Step 2 - Fit and Evaluate
     # Adding process to watch our training process
     current_time = strftime('%Y_%m_%d_%H_%M_%S', gmtime(time()))
     work_dir = normpath('{output_dir}/Graph/{time}'.format(output_dir=output_dir, time=current_time))
@@ -54,19 +60,12 @@ if __name__ == '__main__':
     tb_tool.write_batch()
     tb_tool.run()
 
-    # Save statistics
-    keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
-    StatisticsWriter(dataset).write_result(keys=keys, dir_name=output_dir,
-                                           name='DeepLearning', filter_by=filter_by)
-
     # Get classification model for confocal
     model, preprocess, extractor = DeepModels.get_confocal_model(inputs)
-
     classifier = ClassifierDeep(model=model, outer_cv=StratifiedKFold(n_splits=5, shuffle=True),
                                 preprocess=preprocess, work_dir=work_dir)
     result = classifier.evaluate(inputs)
-    ResultWriter(result).write_results(dir_name=output_dir, name='DeepLearning')
-
+    ResultWriter(result).write_results(dir_name=output_dir, name=name)
 
     # Fit model and evaluate visualization
     model = classifier.fit(inputs)
