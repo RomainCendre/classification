@@ -167,7 +167,9 @@ class ClassifierDeep:
                 result.update({"Prediction": ClassifierDeep.__predict_classes(probabilities=probability)})
                 results.append(result)
 
-        self.work_dir = work_dir
+            # Restore path
+            self.work_dir = work_dir
+
         return Results(results, "Deep")
 
     def fit(self, inputs, batch_size=32, epochs=100):

@@ -49,11 +49,5 @@ if __name__ == "__main__":
     classifier = ClassifierDeep(model=model, outer_cv=StratifiedKFold(n_splits=2, shuffle=True),
                                 preprocess=preprocess, work_dir=output_dir)
     result = classifier.evaluate(inputs, epochs=10)
-    ResultWriter(result).write_results(dir_name=output_dir, name=name)
+    ResultWriter(inputs, result).write_results(dir_name=output_dir, name=name)
 
-
-    # Fit model and evaluate visualization
-    model = classifier.fit(inputs)
-    VisualizationWriter(model=model).write_activations_maps(dir=activation_dir)
-
-    keras.Model()
