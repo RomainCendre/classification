@@ -1,11 +1,10 @@
-import glob
+from glob import glob
 import pandas
 import pyocr
 import shutil
 from os import listdir, makedirs, path
 from os.path import isdir, join
 from PIL import Image
-from numpy import genfromtxt, asarray, savetxt
 from pyocr import builders
 from toolbox.core.structures import Data, DataSet
 
@@ -63,6 +62,21 @@ class Reader:
             datas.extend(patient_datas)
 
         return DataSet(datas)
+
+    def scan_folder_for_images(self, folder_path):
+        # Subdirectories
+        sub_dirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
+
+        # Browse subdirectories
+        data_set = []
+        for subdir in sub_dirs:
+            sub_folder = join(folder_path, subdir)
+            sub_files = glob(join(sub_folder, '*.bmp'))
+
+            for sub_file in sub_files:
+                data_set.append(Data(data={'Data': sub_file,
+                                        'Label': subdir}))
+        return DataSet(data_set)
 
 
 class ConfocalBuilder(builders.TextBuilder):

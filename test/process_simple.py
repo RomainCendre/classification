@@ -1,9 +1,7 @@
 from tempfile import gettempdir
 from os import makedirs
-from os.path import expanduser, normpath, exists, join, dirname
-
+from os.path import normpath, exists, join, dirname
 from sklearn.model_selection import GroupKFold
-
 from toolbox.IO.otorhinolaryngology import Reader
 from toolbox.IO.writer import StatisticsWriter, ResultWriter
 from toolbox.core.classification import Classifier

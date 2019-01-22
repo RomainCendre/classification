@@ -1,8 +1,6 @@
 import pandas
 from os.path import join, splitext
-
 from numpy.ma import array
-
 from toolbox.core.structures import Spectrum, DataSet
 
 

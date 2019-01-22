@@ -26,11 +26,6 @@ if __name__ == "__main__":
     if not exists(output_dir):
         makedirs(output_dir)
 
-    # Activation dir
-    activation_dir = join(output_dir, 'Activation/')
-    if not exists(activation_dir):
-        makedirs(activation_dir)
-
     # Adding process to watch our training process
     current_time = strftime('%Y_%m_%d_%H_%M_%S', gmtime(time()))
     work_dir = normpath('{output_dir}/Graph/{time}'.format(output_dir=output_dir, time=current_time))
@@ -67,3 +62,9 @@ if __name__ == "__main__":
 
     result = classifier.evaluate_patch(paths, labels)
     ResultWriter(result).write_results(dir_name=output_dir, name='DeepLearning')
+
+
+    # Activation dir
+    activation_dir = join(output_dir, 'Activation/')
+    if not exists(activation_dir):
+        makedirs(activation_dir)

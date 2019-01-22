@@ -23,7 +23,11 @@ if __name__ == "__main__":
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
 
-    # Load data
+    # Step 1 -- Load pretrain data
+    thumbnail_folder = normpath('{here}/data/dermatology/Thumbnails/'.format(here=here_path))
+    data_set = Reader().scan_folder_for_images(thumbnail_folder)
+
+    # Step 2 -- Load data
     patient_folder = normpath('{here}/data/dermatology/Patients'.format(here=here_path))
     data_set = Reader().scan_folder(patient_folder)
 
