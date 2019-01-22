@@ -1,6 +1,6 @@
 from tempfile import gettempdir
 from os import makedirs
-from os.path import expanduser, normpath, exists, join
+from os.path import expanduser, normpath, exists, join, dirname
 
 import keras
 from sklearn.model_selection import GroupKFold, StratifiedKFold
@@ -14,11 +14,11 @@ from toolbox.tools.limitations import Parameters
 
 if __name__ == "__main__":
 
-    home_path = expanduser("~")
+    here_path = dirname(__file__)
     temp_path = gettempdir()
 
     # Output dir
-    output_dir = normpath('{temp}/Deep/Test/'.format(temp=temp_path))
+    output_dir = normpath('{temp}/dermatology/'.format(temp=temp_path))
     if not exists(output_dir):
         makedirs(output_dir)
     print('Output directory: {out}'.format(out=output_dir))
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     Parameters.set_gpu(percent_gpu=0.5)
 
     # Load data
-    patient_folder = normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))
+    patient_folder = normpath('{here}/data/dermatology/Patients'.format(here=here_path))
     data_set = Reader().scan_folder(patient_folder)
 
     # Load data references
@@ -46,9 +46,9 @@ if __name__ == "__main__":
     # Get classification model for confocal
     model, preprocess, extractor = DeepModels.get_dummy_model(inputs)
 
-    classifier = ClassifierDeep(model=model, outer_cv=StratifiedKFold(n_splits=5, shuffle=True),
+    classifier = ClassifierDeep(model=model, outer_cv=StratifiedKFold(n_splits=2, shuffle=True),
                                 preprocess=preprocess, work_dir=output_dir)
-    result = classifier.evaluate(inputs)
+    result = classifier.evaluate(inputs, epochs=10)
     ResultWriter(result).write_results(dir_name=output_dir, name=name)
 
 

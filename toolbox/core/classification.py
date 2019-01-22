@@ -135,7 +135,7 @@ class ClassifierDeep:
         model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
         return model
 
-    def evaluate(self, inputs):
+    def evaluate(self, inputs, batch_size=32, epochs=100):
         datas = inputs.get_datas()
         labels = inputs.get_labels()
         groups = inputs.get_groups()
@@ -147,7 +147,7 @@ class ClassifierDeep:
             print('Fold number {}'.format(fold+1))
             self.work_dir = join(self.work_dir, 'Fold {fold}'.format(fold=(fold + 1)))
             # Fit model
-            model = self.__fit(datas[train], labels[train])
+            model = self.__fit(datas[train], labels[train], batch_size=batch_size, epochs=epochs)
 
             # Prepare data
             generator = ResourcesGenerator(preprocessing_function=self.preprocess)
