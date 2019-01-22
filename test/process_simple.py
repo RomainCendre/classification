@@ -27,17 +27,17 @@ if __name__ == "__main__":
 
     # Parameters
     name = 'Test'
-
+    filter = {'label': ['Sain', 'Cancer']}
     keys = ['patient_label', 'operator', 'label', 'location']
 
     inputs = Inputs(spectra, data_tag='Data', label_tag='label', group_tag='patient_name',
-                    references_tags=['patient_name', 'spectrum_id'])
+                    references_tags=['patient_name', 'spectrum_id'], filter_by=filter)
 
     # Get process
     pipe, param = SimpleModels.get_dummy_process()
 
     # Write statistics on current data
-    StatisticsWriter(spectra).write_result(keys=keys, dir_name=output_dir, name=name)
+    StatisticsWriter(spectra).write_result(keys=keys, dir_name=output_dir, name=name, filter_by=filter)
 
     # Classify and write data results
     classifier = Classifier(pipeline=pipe, params=param,
