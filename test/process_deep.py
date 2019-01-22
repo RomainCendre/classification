@@ -36,9 +36,12 @@ if __name__ == "__main__":
 
     inputs = Inputs(data_set, data_tag='Data', label_tag='Label', group_tag='Patient', filter_by=filter_by)
 
-    # Save statistics
+    # Parameters
+    name = 'Test'
+
     keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
-    StatisticsWriter(data_set).write_result(keys=keys, dir_name=output_dir, filter_by=filter_by, name='Test')
+
+    StatisticsWriter(data_set).write_result(keys=keys, dir_name=output_dir, filter_by=filter_by, name=name)
 
     # Get classification model for confocal
     model, preprocess, extractor = DeepModels.get_dummy_model(inputs)
@@ -46,7 +49,7 @@ if __name__ == "__main__":
     classifier = ClassifierDeep(model=model, outer_cv=StratifiedKFold(n_splits=5, shuffle=True),
                                 preprocess=preprocess, work_dir=output_dir)
     result = classifier.evaluate(inputs)
-    ResultWriter(result).write_results(dir_name=output_dir, name='DeepLearning')
+    ResultWriter(result).write_results(dir_name=output_dir, name=name)
 
 
     # Fit model and evaluate visualization
