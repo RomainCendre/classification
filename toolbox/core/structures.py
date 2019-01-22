@@ -152,6 +152,9 @@ class Inputs:
             self.labels_encoder = preprocessing.LabelEncoder()
             self.labels_encoder.fit(self.data_set.get_data(key=self.label_tag, filter_by=self.filter_by))
 
+    def change_group(self, group_tag):
+        self.group_tag = group_tag
+
     def get_datas(self):
         return self.data_set.get_data(key=self.data_tag, filter_by=self.filter_by)
 

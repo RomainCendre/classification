@@ -42,6 +42,7 @@ if __name__ == "__main__":
     patient_folder = normpath('{here}/data/dermatology/Patients'.format(here=here_path))
     data_set = Reader().scan_folder(patient_folder)
     inputs.change_data(data_set, filter_by=filter_by)
+    inputs.change_group(group_tag='Patient')
 
     StatisticsWriter(data_set).write_result(keys=keys, dir_name=output_dir, filter_by=filter_by, name=name)
     result = classifier.evaluate(inputs, epochs=10)
