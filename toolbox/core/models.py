@@ -1,6 +1,6 @@
 from itertools import product
 
-from keras import Model, Sequential
+from keras import Model, Sequential, Input
 from keras.engine import Layer
 from keras.layers import Dense
 from keras.applications import InceptionV3
@@ -24,7 +24,9 @@ class DeepModels:
     def get_dummy_model(inputs):
         # Extract labels
         model = Sequential()
-        model.add(RandomLayer(len(inputs.get_unique_labels())))
+        #model.add(Input(shape=(None, None, 3)))
+        model.add(RandomLayer(len(inputs.get_unique_labels()), input_shape=(None, None, 3)))
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         return model, None, None
 
 
@@ -207,11 +209,6 @@ class RandomLayer(Layer):
         super().__init__(**kwargs)
 
     def build(self, input_shape):
-        # Create a trainable weight variable for this layer.
-        self.kernel = self.add_weight(name='kernel',
-                                      shape=(input_shape[1], self.output_dim),
-                                      initializer='uniform',
-                                      trainable=True)
         super().build(input_shape)  # Be sure to call this at the end
 
     def call(self, x):
