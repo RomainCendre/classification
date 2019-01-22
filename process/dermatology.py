@@ -4,7 +4,7 @@ from os.path import exists, expanduser, normpath, join
 from sklearn.model_selection import GroupKFold, StratifiedKFold
 
 from toolbox.IO.dermatology import Reader, DataManager
-from toolbox.IO.writer import ResultWriter, StatisticsWriter, VisualizationWriter
+from toolbox.IO.writers import ResultWriter, StatisticsWriter, VisualizationWriter
 from toolbox.core.classification import ClassifierDeep
 from toolbox.core.models import DeepModels
 from toolbox.core.structures import Inputs

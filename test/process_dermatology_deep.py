@@ -3,7 +3,7 @@ from os import makedirs
 from os.path import normpath, exists, dirname, join
 from sklearn.model_selection import StratifiedKFold
 from toolbox.IO.dermatology import Reader
-from toolbox.IO.writer import StatisticsWriter, ResultWriter, VisualizationWriter
+from toolbox.IO.writers import StatisticsWriter, ResultWriter, VisualizationWriter
 from toolbox.core.classification import ClassifierDeep
 from toolbox.core.models import DeepModels
 from toolbox.core.structures import Inputs
@@ -21,11 +21,6 @@ if __name__ == "__main__":
     output_dir = normpath('{temp}/dermatology/'.format(temp=temp_path))
     if not exists(output_dir):
         makedirs(output_dir)
-
-    # Activation dir
-    activation_dir = join(output_dir, 'Activation/')
-    if not exists(activation_dir):
-        makedirs(activation_dir)
 
     print('Output directory: {out}'.format(out=output_dir))
 
@@ -49,8 +44,4 @@ if __name__ == "__main__":
     result = classifier.evaluate(inputs, epochs=10)
     ResultWriter(inputs, result).write_results(dir_name=output_dir, name=name)
 
-    # Step 3 - Visualization time
-    model = classifier.fit(inputs, epochs=10)
-    VisualizationWriter(model=model, preprocess=preprocess).write_activations_maps(directory=activation_dir,
-                                                                                   inputs=inputs)
 

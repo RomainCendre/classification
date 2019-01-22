@@ -217,7 +217,7 @@ class VisualizationWriter:
             x, y = valid_generator[index]
 
             for label_index in ulabels:
-                dir_path = join(directory, inputs.get_decode_label(label_index)[0])
+                dir_path = join(directory, inputs.get_decode_label([label_index])[0])
                 if not exists(dir_path):
                     makedirs(dir_path)
 

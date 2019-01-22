@@ -3,7 +3,7 @@ from os import makedirs
 from os.path import normpath, exists, join, dirname
 from sklearn.model_selection import GroupKFold
 from toolbox.IO.otorhinolaryngology import Reader
-from toolbox.IO.writer import StatisticsWriter, ResultWriter
+from toolbox.IO.writers import StatisticsWriter, ResultWriter
 from toolbox.core.classification import Classifier
 from toolbox.core.models import SimpleModels
 from toolbox.core.structures import Inputs

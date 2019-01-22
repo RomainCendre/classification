@@ -15,7 +15,7 @@ from sklearn.svm import SVC
 from numpy import geomspace, concatenate, full, asarray
 from sklearn.model_selection import StratifiedKFold
 
-from toolbox.IO.writer import ResultWriter
+from toolbox.IO.writers import ResultWriter
 from toolbox.core.classification import Classifier
 from toolbox.core.models import DeepModels
 from toolbox.tools.limitations import Parameters

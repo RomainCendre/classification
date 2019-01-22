@@ -11,7 +11,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-from toolbox.IO.writer import ResultWriter
+from toolbox.IO.writers import ResultWriter
 from toolbox.core.classification import Classifier
 from toolbox.tools.tensorboard import DataProjector
 

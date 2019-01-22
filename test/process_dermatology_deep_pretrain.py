@@ -3,7 +3,7 @@ from os import makedirs
 from os.path import normpath, exists, dirname
 from sklearn.model_selection import StratifiedKFold
 from toolbox.IO.dermatology import Reader
-from toolbox.IO.writer import StatisticsWriter, ResultWriter
+from toolbox.IO.writers import StatisticsWriter, ResultWriter
 from toolbox.core.classification import ClassifierDeep
 from toolbox.core.models import DeepModels
 from toolbox.core.structures import Inputs

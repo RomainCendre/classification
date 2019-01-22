@@ -6,7 +6,7 @@ from sklearn.model_selection import GroupKFold
 from toolbox.core.classification import Classifier
 from toolbox.core.models import SimpleModels
 from toolbox.IO.otorhinolaryngology import Reader
-from toolbox.IO.writer import ResultWriter, StatisticsWriter
+from toolbox.IO.writers import ResultWriter, StatisticsWriter
 from toolbox.core.structures import Inputs
 
 

@@ -8,7 +8,7 @@ from numpy import geomspace, concatenate, full
 from sklearn.model_selection import StratifiedKFold
 
 from toolbox.IO.dermatology import Reader
-from toolbox.IO.writer import ResultWriter
+from toolbox.IO.writers import ResultWriter
 from toolbox.core.classification import ClassifierDeep
 from toolbox.core.models import DeepModels
 from toolbox.tools.limitations import Parameters
