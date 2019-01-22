@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
 
     # Fit model and evaluate visualization
-    model = classifier.fit(paths=paths, labels=labels)
+    model = classifier.fit(inputs)
     VisualizationWriter(model=model).write_activations_maps(dir=activation_dir)
 
     keras.Model()

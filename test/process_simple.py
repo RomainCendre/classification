@@ -1,6 +1,6 @@
 from tempfile import gettempdir
 from os import makedirs
-from os.path import expanduser, normpath, exists, join
+from os.path import expanduser, normpath, exists, join, dirname
 
 from sklearn.model_selection import GroupKFold
 
@@ -12,18 +12,18 @@ from toolbox.core.structures import Inputs
 
 if __name__ == "__main__":
 
-    home_path = expanduser("~")
+    here_path = dirname(__file__)
     temp_path = gettempdir()
 
     # Output dir
-    output_dir = normpath('{temp}/Results/Neck/'.format(temp=temp_path))
+    output_dir = normpath('{temp}/spectroscopy/'.format(temp=temp_path))
     if not exists(output_dir):
         makedirs(output_dir)
     print('Output directory: {out}'.format(out=output_dir))
 
     # Load data
-    data_dir = normpath('{home}/Data/Neck/'.format(home=home_path))
-    spectra = Reader(';').read_table(join(data_dir, 'Patients.csv'))
+    data_dir = normpath('{here}/data/spectroscopy'.format(here=here_path))
+    spectra = Reader().read_table(join(data_dir, 'Patients.csv'))
 
     # Parameters
     name = 'Test'
