@@ -1,12 +1,11 @@
 from itertools import product
 
-from keras import Model, Sequential, Input
+from keras import Model, Sequential
 from keras.engine import Layer
-from keras.layers import Dense
+from keras.layers import Dense, K
 from keras.applications import InceptionV3
 from keras.applications.inception_v3 import preprocess_input
 from numpy import arange, geomspace
-from numpy.matlib import rand
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -24,8 +23,7 @@ class DeepModels:
     def get_dummy_model(inputs):
         # Extract labels
         model = Sequential()
-        #model.add(Input(shape=(None, None, 3)))
-        model.add(RandomLayer(len(inputs.get_unique_labels()), input_shape=(None, None, 3)))
+        model.add(Dense(32, input_shape=(16,)))#(RandomLayer(len(inputs.get_unique_labels()), input_shape=(None, None, 3)))
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         return model, None, None
 
@@ -212,7 +210,7 @@ class RandomLayer(Layer):
         super().build(input_shape)  # Be sure to call this at the end
 
     def call(self, x):
-        return rand(self.output_dim)
+        return K.random_uniform(self.output_dim)
 
     def compute_output_shape(self, input_shape):
         return (input_shape[0], self.output_dim)
