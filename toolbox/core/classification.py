@@ -85,13 +85,12 @@ class Classifier:
 
 class ClassifierDeep:
 
-    def __init__(self, model, outer_cv, work_dir, preprocess, activation_dir='', scoring=None):
+    def __init__(self, model, outer_cv, work_dir, preprocess, scoring=None):
         self.model = model
         self.outer_cv = outer_cv
         self.work_dir = work_dir
         self.scoring = scoring
         self.generator = ResourcesGenerator(rescale=1. / 255)
-        self.activation_dir = activation_dir
         self.preprocess = preprocess
 
     def extract_features(self, paths, labels):
@@ -176,6 +175,7 @@ class ClassifierDeep:
         # Extract data for fit
         datas = inputs.get_datas()
         labels = inputs.get_labels()
+        return self.__fit(datas, labels, batch_size=batch_size, epochs=epochs)
 
     def __fit(self, datas, labels, batch_size=32, epochs=100):
 
