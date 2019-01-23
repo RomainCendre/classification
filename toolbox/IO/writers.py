@@ -202,7 +202,13 @@ class VisualizationWriter:
         jet_heatmap = uint8(cm.jet(grads)[..., :3] * 255)
         return overlay(jet_heatmap, image)
 
-    def write_activations_maps(self, directory, inputs):
+    def write_activations_maps(self, inputs, output_folder):
+
+        # Activation dir
+        activation_dir = join(output_folder, 'Activation/')
+        if not exists(activation_dir):
+            makedirs(activation_dir)
+
         # Extract data for fit
         paths = inputs.get_datas()
         labels = inputs.get_labels()
@@ -217,7 +223,7 @@ class VisualizationWriter:
             x, y = valid_generator[index]
 
             for label_index in ulabels:
-                dir_path = join(directory, inputs.get_decode_label([label_index])[0])
+                dir_path = join(output_folder, inputs.get_decode_label([label_index])[0])
                 if not exists(dir_path):
                     makedirs(dir_path)
 

@@ -21,33 +21,31 @@ from toolbox.core.transforms import DWTTransform, PLSTransform
 class DeepModels:
 
     @staticmethod
-    def get_dummy_model(inputs):
+    def get_dummy_model(output_classes):
         # Extract labels
         model = Sequential()
-        Dense
         # model.add(Dense(32, input_shape=(None, None, 3)))
-        model.add(RandomLayer(len(inputs.get_unique_labels()), input_shape=(None, None, 3)))
+        model.add(RandomLayer(output_classes, input_shape=(None, None, 3)))
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-        return model, None, None
+        return model, None
 
 
     @staticmethod
-    def get_confocal_model(inputs):
-        # Extract labels
-        labels = inputs.get_labels()
-
+    def get_confocal_model(output_classes):
         # We get the deep extractor part as include_top is false
         inception_model = InceptionV3(weights='imagenet', include_top=False, pooling='max')
 
         # Now we customize the output consider our application field
-        prediction_layers = Dense(DeepModels.__get_class_number(labels), activation='softmax', name='predictions')(inception_model.output)
+        prediction_layers = Dense(output_classes, activation='softmax', name='predictions')(inception_model.output)
 
         # And defined model based on our input and next output
         model = Model(inputs=inception_model.input, outputs=prediction_layers)
         for layer in model.layers[:len(inception_model.layers)]:
             layer.trainable = False
 
-        return model, preprocess_input, inception_model
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+        return model, preprocess_input
 
     @staticmethod
     def get_confocal_final(optimizer='adam'):

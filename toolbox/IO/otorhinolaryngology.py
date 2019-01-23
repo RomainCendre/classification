@@ -61,7 +61,7 @@ class Reader:
         """
         # Read csv
         base_folder = splitext(table_path)[0]
-        table = pandas.read_csv(table_path, dtype=str)
+        table = pandas.read_csv(table_path, dtype=str).fillna('')
         spectra = []
         for ind, row in table.iterrows():
             current_file = row['fichier']

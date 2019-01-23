@@ -1,32 +1,30 @@
+from tempfile import gettempdir
 from os import makedirs, startfile
-from os.path import expanduser, normpath, join, exists
-
+from os.path import normpath, exists, join, dirname
 from process.processes import Processes
 from toolbox.core.models import SimpleModels
 
 if __name__ == "__main__":
 
-    home_path = expanduser("~")
+    here_path = dirname(__file__)
+    temp_path = gettempdir()
 
     # Output dir
-    output_folder = normpath('{home}/Results/Neck/'.format(home=home_path))
+    output_folder = normpath('{temp}/spectroscopy/'.format(temp=temp_path))
     if not exists(output_folder):
         makedirs(output_folder)
 
-    # Load data
-    input_folder = normpath('{home}/Data/Neck/'.format(home=home_path))
-    input_folders = [join(input_folder, 'Patients.csv'), join(input_folder, 'Temoins.csv')]
+    # Input data
+    input_folder = normpath('{here}/data/spectroscopy'.format(here=here_path))
+    input_folders = [join(input_folder, 'Patients.csv')]
 
     # Filters
     data_filters = {
-        'Results_All': {},
-        'Results_SvsC': {'label': ['Sain', 'Cancer']},
-        'Results_SvsP': {'label': ['Sain', 'Precancer']},
-        'Results_PvsC': {'label': ['Precancer', 'Cancer']},
+        'Results_SvsC': {'label': ['Sain', 'Cancer']}
     }
 
     # Get process
-    pipe, param = SimpleModels.get_pls_process()
+    pipe, param = SimpleModels.get_dummy_process()
     learner = {'Model': pipe,
                'Parameters': param}
 
@@ -36,3 +34,4 @@ if __name__ == "__main__":
 
     # Open result folder
     startfile(output_folder)
+

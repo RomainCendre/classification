@@ -23,8 +23,11 @@ class Data:
 
 class DataSet:
 
-    def __init__(self, data_set):
-        self.data_set = data_set
+    def __init__(self, data_set=None):
+        if data_set is None:
+            self.data_set = []
+        else:
+            self.data_set = data_set
 
     def __add__(self, other):
         """Add two spectra object
