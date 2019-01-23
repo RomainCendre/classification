@@ -3,7 +3,7 @@ from time import gmtime, strftime, time
 from os.path import exists, expanduser, normpath, join
 from sklearn.model_selection import GroupKFold, StratifiedKFold
 
-from process.processes import Processes
+from experiences.processes import Processes
 from toolbox.IO.dermatology import Reader, DataManager
 from toolbox.IO.writers import ResultWriter, StatisticsWriter, VisualizationWriter
 from toolbox.core.classification import ClassifierDeep
@@ -37,7 +37,7 @@ if __name__ == '__main__':
                  'Label': ['LM', 'Normal']}
 
     # Step 2 - Fit and Evaluate
-    # Adding process to watch our training process
+    # Adding experiences to watch our training experiences
     current_time = strftime('%Y_%m_%d_%H_%M_%S', gmtime(time()))
     work_dir = normpath('{output_dir}/Graph/{time}'.format(output_dir=output_folder, time=current_time))
     makedirs(work_dir)

@@ -1,7 +1,7 @@
 from os import makedirs, startfile
 from os.path import expanduser, normpath, join, exists
 
-from process.processes import Processes
+from experiences.processes import Processes
 from toolbox.core.models import SimpleModels
 
 if __name__ == "__main__":
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         'Results_PvsC': {'label': ['Precancer', 'Cancer']},
     }
 
-    # Get process
+    # Get experiences
     pipe, param = SimpleModels.get_pls_process()
     learner = {'Model': pipe,
                'Parameters': param}

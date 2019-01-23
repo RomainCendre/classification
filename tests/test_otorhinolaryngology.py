@@ -1,7 +1,7 @@
 from tempfile import gettempdir
 from os import makedirs, startfile
 from os.path import normpath, exists, join, dirname
-from process.processes import Processes
+from experiences.processes import Processes
 from toolbox.core.models import SimpleModels
 
 if __name__ == "__main__":
@@ -23,7 +23,7 @@ if __name__ == "__main__":
         'Results_SvsC': {'label': ['Sain', 'Cancer']}
     }
 
-    # Get process
+    # Get experiences
     pipe, param = SimpleModels.get_dummy_process()
     learner = {'Model': pipe,
                'Parameters': param}

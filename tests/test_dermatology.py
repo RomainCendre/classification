@@ -1,7 +1,7 @@
 from tempfile import gettempdir
 from os import makedirs, startfile
 from os.path import normpath, exists, dirname
-from process.processes import Processes
+from experiences.processes import Processes
 from toolbox.core.models import DeepModels
 from toolbox.tools.limitations import Parameters
 

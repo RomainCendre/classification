@@ -28,7 +28,7 @@ if __name__ == '__main__':
     data_set = Reader().scan_folder_for_images(thumbnail_folder)
     inputs = Inputs(data_set, data_tag='Data', label_tag='Label')
 
-    # Visualization test
+    # Visualization tests
     model, preprocess, extractor = DeepModels.get_confocal_model(inputs)
     VisualizationWriter(model=model, preprocess=preprocess).write_activations_maps(directory=activation_dir,
                                                                                    inputs=inputs)
