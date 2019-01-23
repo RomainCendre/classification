@@ -211,8 +211,9 @@ class RandomLayer(Layer):
         super().build(input_shape)  # Be sure to call this at the end
 
     def call(self, x):
-        val = random((1, self.output_dim))
-        return K.variable(value=val)
+        return K.random_uniform_variable(shape=(1, self.output_dim), low=0, high=1)
+        # val = random((1, self.output_dim))
+        # return K.variable(value=val)
 
     def compute_output_shape(self, input_shape):
         return (input_shape[0], self.output_dim)
