@@ -19,7 +19,7 @@ if __name__ == '__main__':
     print('Output directory: {out}'.format(out=output_dir))
 
     # Activation dir
-    activation_dir = join(output_dir, 'Activation/')
+    activation_dir = join(output_dir, 'Activation')
     if not exists(activation_dir):
         makedirs(activation_dir)
 

@@ -221,9 +221,9 @@ class VisualizationWriter:
                 if not exists(dir_path):
                     makedirs(dir_path)
 
+                file_path = join(dir_path, '{number}.png'.format(number=index))
                 activation = self.__get_activation_map(seed_input=x, predict=label_index,
                                                        image=load_img(paths[index]))
-                file_path = join(dir_path, '{number}.png'.format(number=paths[index]))
                 imsave(file_path, activation)
 
 
