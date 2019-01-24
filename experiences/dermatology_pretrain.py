@@ -18,6 +18,9 @@ if __name__ == '__main__':
     if not exists(output_folder):
         makedirs(output_folder)
 
+    # Pretrain data
+    pretrain_folder = normpath('{home}/Data/Skin/Thumbnails/'.format(home=home_path))
+
     # Input data
     input_folder = normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))
 
@@ -40,10 +43,9 @@ if __name__ == '__main__':
     learner = {'Model': model,
                'Preprocess': preprocess}
 
-
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
-    Processes.dermatology(input_folder, output_folder, name, filter_by, learner, epochs)
+    Processes.dermatology_pretrain(pretrain_folder,input_folder, output_folder, name, filter_by, learner, epochs)
 
     # Open result folder
     startfile(output_folder)

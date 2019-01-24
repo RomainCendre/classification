@@ -148,10 +148,10 @@ class Inputs:
         self.labels_encoder = preprocessing.LabelEncoder()
         self.labels_encoder.fit(self.data_set.get_data(key=self.label_tag, filter_by=self.filter_by))
 
-    def change_data(self, data_set, keep_labels=False, filter_by={}):
+    def change_data(self, data_set, keep_labels=True, filter_by={}):
         self.data_set = data_set
         self.filter_by = filter_by
-        if keep_labels:
+        if not keep_labels:
             self.labels_encoder = preprocessing.LabelEncoder()
             self.labels_encoder.fit(self.data_set.get_data(key=self.label_tag, filter_by=self.filter_by))
 

@@ -10,25 +10,56 @@ from toolbox.core.structures import Inputs, DataSet
 class Processes:
 
     @staticmethod
-    def dermatology(input_directory, output_directory, name, filter_by, learner, epochs):
+    def dermatology(input_folder, output_folder, name, filter_by, learner, epochs):
 
-        # Step 0 -Load data
-        data_set = dermatology.Reader().scan_folder(input_directory)
+        # Step 0 - Load data
+        data_set = dermatology.Reader().scan_folder(input_folder)
 
         # Step 1 - Write statistics on current data
         keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
-        StatisticsWriter(data_set).write_result(keys=keys, dir_name=output_directory, filter_by=filter_by, name=name)
+        StatisticsWriter(data_set).write_result(keys=keys, dir_name=output_folder, filter_by=filter_by, name=name)
         inputs = Inputs(data_set, data_tag='Data', label_tag='Label', group_tag='Patient', filter_by=filter_by)
 
         # Step 2 - Fit and Evaluate
         classifier = ClassifierDeep(model=learner['Model'], outer_cv=StratifiedKFold(n_splits=5, shuffle=True),
-                                    preprocess=learner['Preprocess'], work_dir=output_directory)
+                                    preprocess=learner['Preprocess'], work_dir=output_folder)
         result = classifier.evaluate(inputs, epochs=epochs)
-        ResultWriter(inputs, result).write_results(dir_name=output_directory, name=name)
+        ResultWriter(inputs, result).write_results(dir_name=output_folder, name=name)
 
         # Step 3 - Fit model and evaluate visualization
         model = classifier.fit(inputs, epochs=epochs)
-        VisualizationWriter(model=model).write_activations_maps(output_folder=output_directory, inputs=inputs)
+        VisualizationWriter(model=model).write_activations_maps(output_folder=output_folder, inputs=inputs)
+
+    @staticmethod
+    def dermatology_pretrain(pretrain_folder, input_folder, output_folder, name, filter_by, learner, epochs):
+        # Step 0 - Load pretrain data
+        data_set = dermatology.Reader().scan_folder_for_images(pretrain_folder)
+        inputs = Inputs(data_set, data_tag='Data', label_tag='Label')
+
+        # Step 1 - Fit
+        classifier = ClassifierDeep(model=learner['Model'], outer_cv=StratifiedKFold(n_splits=5, shuffle=True),
+                                    preprocess=learner['Preprocess'], work_dir=output_folder)
+        classifier.model = classifier.fit(inputs, epochs=epochs)
+
+        # Step 2 - Load data
+        data_set = dermatology.Reader().scan_folder(input_folder)
+
+        # Step 3 - Write statistics on current data
+        keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
+        StatisticsWriter(data_set).write_result(keys=keys, dir_name=output_folder, filter_by=filter_by,
+                                                name=name)
+        inputs.change_data(data_set, filter_by=filter_by)
+        inputs.change_group(group_tag='Patient')
+
+        # Step 2 - Fit and Evaluate
+        classifier = ClassifierDeep(model=learner['Model'], outer_cv=StratifiedKFold(n_splits=5, shuffle=True),
+                                    preprocess=learner['Preprocess'], work_dir=output_folder)
+        result = classifier.evaluate(inputs, epochs=epochs)
+        ResultWriter(inputs, result).write_results(dir_name=output_folder, name=name)
+
+        # Step 3 - Fit model and evaluate visualization
+        model = classifier.fit(inputs, epochs=epochs)
+        VisualizationWriter(model=model).write_activations_maps(output_folder=output_folder, inputs=inputs)
 
     @staticmethod
     def otorhinolaryngology(input_folders, output_folder, name, filter_by, learner):

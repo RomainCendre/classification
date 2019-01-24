@@ -1,12 +1,10 @@
 from itertools import product
-
 from keras import Model, Sequential
 from keras.engine import Layer
 from keras.layers import Dense, K
 from keras.applications import InceptionV3
 from keras.applications.inception_v3 import preprocess_input
 from numpy import arange, geomspace
-from numpy.random import random
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
 from sklearn.neighbors import KNeighborsClassifier
