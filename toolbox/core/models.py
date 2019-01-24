@@ -27,7 +27,6 @@ class DeepModels:
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         return model, None
 
-
     @staticmethod
     def get_confocal_model(output_classes):
         # We get the deep extractor part as include_top is false
@@ -38,9 +37,6 @@ class DeepModels:
 
         # And defined model based on our input and next output
         model = Model(inputs=inception_model.input, outputs=prediction_layers)
-        for layer in model.layers[:len(inception_model.layers)]:
-            layer.trainable = False
-
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
         return model, preprocess_input

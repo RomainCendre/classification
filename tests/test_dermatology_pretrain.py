@@ -28,13 +28,14 @@ if __name__ == "__main__":
     filter_by = {'Modality': 'Microscopy',
                  'Label': ['LM', 'Normal']}
 
+    # Configure GPU consumption
+    Parameters.set_gpu(percent_gpu=0.5)
+
     # Get right model and process function
     model, preprocess = DeepModels.get_dummy_model(nb_class)
     learner = {'Model': model,
                'Preprocess': preprocess}
 
-    # Configure GPU consumption
-    Parameters.set_gpu(percent_gpu=0.5)
     Processes.dermatology_pretrain(pretrain_folder, input_folder, output_folder, name, filter_by, learner, epochs)
 
     # Open result folder

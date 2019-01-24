@@ -35,14 +35,14 @@ if __name__ == '__main__':
     tb_tool.write_batch()
     tb_tool.run()
 
+    # Configure GPU consumption
+    Parameters.set_gpu(percent_gpu=0.5)
+
     # Get classification model for confocal
     model, preprocess = DeepModels.get_confocal_model(nb_class)
     learner = {'Model': model,
                'Preprocess': preprocess}
 
-
-    # Configure GPU consumption
-    Parameters.set_gpu(percent_gpu=0.5)
     Processes.dermatology(input_folder, output_folder, name, filter_by, learner, epochs)
 
     # Open result folder
