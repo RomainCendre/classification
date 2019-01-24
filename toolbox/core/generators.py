@@ -13,7 +13,7 @@ backend = get_keras_submodule('backend')
 
 class ResourcesGenerator(ImageDataGenerator):
 
-    def flow_from_paths(self, filenames, labels,
+    def flow_from_paths(self, filenames, labels=None,
                         target_size=None, color_mode='rgb',
                         classes=None, class_mode='categorical',
                         batch_size=32, shuffle=True, seed=None,
@@ -23,7 +23,7 @@ class ResourcesGenerator(ImageDataGenerator):
                         subset=None,
                         interpolation='nearest'):
         return ResourcesIterator(
-            filenames, labels, self,
+            filenames, self, labels,
             target_size=target_size, color_mode=color_mode,
             classes=classes, class_mode=class_mode,
             data_format=self.data_format,
@@ -37,7 +37,7 @@ class ResourcesGenerator(ImageDataGenerator):
 
 class ResourcesIterator(Iterator, Sequence):
 
-    def __init__(self, filenames, labels, image_data_generator,
+    def __init__(self, filenames, image_data_generator, labels=None,
                  target_size=None, color_mode='rgb',
                  classes=None, class_mode='categorical',
                  batch_size=32, shuffle=True, seed=None,
@@ -90,17 +90,24 @@ class ResourcesIterator(Iterator, Sequence):
         white_list_formats = {'png', 'jpg', 'jpeg', 'bmp',
                               'ppm', 'tif', 'tiff'}
         # First, count the number of samples and classes.
-        self.samples = 0
+        self.samples = len(filenames)
 
         # List of existing classes
-        if not classes:
-            classes = list(set(labels))
+        if labels is None:
+            labels = np.zeros((self.samples,), dtype=int)
+            if not classes:
+                classes = list(set(labels))
+            self.num_classes = len(classes)
+            self.class_indices = dict(zip(classes, range(len(classes))))
+            print('Found {sample} images.'.format(sample=self.samples))
+        else:
+            if not classes:
+                classes = list(set(labels))
 
-        self.num_classes = len(classes)
-        self.class_indices = dict(zip(classes, range(len(classes))))
-        self.samples = len(labels)
+            self.num_classes = len(classes)
+            self.class_indices = dict(zip(classes, range(len(classes))))
 
-        print('Found %d images belonging to %d classes.' % (self.samples, self.num_classes))
+            print('Found %d images belonging to %d classes.' % (self.samples, self.num_classes))
 
         # Second, build an index of the images
         self.classes = list(map(self.class_indices.get, labels))

@@ -1,96 +1,15 @@
-from keras import Model
+import types
+import copy
+from keras import Model, Sequential
 from keras.models import clone_model
+from keras.utils import to_categorical
 from keras.wrappers.scikit_learn import KerasClassifier
-from numpy import concatenate, uint8, unique, zeros, arange, mean, repeat, newaxis, array
+from numpy import concatenate, arange, newaxis, array, unique, searchsorted, hstack
 from os.path import join
-
-from sklearn import preprocessing
 from sklearn.model_selection import GridSearchCV
-
 from toolbox.core.generators import ResourcesGenerator
-from toolbox.core.structures import Results, Result, Data
+from toolbox.core.structures import Results, Result
 from toolbox.tools.tensorboard import TensorBoardWriter
-
-class KerasBatchClassifier(KerasClassifier):
-    """
-    Add fit_generator to KerasClassifier to convert sparse matrices to numpy arrays before fitting.
-    """
-
-    def fit(self, X, y, **kwargs):
-        if not issparse(X[0]):
-            return super().fit(X, y, **kwargs)
-
-        # taken from keras.wrappers.scikit_learn.KerasClassifier.fit ###################################################
-        if self.build_fn is None:
-            self.model = self.__call__(**self.filter_sk_params(self.__call__))
-        elif not isinstance(self.build_fn, types.FunctionType) and not isinstance(self.build_fn, types.MethodType):
-            self.model = self.build_fn(**self.filter_sk_params(self.build_fn.__call__))
-        else:
-            self.model = self.build_fn(**self.filter_sk_params(self.build_fn))
-
-        loss_name = self.model.loss
-        if hasattr(loss_name, '__name__'):
-            loss_name = loss_name.__name__
-        if loss_name == 'categorical_crossentropy' and len(y.shape) != 2:
-            y = to_categorical(y)
-
-        fit_args = copy.deepcopy(self.filter_sk_params(Sequential.fit_generator))
-        fit_args.update(kwargs)
-        ################################################################################################################
-
-        early_stopping = EarlyStopping(monitor="val_loss", patience=3, verbose=5, mode="auto")
-        model_checkpoint = ModelCheckpoint("results/best_weights.{epoch:02d}-{val_loss:.5f}.hdf5", monitor="val_loss", verbose=5, save_best_only=True, mode="auto")
-        callbacks = [early_stopping, model_checkpoint]
-        fit_args.update({"callbacks": callbacks})
-
-        self.__history = self.model.fit_generator(
-            self.batch_generator(X, y, batch_size=self.sk_params["batch_size"]),
-            samples_per_epoch=X.shape[0],
-            **fit_args)
-
-        return self.__history
-
-    def score(self, X, y, **kwargs):
-        kwargs = self.filter_sk_params(Sequential.evaluate, kwargs)
-
-        # sparse to numpy array
-        X = KerasBatchClassifier.sparse_to_array(X)
-
-        loss_name = self.model.loss
-        if hasattr(loss_name, '__name__'):
-            loss_name = loss_name.__name__
-        if loss_name == 'categorical_crossentropy' and len(y.shape) != 2:
-            y = to_categorical(y)
-        outputs = self.model.evaluate(X, y, **kwargs)
-        if type(outputs) is not list:
-            outputs = [outputs]
-        for name, output in zip(self.model.metrics_names, outputs):
-            if name == 'acc':
-                return output
-        raise Exception('The model is not configured to compute accuracy. '
-                        'You should pass `metrics=["accuracy"]` to '
-                        'the `model.compile()` method.')
-
-    @staticmethod
-    def batch_generator(X, y, batch_size=128):
-        n_splits = len(X) // (batch_size)
-        X = np.array_split(X, n_splits)
-        y = np.array_split(y, n_splits)
-
-        while True:
-            for Xy in zip(X, y):
-                yield (KerasBatchClassifier.sparse_to_array(Xy[0]), Xy[1])
-
-    @staticmethod
-    def sparse_to_array(sparse_list):
-        array_list = []
-        for s in sparse_list:
-            array_list.append(s.toarray().astype(np.int8))
-        return np.array(array_list)
-
-    @property
-    def history(self):
-        return self.__history
 
 
 class Classifier:
@@ -315,3 +234,89 @@ class ClassifierDeep:
         else:
             return (probabilities > 0.5).astype('int32')
 
+
+class KerasBatchClassifier(KerasClassifier):
+    #
+    # def __init__(self, build_fn=None, **sk_params):
+    #     self.build_fn = build_fn
+    #     self.sk_params = sk_params
+    #     self.check_params(sk_params)
+
+    def fit(self, X, y, sample_weight=None, **kwargs):
+        # Get the deep model
+        if self.build_fn is None:
+            self.model = self.__call__(**self.filter_sk_params(self.__call__))
+        elif not isinstance(self.build_fn, types.FunctionType) and not isinstance(self.build_fn, types.MethodType):
+            self.model = self.build_fn(**self.filter_sk_params(self.build_fn.__call__))
+        else:
+            self.model = self.build_fn(**self.filter_sk_params(self.build_fn))
+
+        # Store labels
+        y = array(y)
+        if len(y.shape) == 2 and y.shape[1] > 1:
+            self.classes_ = arange(y.shape[1])
+        elif (len(y.shape) == 2 and y.shape[1] == 1) or len(y.shape) == 1:
+            self.classes_ = unique(y)
+            y = searchsorted(self.classes_, y)
+        else:
+            raise ValueError('Invalid shape for y: ' + str(y.shape))
+
+        # Get arguments for fit
+        fit_args = copy.deepcopy(self.filter_sk_params(Sequential.fit_generator))
+        fit_args.update(kwargs)
+
+        # Create generator
+        generator = ResourcesGenerator(preprocessing_function=kwargs.get('Preprocess', None))
+        train = generator.flow_from_paths(X, y, batch_size=1, shuffle=True)
+
+        self.history = self.model.fit_generator(generator=train, **fit_args)
+
+        return self.history
+
+    def predict(self, X, **kwargs):
+        probs = self.predict_proba(X, **kwargs)
+        if probs.shape[-1] > 1:
+            classes = probs.argmax(axis=-1)
+        else:
+            classes = (probs > 0.5).astype('int32')
+        return self.classes_[classes]
+
+    def predict_proba(self, X, **kwargs):
+        kwargs = self.filter_sk_params(Sequential.predict_generator, kwargs)
+
+        # Create generator
+        generator = ResourcesGenerator(preprocessing_function=kwargs.get('Preprocess', None))
+        valid = generator.flow_from_paths(X, batch_size=1, shuffle=False)
+
+        # Get arguments for fit
+        fit_args = copy.deepcopy(self.filter_sk_params(Sequential.predict_generator))
+        fit_args.update(kwargs)
+
+        probs = self.model.predict_generator(generator=valid, **fit_args)
+
+        # check if binary classification
+        if probs.shape[1] == 1:
+            # first column is probability of class 0 and second is of class 1
+            probs = hstack([1 - probs, probs])
+        return probs
+
+    def score(self, X, y, **kwargs):
+        kwargs = self.filter_sk_params(Sequential.evaluate, kwargs)
+
+        # sparse to numpy array
+        X = KerasBatchClassifier.sparse_to_array(X)
+
+        loss_name = self.model.loss
+        if hasattr(loss_name, '__name__'):
+            loss_name = loss_name.__name__
+        if loss_name == 'categorical_crossentropy' and len(y.shape) != 2:
+            y = to_categorical(y)
+        outputs = self.model.evaluate_generator(X, y, **kwargs)
+        if type(outputs) is not list:
+            outputs = [outputs]
+        for name, output in zip(self.model.metrics_names, outputs):
+            if name == 'acc':
+                return output
+        raise Exception('The model is not configured to compute accuracy. '
+                        'You should pass `metrics=["accuracy"]` to '
+                        'the `model.compile()` method.')

@@ -19,13 +19,13 @@ from toolbox.core.transforms import DWTTransform, PLSTransform
 class DeepModels:
 
     @staticmethod
-    def get_dummy_model(output_classes):
+    def get_dummy_model(output_classes=2):
         # Extract labels
         model = Sequential()
         # model.add(Dense(32, input_shape=(None, None, 3)))
         model.add(RandomLayer(output_classes, input_shape=(None, None, 3)))
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-        return model, None
+        return model
 
     @staticmethod
     def get_confocal_model(output_classes):
