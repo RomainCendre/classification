@@ -62,9 +62,9 @@ class DataSet:
             valid_keys = list(set(valid_keys) & set(keys))
         return valid_keys
 
-    def is_valid_keys(self, check_keys):
+    def is_valid_keys(self, check_keys, filter_by):
         for key in check_keys:
-            if key not in self.get_keys():
+            if key not in self.get_keys(filter_by=filter_by):
                 return False
         return True
 
@@ -147,10 +147,11 @@ class Inputs:
         self.groups_encoder = preprocessing.LabelEncoder()
         self.labels_encoder = preprocessing.LabelEncoder()
 
-    def change_data(self, folders, tags={}, loader=None, keep=False):
+    def change_data(self, folders,  filter_by={}, tags={}, loader=None, keep=False):
         if loader is not None:
             self.loader = loader
 
+        self.filter_by = filter_by
         self.tags.update(tags)
 
         if keep:
@@ -163,6 +164,12 @@ class Inputs:
 
     def encode_label(self, indices):
         return self.labels_encoder.transform(indices)
+
+    def get_from_key(self, key):
+        if not self.data.is_valid_keys([key], filter_by=self.filter_by):
+            return None
+
+        return self.data.get_data(key=key, filter_by=self.filter_by)
 
     def get_datas(self):
         if 'data_tag' not in self.tags:

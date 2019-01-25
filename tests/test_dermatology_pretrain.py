@@ -1,12 +1,14 @@
 from tempfile import gettempdir
 from os import makedirs, startfile
 from os.path import normpath, exists, dirname
-
 from sklearn.model_selection import StratifiedKFold
+from tensorflow.python import deep_copy
 
 from experiences.processes import Processes
 from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.models import DeepModels
+from toolbox.core.structures import Inputs
+from toolbox.IO import dermatology
 from toolbox.tools.limitations import Parameters
 
 if __name__ == "__main__":
@@ -25,14 +27,18 @@ if __name__ == "__main__":
 
     # Pretrain data
     pretrain_folder = normpath('{here}/data/dermatology/Thumbnails/'.format(here=here_path))
+    pretrain_inputs = Inputs(folders=[pretrain_folder], loader=dermatology.Reader.scan_folder_for_images,
+                             tags={'data_tag': 'Data', 'label_tag': 'Label'})
+    pretrain_inputs.load()
 
     # Input data
-    input_folder = normpath('{here}/data/dermatology/Patients'.format(here=here_path))
-    input_folders = [input_folder]
-
-    # Filters
     filter_by = {'Modality': 'Microscopy',
                  'Label': ['LM', 'Normal']}
+    input_folder = normpath('{here}/data/dermatology/Patients'.format(here=here_path))
+    inputs = deep_copy(pretrain_inputs)
+    inputs.change_data(folders=[input_folder], filter_by=filter_by, loader=dermatology.Reader.scan_folder_for_images,
+                       tags={'data_tag': 'Data', 'label_tag': 'Label', 'groups': 'Patient'})
+    inputs.load()
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
@@ -46,7 +52,7 @@ if __name__ == "__main__":
               'outer_cv': validation}
 
     # Launch process
-    Processes.dermatology_pretrain(pretrain_folder, input_folders, filter_by, output_folder, model, params, name)
+    Processes.dermatology_pretrain(pretrain_folder, inputs, output_folder, model, params, name)
 
     # Open result folder
     startfile(output_folder)

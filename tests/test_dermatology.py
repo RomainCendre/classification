@@ -27,6 +27,7 @@ if __name__ == "__main__":
     input_folder = normpath('{here}/data/dermatology/Patients'.format(here=here_path))
     inputs = Inputs(folders=[input_folder], loader=dermatology.Reader.scan_folder,
                     tags={'data_tag': 'Data', 'label_tag': 'Label'}, filter_by=filter_by)
+    inputs.load()
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)

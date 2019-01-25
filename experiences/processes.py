@@ -1,6 +1,6 @@
 from numpy.ma import arange
-from sklearn.model_selection import GroupKFold, StratifiedKFold
-from toolbox.IO import dermatology, otorhinolaryngology
+from sklearn.model_selection import GroupKFold
+from toolbox.IO import otorhinolaryngology
 from toolbox.IO.writers import StatisticsWriter, VisualizationWriter, ResultWriter
 from toolbox.core.classification import Classifier
 from toolbox.core.structures import Inputs, DataSet
@@ -11,44 +11,31 @@ class Processes:
     @staticmethod
     def dermatology(inputs, output_folder, model, params, name):
         # Step 1 - Write statistics on current data
-        inputs.load()
+        keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
+        StatisticsWriter(inputs).write_result(keys=keys, dir_name=output_folder, name=name)
 
-        # Step 2 - Evaluate
+        # Step 2 - Evaluate model
         classifier = Classifier(model, params, params.pop('inner_cv'), params.pop('outer_cv'), scoring=None)
         results = classifier.evaluate(inputs, name)
         ResultWriter(inputs, results).write_results(dir_name=output_folder, name=name)
 
-        # Step 3 - Fit model and evaluate visualization
+        # Step 3 - Visualization of CAM
         model = classifier.fit(inputs)
         VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)
 
     @staticmethod
-    def dermatology_pretrain(pretrain_inputs, inputs, filter_by, output_folder, model, params, name):
-        # Step 0 - Load pretrain data
-        data_set = dermatology.Reader().scan_folder_for_images(pretrain_folder)
-        inputs = Inputs(data_set, data_tag='Data', label_tag='Label')
-
-        # Step 1 - Fit
+    def dermatology_pretrain(pretrain_inputs, inputs, output_folder, model, params, name):
+        # Step 1 - Fit pre input
         classifier = Classifier(model, params, params.pop('inner_cv'), params.pop('outer_cv'), scoring=None)
-        classifier.model = classifier.fit(inputs)
+        classifier.model = classifier.fit(pretrain_inputs)
 
-        # Step 2 - Load data
-        data_set = DataSet()
-        for input_folder in input_folders:
-            data_set += dermatology.Reader().scan_folder(input_folder)
-
-        # Step 3 - Write statistics on current data
+        # Step 2 - Write statistics, and Evaluate on final data
         keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
-        StatisticsWriter(data_set).write_result(keys=keys, dir_name=output_folder, filter_by=filter_by,
-                                                name=name)
-        inputs.change_data(data_set, filter_by=filter_by)
-        inputs.change_group(group_tag='Patient')
-
-        # Step 2 - Fit and Evaluate
+        StatisticsWriter(inputs).write_result(keys=keys, dir_name=output_folder, name=name)
         result = classifier.evaluate(inputs)
         ResultWriter(inputs, result).write_results(dir_name=output_folder, name=name)
 
-        # Step 3 - Fit model and evaluate visualization
+        # Step 3 - Visualization of CAM
         model = classifier.fit(inputs)
         VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)
 

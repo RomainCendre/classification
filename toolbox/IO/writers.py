@@ -19,18 +19,18 @@ from toolbox.core.generators import ResourcesGenerator
 
 class StatisticsWriter:
 
-    def __init__(self, data_set):
-        self.data_set = data_set
+    def __init__(self, inputs):
+        self.inputs = inputs
 
-    def write_result(self, keys, dir_name, name, filter_by={}):
-        self.write_stats(path=join(dir_name, name + "_stat.pdf"), keys=keys, filter_by=filter_by)
+    def write_result(self, keys, dir_name, name):
+        self.write_stats(path=join(dir_name, name + "_stat.pdf"), keys=keys)
 
-    def write_stats(self, keys, path=None, filter_by={}):
+    def write_stats(self, keys, path=None):
         nb_chart = len(keys)
 
         # Browse each kind of parameter
         for index, key in enumerate(keys):
-            counter = Counter(list(self.data_set.get_data(key=key, filter_by=filter_by)))
+            counter = Counter(list(self.inputs.get_from_key(key=key)))
             pyplot.subplot(ceil(nb_chart/2), 2, index+1)
             pyplot.pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
             pyplot.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
