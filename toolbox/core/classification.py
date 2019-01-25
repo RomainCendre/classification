@@ -2,15 +2,14 @@ import types
 import copy
 from keras import Model, Sequential
 from keras.models import clone_model
-from keras.utils import to_categorical
 from keras.wrappers.scikit_learn import KerasClassifier
+from keras.utils.generic_utils import to_list
 from numpy import concatenate, arange, newaxis, array, unique, searchsorted, hstack
 from os.path import join
 from sklearn.model_selection import GridSearchCV
 from toolbox.core.generators import ResourcesGenerator
 from toolbox.core.structures import Results, Result
 from toolbox.tools.tensorboard import TensorBoardWriter
-
 
 class Classifier:
     """Class that manage a spectrum representation.
@@ -301,22 +300,22 @@ class KerasBatchClassifier(KerasClassifier):
         return probs
 
     def score(self, X, y, **kwargs):
-        kwargs = self.filter_sk_params(Sequential.evaluate, kwargs)
+        kwargs = self.filter_sk_params(Sequential.evaluate_generator, kwargs)
+
+        # Create generator
+        generator = ResourcesGenerator(preprocessing_function=kwargs.get('Preprocess', None))
+        valid = generator.flow_from_paths(X, y, batch_size=1, shuffle=False)
+
+        # Get arguments for fit
+        fit_args = copy.deepcopy(self.filter_sk_params(Sequential.evaluate_generator))
+        fit_args.update(kwargs)
 
         # sparse to numpy array
-        X = KerasBatchClassifier.sparse_to_array(X)
-
-        loss_name = self.model.loss
-        if hasattr(loss_name, '__name__'):
-            loss_name = loss_name.__name__
-        if loss_name == 'categorical_crossentropy' and len(y.shape) != 2:
-            y = to_categorical(y)
-        outputs = self.model.evaluate_generator(X, y, **kwargs)
-        if type(outputs) is not list:
-            outputs = [outputs]
+        outputs = self.model.evaluate_generator(generator=valid, **fit_args)
+        outputs = to_list(outputs)
         for name, output in zip(self.model.metrics_names, outputs):
             if name == 'acc':
                 return output
-        raise Exception('The model is not configured to compute accuracy. '
-                        'You should pass `metrics=["accuracy"]` to '
-                        'the `model.compile()` method.')
+        raise ValueError('The model is not configured to compute accuracy. '
+                         'You should pass `metrics=["accuracy"]` to '
+                         'the `model.compile()` method.')
