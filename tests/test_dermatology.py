@@ -1,7 +1,9 @@
 from tempfile import gettempdir
 from os import makedirs, startfile
 from os.path import normpath, exists, dirname
+from sklearn.model_selection import StratifiedKFold
 from experiences.processes import Processes
+from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.models import DeepModels
 from toolbox.tools.limitations import Parameters
 
@@ -9,9 +11,10 @@ if __name__ == "__main__":
 
     here_path = dirname(__file__)
     temp_path = gettempdir()
-    name = 'Test'
-    nb_class = 2
+    name = 'DermatologyDeepTest'
     epochs = 1
+    batch_size = 10
+    validation = StratifiedKFold(n_splits=2, shuffle=True)
 
     # Output dir
     output_folder = normpath('{temp}/dermatology/'.format(temp=temp_path))
@@ -20,6 +23,7 @@ if __name__ == "__main__":
 
     # Input data
     input_folder = normpath('{here}/data/dermatology/Patients'.format(here=here_path))
+    input_folders = [input_folder]
 
     # Filters
     filter_by = {'Modality': 'Microscopy',
@@ -28,12 +32,16 @@ if __name__ == "__main__":
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
 
-    # Get right model and process function
-    model, preprocess = DeepModels.get_dummy_model(nb_class)
-    learner = {'Model': model,
-               'Preprocess': preprocess}
+    # Initiate model and params
+    params = {'epochs': [epochs],
+              'batch_size': [batch_size],
+              'inner_cv': validation,
+              'outer_cv': validation}
 
-    Processes.dermatology(input_folder, output_folder, name, filter_by, learner, epochs)
+    model = KerasBatchClassifier(DeepModels.get_dummy_model)
+
+    # Launch process
+    Processes.dermatology(input_folders, filter_by, output_folder, model, params, name)
 
     # Open result folder
     startfile(output_folder)

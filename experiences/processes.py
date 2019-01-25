@@ -1,7 +1,6 @@
 from numpy.ma import arange
 from sklearn.model_selection import GroupKFold, StratifiedKFold
-
-from toolbox.IO import dermatology,otorhinolaryngology
+from toolbox.IO import dermatology, otorhinolaryngology
 from toolbox.IO.writers import StatisticsWriter, VisualizationWriter, ResultWriter
 from toolbox.core.classification import ClassifierDeep, Classifier
 from toolbox.core.structures import Inputs, DataSet
@@ -10,21 +9,19 @@ from toolbox.core.structures import Inputs, DataSet
 class Processes:
 
     @staticmethod
-    def dermatology(input_folder, output_folder, name, filter_by, learner, epochs):
-
-        # Step 0 - Load data
-        data_set = dermatology.Reader().scan_folder(input_folder)
+    def dermatology(input_folders, filter_by, output_folder, model, params, name):
+        # Import data
+        data_set = DataSet()
+        for input_folder in input_folders:
+            data_set += dermatology.Reader().scan_folder(input_folder)
 
         # Step 1 - Write statistics on current data
-        keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
-        StatisticsWriter(data_set).write_result(keys=keys, dir_name=output_folder, filter_by=filter_by, name=name)
         inputs = Inputs(data_set, data_tag='Data', label_tag='Label', group_tag='Patient', filter_by=filter_by)
 
-        # Step 2 - Fit and Evaluate
-        classifier = ClassifierDeep(model=learner['Model'], outer_cv=StratifiedKFold(n_splits=5, shuffle=True),
-                                    preprocess=learner['Preprocess'], work_dir=output_folder)
-        result = classifier.evaluate(inputs, epochs=epochs)
-        ResultWriter(inputs, result).write_results(dir_name=output_folder, name=name)
+        # Step 2 - Evaluate
+        classifier = Classifier(model, params, params.pop('inner_cv'), params.pop('outer_cv'), scoring=None)
+        results = classifier.evaluate(inputs, name)
+        ResultWriter(inputs, results).write_results(dir_name=output_folder, name=name)
 
         # Step 3 - Fit model and evaluate visualization
         model = classifier.fit(inputs, epochs=epochs)

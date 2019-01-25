@@ -28,7 +28,7 @@ class Classifier:
 
      """
 
-    def __init__(self, pipeline, params, inner_cv, outer_cv, scoring=None):
+    def __init__(self, model, params, inner_cv, outer_cv, scoring=None):
         """Make an initialisation of SpectraClassifier object.
 
         Take a pipeline object from scikit learn to experiences data and params for parameters
@@ -40,13 +40,13 @@ class Classifier:
              inner_cv (:obj:):
              outer_cv (:obj:):
         """
-        self.__pipeline = pipeline
+        self.__model = model
         self.__params = params
         self.__inner_cv = inner_cv
         self.__outer_cv = outer_cv
         self.scoring = scoring
 
-    def evaluate(self, inputs):
+    def evaluate(self, inputs, name='Default'):
         """
 
         Args:
@@ -63,7 +63,9 @@ class Classifier:
         # Encode labels to go from string to int
         results = []
         for fold, (train, test) in enumerate(self.__outer_cv.split(X=datas, y=labels, groups=groups)):
-            grid_search = GridSearchCV(estimator=self.__pipeline, param_grid=self.__params, cv=self.__inner_cv,
+            print('Fold : {fold}'.format(fold=fold+1))
+
+            grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
                                        scoring=self.scoring, verbose=1, iid=False)
 
             if groups is not None:
@@ -71,19 +73,25 @@ class Classifier:
             else:
                 grid_search.fit(X=datas[train], y=labels[train])
 
-            for index in test:
+            # Try to predict test data
+            probabilities = grid_search.predict_proba(datas[test])
+            predictions = grid_search.predict(datas[test])
+
+            # Now store all computed data
+            for index, test_index in enumerate(test):
                 result = Result()
                 result.update({"Fold": fold})
-                result.update({"Label": labels[index]})
+                result.update({"Label": labels[test_index]})
                 if reference is not None:
-                    result.update({"Reference": reference[index]})
-                # Compute probabilities for ROC curve data
-                result.update({"Probability": grid_search.predict_proba(datas[newaxis, index])[0]})
-                # Kept predictions
-                result.update({"Prediction": grid_search.predict(datas[newaxis, index])[0]})
+                    result.update({"Reference": reference[test_index]})
+
+                # Get probabilities and predictions
+                result.update({"Probability": probabilities[index]})
+                result.update({"Prediction": predictions[index]})
+
+                # Append element and go on next one
                 results.append(result)
 
-        name = "_".join(self.__pipeline.named_steps)
         return Results(results, name)
 
 
