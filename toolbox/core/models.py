@@ -16,10 +16,11 @@ from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from toolbox.core.transforms import DWTTransform, PLSTransform
 
+
 class DeepModels:
 
     @staticmethod
-    def get_dummy_model(output_classes=2):
+    def get_dummy_model(output_classes):
         keras.layers.RandomLayer = RandomLayer
         # Extract labels
         model = Sequential()

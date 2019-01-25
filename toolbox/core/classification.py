@@ -7,6 +7,8 @@ from keras.utils.generic_utils import to_list
 from numpy import concatenate, arange, newaxis, array, unique, searchsorted, hstack
 from os.path import join
 from sklearn.model_selection import GridSearchCV
+from sklearn.utils.multiclass import unique_labels
+
 from toolbox.core.generators import ResourcesGenerator
 from toolbox.core.structures import Results, Result
 from toolbox.tools.tensorboard import TensorBoardWriter
@@ -235,9 +237,14 @@ class ClassifierDeep:
             return (probabilities > 0.5).astype('int32')
 
 
+def unique_label(y):
+    pass
+
+
 class KerasBatchClassifier(KerasClassifier):
 
-    def fit(self, X, y, sample_weight=None, **kwargs):
+    def fit(self, X, y, **kwargs):
+        self.sk_params.update({'output_classes': len(unique_labels(y))})
         # Get the deep model
         if self.build_fn is None:
             self.model = self.__call__(**self.filter_sk_params(self.__call__))
