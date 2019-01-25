@@ -1,4 +1,5 @@
 from itertools import product
+import keras
 from keras import Model, Sequential
 from keras.engine import Layer
 from keras.layers import Dense, K
@@ -15,14 +16,13 @@ from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from toolbox.core.transforms import DWTTransform, PLSTransform
 
-
 class DeepModels:
 
     @staticmethod
     def get_dummy_model(output_classes=2):
+        keras.layers.RandomLayer = RandomLayer
         # Extract labels
         model = Sequential()
-        # model.add(Dense(32, input_shape=(None, None, 3)))
         model.add(RandomLayer(output_classes, input_shape=(None, None, 3)))
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         return model

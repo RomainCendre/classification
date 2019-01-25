@@ -11,6 +11,7 @@ from toolbox.core.generators import ResourcesGenerator
 from toolbox.core.structures import Results, Result
 from toolbox.tools.tensorboard import TensorBoardWriter
 
+
 class Classifier:
     """Class that manage a spectrum representation.
 
@@ -235,11 +236,6 @@ class ClassifierDeep:
 
 
 class KerasBatchClassifier(KerasClassifier):
-    #
-    # def __init__(self, build_fn=None, **sk_params):
-    #     self.build_fn = build_fn
-    #     self.sk_params = sk_params
-    #     self.check_params(sk_params)
 
     def fit(self, X, y, sample_weight=None, **kwargs):
         # Get the deep model
