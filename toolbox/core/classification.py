@@ -50,8 +50,8 @@ class Classifier:
         """
 
         Args:
-             inputs (:obj:):
-
+            inputs (:obj:):
+            name :
          Returns:
 
         """
@@ -93,6 +93,23 @@ class Classifier:
                 results.append(result)
 
         return Results(results, name)
+
+    def fit(self, inputs):
+        # Extract needed data
+        datas = inputs.get_datas()
+        labels = inputs.get_labels()
+        groups = inputs.get_groups()
+
+        # Fit to data
+        grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
+                                   scoring=self.scoring, verbose=1, iid=False)
+
+        if groups is not None:
+            grid_search.fit(X=datas, y=labels, groups=groups)
+        else:
+            grid_search.fit(X=datas, y=labels)
+
+        return grid_search.best_estimator_
 
 
 class ClassifierDeep:

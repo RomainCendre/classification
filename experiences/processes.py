@@ -24,8 +24,8 @@ class Processes:
         ResultWriter(inputs, results).write_results(dir_name=output_folder, name=name)
 
         # Step 3 - Fit model and evaluate visualization
-        model = classifier.fit(inputs, epochs=epochs)
-        VisualizationWriter(model=model).write_activations_maps(output_folder=output_folder, inputs=inputs)
+        model = classifier.fit(inputs)
+        VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)
 
     @staticmethod
     def dermatology_pretrain(pretrain_folder, input_folder, output_folder, name, filter_by, learner, epochs):
