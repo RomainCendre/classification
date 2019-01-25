@@ -225,7 +225,7 @@ class VisualizationWriter:
             x, y = valid_generator[index]
 
             for label_index in ulabels:
-                dir_path = join(output_folder, inputs.get_decode_label([label_index])[0])
+                dir_path = join(activation_dir, inputs.get_decode_label([label_index])[0])
                 if not exists(dir_path):
                     makedirs(dir_path)
 
@@ -234,11 +234,9 @@ class VisualizationWriter:
                 try:
                     activation = self.__get_activation_map(seed_input=x, predict=label_index,
                                                            image=load_img(paths[index]))
+                    imsave(file_path, activation)
                 except:
                     print('Incompatible model or trouble occurred.')
-                    break
-
-                imsave(file_path, activation)
 
 
 class ObjectManager:
