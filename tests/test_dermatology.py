@@ -33,12 +33,12 @@ if __name__ == "__main__":
     Parameters.set_gpu(percent_gpu=0.5)
 
     # Initiate model and params
+    model = KerasBatchClassifier(DeepModels.get_dummy_model)
     params = {'epochs': [epochs],
               'batch_size': [batch_size],
+              'preprocessing_function': [None],
               'inner_cv': validation,
               'outer_cv': validation}
-
-    model = KerasBatchClassifier(DeepModels.get_dummy_model)
 
     # Launch process
     Processes.dermatology(input_folders, filter_by, output_folder, model, params, name)

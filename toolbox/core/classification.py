@@ -3,7 +3,7 @@ import copy
 from keras import Model, Sequential
 from keras.models import clone_model
 from keras.wrappers.scikit_learn import KerasClassifier
-from keras.utils.generic_utils import to_list
+from keras.utils.generic_utils import has_arg, to_list
 from numpy import concatenate, arange, newaxis, array, unique, searchsorted, hstack
 from os.path import join
 from sklearn.model_selection import GridSearchCV
@@ -252,6 +252,23 @@ def unique_label(y):
 
 class KerasBatchClassifier(KerasClassifier):
 
+    def check_params(self, params):
+        """Checks for user typos in `params`.
+
+        # Arguments
+            params: dictionary; the parameters to be checked
+
+        # Raises
+            ValueError: if any member of `params` is not a valid argument.
+        """
+        local_param = copy.deepcopy(params)
+        legal_params_fns = [ResourcesGenerator.__init__, ResourcesGenerator.flow_from_paths]
+        for params_name in params:
+            for fn in legal_params_fns:
+                if has_arg(fn, params_name):
+                    local_param.pop(params_name)
+        super().check_params(local_param)
+
     def fit(self, X, y, **kwargs):
         self.sk_params.update({'output_classes': len(unique_labels(y))})
         # Get the deep model
@@ -277,7 +294,7 @@ class KerasBatchClassifier(KerasClassifier):
         fit_args.update(kwargs)
 
         # Create generator
-        generator = ResourcesGenerator(preprocessing_function=kwargs.get('Preprocess', None))
+        generator = ResourcesGenerator(**self.filter_sk_params(ResourcesGenerator.__init__))
         train = generator.flow_from_paths(X, y, **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
 
         self.history = self.model.fit_generator(generator=train, **fit_args)
