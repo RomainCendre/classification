@@ -36,7 +36,7 @@ if __name__ == "__main__":
                  'Label': ['LM', 'Normal']}
     input_folder = normpath('{here}/data/dermatology/Patients'.format(here=here_path))
     inputs = deepcopy(pretrain_inputs)
-    inputs.change_data(folders=[input_folder], filter_by=filter_by, loader=dermatology.Reader.scan_folder_for_images,
+    inputs.change_data(folders=[input_folder], filter_by=filter_by, loader=dermatology.Reader.scan_folder,
                        tags={'data_tag': 'Data', 'label_tag': 'Label', 'groups': 'Patient'})
     inputs.load()
 
