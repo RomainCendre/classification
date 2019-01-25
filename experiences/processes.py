@@ -2,7 +2,7 @@ from numpy.ma import arange
 from sklearn.model_selection import GroupKFold, StratifiedKFold
 from toolbox.IO import dermatology, otorhinolaryngology
 from toolbox.IO.writers import StatisticsWriter, VisualizationWriter, ResultWriter
-from toolbox.core.classification import ClassifierDeep, Classifier
+from toolbox.core.classification import Classifier
 from toolbox.core.structures import Inputs, DataSet
 
 
@@ -59,7 +59,7 @@ class Processes:
         VisualizationWriter(model=model).write_activations_maps(output_folder=output_folder, inputs=inputs)
 
     @staticmethod
-    def otorhinolaryngology(input_folders, output_folder, name, filter_by, learner):
+    def otorhinolaryngology(input_folders, filter_by, output_folder, model, params, name):
         # Import data
         data_set = DataSet()
         for input_folder in input_folders:
@@ -78,7 +78,7 @@ class Processes:
         StatisticsWriter(data_set).write_result(keys=keys, dir_name=output_folder, name=name, filter_by=filter_by)
 
         # Classify and write data results
-        classifier = Classifier(pipeline=learner['Model'], params=learner['Parameters'],
+        classifier = Classifier(model=model, params=params,
                                 inner_cv=GroupKFold(n_splits=5), outer_cv=GroupKFold(n_splits=5))
         result = classifier.evaluate(inputs)
         ResultWriter(inputs, result).write_results(dir_name=output_folder, name=name)
