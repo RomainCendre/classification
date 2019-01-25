@@ -5,6 +5,8 @@ from sklearn.model_selection import StratifiedKFold
 from experiences.processes import Processes
 from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.models import DeepModels
+from toolbox.core.structures import Inputs
+from toolbox.IO import dermatology
 from toolbox.tools.limitations import Parameters
 
 if __name__ == "__main__":
@@ -20,12 +22,11 @@ if __name__ == "__main__":
         makedirs(output_folder)
 
     # Input data
-    input_folder = normpath('{here}/data/dermatology/Patients'.format(here=here_path))
-    input_folders = [input_folder]
-
-    # Filters
     filter_by = {'Modality': 'Microscopy',
                  'Label': ['LM', 'Normal']}
+    input_folder = normpath('{here}/data/dermatology/Patients'.format(here=here_path))
+    inputs = Inputs(folders=[input_folder], loader=dermatology.Reader.scan_folder,
+                    tags={'data_tag': 'Data', 'label_tag': 'Label'}, filter_by=filter_by)
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
@@ -39,7 +40,7 @@ if __name__ == "__main__":
               'outer_cv': validation}
 
     # Launch process
-    Processes.dermatology(input_folders, filter_by, output_folder, model, params, name)
+    Processes.dermatology(inputs, output_folder, model, params, name)
 
     # Open result folder
     startfile(output_folder)

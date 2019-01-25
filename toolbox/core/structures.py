@@ -1,6 +1,7 @@
 from numpy import correlate, ones, interp, asarray
 from sklearn import preprocessing
 from sklearn.utils.multiclass import unique_labels
+from sklearn.utils.validation import check_is_fitted
 
 
 class Data:
@@ -137,64 +138,79 @@ class Spectrum(Data):
 # Manage data for input on machine learning pipes
 class Inputs:
 
-    def __init__(self, data_set, data_tag, label_tag, group_tag='', references_tags=[], filter_by={}):
-        self.data_set = data_set
-        self.data_tag = data_tag
-        self.label_tag = label_tag
-        self.references_tags = references_tags
-        self.group_tag = group_tag
+    def __init__(self, folders, loader, tags, filter_by={}):
+        self.data = DataSet()
+        self.folders = folders
+        self.loader = loader
+        self.tags = tags
         self.filter_by = filter_by
         self.groups_encoder = preprocessing.LabelEncoder()
         self.labels_encoder = preprocessing.LabelEncoder()
-        self.labels_encoder.fit(self.data_set.get_data(key=self.label_tag, filter_by=self.filter_by))
 
-    def change_data(self, data_set, keep_labels=True, filter_by={}):
-        self.data_set = data_set
-        self.filter_by = filter_by
-        if not keep_labels:
-            self.labels_encoder = preprocessing.LabelEncoder()
-            self.labels_encoder.fit(self.data_set.get_data(key=self.label_tag, filter_by=self.filter_by))
+    def change_data(self, folders, tags={}, loader=None, keep=False):
+        if loader is not None:
+            self.loader = loader
 
-    def change_group(self, group_tag):
-        self.group_tag = group_tag
+        self.tags.update(tags)
 
-    def get_datas(self):
-        return self.data_set.get_data(key=self.data_tag, filter_by=self.filter_by)
+        if keep:
+            self.folders.extend(folders)
+        else:
+            self.folders = folders
 
-    def get_decode_label(self, indices):
+    def decode_label(self, indices):
         return self.labels_encoder.inverse_transform(indices)
 
-    def get_encode_label(self, indices):
+    def encode_label(self, indices):
         return self.labels_encoder.transform(indices)
 
-    def get_groups(self):
-        if not self.group_tag:
+    def get_datas(self):
+        if 'data_tag' not in self.tags:
             return None
-        groups = self.data_set.get_data(key=self.group_tag, filter_by=self.filter_by)
+
+        return self.data.get_data(key=self.tags['data_tag'], filter_by=self.filter_by)
+
+    def get_groups(self):
+        if 'group_tag' not in self.tags:
+            return None
+
+        groups = self.data.get_data(key=self.tags['group_tag'], filter_by=self.filter_by)
         self.groups_encoder.fit(groups)
         return self.groups_encoder.transform(groups)
 
     def get_labels(self):
-        labels = self.data_set.get_data(key=self.label_tag, filter_by=self.filter_by)
-        return self.labels_encoder.transform(labels)
+        if 'label_tag' not in self.tags:
+            return None
 
-    def get_unique_labels(self):
-        labels = self.data_set.get_unique_values(key=self.label_tag, filter_by=self.filter_by)
+        labels = self.data.get_data(key=self.tags['label_tag'], filter_by=self.filter_by)
         return self.labels_encoder.transform(labels)
 
     def get_reference(self):
-        if not self.references_tags:
+        if 'reference_tag' not in self.tags:
             return None
 
-        references = [self.data_set.get_data(key=reference, filter_by=self.filter_by) for reference in self.references_tags]
+        references = [self.data.get_data(key=reference, filter_by=self.filter_by) for reference in self.tags['reference_tag']]
         return ['-'.join(map(str, x)) for x in zip(*references)]
 
+    def get_unique_labels(self):
+        labels = self.data.get_unique_values(key=self.tags['label_tag'], filter_by=self.filter_by)
+        return self.labels_encoder.transform(labels)
 
-class InputsGenerators:
+    def load(self, refresh_encoder=False):
+        if 'data_tag' not in self.tags:
+            print('data_tag is needed at least.')
+            return
 
-    def __init__(self, data_set, data_tag, label_tag, group_tag='', references_tags=[], filter_by=None):
-        self.data_set = data_set
-        self.data_tag = data_tag
+        self.data = DataSet()
+        for folder in self.folders:
+            self.data += self.loader(folder)
+
+        try:
+            check_is_fitted(self.labels_encoder, 'classes_')
+            if refresh_encoder:
+                self.labels_encoder.fit(self.data.get_data(key=self.tags['data_tag'], filter_by=self.filter_by))
+        except:
+            self.labels_encoder.fit(self.data.get_data(key=self.tags['label_tag'], filter_by=self.filter_by))
 
 
 class Result(Data):

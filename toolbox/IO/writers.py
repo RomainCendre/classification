@@ -59,8 +59,8 @@ class ResultWriter:
             print('Missing tag for misclassification report.')
             return
 
-        labels = self.inputs.get_decode_label(self.results.get_data(key='Label'))
-        predictions = self.inputs.get_decode_label(self.results.get_data(key='Prediction'))
+        labels = self.inputs.decode_label(self.results.get_data(key='Label'))
+        predictions = self.inputs.decode_label(self.results.get_data(key='Prediction'))
         references = self.results.get_data(key='Reference')
         misclassified = [index for index, (i, j) in enumerate(zip(labels, predictions)) if i != j]
         data = {'paths': references[misclassified],
@@ -96,7 +96,7 @@ class ResultWriter:
         if not positives_classes:
             positives_indices = self.results.get_unique_values('Label')
         else:
-            positives_indices = self.inputs.get_encode_label(positives_classes)
+            positives_indices = self.inputs.encode_label(positives_classes)
 
         labels = self.results.get_data(key='Label')
         probabilities = self.results.get_data(key='Probability')
@@ -108,7 +108,7 @@ class ResultWriter:
         for index, axe in enumerate(axes):
             # Get AUC results for current positive class
             positive_index = positives_indices[index]
-            positive_class = self.inputs.get_decode_label([positive_index])[0]
+            positive_class = self.inputs.decode_label([positive_index])[0]
             fpr, tpr, threshold = roc_curve(labels,
                                             probabilities[:, positive_index],
                                             pos_label=positive_index)
@@ -136,7 +136,7 @@ class ResultWriter:
 
         # Label
         ulabels = self.results.get_unique_values('Label')
-        ulabels = self.inputs.get_decode_label(ulabels)
+        ulabels = self.inputs.decode_label(ulabels)
         for ind, label in enumerate(ulabels):
             label_report = dict_report[label]
             report += '|' + label.capitalize()
@@ -184,8 +184,8 @@ class ResultWriter:
             filter_by = {'Fold': [fold]}
             labels = self.results.get_data(key='Label', filter_by=filter_by)
             predictions = self.results.get_data(key='Prediction', filter_by=filter_by)
-        return classification_report(self.inputs.get_decode_label(labels),
-                                     self.inputs.get_decode_label(predictions), output_dict=True)
+        return classification_report(self.inputs.decode_label(labels),
+                                     self.inputs.decode_label(predictions), output_dict=True)
 
 
 class VisualizationWriter:
@@ -225,7 +225,7 @@ class VisualizationWriter:
             x, y = valid_generator[index]
 
             for label_index in ulabels:
-                dir_path = join(activation_dir, inputs.get_decode_label([label_index])[0])
+                dir_path = join(activation_dir, inputs.decode_label([label_index])[0])
                 if not exists(dir_path):
                     makedirs(dir_path)
 

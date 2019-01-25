@@ -11,15 +11,8 @@ from toolbox.core.structures import Data, DataSet
 
 class Reader:
 
-    def __init__(self):
-        """Make an initialisation of SpectrumReader object.
-
-        Take a string that represent delimiter
-
-        Args:
-        """
-
-    def __read_images_file(self, parent_folder, subdir):
+    @staticmethod
+    def __read_images_file(parent_folder, subdir):
 
         # Patient file
         images_file = join(parent_folder, subdir, 'images.csv')
@@ -36,7 +29,8 @@ class Reader:
             images.append(image)
         return images
 
-    def __read_patient_file(self, folder_path):
+    @staticmethod
+    def __read_patient_file(folder_path):
         # Patient file
         patient_file = join(folder_path, 'patient.csv')
 
@@ -44,7 +38,8 @@ class Reader:
         csv = pandas.read_csv(patient_file, dtype=str).iloc[0]
         return csv.to_dict()
 
-    def scan_folder(self, folder_path):
+    @staticmethod
+    def scan_folder(folder_path):
         # Subdirectories
         subdirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
 
@@ -53,8 +48,8 @@ class Reader:
         for subdir in subdirs:
             patient_datas = []
             try:
-                meta = self.__read_patient_file(join(folder_path, subdir))
-                patient_datas = self.__read_images_file(folder_path, subdir)
+                meta = Reader.__read_patient_file(join(folder_path, subdir))
+                patient_datas = Reader.__read_images_file(folder_path, subdir)
                 # Update all meta data
                 [data.data.update(meta) for data in patient_datas]
             except OSError:
@@ -63,7 +58,8 @@ class Reader:
 
         return DataSet(datas)
 
-    def scan_folder_for_images(self, folder_path):
+    @staticmethod
+    def scan_folder_for_images(folder_path):
         # Subdirectories
         sub_dirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
 
@@ -75,7 +71,7 @@ class Reader:
 
             for sub_file in sub_files:
                 data_set.append(Data(data={'Data': sub_file,
-                                        'Label': subdir}))
+                                           'Label': subdir}))
         return DataSet(data_set)
 
 

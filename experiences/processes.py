@@ -9,14 +9,9 @@ from toolbox.core.structures import Inputs, DataSet
 class Processes:
 
     @staticmethod
-    def dermatology(input_folders, filter_by, output_folder, model, params, name):
-        # Import data
-        data_set = DataSet()
-        for input_folder in input_folders:
-            data_set += dermatology.Reader().scan_folder(input_folder)
-
+    def dermatology(inputs, output_folder, model, params, name):
         # Step 1 - Write statistics on current data
-        inputs = Inputs(data_set, data_tag='Data', label_tag='Label', group_tag='Patient', filter_by=filter_by)
+        inputs.load()
 
         # Step 2 - Evaluate
         classifier = Classifier(model, params, params.pop('inner_cv'), params.pop('outer_cv'), scoring=None)
@@ -28,7 +23,7 @@ class Processes:
         VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)
 
     @staticmethod
-    def dermatology_pretrain(pretrain_folder, input_folders, filter_by, output_folder, model, params, name):
+    def dermatology_pretrain(pretrain_inputs, inputs, filter_by, output_folder, model, params, name):
         # Step 0 - Load pretrain data
         data_set = dermatology.Reader().scan_folder_for_images(pretrain_folder)
         inputs = Inputs(data_set, data_tag='Data', label_tag='Label')
