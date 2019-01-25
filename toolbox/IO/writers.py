@@ -197,8 +197,14 @@ class VisualizationWriter:
     def __get_activation_map(self, seed_input, predict, image):
         if image.ndim == 2:
             image = repeat(image[:, :, newaxis], 3, axis=2)
-        grads = visualize_cam(self.model, len(self.model.layers) - 1, filter_indices=predict, seed_input=seed_input,
-                              backprop_modifier='guided')  # , penultimate_layer_idx=None, backprop_modifier=None, grad_modifier=None)
+
+        try:
+            grads = visualize_cam(self.model, len(self.model.layers) - 1, filter_indices=predict, seed_input=seed_input,
+                                  backprop_modifier='guided')
+        except:
+            print('Incompatible model or trouble occurred.')
+            return
+
         jet_heatmap = uint8(cm.jet(grads)[..., :3] * 255)
         return overlay(jet_heatmap, image)
 
