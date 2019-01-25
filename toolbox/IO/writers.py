@@ -198,12 +198,8 @@ class VisualizationWriter:
         if image.ndim == 2:
             image = repeat(image[:, :, newaxis], 3, axis=2)
 
-        try:
-            grads = visualize_cam(self.model, len(self.model.layers) - 1, filter_indices=predict, seed_input=seed_input,
-                                  backprop_modifier='guided')
-        except:
-            print('Incompatible model or trouble occurred.')
-            return
+        grads = visualize_cam(self.model, len(self.model.layers) - 1, filter_indices=predict, seed_input=seed_input,
+                              backprop_modifier='guided')
 
         jet_heatmap = uint8(cm.jet(grads)[..., :3] * 255)
         return overlay(jet_heatmap, image)
@@ -234,8 +230,14 @@ class VisualizationWriter:
                     makedirs(dir_path)
 
                 file_path = join(dir_path, '{number}.png'.format(number=index))
-                activation = self.__get_activation_map(seed_input=x, predict=label_index,
-                                                       image=load_img(paths[index]))
+
+                try:
+                    activation = self.__get_activation_map(seed_input=x, predict=label_index,
+                                                           image=load_img(paths[index]))
+                except:
+                    print('Incompatible model or trouble occurred.')
+                    break
+
                 imsave(file_path, activation)
 
 
