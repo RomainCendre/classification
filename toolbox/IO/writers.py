@@ -30,7 +30,12 @@ class StatisticsWriter:
 
         # Browse each kind of parameter
         for index, key in enumerate(keys):
-            counter = Counter(list(self.inputs.get_from_key(key=key)))
+            elements = self.inputs.get_from_key(key=key)
+            if elements is None:
+                print('Key {key} is missing from data.'.format(key=key))
+                continue
+
+            counter = Counter(list(elements))
             pyplot.subplot(ceil(nb_chart/2), 2, index+1)
             pyplot.pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
             pyplot.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.

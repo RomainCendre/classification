@@ -64,7 +64,8 @@ class DataSet:
 
     def is_valid_keys(self, check_keys, filter_by={}):
         for key in check_keys:
-            if key not in self.get_keys(filter_by=filter_by):
+            set_keys = self.get_keys(filter_by=filter_by)
+            if set_keys is None or key not in set_keys:
                 return False
         return True
 

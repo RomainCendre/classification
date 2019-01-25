@@ -1,8 +1,8 @@
+from copy import deepcopy
 from tempfile import gettempdir
 from os import makedirs, startfile
 from os.path import normpath, exists, dirname
 from sklearn.model_selection import StratifiedKFold
-from tensorflow.python import deep_copy
 
 from experiences.processes import Processes
 from toolbox.core.classification import KerasBatchClassifier
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     filter_by = {'Modality': 'Microscopy',
                  'Label': ['LM', 'Normal']}
     input_folder = normpath('{here}/data/dermatology/Patients'.format(here=here_path))
-    inputs = deep_copy(pretrain_inputs)
+    inputs = deepcopy(pretrain_inputs)
     inputs.change_data(folders=[input_folder], filter_by=filter_by, loader=dermatology.Reader.scan_folder_for_images,
                        tags={'data_tag': 'Data', 'label_tag': 'Label', 'groups': 'Patient'})
     inputs.load()
@@ -52,7 +52,7 @@ if __name__ == "__main__":
               'outer_cv': validation}
 
     # Launch process
-    Processes.dermatology_pretrain(pretrain_folder, inputs, output_folder, model, params, name)
+    Processes.dermatology_pretrain(pretrain_inputs, inputs, output_folder, model, params, name)
 
     # Open result folder
     startfile(output_folder)
