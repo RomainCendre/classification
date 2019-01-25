@@ -29,6 +29,10 @@ class DeepModels:
         return model
 
     @staticmethod
+    def get_confocal_preprocessing():
+        return preprocess_input
+
+    @staticmethod
     def get_confocal_model(output_classes):
         # We get the deep extractor part as include_top is false
         inception_model = InceptionV3(weights='imagenet', include_top=False, pooling='max')
@@ -40,7 +44,7 @@ class DeepModels:
         model = Model(inputs=inception_model.input, outputs=prediction_layers)
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-        return model, preprocess_input
+        return model
 
     @staticmethod
     def get_confocal_final(optimizer='adam'):
