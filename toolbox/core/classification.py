@@ -75,7 +75,8 @@ class Classifier:
                 result = Result()
                 result.update({"Fold": fold})
                 result.update({"Label": labels[index]})
-                result.update({"Reference": reference[index]})
+                if reference is not None:
+                    result.update({"Reference": reference[index]})
                 # Compute probabilities for ROC curve data
                 result.update({"Probability": grid_search.predict_proba(datas[newaxis, index])[0]})
                 # Kept predictions
@@ -269,7 +270,7 @@ class KerasBatchClassifier(KerasClassifier):
 
         # Create generator
         generator = ResourcesGenerator(preprocessing_function=kwargs.get('Preprocess', None))
-        train = generator.flow_from_paths(X, y, batch_size=1, shuffle=True)
+        train = generator.flow_from_paths(X, y, **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
 
         self.history = self.model.fit_generator(generator=train, **fit_args)
 
