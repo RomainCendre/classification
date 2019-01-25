@@ -28,18 +28,19 @@ class Processes:
         VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)
 
     @staticmethod
-    def dermatology_pretrain(pretrain_folder, input_folder, output_folder, name, filter_by, learner, epochs):
+    def dermatology_pretrain(pretrain_folder, input_folders, filter_by, output_folder, model, params, name):
         # Step 0 - Load pretrain data
         data_set = dermatology.Reader().scan_folder_for_images(pretrain_folder)
         inputs = Inputs(data_set, data_tag='Data', label_tag='Label')
 
         # Step 1 - Fit
-        classifier = ClassifierDeep(model=learner['Model'], outer_cv=StratifiedKFold(n_splits=5, shuffle=True),
-                                    preprocess=learner['Preprocess'], work_dir=output_folder)
-        classifier.model = classifier.fit(inputs, epochs=epochs)
+        classifier = Classifier(model, params, params.pop('inner_cv'), params.pop('outer_cv'), scoring=None)
+        classifier.model = classifier.fit(inputs)
 
         # Step 2 - Load data
-        data_set = dermatology.Reader().scan_folder(input_folder)
+        data_set = DataSet()
+        for input_folder in input_folders:
+            data_set += dermatology.Reader().scan_folder(input_folder)
 
         # Step 3 - Write statistics on current data
         keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
@@ -49,14 +50,12 @@ class Processes:
         inputs.change_group(group_tag='Patient')
 
         # Step 2 - Fit and Evaluate
-        classifier = ClassifierDeep(model=learner['Model'], outer_cv=StratifiedKFold(n_splits=5, shuffle=True),
-                                    preprocess=learner['Preprocess'], work_dir=output_folder)
-        result = classifier.evaluate(inputs, epochs=epochs)
+        result = classifier.evaluate(inputs)
         ResultWriter(inputs, result).write_results(dir_name=output_folder, name=name)
 
         # Step 3 - Fit model and evaluate visualization
-        model = classifier.fit(inputs, epochs=epochs)
-        VisualizationWriter(model=model).write_activations_maps(output_folder=output_folder, inputs=inputs)
+        model = classifier.fit(inputs)
+        VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)
 
     @staticmethod
     def otorhinolaryngology(input_folders, filter_by, output_folder, model, params, name):

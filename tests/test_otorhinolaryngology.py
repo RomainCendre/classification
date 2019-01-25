@@ -39,4 +39,3 @@ if __name__ == "__main__":
 
     # Open result folder
     startfile(output_folder)
-
