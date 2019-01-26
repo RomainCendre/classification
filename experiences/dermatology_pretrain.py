@@ -1,6 +1,6 @@
 from copy import deepcopy
 from os import makedirs, startfile
-from os.path import normpath, exists, dirname, expanduser, splitext, basename
+from os.path import normpath, exists, expanduser, splitext, basename
 from sklearn.model_selection import StratifiedKFold
 from experiences.processes import Processes
 from toolbox.core.classification import KerasBatchClassifier

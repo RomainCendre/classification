@@ -1,7 +1,6 @@
-from copy import deepcopy
 from tempfile import gettempdir
 from os import makedirs, startfile
-from os.path import normpath, exists, dirname
+from os.path import normpath, exists, dirname, splitext, basename
 from sklearn.model_selection import StratifiedKFold
 from experiences.processes import Processes
 from toolbox.core.classification import KerasBatchClassifier
@@ -12,15 +11,17 @@ from toolbox.tools.limitations import Parameters
 
 if __name__ == "__main__":
 
+    # Parameters
+    filename = splitext(basename(__file__))[0]
     here_path = dirname(__file__)
     temp_path = gettempdir()
-    name = 'DermatologyPretrainDeepTest'
+    name = 'test_dermatology_pretrain'
     epochs = 1
     batch_size = 10
     validation = StratifiedKFold(n_splits=2, shuffle=True)
 
     # Output dir
-    output_folder = normpath('{temp}/dermatology/'.format(temp=temp_path))
+    output_folder = normpath('{temp}/dermatology/{filename}'.format(temp=temp_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
 

@@ -1,6 +1,6 @@
 from tempfile import gettempdir
 from os import makedirs, startfile
-from os.path import normpath, exists, join, dirname
+from os.path import normpath, exists, join, dirname, splitext, basename
 from sklearn.model_selection import StratifiedKFold
 from experiences.processes import Processes
 from toolbox.core.models import SimpleModels
@@ -9,13 +9,15 @@ from toolbox.IO import otorhinolaryngology
 
 if __name__ == "__main__":
 
+    # Parameters
+    filename = splitext(basename(__file__))[0]
     here_path = dirname(__file__)
     temp_path = gettempdir()
     name = 'OrlTest'
     validation = StratifiedKFold(n_splits=2, shuffle=True)
 
     # Output dir
-    output_folder = normpath('{temp}/spectroscopy/'.format(temp=temp_path))
+    output_folder = normpath('{temp}/spectroscopy/{filename}'.format(temp=temp_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
 
