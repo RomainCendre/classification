@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
     # Parameters
     home_path = expanduser("~")
-    name = 'DeepLearning'
+    name = 'Dermatology'
     validation = StratifiedKFold(n_splits=5, shuffle=True)
 
     # Output dir
