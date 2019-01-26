@@ -36,10 +36,10 @@ class Reader:
         for x in range(Reader.COLUMN_FIRST, csv.shape[1]):
             meta = {'label': csv[Reader.ROW_LABEL, x],
                     'spectrum_id': x - Reader.COLUMN_FIRST}
-            spectrum = Spectrum(
-                data=csv[Reader.ROW_WAVELENGTH:csv.shape[0], x].astype("float"),
-                wavelength=csv[Reader.ROW_WAVELENGTH:csv.shape[0], Reader.COLUMN_WAVELENGTH].astype("float"),
-                meta=meta)
+            spectrum = Spectrum(data=csv[Reader.ROW_WAVELENGTH:csv.shape[0], x].astype("float"),
+                                wavelength=csv[Reader.ROW_WAVELENGTH:csv.shape[0],
+                                               Reader.COLUMN_WAVELENGTH].astype("float"),
+                                meta=meta)
             spectra.append(spectrum)
         return spectra
 

@@ -2,11 +2,9 @@ from os import makedirs, startfile
 from sklearn.model_selection import StratifiedKFold
 from os.path import exists, expanduser, normpath, basename, splitext, join
 from experiences.processes import Processes
-from toolbox.core.classification import KerasBatchClassifier
-from toolbox.core.models import DeepModels, SimpleModels
+from toolbox.core.models import SimpleModels
 from toolbox.core.structures import Inputs
-from toolbox.IO import dermatology
-from toolbox.tools.limitations import Parameters
+from toolbox.IO import otorhinolaryngology
 
 if __name__ == "__main__":
 
@@ -23,9 +21,6 @@ if __name__ == "__main__":
 
     # Load data
     input_folder = normpath('{home}/Data/Neck/'.format(home=home_path))
-    inputs = Inputs(folders=[join(input_folder, 'Patients.csv'), join(input_folder, 'Temoins.csv')],
-                    loader=dermatology.Reader.scan_folder,
-                    tags={'data_tag': 'Data', 'label_tag': 'Label'})
 
     # Filters
     data_filters = {
@@ -39,7 +34,11 @@ if __name__ == "__main__":
     model, params = SimpleModels.get_pls_process()
 
     for item_name, item_filter in data_filters.items():
-        inputs.se
+        inputs = Inputs(folders=[join(input_folder, 'Patients.csv'), join(input_folder, 'Temoins.csv')],
+                        loader=otorhinolaryngology.Reader.read_table, filter_by=item_filter,
+                        tags={'data_tag': 'Data', 'label_tag': 'label',
+                              'group_tag': 'patient_name', 'reference_tag': ['patient_name', 'spectrum_id']})
+        inputs.load()
         Processes.otorhinolaryngology(inputs=inputs, output_folder=output_folder, model=model,
                                       params=params, name=item_name)
 
