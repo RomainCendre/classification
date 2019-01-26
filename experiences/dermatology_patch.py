@@ -1,7 +1,6 @@
 from os import makedirs, startfile
 from sklearn.model_selection import StratifiedKFold
-from os.path import exists, expanduser, normpath
-
+from os.path import exists, expanduser, normpath, splitext, basename
 from experiences.processes import Processes
 from toolbox.IO import dermatology
 from toolbox.core.classification import KerasBatchClassifier
@@ -12,12 +11,13 @@ from toolbox.tools.limitations import Parameters
 if __name__ == '__main__':
 
     # Parameters
+    filename = splitext(basename(__file__))[0]
     home_path = expanduser("~")
     name = 'Dermatology_patch'
     validation = StratifiedKFold(n_splits=5, shuffle=True)
 
     # Output dir
-    output_folder = normpath('{home}/Results/Skin/Saint_Etienne/Thumbnails/'.format(home=home_path))
+    output_folder = normpath('{home}/Results/Dermatology/{filename}'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
 
