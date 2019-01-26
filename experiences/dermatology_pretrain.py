@@ -14,7 +14,7 @@ if __name__ == '__main__':
     # Parameters
     filename = splitext(basename(__file__))[0]
     home_path = expanduser("~")
-    name = 'Dermatology_pretrain'
+    name = filename
     epochs = 100
     batch_size = 10
     validation = StratifiedKFold(n_splits=5, shuffle=True)

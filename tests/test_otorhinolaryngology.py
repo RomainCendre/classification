@@ -13,7 +13,7 @@ if __name__ == "__main__":
     filename = splitext(basename(__file__))[0]
     here_path = dirname(__file__)
     temp_path = gettempdir()
-    name = 'OrlTest'
+    name = filename
     validation = StratifiedKFold(n_splits=2, shuffle=True)
 
     # Output dir

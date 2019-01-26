@@ -13,7 +13,7 @@ if __name__ == '__main__':
     # Parameters
     filename = splitext(basename(__file__))[0]
     home_path = expanduser("~")
-    name = 'Dermatology'
+    name = filename
     validation = StratifiedKFold(n_splits=5, shuffle=True)
 
     # Output dir
