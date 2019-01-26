@@ -19,15 +19,8 @@ class Reader:
     ROW_WAVELENGTH = 6
     FILE_EXTENSION = '*.csv'
 
-    def __init__(self):
-        """Make an initialisation of SpectrumReader object.
-
-        Take a string that represent delimiter
-
-        Args:
-        """
-
-    def read_file(self, file_path):
+    @staticmethod
+    def read_file(file_path):
         """Read a spectrum file and return spectra
 
         Args:
@@ -40,17 +33,18 @@ class Reader:
         csv = array(pandas.read_csv(file_path, header=None, dtype=str).values)
         spectra = []
         # Build spectrum
-        for x in range(self.COLUMN_FIRST, csv.shape[1]):
-            meta = {'label': csv[self.ROW_LABEL, x],
-                    'spectrum_id': x - self.COLUMN_FIRST}
+        for x in range(Reader.COLUMN_FIRST, csv.shape[1]):
+            meta = {'label': csv[Reader.ROW_LABEL, x],
+                    'spectrum_id': x - Reader.COLUMN_FIRST}
             spectrum = Spectrum(
-                data=csv[self.ROW_WAVELENGTH:csv.shape[0], x].astype("float"),
-                wavelength=csv[self.ROW_WAVELENGTH:csv.shape[0], self.COLUMN_WAVELENGTH].astype("float"),
+                data=csv[Reader.ROW_WAVELENGTH:csv.shape[0], x].astype("float"),
+                wavelength=csv[Reader.ROW_WAVELENGTH:csv.shape[0], Reader.COLUMN_WAVELENGTH].astype("float"),
                 meta=meta)
             spectra.append(spectrum)
         return spectra
 
-    def read_table(self, table_path):
+    @staticmethod
+    def read_table(table_path):
         """Read a specific file that map meta data and spectrum files
 
         Args:
@@ -73,7 +67,7 @@ class Reader:
                     'operator': row['operateur'],
                     'location': row['provenance']}
 
-            patient_datas = self.read_file(join(base_folder, current_file))
+            patient_datas = Reader.read_file(join(base_folder, current_file))
             [data.data.update(meta) for data in patient_datas]
             spectra.extend(patient_datas)
         return DataSet(spectra)

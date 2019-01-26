@@ -10,6 +10,8 @@ from toolbox.core.structures import Inputs
 from toolbox.tools.limitations import Parameters
 
 if __name__ == '__main__':
+
+    # Parameters
     home_path = expanduser("~")
     name = 'DeepLearning'
     validation = StratifiedKFold(n_splits=5, shuffle=True)
@@ -23,6 +25,7 @@ if __name__ == '__main__':
     input_folder = normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))
     inputs = Inputs(folders=[input_folder], loader=dermatology.Reader.scan_folder_for_images,
                     tags={'data_tag': 'Data', 'label_tag': 'Label'})
+    inputs.load()
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
@@ -31,7 +34,7 @@ if __name__ == '__main__':
     model = KerasBatchClassifier(DeepModels.get_confocal_model)
     params = {'epochs': [100],
               'batch_size': [10],
-              'preprocessing_function': [DeepModels.get_confocal_preprocessing()],
+              'preprocessing_function': [DeepModels.get_confocal_preprocessing],
               'inner_cv': validation,
               'outer_cv': validation}
 

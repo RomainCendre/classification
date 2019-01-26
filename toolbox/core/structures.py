@@ -142,6 +142,7 @@ class Inputs:
     def __init__(self, folders, loader, tags, filter_by={}):
         self.data = DataSet()
         self.folders = folders
+        self.load_state = False
         self.loader = loader
         self.tags = tags
         self.filter_by = filter_by
@@ -160,6 +161,13 @@ class Inputs:
         else:
             self.folders = folders
 
+        # Set load property to true
+        self.load_state = False
+
+    def check_load(self):
+        if not self.load_state:
+            raise Exception('Data not loaded !!!')
+
     def decode_label(self, indices):
         return self.labels_encoder.inverse_transform(indices)
 
@@ -167,18 +175,21 @@ class Inputs:
         return self.labels_encoder.transform(indices)
 
     def get_from_key(self, key):
+        self.check_load()
         if not self.data.is_valid_keys([key], filter_by=self.filter_by):
             return None
 
         return self.data.get_data(key=key, filter_by=self.filter_by)
 
     def get_datas(self):
+        self.check_load()
         if 'data_tag' not in self.tags:
             return None
 
         return self.data.get_data(key=self.tags['data_tag'], filter_by=self.filter_by)
 
     def get_groups(self):
+        self.check_load()
         if 'group_tag' not in self.tags:
             return None
 
@@ -187,6 +198,7 @@ class Inputs:
         return self.groups_encoder.transform(groups)
 
     def get_labels(self):
+        self.check_load()
         if 'label_tag' not in self.tags:
             return None
 
@@ -194,6 +206,7 @@ class Inputs:
         return self.labels_encoder.transform(labels)
 
     def get_reference(self):
+        self.check_load()
         if 'reference_tag' not in self.tags:
             return None
 
@@ -201,6 +214,7 @@ class Inputs:
         return ['-'.join(map(str, x)) for x in zip(*references)]
 
     def get_unique_labels(self):
+        self.check_load()
         labels = self.data.get_unique_values(key=self.tags['label_tag'], filter_by=self.filter_by)
         return self.labels_encoder.transform(labels)
 
@@ -219,6 +233,8 @@ class Inputs:
                 self.labels_encoder.fit(self.data.get_data(key=self.tags['data_tag'], filter_by=self.filter_by))
         except:
             self.labels_encoder.fit(self.data.get_data(key=self.tags['label_tag'], filter_by=self.filter_by))
+        # Set load property to true
+        self.load_state = True
 
 
 class Result(Data):

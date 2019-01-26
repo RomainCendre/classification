@@ -11,6 +11,7 @@ from toolbox.tools.limitations import Parameters
 
 if __name__ == "__main__":
 
+    # Parameters
     here_path = dirname(__file__)
     temp_path = gettempdir()
     name = 'DermatologyDeepTest'
