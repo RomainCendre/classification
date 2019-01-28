@@ -15,7 +15,7 @@ if __name__ == '__main__':
     filename = splitext(basename(__file__))[0]
     home_path = expanduser("~")
     name = filename
-    epochs = 1
+    epochs = 100
     batch_size = 10
     validation = StratifiedKFold(n_splits=5, shuffle=True)
 
@@ -52,7 +52,8 @@ if __name__ == '__main__':
               'outer_cv': validation}
 
     # Launch process
-    Processes.dermatology_pretrain_patch(pretrain_inputs, inputs, output_folder, model, params, name)
+    Processes.dermatology_pretrain_patch(pretrain_inputs, inputs, inputs.encode_label(['Normal'])[0],
+                                   inputs.encode_label(['LM'])[0], output_folder, model, params, name)
 
     # Open result folder
     startfile(output_folder)
