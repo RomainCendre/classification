@@ -42,6 +42,10 @@ class Classifier:
         self.__outer_cv = outer_cv
         self.scoring = scoring
 
+    def change_model(self, model, params):
+        self.__model = model
+        self.__params = params
+
     def evaluate(self, inputs, name='Default'):
         """
 
@@ -132,7 +136,7 @@ class Classifier:
             for i in range(0, 4):
                 for j in range(0, 4):
                     x_patch = x[:, i * patch_size:(i + 1) * patch_size, j * patch_size:(j + 1) * patch_size, :]
-                    prediction.append(Classifier.__predict_classes(probabilities=self.model.predict(x_patch)))
+                    prediction.append(Classifier.__predict_classes(probabilities=self.__model.predict(x_patch)))
 
             # Kept predictions
             result.update({"Prediction": malignant if prediction.count(malignant) > 0 else benign})
