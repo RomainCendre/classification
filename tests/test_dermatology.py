@@ -25,9 +25,10 @@ if __name__ == "__main__":
 
     # Input data
     filter_by = {'Modality': 'Microscopy',
-                 'Label': ['LM', 'Normal']}
-    input_folder = normpath('{here}/data/dermatology/Patients'.format(here=here_path))
-    inputs = Inputs(folders=[input_folder], loader=dermatology.Reader.scan_folder,
+                 'Label': ['LM', 'LB', 'Normal']}
+    input_folders = [normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
+                     normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
+    inputs = Inputs(folders=input_folders, loader=dermatology.Reader.scan_folder,
                     tags={'data_tag': 'Data', 'label_tag': 'Label'}, filter_by=filter_by)
     inputs.load()
 
