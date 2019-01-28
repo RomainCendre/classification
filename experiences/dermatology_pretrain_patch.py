@@ -1,52 +1,57 @@
+from copy import deepcopy
 from os import makedirs, startfile
-from time import gmtime, strftime, time
-from os.path import exists, expanduser, normpath
+from os.path import normpath, exists, expanduser, splitext, basename
+from sklearn.model_selection import StratifiedKFold
 from experiences.processes import Processes
+from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.models import DeepModels
+from toolbox.core.structures import Inputs
+from toolbox.IO import dermatology
 from toolbox.tools.limitations import Parameters
-from toolbox.tools.tensorboard import TensorBoardTool
 
 if __name__ == '__main__':
 
+    # Parameters
+    filename = splitext(basename(__file__))[0]
     home_path = expanduser("~")
-    name = 'DeepLearning'
-    nb_class = 2
+    name = filename
     epochs = 100
+    batch_size = 10
+    validation = StratifiedKFold(n_splits=5, shuffle=True)
 
     # Output dir
-    output_folder = normpath('{home}/Results/Skin/Saint_Etienne/Deep/'.format(home=home_path))
+    output_folder = normpath('{home}/Results/Dermatology/{filename}'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
 
     # Pretrain data
     pretrain_folder = normpath('{home}/Data/Skin/Thumbnails/'.format(home=home_path))
+    pretrain_inputs = Inputs(folders=[pretrain_folder], loader=dermatology.Reader.scan_folder_for_images,
+                             tags={'data_tag': 'Data', 'label_tag': 'Label'})
+    pretrain_inputs.load()
 
     # Input data
-    input_folder = normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))
-
-    # Filters
     filter_by = {'Modality': 'Microscopy',
                  'Label': ['LM', 'Normal']}
-
-    # Adding experiences to watch our training experiences
-    current_time = strftime('%Y_%m_%d_%H_%M_%S', gmtime(time()))
-    work_dir = normpath('{output_dir}/Graph/{time}'.format(output_dir=output_folder, time=current_time))
-    makedirs(work_dir)
-
-    # Tensorboard tool launch
-    tb_tool = TensorBoardTool(work_dir)
-    tb_tool.write_batch()
-    tb_tool.run()
+    input_folder = normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))
+    inputs = deepcopy(pretrain_inputs)
+    inputs.change_data(folders=[input_folder], filter_by=filter_by, loader=dermatology.Reader.scan_folder,
+                       tags={'data_tag': 'Data', 'label_tag': 'Label', 'groups': 'Patient'})
+    inputs.load()
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
 
-    # Get classification model for confocal
-    model, preprocess = DeepModels.get_confocal_model(nb_class)
-    learner = {'Model': model,
-               'Preprocess': preprocess}
+    # Initiate model and params
+    model = KerasBatchClassifier(DeepModels.get_confocal_model)
+    params = {'epochs': [epochs],
+              'batch_size': [batch_size],
+              'preprocessing_function': [DeepModels.get_confocal_preprocessing()],
+              'inner_cv': validation,
+              'outer_cv': validation}
 
-    Processes.dermatology_pretrain(pretrain_folder, input_folder, output_folder, name, filter_by, learner, epochs)
+    # Launch process
+    Processes.dermatology_pretrain_patch(pretrain_inputs, inputs, output_folder, model, params, name)
 
     # Open result folder
     startfile(output_folder)

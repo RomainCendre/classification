@@ -54,7 +54,6 @@ class Processes:
         model = classifier.fit(inputs)
         VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)
 
-
     @staticmethod
     def otorhinolaryngology(inputs, output_folder, model, params, name):
         # Step 1 - Filter data
