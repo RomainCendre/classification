@@ -94,7 +94,7 @@ class ResultWriter:
                 text_file.write("%s" % mk_report.get_document_body())
 
     def write_roc(self, positives_classes=[], path=None):
-        if not self.results.is_valid_keys(['Label', 'Prediction']):
+        if not self.results.is_valid_keys(['Label', 'Prediction', 'Probability']):
             print('Missing tag for Roc Curves report.')
             return
 

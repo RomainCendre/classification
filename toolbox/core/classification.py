@@ -3,7 +3,7 @@ import copy
 from keras import Sequential
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras.utils.generic_utils import has_arg, to_list
-from numpy import arange, array, unique, searchsorted, hstack
+from numpy import arange, array, unique, searchsorted, hstack, asarray, mean
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils.multiclass import unique_labels
 from toolbox.core.generators import ResourcesGenerator
@@ -128,17 +128,22 @@ class Classifier:
             x, y = test[index]
 
             result = Result()
+            result.update({"Fold": 1})
             result.update({"Label": labels[index]})
             if reference is not None:
                 result.update({"Reference": reference[index]})
 
             prediction = []
+            probability = []
             for i in range(0, 4):
                 for j in range(0, 4):
                     x_patch = x[:, i * patch_size:(i + 1) * patch_size, j * patch_size:(j + 1) * patch_size, :]
-                    prediction.append(Classifier.__predict_classes(probabilities=self.__model.predict(x_patch)))
+                    probability.append(self.__model.model.predict_proba(x_patch)[0])
+                    prediction.append(Classifier.__predict_classes(probabilities=self.__model.model.predict(x_patch)))
 
             # Kept predictions
+            probability = asarray(probability)
+            result.update({"Probability": mean(probability, axis=0)})
             result.update({"Prediction": malignant if prediction.count(malignant) > 0 else benign})
             results.append(result)
 
