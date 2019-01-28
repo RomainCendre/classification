@@ -15,7 +15,7 @@ if __name__ == '__main__':
     filename = splitext(basename(__file__))[0]
     home_path = expanduser("~")
     name = filename
-    epochs = 100
+    epochs = 1
     batch_size = 10
     validation = StratifiedKFold(n_splits=5, shuffle=True)
 
@@ -46,6 +46,7 @@ if __name__ == '__main__':
     model = KerasBatchClassifier(DeepModels.get_confocal_model)
     params = {'epochs': [epochs],
               'batch_size': [batch_size],
+              'callbacks': [DeepModels.get_callbacks()],
               'preprocessing_function': [DeepModels.get_confocal_preprocessing()],
               'inner_cv': validation,
               'outer_cv': validation}
