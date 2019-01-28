@@ -31,11 +31,13 @@ if __name__ == '__main__':
     pretrain_inputs.load()
 
     # Input data
-    filter_by = {'Modality': 'Microscopy',
-                 'Label': ['LM', 'Normal']}
-    input_folder = normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))
     inputs = deepcopy(pretrain_inputs)
-    inputs.change_data(folders=[input_folder], filter_by=filter_by, loader=dermatology.Reader.scan_folder,
+    filter_by = {'Modality': 'Microscopy',
+                 'Label': ['LM', 'LB', 'Normal']}
+
+    input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
+                     normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
+    inputs.change_data(folders=input_folders, filter_by=filter_by, loader=dermatology.Reader.scan_folder,
                        tags={'data_tag': 'Data', 'label_tag': 'Label', 'groups': 'Patient'})
     inputs.load()
 
