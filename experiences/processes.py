@@ -2,7 +2,6 @@ from numpy.ma import arange
 from sklearn.model_selection import GroupKFold
 from toolbox.IO.writers import StatisticsWriter, VisualizationWriter, ResultWriter
 from toolbox.core.classification import Classifier
-from toolbox.core.structures import Inputs, DataSet
 
 
 class Processes:
