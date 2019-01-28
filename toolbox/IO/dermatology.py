@@ -99,7 +99,7 @@ class DataManager:
 
         images = []
         folder = path.join(self.dermoscopy_folder, source_id)
-        files = glob.glob(folder + " (*.jpg", recursive=True)
+        files = glob(folder + " (*.jpg", recursive=True)
         for file in files:
             destination_file = path.join(destination_folder, path.basename(file))
             shutil.copy(file, destination_file)
@@ -115,7 +115,7 @@ class DataManager:
 
         images = []
         folder = path.join(self.photography_folder, source_id)
-        files = glob.glob(folder + " (*.jpg", recursive=True)
+        files = glob(folder + " (*.jpg", recursive=True)
         for file in files:
             destination_file = path.join(destination_folder, path.basename(file))
             shutil.copy(file, destination_file)
