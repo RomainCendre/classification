@@ -36,6 +36,7 @@ if __name__ == '__main__':
     model = KerasBatchClassifier(DeepModels.get_confocal_model)
     params = {'epochs': [100],
               'batch_size': [10],
+              'callbacks': [DeepModels.get_callbacks()],
               'preprocessing_function': [DeepModels.get_confocal_preprocessing()],
               'inner_cv': validation,
               'outer_cv': validation}

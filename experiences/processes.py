@@ -39,6 +39,23 @@ class Processes:
         VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)
 
     @staticmethod
+    def dermatology_pretrain_patch(pretrain_inputs, inputs, output_folder, model, params, name):
+        # Step 1 - Fit pre input
+        classifier = Classifier(model, params, params.pop('inner_cv'), params.pop('outer_cv'), scoring=None)
+        classifier.model = classifier.fit(pretrain_inputs)
+
+        # Step 2 - Write statistics, and Evaluate on final data
+        keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
+        StatisticsWriter(inputs).write_result(keys=keys, dir_name=output_folder, name=name)
+        result = classifier.evaluate(inputs)
+        ResultWriter(inputs, result).write_results(dir_name=output_folder, name=name)
+
+        # Step 3 - Visualization of CAM
+        model = classifier.fit(inputs)
+        VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)
+
+
+    @staticmethod
     def otorhinolaryngology(inputs, output_folder, model, params, name):
         # Step 1 - Filter data
         inputs.data.apply_method(name='apply_average_filter', parameters={'size': 5})

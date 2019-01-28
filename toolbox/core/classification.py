@@ -263,6 +263,7 @@ class Classifier:
 #             return (probabilities > 0.5).astype('int32')
 #
 
+
 class KerasBatchClassifier(KerasClassifier):
 
     def check_params(self, params):
