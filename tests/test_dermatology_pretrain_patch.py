@@ -33,7 +33,7 @@ if __name__ == "__main__":
     # Input data
     inputs = deepcopy(pretrain_inputs)
     filter_by = {'Modality': 'Microscopy',
-                 'Label': ['LM', 'Normal']}
+                 'Label': ['LM', 'LB', 'Normal']}
     input_folders = [normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
                      normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
     inputs.change_data(folders=input_folders, filter_by=filter_by, loader=dermatology.Reader.scan_folder,
