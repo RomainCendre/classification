@@ -181,13 +181,15 @@ class DataManager:
                                    'Depth(um)': digits})
         return images
 
-    def launch_converter(self, out_dir):
+    def launch_converter(self, output_folder, excluded_meta):
         # Create output dir
-        if not path.exists(out_dir):
-            makedirs(out_dir)
+        if not path.exists(output_folder):
+            makedirs(output_folder)
 
+        id_modality = ['ID_Dermoscopy', 'ID_RCM']
         # Read csv
         table = pandas.read_csv(self.table_file, dtype=str)
+        table = table.drop(excluded_meta, axis=1)
         nb_patients = table.shape[0]
 
         # Print progress bar
@@ -199,32 +201,26 @@ class DataManager:
             DataManager.print_progress_bar(index, nb_patients, prefix='Progress:')
 
             # Construct folder reference
-            out_patient_folder = path.join(out_dir, str(index))
+            out_patient_folder = path.join(output_folder, str(index))
 
             # Create folder if necessary
             if not path.exists(out_patient_folder):
                 makedirs(out_patient_folder)
 
-            # Save metadata
-            patient = [{'Patient': str(index),
-                        'Age': row['Age'],
-                        'Area': row['Area'],
-                        'PatientDiagnosis': row['Diagnosis'],
-                        'PatientLabel': row['Binary_Diagnosis'],
-                        'Sex': row['Sex']}]
             # Write patient meta
-            pandas.DataFrame(patient).to_csv(path.join(out_patient_folder, 'patient.csv'), index=False)
+            pandas.DataFrame([row.drop(id_modality, errors='ignore').to_dict()]).to_csv(path.join(out_patient_folder, 'patient.csv'), index=False)
 
             images = []
 
-            # Get photography files
-            images.extend(self.compute_photography(row['ID_Dermoscopy'], out_patient_folder))
+            if 'ID_Dermoscopy' in row.index:
+                # Get photography files
+                images.extend(self.compute_photography(row['ID_Dermoscopy'], out_patient_folder))
+                # Get dermoscopy files
+                images.extend(self.compute_dermoscopy(row['ID_Dermoscopy'], out_patient_folder))
 
-            # Get dermoscopy files
-            images.extend(self.compute_dermoscopy(row['ID_Dermoscopy'], out_patient_folder))
-
-            # Get microscopy files
-            images.extend(self.compute_microscopy(row['ID_RCM'], out_patient_folder))
+            if 'ID_RCM' in row.index:
+                # Get microscopy files
+                images.extend(self.compute_microscopy(row['ID_RCM'], out_patient_folder))
 
             # Write images list
             pandas.DataFrame(images).to_csv(path.join(out_patient_folder, 'images.csv'), index=False)
