@@ -52,7 +52,8 @@ if __name__ == "__main__":
               'outer_cv': validation}
 
     # Launch process
-    Processes.dermatology_pretrain(pretrain_inputs, inputs, output_folder, model, params, name)
+    Processes.dermatology_pretrain_patch(pretrain_inputs, inputs, inputs.encode_label(['Normal'])[0],
+                                   inputs.encode_label(['LM'])[0], output_folder, model, params, name)
 
     # Open result folder
     startfile(output_folder)

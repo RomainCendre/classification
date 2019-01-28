@@ -105,9 +105,9 @@ class Classifier:
         else:
             grid_search.fit(X=datas, y=labels)
 
-        return grid_search.best_estimator_
+        return grid_search.best_estimator_, grid_search.best_params_
 
-    def evaluate_patch(self, inputs, name='Default', patch_size=250):
+    def evaluate_patch(self, inputs, benign, malignant, name='Default', patch_size=250):
         # Extract needed data
         datas = inputs.get_datas()
         labels = inputs.get_labels()
@@ -115,7 +115,7 @@ class Classifier:
         reference = inputs.get_reference()
 
         # Prepare data
-        generator = ResourcesGenerator(preprocessing_function=self.preprocess)
+        generator = ResourcesGenerator(preprocessing_function=self.__params.get('preprocessing_function', None))
         test = generator.flow_from_paths(datas, batch_size=1, shuffle=False)
 
         # Encode labels to go from string to int
@@ -135,7 +135,7 @@ class Classifier:
                     prediction.append(Classifier.__predict_classes(probabilities=self.model.predict(x_patch)))
 
             # Kept predictions
-            result.update({"Prediction": malignant if prediction.count(malignant) > 0 else normal})
+            result.update({"Prediction": malignant if prediction.count(malignant) > 0 else benign})
             results.append(result)
 
         return Results(results, name)

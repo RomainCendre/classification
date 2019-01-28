@@ -171,8 +171,8 @@ class Inputs:
     def decode_label(self, indices):
         return self.labels_encoder.inverse_transform(indices)
 
-    def encode_label(self, indices):
-        return self.labels_encoder.transform(indices)
+    def encode_label(self, label):
+        return self.labels_encoder.transform(label)
 
     def get_from_key(self, key):
         self.check_load()
