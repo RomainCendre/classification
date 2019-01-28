@@ -21,7 +21,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from toolbox.core.transforms import DWTTransform, PLSTransform
-from toolbox.tools.tensorboard import TensorBoardWriter
+from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
 
 class DeepModels:
@@ -62,13 +62,21 @@ class DeepModels:
         return model
 
     @staticmethod
-    def get_callbacks(directory=None):
+    def get_callbacks(folder=None):
         callbacks = []
-        if directory is not None:
+        if folder is not None:
+            # Workdir creation
             current_time = strftime('%Y_%m_%d_%H_%M_%S', gmtime(time()))
-            work_dir = normpath('{output_dir}/Graph/{time}'.format(output_dir=directory, time=current_time))
+            work_dir = normpath('{folder}/Graph/{time}'.format(folder=folder, time=current_time))
             makedirs(work_dir)
+
+            # Tensorboard tool launch
+            tb_tool = TensorBoardTool(work_dir)
+            tb_tool.write_batch()
+            tb_tool.run()
+
             callbacks.append(TensorBoardWriter(log_dir=work_dir))
+
         callbacks.append(ReduceLROnPlateau(monitor='loss', factor=0.1, patience=5, verbose=1, epsilon=1e-4, mode='min'))
         callbacks.append(EarlyStopping(monitor='val_loss', min_delta=0.0001, patience=5, verbose=1, mode='auto'))
         return

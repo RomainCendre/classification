@@ -39,6 +39,7 @@ if __name__ == "__main__":
     params = {'epochs': [1],
               'batch_size': [10],
               'preprocessing_function': [None],
+              'callbacks': [DeepModels.get_callbacks(output_folder)],
               'inner_cv': validation,
               'outer_cv': validation}
 

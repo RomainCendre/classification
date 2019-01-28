@@ -41,10 +41,6 @@ if __name__ == "__main__":
     paths = concatenate((benign_files, malignant_files), axis=0)
     labels = concatenate((benign_label, malignant_label), axis=0)
 
-    # Tensorboard tool launch
-    tb_tool = TensorBoardTool(work_dir)
-    tb_tool.write_batch()
-    tb_tool.run()
 
     # Pre trained model on patch
     model, preprocess, extractor = DeepModels.get_confocal_model(labels=labels)
