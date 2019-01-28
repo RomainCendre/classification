@@ -41,9 +41,9 @@ class Processes:
     @staticmethod
     def otorhinolaryngology(inputs, output_folder, model, params, name):
         # Step 1 - Filter data
-        # data_set.apply_method(name='apply_average_filter', parameters={'size': 5})
-        # data_set.apply_method(name='apply_scaling')
-        # data_set.apply_method(name='change_wavelength', parameters={'wavelength': arange(start=445, stop=962, step=1)})
+        inputs.data.apply_method(name='apply_average_filter', parameters={'size': 5})
+        inputs.data.apply_method(name='apply_scaling')
+        inputs.data.apply_method(name='change_wavelength', parameters={'wavelength': arange(start=445, stop=962, step=1)})
 
         # Step 2 - Write statistics on current data
         keys = ['patient_label', 'operator', 'label', 'location']
