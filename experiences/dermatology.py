@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     # Input data
     filter_by = {'Modality': 'Microscopy',
-                 'Label': ['LM', 'Normal']}
+                 'Label': ['LM', 'LB', 'Normal']}
     input_folder = normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))
     inputs = Inputs(folders=[input_folder], loader=dermatology.Reader.scan_folder,
                     tags={'data_tag': 'Data', 'label_tag': 'Label'}, filter_by=filter_by)

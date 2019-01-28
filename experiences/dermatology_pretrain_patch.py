@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     # Input data
     filter_by = {'Modality': 'Microscopy',
-                 'Label': ['LM', 'Normal']}
+                 'Label': ['LM', 'LB', 'Normal']}
     input_folder = normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))
     inputs = deepcopy(pretrain_inputs)
     inputs.change_data(folders=[input_folder], filter_by=filter_by, loader=dermatology.Reader.scan_folder,
