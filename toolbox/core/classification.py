@@ -169,11 +169,16 @@ class KerasBatchClassifier(KerasClassifier):
             ValueError: if any member of `params` is not a valid argument.
         """
         local_param = copy.deepcopy(params)
-        legal_params_fns = [ResourcesGenerator.__init__, ResourcesGenerator.flow_from_paths]
-        for params_name in params:
+        legal_params_fns = [ResourcesGenerator.__init__, ResourcesGenerator.flow_from_paths,
+                            Sequential.fit_generator, Sequential.predict_generator,
+                            Sequential.evaluate_generator]
+        found_params = set()
+        for param_name in params:
             for fn in legal_params_fns:
-                if has_arg(fn, params_name):
-                    local_param.pop(params_name)
+                if has_arg(fn, param_name):
+                    found_params.add(param_name)
+        if not len(found_params) == 0:
+            [local_param.pop(key) for key in list(found_params)]
         super().check_params(local_param)
 
     def fit(self, X, y, **kwargs):
