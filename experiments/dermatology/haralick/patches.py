@@ -43,7 +43,7 @@ if __name__ == '__main__':
     # DataProjector.project_data(datas=features, labels=labels, path=join(output_dir, 'Projector'))
 
     # Initiate model and params
-    model, params = SimpleModels.get_pca_process()
+    model, params = SimpleModels.get_linear_svm_process()
     params.update({'inner_cv': validation,
                    'outer_cv': validation})
 

@@ -173,6 +173,17 @@ class SimpleModels:
         return pipe, parameters
 
     @staticmethod
+    def get_linear_svm_process():
+        pipe = Pipeline([('scale', StandardScaler()),
+                         ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
+        # Define parameters to validate through grid CV
+        parameters = {
+            'clf__C': geomspace(0.01, 1000, 6),
+            'clf__gamma': geomspace(0.01, 1000, 6)
+        }
+        return pipe, parameters
+
+    @staticmethod
     def get_pca_process():
         pipe = Pipeline([('scale', StandardScaler()),
                          ('pca', PCA()),
