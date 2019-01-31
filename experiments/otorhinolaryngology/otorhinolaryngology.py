@@ -1,7 +1,7 @@
 from os import makedirs, startfile
 from sklearn.model_selection import StratifiedKFold
 from os.path import exists, expanduser, normpath, basename, splitext, join
-from experiences.processes import Processes
+from experiments.processes import Processes
 from toolbox.core.models import SimpleModels
 from toolbox.core.structures import Inputs
 from toolbox.IO import otorhinolaryngology
@@ -30,7 +30,7 @@ if __name__ == "__main__":
         'Results_PvsC': {'label': ['Precancer', 'Cancer']},
     }
 
-    # Get experiences
+    # Get experiments
     model, params = SimpleModels.get_pls_process()
 
     for item_name, item_filter in data_filters.items():

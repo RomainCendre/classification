@@ -2,7 +2,7 @@ from tempfile import gettempdir
 from os import makedirs, startfile
 from os.path import normpath, exists, join, dirname, splitext, basename
 from sklearn.model_selection import StratifiedKFold
-from experiences.processes import Processes
+from experiments.processes import Processes
 from toolbox.core.models import SimpleModels
 from toolbox.core.structures import Inputs
 from toolbox.IO import otorhinolaryngology
@@ -29,7 +29,7 @@ if __name__ == "__main__":
                           'group_tag': 'patient_name', 'references_tags': ['patient_name', 'spectrum_id']})
     inputs.load()
 
-    # Get experiences
+    # Get experiments
     model, params = SimpleModels.get_dummy_process()
 
     for item_name, item_filter in filters_by.items():

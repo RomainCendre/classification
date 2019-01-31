@@ -3,7 +3,7 @@ from tempfile import gettempdir
 from os import makedirs, startfile
 from os.path import normpath, exists, dirname, splitext, basename
 from sklearn.model_selection import StratifiedKFold
-from experiences.processes import Processes
+from experiments.processes import Processes
 from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.models import DeepModels
 from toolbox.core.structures import Inputs

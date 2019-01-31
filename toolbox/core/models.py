@@ -86,7 +86,7 @@ class DeepModels:
             callbacks.append(TensorBoardWriter(log_dir=work_dir))
 
         callbacks.append(ReduceLROnPlateau(monitor='loss', factor=0.1, patience=5, verbose=1, epsilon=1e-4, mode='min'))
-        callbacks.append(EarlyStopping(monitor='val_loss', min_delta=0.0001, patience=5, verbose=1, mode='auto'))
+        callbacks.append(EarlyStopping(monitor='loss', min_delta=0.0001, patience=5, verbose=1, mode='auto'))
         return callbacks
 
     @staticmethod

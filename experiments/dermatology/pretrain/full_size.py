@@ -2,7 +2,7 @@ from copy import deepcopy
 from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename
 from sklearn.model_selection import StratifiedKFold
-from experiences.processes import Processes
+from experiments.processes import Processes
 from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.models import DeepModels
 from toolbox.core.structures import Inputs
@@ -15,12 +15,10 @@ if __name__ == '__main__':
     filename = splitext(basename(__file__))[0]
     home_path = expanduser("~")
     name = filename
-    epochs = 100
-    batch_size = 10
     validation = StratifiedKFold(n_splits=5, shuffle=True)
 
     # Output dir
-    output_folder = normpath('{home}/Results/Dermatology/{filename}'.format(home=home_path, filename=filename))
+    output_folder = normpath('{home}/Results/Dermatology/Pretrain/{filename}'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
 
@@ -42,20 +40,18 @@ if __name__ == '__main__':
     inputs.load()
 
     # Configure GPU consumption
-    Parameters.set_gpu(percent_gpu=0.5)
+    Parameters.set_gpu(percent_gpu=1)
 
     # Initiate model and params
     model = KerasBatchClassifier(DeepModels.get_confocal_model)
-    params = {'epochs': [epochs],
-              'batch_size': [batch_size],
-              'callbacks': [DeepModels.get_callbacks()],
+    params = {'epochs': [100],
+              'batch_size': [50],
               'preprocessing_function': [DeepModels.get_confocal_preprocessing()],
               'inner_cv': validation,
               'outer_cv': validation}
 
     # Launch process
-    Processes.dermatology_pretrain_patch(pretrain_inputs, inputs, inputs.encode_label(['Normal'])[0],
-                                   inputs.encode_label(['LM'])[0], output_folder, model, params, name)
+    Processes.dermatology_pretrain(pretrain_inputs, inputs, output_folder, model, params, name)
 
     # Open result folder
     startfile(output_folder)
