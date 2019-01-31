@@ -173,7 +173,7 @@ class SimpleModels:
     @staticmethod
     def get_pca_process():
         pipe = Pipeline([('pca', PCA()),
-                         ('clf', SVC(kernel='rbf', class_weight='balanced', probability=True)),
+                         ('clf', SVC(kernel='linear', class_weight='balanced', probability=True)),
                          ])
         # Define parameters to validate through grid CV
         parameters = {
