@@ -90,7 +90,7 @@ class DataManager:
         self.microscopy_folder = path.join(root_folder, 'Microscopy')
         self.dermoscopy_folder = path.join(root_folder, 'Dermoscopy')
         self.photography_folder = path.join(root_folder, 'Photography')
-        self.labels = ['LM', 'LB', 'Normal', 'Doubtful', 'Draw']
+        self.labels = ['Malignant', 'Benign', 'Normal', 'Doubtful', 'Draw']
 
     def compute_dermoscopy(self, source_id, destination):
         destination_folder = path.join(destination, 'Dermoscopy')

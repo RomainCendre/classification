@@ -1,3 +1,4 @@
+from keras.wrappers.scikit_learn import BaseWrapper
 from numpy.ma import arange
 from sklearn.model_selection import GroupKFold
 from toolbox.IO.writers import StatisticsWriter, VisualizationWriter, ResultWriter
@@ -18,8 +19,9 @@ class Processes:
         ResultWriter(inputs, results).write_results(dir_name=output_folder, name=name)
 
         # Step 3 - Visualization of CAM
-        model, best_params = classifier.fit(inputs)
-        VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)
+        if isinstance(model, BaseWrapper):
+            model, best_params = classifier.fit(inputs)
+            VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)
 
     @staticmethod
     def dermatology_pretrain(pretrain_inputs, inputs, output_folder, model, params, name):
