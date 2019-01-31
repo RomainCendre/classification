@@ -1,6 +1,8 @@
 from itertools import product
 from os import makedirs
 from os.path import normpath
+
+from sklearn.preprocessing import StandardScaler
 from time import strftime, gmtime, time
 import keras
 from keras import Sequential, Model
@@ -172,9 +174,9 @@ class SimpleModels:
 
     @staticmethod
     def get_pca_process():
-        pipe = Pipeline([('pca', PCA()),
-                         ('clf', SVC(kernel='linear', class_weight='balanced', probability=True)),
-                         ])
+        pipe = Pipeline([('scale', StandardScaler()),
+                         ('pca', PCA()),
+                         ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
         # Define parameters to validate through grid CV
         parameters = {
             'pca__n_components': [0.95, 0.975, 0.99],

@@ -2,10 +2,8 @@ import mahotas
 from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename
 from PIL import Image
-from numpy.ma import array, asarray
+from numpy.ma import array
 from sklearn.model_selection import StratifiedKFold
-from sklearn.preprocessing import StandardScaler
-
 from experiments.processes import Processes
 from toolbox.core.models import SimpleModels
 from toolbox.core.structures import Inputs
@@ -13,16 +11,10 @@ from toolbox.IO import dermatology
 
 
 def extract_haralick(inputs):
-    files = inputs.get_datas()
-    labels = inputs.get_labels()
 
-    features = []
-    for file, label in zip(files, labels):
-        image = array(Image.open(file))
-        features.append(mahotas.features.haralick(image[:, :, 0]).flatten())
-
-    features = asarray(features)
-    return features, labels
+    for data in inputs.data.data_set:
+        image = array(Image.open(data.data['Data']))
+        data.update({'Haralick': mahotas.features.haralick(image[:, :, 0]).flatten()})
 
 
 if __name__ == '__main__':
@@ -41,12 +33,11 @@ if __name__ == '__main__':
     # Input data
     input_folder = normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))
     inputs = Inputs(folders=[input_folder], loader=dermatology.Reader.scan_folder_for_images,
-                    tags={'data_tag': 'Data', 'label_tag': 'Label'})
+                    tags={'data_tag': 'Haralick', 'label_tag': 'Label'})
     inputs.load()
 
     # Format Data
-    features, labels = extract_haralick(inputs)
-    features = StandardScaler().fit_transform(features)
+    extract_haralick(inputs)
 
     # Write data to visualize it
     # DataProjector.project_data(datas=features, labels=labels, path=join(output_dir, 'Projector'))
