@@ -6,7 +6,7 @@ import keras
 from keras import Sequential, Model
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from keras.engine import Layer
-from keras.layers import Dense, K
+from keras.layers import Dense, K, Conv2D, GlobalMaxPooling2D
 from keras.applications import InceptionV3
 from keras.applications.inception_v3 import preprocess_input
 from numpy import arange, geomspace
@@ -23,6 +23,16 @@ from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
 
 class DeepModels:
+
+    @staticmethod
+    def get_patch_model(output_classes):
+        model = Sequential()
+        model.add(Conv2D(10, (1, 3), strides=(2, 2), input_shape=(250, 250, 3), activation='linear', name='Convolution_1'))
+        model.add(Conv2D(10, (3, 1), strides=(2, 2), activation='relu', name='Convolution_2'))
+        model.add(GlobalMaxPooling2D(name='Pooling_2D'))
+        model.add(Dense(output_classes, activation='softmax', name='Predictions'))
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        return model
 
     @staticmethod
     def get_dummy_model(output_classes):

@@ -1,5 +1,5 @@
 import types
-import copy
+from copy import deepcopy
 from keras import Sequential
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras.utils.generic_utils import has_arg, to_list
@@ -42,6 +42,12 @@ class Classifier:
         self.__outer_cv = outer_cv
         self.scoring = scoring
 
+    @staticmethod
+    def sub(array, indices):
+        if array is None:
+            return None
+        return array[indices]
+
     def change_model(self, model, params):
         self.__model = model
         self.__params = params
@@ -63,15 +69,18 @@ class Classifier:
         # Encode labels to go from string to int
         results = []
         for fold, (train, test) in enumerate(self.__outer_cv.split(X=datas, y=labels, groups=groups)):
+
             print('Fold : {fold}'.format(fold=fold+1))
 
-            grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
+            model = deepcopy(self.__model)
+            grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
                                        scoring=self.scoring, verbose=1, iid=False)
 
-            if groups is not None:
-                grid_search.fit(X=datas[train], y=labels[train], groups=groups[train])
+            if isinstance(model, KerasBatchClassifier):
+                grid_search.fit(X=self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train),
+                                X_validation=self.sub(datas, test), y_validation=self.sub(labels, test))
             else:
-                grid_search.fit(X=datas[train], y=labels[train])
+                grid_search.fit(X=self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train))
 
             # Try to predict test data
             probabilities = grid_search.predict_proba(datas[test])
@@ -168,7 +177,7 @@ class KerasBatchClassifier(KerasClassifier):
         # Raises
             ValueError: if any member of `params` is not a valid argument.
         """
-        local_param = copy.deepcopy(params)
+        local_param = deepcopy(params)
         legal_params_fns = [ResourcesGenerator.__init__, ResourcesGenerator.flow_from_paths,
                             Sequential.fit_generator, Sequential.predict_generator,
                             Sequential.evaluate_generator]
@@ -181,7 +190,7 @@ class KerasBatchClassifier(KerasClassifier):
             [local_param.pop(key) for key in list(found_params)]
         super().check_params(local_param)
 
-    def fit(self, X, y, **kwargs):
+    def fit(self, X, y, X_validation=None, y_validation=None, **kwargs):
         self.sk_params.update({'output_classes': len(unique_labels(y))})
         # Get the deep model
         if self.build_fn is None:
@@ -202,14 +211,19 @@ class KerasBatchClassifier(KerasClassifier):
             raise ValueError('Invalid shape for y: ' + str(y.shape))
 
         # Get arguments for fit
-        fit_args = copy.deepcopy(self.filter_sk_params(Sequential.fit_generator))
+        fit_args = deepcopy(self.filter_sk_params(Sequential.fit_generator))
         fit_args.update(kwargs)
 
         # Create generator
         generator = ResourcesGenerator(**self.filter_sk_params(ResourcesGenerator.__init__))
         train = generator.flow_from_paths(X, y, **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
 
-        self.history = self.model.fit_generator(generator=train, **fit_args)
+        validation = None
+        if X_validation is not None:
+            validation = generator.flow_from_paths(X_validation, y_validation,
+                                                   **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
+
+        self.history = self.model.fit_generator(generator=train, validation_data=validation, **fit_args)
 
         return self.history
 
@@ -229,7 +243,7 @@ class KerasBatchClassifier(KerasClassifier):
         valid = generator.flow_from_paths(X, batch_size=1, shuffle=False)
 
         # Get arguments for fit
-        fit_args = copy.deepcopy(self.filter_sk_params(Sequential.predict_generator))
+        fit_args = deepcopy(self.filter_sk_params(Sequential.predict_generator))
         fit_args.update(kwargs)
 
         probs = self.model.predict_generator(generator=valid, **fit_args)
@@ -248,7 +262,7 @@ class KerasBatchClassifier(KerasClassifier):
         valid = generator.flow_from_paths(X, y, batch_size=1, shuffle=False)
 
         # Get arguments for fit
-        fit_args = copy.deepcopy(self.filter_sk_params(Sequential.evaluate_generator))
+        fit_args = deepcopy(self.filter_sk_params(Sequential.evaluate_generator))
         fit_args.update(kwargs)
 
         # sparse to numpy array
