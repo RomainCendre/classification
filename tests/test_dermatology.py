@@ -37,9 +37,9 @@ if __name__ == "__main__":
 
     # Initiate model and params
     model = KerasBatchClassifier(DeepModels.get_dummy_model)
-    params = {'epochs': [2],
-              'batch_size': [10],
-              'preprocessing_function': [None],
+    params = {'epochs': 2,
+              'batch_size': 10,
+              'preprocessing_function': None,
               'callbacks': DeepModels.get_callbacks(output_folder),
               'inner_cv': validation,
               'outer_cv': validation}
