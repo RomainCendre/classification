@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     # Input data
     filter_by = {'Modality': 'Microscopy',
-                 'Label': ['LM', 'LB', 'Normal']}
+                 'Label': ['Malignant', 'Benign', 'Normal']}
 
     input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
