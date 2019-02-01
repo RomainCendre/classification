@@ -24,7 +24,7 @@ class Classifier:
 
      """
 
-    def __init__(self, model, params, callbacks, inner_cv, outer_cv, scoring=None):
+    def __init__(self, model, params, inner_cv, outer_cv, callbacks=[], scoring=None):
         """Make an initialisation of SpectraClassifier object.
 
         Take a pipeline object from scikit learn to experiments data and params for parameters

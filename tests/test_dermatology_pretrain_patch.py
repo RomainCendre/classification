@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
     # Launch process
     Processes.dermatology_pretrain_patch(pretrain_inputs, inputs, inputs.encode_label(['Normal'])[0],
-                                   inputs.encode_label(['LM'])[0], output_folder, model, params, name)
+                                   inputs.encode_label(['Malignant'])[0], output_folder, model, params, name)
 
     # Open result folder
     startfile(output_folder)

@@ -44,7 +44,8 @@ class Processes:
     @staticmethod
     def dermatology_pretrain_patch(pretrain_inputs, inputs, benign, malignant, output_folder, model, params, name):
         # Step 1 - Fit pre input
-        classifier = Classifier(model, params, params.pop('inner_cv'), params.pop('outer_cv'), scoring=None)
+        classifier = Classifier(model, params, callbacks=params.pop('callbacks', []),
+                                inner_cv=params.pop('inner_cv'), outer_cv=params.pop('outer_cv'), scoring=None)
         fited_model, fited_params = classifier.fit(pretrain_inputs)
         mod = fited_model
         par = fited_params
