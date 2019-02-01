@@ -41,6 +41,7 @@ class Classifier:
         self.__inner_cv = inner_cv
         self.__outer_cv = outer_cv
         self.__scoring = scoring
+        self.__format_params()
 
     @staticmethod
     def sub(np_array, indices):
@@ -72,20 +73,29 @@ class Classifier:
 
             print('Fold : {fold}'.format(fold=fold+1))
 
+            # Clone model
             model = deepcopy(self.__model)
-            grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
-                                       scoring=self.__scoring, verbose=1, iid=False)
 
-            if isinstance(model, KerasBatchClassifier):
-                grid_search.fit(X=self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train),
-                                callbacks=self.__callbacks,
-                                X_validation=self.sub(datas, test), y_validation=self.sub(labels, test))
-            else:
+            # Estimate best combination
+            if self.__check_params_multiple():
+                grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
+                                           scoring=self.__scoring, verbose=1, iid=False)
                 grid_search.fit(X=self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train))
+                best_params = grid_search.best_params_
+            else:
+                best_params = self.__params
+
+            # Fit the model, with the bests parameters
+            model.set_params(**best_params)
+            if isinstance(model, KerasBatchClassifier):
+                model.fit(X=self.sub(datas, train), y=self.sub(labels, train), callbacks=self.__callbacks,
+                          X_validation=self.sub(datas, test), y_validation=self.sub(labels, test))
+            else:
+                model.fit(X=self.sub(datas, train), y=self.sub(labels, train))
 
             # Try to predict test data
-            probabilities = grid_search.predict_proba(datas[test])
-            predictions = grid_search.predict(datas[test])
+            probabilities = model.predict_proba(datas[test])
+            predictions = model.predict(datas[test])
 
             # Now store all computed data
             for index, test_index in enumerate(test):
@@ -110,16 +120,27 @@ class Classifier:
         labels = inputs.get_labels()
         groups = inputs.get_groups()
 
-        # Fit to data
-        grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
-                                   scoring=self.scoring, verbose=1, iid=False)
+        # Clone model
+        model = deepcopy(self.__model)
 
-        if groups is not None:
+        # Estimate best combination
+        if self.__check_params_multiple():
+            grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
+                                       refit=False, scoring=self.__scoring, verbose=1, iid=False)
             grid_search.fit(X=datas, y=labels, groups=groups)
+            best_params = grid_search.best_params_
         else:
-            grid_search.fit(X=datas, y=labels)
+            best_params = self.__params
 
-        return grid_search.best_estimator_, grid_search.best_params_
+        # Fit the model, with the bests parameters
+        model.set_params(**best_params)
+        if isinstance(model, KerasBatchClassifier):
+            model.fit(X=datas, y=labels, callbacks=self.__callbacks,
+                      X_validation=datas, y_validation=labels)
+        else:
+            model.fit(X=datas, y=labels)
+
+        return model, best_params
 
     def evaluate_patch(self, inputs, benign, malignant, name='Default', patch_size=250):
         # Extract needed data
@@ -158,6 +179,23 @@ class Classifier:
             results.append(result)
 
         return Results(results, name)
+
+    def __check_params_multiple(self):
+        for key, value in self.__params.items():
+            if isinstance(value, list) and len(value)>1:
+                return True
+        return False
+
+    def __format_params(self):
+        if self.__check_params_multiple():  # Here we proceed as multiple combination
+            for key, value in self.__params.items():
+                if not isinstance(value, list):
+                    self.__params[key] = [value]
+
+        else:  # Here we proceed as single combination
+            for key, value in self.__params.items():
+                if isinstance(value, list):
+                    self.__params[key] = value[0]
 
     @staticmethod
     def __predict_classes(probabilities):
