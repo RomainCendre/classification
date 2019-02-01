@@ -31,10 +31,10 @@ if __name__ == '__main__':
     Parameters.set_gpu(percent_gpu=0.5)
 
     # Initiate model and params
-    model = KerasBatchClassifier(DeepModels.get_patch_model)
+    model = KerasBatchClassifier(DeepModels.get_scratch_patch_model)
     params = {'epochs': [100],
               'batch_size': [10],
-              'preprocessing_function': [DeepModels.get_confocal_preprocessing()],
+              'preprocessing_function': [None],
               'inner_cv': validation,
               'outer_cv': validation}
 
@@ -43,59 +43,3 @@ if __name__ == '__main__':
 
     # Open result folder
     startfile(output_folder)
-
-
-
-
-#
-# def extract_deepfeatures (input_dir, label):
-#     # Init model
-#     model = InceptionV3(weights='imagenet', include_top=False, pooling='avg')
-#
-#     files = glob(join(input_dir, '*.bmp'))
-#     features = []
-#     for file in files:
-#         image = expand_dims(array(Image.open(file)), axis=0)
-#         image = preprocess_input(image)
-#         features.append(model.predict(image)[0])
-#     features = asarray(features)
-#     return features, full(features.shape[0], label)
-#
-#
-# if __name__ == "__main__":#
-#     # Configure GPU consumption
-#     Parameters.set_gpu(percent_gpu=0.5)
-#
-#     home_path = expanduser("~")
-#
-#     # Output dir
-#     output_dir = normpath('{home}/Results/Skin/Thumbnails/Deep_Features/'.format(home=home_path))
-#     if not exists(output_dir):
-#         makedirs(output_dir)
-#
-#     # Prepare input ressources
-#     features_file = join(output_dir, 'features.npy')
-#     labels_file = join(output_dir, 'labels.npy')
-#
-#     if not isfile(features_file):
-#         # Load data
-#         input_dir = normpath('{home}/Data/Skin/Thumbnails/'.format(home=home_path))
-#         benign_dir = join(input_dir, 'Benin')
-#         malignant_dir = join(input_dir, 'Malin')
-#         features, labels = extract_deepfeatures(benign_dir, 'benin')
-#         features_m, labels_m = extract_deepfeatures(malignant_dir, 'malin')
-#
-#         features = concatenate((features, features_m), axis=0)
-#         features = StandardScaler().fit_transform(features)
-#         labels = concatenate((labels, labels_m), axis=0)
-#
-#         # Make a save of data
-#         save(features_file, features)
-#         save(labels_file, labels)
-#     else:
-#         # Reload data if exist
-#         features = load(features_file)
-#         labels = load(labels_file)
-#
-#     # Save data as projector to visualize them
-#     DataProjector.project_data(datas=features, labels=labels, path=join(output_dir, 'Projector'))

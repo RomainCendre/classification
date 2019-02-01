@@ -9,8 +9,7 @@ from keras import Sequential, Model
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from keras.engine import Layer
 from keras.layers import Dense, K, Conv2D, GlobalMaxPooling2D
-from keras.applications import InceptionV3
-from keras.applications.inception_v3 import preprocess_input
+from keras import applications
 from numpy import arange, geomspace
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
@@ -25,51 +24,6 @@ from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
 
 class DeepModels:
-
-    @staticmethod
-    def get_patch_model(output_classes):
-        model = Sequential()
-        model.add(Conv2D(10, (1, 3), strides=(2, 2), input_shape=(250, 250, 3), activation='linear', name='Convolution_1'))
-        model.add(Conv2D(10, (3, 1), strides=(2, 2), activation='relu', name='Convolution_2'))
-        model.add(GlobalMaxPooling2D(name='Pooling_2D'))
-        model.add(Dense(output_classes, activation='softmax', name='Predictions'))
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-        return model
-
-    @staticmethod
-    def get_dummy_model(output_classes):
-        keras.layers.RandomLayer = RandomLayer
-        # Extract labels
-        model = Sequential()
-        model.add(RandomLayer(output_classes, input_shape=(None, None, 3)))
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-        return model
-
-    @staticmethod
-    def get_confocal_preprocessing():
-        return preprocess_input
-
-    @staticmethod
-    def get_confocal_final(optimizer='adam'):
-        # Now we customize the output consider our application field
-        model = Sequential()
-        model.add(Dense(2, activation='softmax', name='predictions'))
-        model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
-        return model
-
-    @staticmethod
-    def get_confocal_model(output_classes):
-        # We get the deep extractor part as include_top is false
-        inception_model = InceptionV3(weights='imagenet', include_top=False, pooling='max')
-
-        # Now we customize the output consider our application field
-        prediction_layers = Dense(output_classes, activation='softmax', name='predictions')(inception_model.output)
-
-        # And defined model based on our input and next output
-        model = Model(inputs=inception_model.input, outputs=prediction_layers)
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-        return model
 
     @staticmethod
     def get_callbacks(folder=None):
@@ -92,8 +46,52 @@ class DeepModels:
         return callbacks
 
     @staticmethod
-    def get_model_memory_usage(batch_size, model):
+    def get_dummy_model(output_classes):
+        keras.layers.RandomLayer = RandomLayer
+        # Extract labels
+        model = Sequential()
+        model.add(RandomLayer(output_classes, input_shape=(None, None, 3)))
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        return model
 
+    @staticmethod
+    def get_scratch_patch_model(output_classes):
+        model = Sequential()
+        model.add(Conv2D(10, (1, 3), strides=(2, 2), input_shape=(250, 250, 3), activation='linear', name='Convolution_1'))
+        model.add(Conv2D(10, (3, 1), strides=(2, 2), activation='relu', name='Convolution_2'))
+        model.add(GlobalMaxPooling2D(name='Pooling_2D'))
+        model.add(Dense(output_classes, activation='softmax', name='Predictions'))
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        return model
+
+    @staticmethod
+    def get_transfer_model(optimizer='adam'):
+        # Now we customize the output consider our application field
+        model = Sequential()
+        model.add(Dense(2, activation='softmax', name='predictions'))
+        model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+        return model
+
+    @staticmethod
+    def get_transfer_learning_model(output_classes, architecture='InceptionV3'):
+        # We get the deep extractor part as include_top is false
+        inception_model = applications.InceptionV3(weights='imagenet', include_top=False, pooling='max')
+
+        # Now we customize the output consider our application field
+        prediction_layers = Dense(output_classes, activation='softmax', name='predictions')(inception_model.output)
+
+        # And defined model based on our input and next output
+        model = Model(inputs=inception_model.input, outputs=prediction_layers)
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+        return model
+
+    @staticmethod
+    def get_transfer_learning_preprocessing():
+        return applications.inception_v3.preprocess_input
+
+    @staticmethod
+    def get_memory_usage(batch_size, model, unit=(1024.0 ** 3)):
         shapes_mem_count = 0
         for l in model.layers:
             single_layer_mem = 1
@@ -114,8 +112,7 @@ class DeepModels:
             number_size = 4.0
 
         total_memory = number_size * (batch_size * shapes_mem_count + trainable_count + non_trainable_count)
-        gbytes = round(total_memory / (1024.0 ** 3), 3)
-        return gbytes
+        return round(total_memory / unit, 3)
 
 
 class SimpleModels:
