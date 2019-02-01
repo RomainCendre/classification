@@ -39,8 +39,8 @@ if __name__ == '__main__':
     params = {'architecture': ['InceptionV3'],
               'epochs': [100],
               'batch_size': [10],
-              'callbacks': [DeepModels.get_callbacks()],
               'preprocessing_function': [DeepModels.get_transfer_learning_preprocessing()],
+              'callbacks': DeepModels.get_callbacks(),
               'inner_cv': validation,
               'outer_cv': validation}
 

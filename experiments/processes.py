@@ -14,7 +14,8 @@ class Processes:
         StatisticsWriter(inputs).write_result(keys=keys, dir_name=output_folder, name=name)
 
         # Step 2 - Evaluate model
-        classifier = Classifier(model, params, params.pop('inner_cv'), params.pop('outer_cv'), scoring=None)
+        classifier = Classifier(model, params, callbacks=params.pop('callbacks', []),
+                                inner_cv=params.pop('inner_cv', 5), outer_cv=params.pop('outer_cv', 5), scoring=None)
         results = classifier.evaluate(inputs, name)
         ResultWriter(inputs, results).write_results(dir_name=output_folder, name=name)
 

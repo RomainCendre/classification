@@ -24,29 +24,29 @@ class Classifier:
 
      """
 
-    def __init__(self, model, params, inner_cv, outer_cv, scoring=None):
+    def __init__(self, model, params, callbacks, inner_cv, outer_cv, scoring=None):
         """Make an initialisation of SpectraClassifier object.
 
         Take a pipeline object from scikit learn to experiments data and params for parameters
         to cross validate.
 
         Args:
-             pipeline (:obj:):
              params (:obj:):
              inner_cv (:obj:):
              outer_cv (:obj:):
         """
         self.__model = model
         self.__params = params
+        self.__callbacks = callbacks
         self.__inner_cv = inner_cv
         self.__outer_cv = outer_cv
-        self.scoring = scoring
+        self.__scoring = scoring
 
     @staticmethod
-    def sub(array, indices):
-        if array is None:
+    def sub(np_array, indices):
+        if np_array is None:
             return None
-        return array[indices]
+        return np_array[indices]
 
     def change_model(self, model, params):
         self.__model = model
@@ -74,7 +74,7 @@ class Classifier:
 
             model = deepcopy(self.__model)
             grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
-                                       scoring=self.scoring, verbose=1, iid=False)
+                                       scoring=self.__scoring, verbose=1, iid=False)
 
             if isinstance(model, KerasBatchClassifier):
                 grid_search.fit(X=self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train),
