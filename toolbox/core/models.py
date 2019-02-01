@@ -74,21 +74,32 @@ class DeepModels:
 
     @staticmethod
     def get_transfer_learning_model(output_classes, architecture='InceptionV3'):
+
         # We get the deep extractor part as include_top is false
-        inception_model = applications.InceptionV3(weights='imagenet', include_top=False, pooling='max')
+        if architecture == 'VGG16':
+            base_model = applications.VGG16(weights='imagenet', include_top=False, pooling='max')
+        if architecture == 'VGG19':
+            base_model = applications.VGG19(weights='imagenet', include_top=False, pooling='max')
+        else:
+            base_model = applications.InceptionV3(weights='imagenet', include_top=False, pooling='max')
 
         # Now we customize the output consider our application field
-        prediction_layers = Dense(output_classes, activation='softmax', name='predictions')(inception_model.output)
+        prediction_layers = Dense(output_classes, activation='softmax', name='predictions')(base_model.output)
 
         # And defined model based on our input and next output
-        model = Model(inputs=inception_model.input, outputs=prediction_layers)
+        model = Model(inputs=base_model.input, outputs=prediction_layers)
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
         return model
 
     @staticmethod
-    def get_transfer_learning_preprocessing():
-        return applications.inception_v3.preprocess_input
+    def get_transfer_learning_preprocessing(architecture='InceptionV3'):
+        if architecture == 'VGG16':
+            return applications.vgg16.preprocess_input
+        if architecture == 'VGG19':
+            return applications.vgg19.preprocess_input
+        else:
+            return applications.inception_v3.preprocess_input
 
     @staticmethod
     def get_memory_usage(batch_size, model, unit=(1024.0 ** 3)):
