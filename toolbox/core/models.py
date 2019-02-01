@@ -26,7 +26,7 @@ from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 class DeepModels:
 
     @staticmethod
-    def get_callbacks(folder=None):
+    def get_callbacks(model_calls=[], folder=None):
         callbacks = []
         if folder is not None:
             # Workdir creation
@@ -41,8 +41,12 @@ class DeepModels:
 
             callbacks.append(TensorBoardWriter(log_dir=work_dir))
 
-        callbacks.append(ReduceLROnPlateau(monitor='loss', factor=0.1, patience=5, verbose=1, epsilon=1e-4, mode='min'))
-        callbacks.append(EarlyStopping(monitor='loss', min_delta=0.0001, patience=5, verbose=1, mode='auto'))
+        if 'Reduce' in model_calls:
+            callbacks.append(ReduceLROnPlateau(monitor='loss', factor=0.1, patience=5, verbose=1, epsilon=1e-4, mode='min'))
+
+        if 'Early' in model_calls:
+            callbacks.append(EarlyStopping(monitor='loss', min_delta=0.0001, patience=5, verbose=1, mode='auto'))
+
         return callbacks
 
     @staticmethod
@@ -55,9 +59,12 @@ class DeepModels:
         return model
 
     @staticmethod
-    def get_scratch_patch_model(output_classes):
+    def get_scratch_model(output_classes, mode):
         model = Sequential()
-        model.add(Conv2D(10, (1, 3), strides=(2, 2), input_shape=(250, 250, 3), activation='linear', name='Convolution_1'))
+        if mode == 'patch':
+            model.add(Conv2D(10, (1, 3), strides=(2, 2), input_shape=(250, 250, 3), activation='linear', name='Convolution_1'))
+        else:
+            model.add(Conv2D(10, (1, 3), strides=(2, 2), input_shape=(1000, 1000, 3), activation='linear', name='Convolution_1'))
         model.add(Conv2D(10, (3, 1), strides=(2, 2), activation='relu', name='Convolution_2'))
         model.add(GlobalMaxPooling2D(name='Pooling_2D'))
         model.add(Dense(output_classes, activation='softmax', name='Predictions'))
@@ -73,7 +80,7 @@ class DeepModels:
         return model
 
     @staticmethod
-    def get_transfer_learning_model(output_classes, architecture='InceptionV3'):
+    def get_transfer_learning_model(output_classes, architecture='InceptionV3', optimizer='adam', metrics=['accuracy']):
 
         # We get the deep extractor part as include_top is false
         if architecture == 'VGG16':
@@ -86,9 +93,14 @@ class DeepModels:
         # Now we customize the output consider our application field
         prediction_layers = Dense(output_classes, activation='softmax', name='predictions')(base_model.output)
 
+        if output_classes>2:
+            loss = 'categorical_crossentropy'
+        else:
+            loss = 'binary_crossentropy'
+
         # And defined model based on our input and next output
         model = Model(inputs=base_model.input, outputs=prediction_layers)
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
 
         return model
 

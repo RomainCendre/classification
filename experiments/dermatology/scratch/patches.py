@@ -31,9 +31,11 @@ if __name__ == '__main__':
     Parameters.set_gpu(percent_gpu=0.5)
 
     # Initiate model and params
-    model = KerasBatchClassifier(DeepModels.get_scratch_patch_model)
-    params = {'epochs': [100],
-              'batch_size': [10],
+    model = KerasBatchClassifier(DeepModels.get_scratch_model)
+    params = {'batch_size': [10],
+              'callbacks': [DeepModels.get_callbacks(folder=output_folder)],
+              'epochs': [100],
+              'mode': ['patch'],
               'preprocessing_function': [None],
               'inner_cv': validation,
               'outer_cv': validation}
