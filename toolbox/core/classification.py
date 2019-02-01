@@ -78,6 +78,7 @@ class Classifier:
 
             if isinstance(model, KerasBatchClassifier):
                 grid_search.fit(X=self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train),
+                                callbacks=self.__callbacks,
                                 X_validation=self.sub(datas, test), y_validation=self.sub(labels, test))
             else:
                 grid_search.fit(X=self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train))
@@ -190,7 +191,7 @@ class KerasBatchClassifier(KerasClassifier):
             [local_param.pop(key) for key in list(found_params)]
         super().check_params(local_param)
 
-    def fit(self, X, y, X_validation=None, y_validation=None, **kwargs):
+    def fit(self, X, y, callbacks=[], X_validation=None, y_validation=None, **kwargs):
         self.sk_params.update({'output_classes': len(unique_labels(y))})
         # Get the deep model
         if self.build_fn is None:
@@ -223,7 +224,8 @@ class KerasBatchClassifier(KerasClassifier):
             validation = generator.flow_from_paths(X_validation, y_validation,
                                                    **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
 
-        self.history = self.model.fit_generator(generator=train, validation_data=validation, **fit_args)
+        self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
+                                                **fit_args)
 
         return self.history
 
