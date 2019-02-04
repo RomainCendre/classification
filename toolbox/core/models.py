@@ -26,6 +26,29 @@ from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 class DeepModels:
 
     @staticmethod
+    def get_application_model(architecture='InceptionV3'):
+        # We get the deep extractor part as include_top is false
+        if architecture == 'MobileNet':
+            model = applications.MobileNet(weights='imagenet', include_top=False, pooling='max')
+        elif architecture == 'VGG16':
+            model = applications.VGG16(weights='imagenet', include_top=False, pooling='max')
+        elif architecture == 'VGG19':
+            model = applications.VGG19(weights='imagenet', include_top=False, pooling='max')
+        else:
+            model = applications.InceptionV3(weights='imagenet', include_top=False, pooling='max')
+
+        return model
+
+    @staticmethod
+    def get_application_preprocessing(architecture='InceptionV3'):
+        if architecture == 'VGG16':
+            return applications.vgg16.preprocess_input
+        if architecture == 'VGG19':
+            return applications.vgg19.preprocess_input
+        else:
+            return applications.inception_v3.preprocess_input
+
+    @staticmethod
     def get_callbacks(model_calls=[], folder=None):
         callbacks = []
         if folder is not None:
@@ -54,7 +77,7 @@ class DeepModels:
         keras.layers.RandomLayer = RandomLayer
         # Extract labels
         model = Sequential()
-        model.add(RandomLayer(output_classes, input_shape=(None, None, 3)))
+        model.add(RandomLayer(output_classes))
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         return model
 
@@ -83,17 +106,12 @@ class DeepModels:
     def get_transfer_learning_model(output_classes, architecture='InceptionV3', optimizer='adam', metrics=['accuracy']):
 
         # We get the deep extractor part as include_top is false
-        if architecture == 'VGG16':
-            base_model = applications.VGG16(weights='imagenet', include_top=False, pooling='max')
-        if architecture == 'VGG19':
-            base_model = applications.VGG19(weights='imagenet', include_top=False, pooling='max')
-        else:
-            base_model = applications.InceptionV3(weights='imagenet', include_top=False, pooling='max')
+        base_model = DeepModels.get_application_model(architecture)
 
         # Now we customize the output consider our application field
         prediction_layers = Dense(output_classes, activation='softmax', name='predictions')(base_model.output)
 
-        if output_classes>2:
+        if output_classes > 2:
             loss = 'categorical_crossentropy'
         else:
             loss = 'binary_crossentropy'
@@ -103,15 +121,6 @@ class DeepModels:
         model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
 
         return model
-
-    @staticmethod
-    def get_transfer_learning_preprocessing(architecture='InceptionV3'):
-        if architecture == 'VGG16':
-            return applications.vgg16.preprocess_input
-        if architecture == 'VGG19':
-            return applications.vgg19.preprocess_input
-        else:
-            return applications.inception_v3.preprocess_input
 
     @staticmethod
     def get_memory_usage(batch_size, model, unit=(1024.0 ** 3)):

@@ -1,11 +1,13 @@
+import glob
 import warnings
+from os.path import join
 
 import types
 from copy import deepcopy
 from keras import Sequential
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras.utils.generic_utils import has_arg, to_list
-from numpy import arange, array, unique, searchsorted, hstack, asarray, mean, array_equal
+from numpy import arange, array, unique, searchsorted, hstack, asarray, mean, array_equal, save, load
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils.multiclass import unique_labels
 from toolbox.core.generators import ResourcesGenerator
@@ -87,7 +89,7 @@ class Classifier:
             if self.__check_params_multiple():
                 grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
                                            scoring=self.__scoring, verbose=1, iid=False)
-                grid_search.fit(X=self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train))
+                grid_search.fit(self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train))
                 best_params = grid_search.best_params_
             else:
                 best_params = self.__params
@@ -95,10 +97,10 @@ class Classifier:
             # Fit the model, with the bests parameters
             model.set_params(**best_params)
             if isinstance(model, KerasBatchClassifier):
-                model.fit(X=self.sub(datas, train), y=self.sub(labels, train), callbacks=self.__callbacks,
+                model.fit(self.sub(datas, train), y=self.sub(labels, train), callbacks=self.__callbacks,
                           X_validation=self.sub(datas, test), y_validation=self.sub(labels, test))
             else:
-                model.fit(X=self.sub(datas, train), y=self.sub(labels, train))
+                model.fit(self.sub(datas, train), y=self.sub(labels, train))
 
             # Try to predict test data
             probabilities = model.predict_proba(datas[test])
@@ -134,7 +136,7 @@ class Classifier:
         if self.__check_params_multiple():
             grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
                                        refit=False, scoring=self.__scoring, verbose=1, iid=False)
-            grid_search.fit(X=datas, y=labels, groups=groups)
+            grid_search.fit(datas, y=labels, groups=groups)
             best_params = grid_search.best_params_
         else:
             best_params = self.__params
@@ -142,10 +144,10 @@ class Classifier:
         # Fit the model, with the bests parameters
         model.set_params(**best_params)
         if isinstance(model, KerasBatchClassifier):
-            model.fit(X=datas, y=labels, callbacks=self.__callbacks,
+            model.fit(datas, y=labels, callbacks=self.__callbacks,
                       X_validation=datas, y_validation=labels)
         else:
-            model.fit(X=datas, y=labels)
+            model.fit(datas, y=labels)
 
         return model, best_params
 
@@ -186,6 +188,30 @@ class Classifier:
             results.append(result)
 
         return Results(results, name)
+
+    def load_bottleneck(self, inputs, folder):
+        files = glob.glob(join(folder, '*.npy'))
+        features = []
+        for index in range(0, len(files)):
+            features.append(load(join(folder, '{index}.npy'.format(index=index))))
+
+        inputs.set_datas(features)
+
+    def write_bottleneck(self, inputs, folder):
+        # Extract needed data
+        datas = inputs.get_datas()
+        files = glob.glob(join(folder, '*.npy'))
+
+        # Check if already extracted
+        if len(datas) == len(files):
+            return
+
+        # Now browse data
+        features = self.__model.predict_proba(datas, **self.__params)
+
+        # Now save features as files
+        for index, feature in enumerate(features):
+            save(join(folder, str(index)), feature)
 
     @staticmethod
     def __check_labels(labels, labels_fold):
@@ -240,7 +266,7 @@ class KerasBatchClassifier(KerasClassifier):
             [local_param.pop(key) for key in list(found_params)]
         super().check_params(local_param)
 
-    def fit(self, X, y, callbacks=[], X_validation=None, y_validation=None, **kwargs):
+    def init_model(self, y=[]):
         self.sk_params.update({'output_classes': len(unique_labels(y))})
         # Get the deep model
         if self.build_fn is None:
@@ -259,6 +285,9 @@ class KerasBatchClassifier(KerasClassifier):
             y = searchsorted(self.classes_, y)
         else:
             raise ValueError('Invalid shape for y: ' + str(y.shape))
+
+    def fit(self, X, y, callbacks=[], X_validation=None, y_validation=None, **kwargs):
+        self.init_model(y)
 
         # Get arguments for fit
         fit_args = deepcopy(self.filter_sk_params(Sequential.fit_generator))
@@ -287,15 +316,19 @@ class KerasBatchClassifier(KerasClassifier):
         return self.classes_[classes]
 
     def predict_proba(self, X, **kwargs):
-        kwargs = self.filter_sk_params(Sequential.predict_generator, kwargs)
+        # Get arguments for generator
+        fit_args = deepcopy(self.filter_sk_params(ResourcesGenerator.flow_from_paths))
+        fit_args.update(self.__filter_params(kwargs, ResourcesGenerator.flow_from_paths))
+        fit_args.update({'shuffle': False})
+        fit_args.update({'batch_size': 1})
 
         # Create generator
         generator = ResourcesGenerator(preprocessing_function=kwargs.get('Preprocess', None))
-        valid = generator.flow_from_paths(X, batch_size=1, shuffle=False)
+        valid = generator.flow_from_paths(X, **fit_args)
 
-        # Get arguments for fit
+        # Get arguments for predict
         fit_args = deepcopy(self.filter_sk_params(Sequential.predict_generator))
-        fit_args.update(kwargs)
+        fit_args.update(self.__filter_params(kwargs, Sequential.predict_generator))
 
         probs = self.model.predict_generator(generator=valid, **fit_args)
 
@@ -325,3 +358,22 @@ class KerasBatchClassifier(KerasClassifier):
         raise ValueError('The model is not configured to compute accuracy. '
                          'You should pass `metrics=["accuracy"]` to '
                          'the `model.compile()` method.')
+
+    def __filter_params(self, params, fn, override=None):
+        """Filters `sk_params` and returns those in `fn`'s arguments.
+
+        # Arguments
+            fn : arbitrary function
+            override: dictionary, values to override `sk_params`
+
+        # Returns
+            res : dictionary containing variables
+                in both `sk_params` and `fn`'s arguments.
+        """
+        override = override or {}
+        res = {}
+        for name, value in params.items():
+            if has_arg(fn, name):
+                res.update({name: value})
+        res.update(override)
+        return res

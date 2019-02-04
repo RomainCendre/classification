@@ -88,6 +88,10 @@ class DataSet:
 
         return valid_methods
 
+    def set_data(self, key: object, new_data, filter_by: object = {}) -> object:
+        for data, n_data in zip(self.__filter_by(filter_by), new_data):
+            data.data[key] = n_data
+
     def __filter_by(self, filter_by):
         for data in self.data_set:
             if data.is_in_data(filter_by):
@@ -235,6 +239,13 @@ class Inputs:
             self.labels_encoder.fit(self.data.get_data(key=self.tags['label_tag'], filter_by=self.filter_by))
         # Set load property to true
         self.load_state = True
+
+    def set_datas(self, new_data):
+        self.check_load()
+        if 'data_tag' not in self.tags:
+            return None
+
+        self.data.set_data(key=self.tags['data_tag'], new_data=new_data, filter_by=self.filter_by)
 
 
 class Result(Data):

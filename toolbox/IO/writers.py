@@ -14,6 +14,7 @@ from sklearn.metrics import auc, roc_curve, classification_report
 from vis.utils.utils import load_img
 from vis.visualization import visualize_cam, overlay
 
+from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.generators import ResourcesGenerator
 
 
@@ -215,6 +216,10 @@ class VisualizationWriter:
         activation_dir = join(output_folder, 'Activation/')
         if not exists(activation_dir):
             makedirs(activation_dir)
+
+        # Check for model type, will be changed in future
+        if not isinstance(self.model, KerasBatchClassifier):
+            return
 
         # Extract data for fit
         paths = inputs.get_datas()
