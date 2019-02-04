@@ -1,9 +1,11 @@
+import warnings
+
 import types
 from copy import deepcopy
 from keras import Sequential
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras.utils.generic_utils import has_arg, to_list
-from numpy import arange, array, unique, searchsorted, hstack, asarray, mean
+from numpy import arange, array, unique, searchsorted, hstack, asarray, mean, array_equal
 from sklearn.model_selection import GridSearchCV
 from sklearn.utils.multiclass import unique_labels
 from toolbox.core.generators import ResourcesGenerator
@@ -70,6 +72,11 @@ class Classifier:
         # Encode labels to go from string to int
         results = []
         for fold, (train, test) in enumerate(self.__outer_cv.split(X=datas, y=labels, groups=groups)):
+
+            # Check that current fold respect labels
+            if not self.__check_labels(labels, self.sub(labels, train)):
+                warnings.warn('Invalid fold, missing labels for fold {fold}'.format(fold=fold+1))
+                continue
 
             print('Fold : {fold}'.format(fold=fold+1))
 
@@ -179,6 +186,10 @@ class Classifier:
             results.append(result)
 
         return Results(results, name)
+
+    @staticmethod
+    def __check_labels(labels, labels_fold):
+        return array_equal(unique(labels), unique(labels_fold))
 
     def __check_params_multiple(self):
         for key, value in self.__params.items():
