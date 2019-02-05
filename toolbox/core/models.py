@@ -95,11 +95,18 @@ class DeepModels:
         return model
 
     @staticmethod
-    def get_transfer_model(optimizer='adam'):
+    def get_prediction_model(output_classes, optimizer='adam', metrics=['accuracy']):
         # Now we customize the output consider our application field
         model = Sequential()
-        model.add(Dense(2, activation='softmax', name='predictions'))
-        model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+        # Now we customize the output consider our application field
+        model.add(Dense(output_classes, activation='softmax', name='predictions'))
+
+        if output_classes > 2:
+            loss = 'categorical_crossentropy'
+        else:
+            loss = 'binary_crossentropy'
+
+        model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
         return model
 
     @staticmethod

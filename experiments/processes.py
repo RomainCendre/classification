@@ -10,7 +10,7 @@ class Processes:
     @staticmethod
     def dermatology(inputs, output_folder, model, params, name):
         # Step 1 - Write statistics on current data
-        keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
+        keys = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
         StatisticsWriter(inputs).write_result(keys=keys, dir_name=output_folder, name=name)
 
         # Step 2 - Evaluate model
@@ -27,7 +27,7 @@ class Processes:
     @staticmethod
     def dermatology_bottleneck(inputs, temp_folder, output_folder, model, m_params, predictor, p_params, name):
         # Step 1 - Write statistics on current data
-        keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
+        keys = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
         StatisticsWriter(inputs).write_result(keys=keys, dir_name=output_folder, name=name)
 
         # Step 2-1 - Evaluate model

@@ -1,0 +1,118 @@
+from os import makedirs, startfile
+
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import StratifiedKFold
+from os.path import exists, expanduser, normpath, splitext, basename, join
+from experiments.processes import Processes
+from toolbox.IO import dermatology
+from toolbox.core.classification import KerasBatchClassifier
+from toolbox.core.models import DeepModels
+from toolbox.core.structures import Inputs
+from toolbox.tools.limitations import Parameters
+
+if __name__ == '__main__':
+
+    # Parameters
+    filename = splitext(basename(__file__))[0]
+    home_path = expanduser('~')
+    name = 'Results'
+    validation = StratifiedKFold(n_splits=5, shuffle=True)
+
+    # Output dir
+    output_folder = normpath('{home}/Results/Dermatology/Transfer_learning/{filename}'.format(home=home_path, filename=filename))
+    if not exists(output_folder):
+        makedirs(output_folder)
+
+    # Temporary folder
+    temp_folder = join(output_folder, 'Temp')
+    if not exists(temp_folder):
+        makedirs(temp_folder)
+
+    # Input data
+    input_folder = normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))
+    inputs = Inputs(folders=[input_folder], loader=dermatology.Reader.scan_folder_for_images,
+                    tags={'data_tag': 'Data', 'label_tag': 'Label'})
+    inputs.load()
+
+    # Configure GPU consumption
+    Parameters.set_gpu(percent_gpu=0.5)
+
+    # Initiate model and params
+    model = KerasBatchClassifier(DeepModels.get_application_model)
+    model.init_model()
+    model_params = {'preprocessing_function': DeepModels.get_application_preprocessing(),
+                    'batch_size': 50}
+
+    # Initiate model and params
+    predictor = KerasClassifier(DeepModels.get_prediction_model)
+    predictor_params = {'epochs': 100,
+                        'output_classes': 3,
+                        'batch_size': 50,
+                        'callbacks': DeepModels.get_callbacks(output_folder),
+                        'inner_cv': validation,
+                        'outer_cv': validation}
+
+    # Launch process
+    Processes.dermatology_bottleneck(inputs, temp_folder, output_folder, model, model_params,
+                                     predictor, predictor_params, name)
+
+    # Open result folder
+    startfile(output_folder)
+
+
+
+
+#
+# def extract_deepfeatures (input_dir, label):
+#     # Init model
+#     model = InceptionV3(weights='imagenet', include_top=False, pooling='avg')
+#
+#     files = glob(join(input_dir, '*.bmp'))
+#     features = []
+#     for file in files:
+#         image = expand_dims(array(Image.open(file)), axis=0)
+#         image = preprocess_input(image)
+#         features.append(model.predict(image)[0])
+#     features = asarray(features)
+#     return features, full(features.shape[0], label)
+#
+#
+# if __name__ == "__main__":
+#     # TODO DummyClassifier
+#
+#     # Configure GPU consumption
+#     Parameters.set_gpu(percent_gpu=0.5)
+#
+#     home_path = expanduser("~")
+#
+#     # Output dir
+#     output_dir = normpath('{home}/Results/Skin/Thumbnails/Deep_Features/'.format(home=home_path))
+#     if not exists(output_dir):
+#         makedirs(output_dir)
+#
+#     # Prepare input ressources
+#     features_file = join(output_dir, 'features.npy')
+#     labels_file = join(output_dir, 'labels.npy')
+#
+#     if not isfile(features_file):
+#         # Load data
+#         input_dir = normpath('{home}/Data/Skin/Thumbnails/'.format(home=home_path))
+#         benign_dir = join(input_dir, 'Benin')
+#         malignant_dir = join(input_dir, 'Malin')
+#         features, labels = extract_deepfeatures(benign_dir, 'benin')
+#         features_m, labels_m = extract_deepfeatures(malignant_dir, 'malin')
+#
+#         features = concatenate((features, features_m), axis=0)
+#         features = StandardScaler().fit_transform(features)
+#         labels = concatenate((labels, labels_m), axis=0)
+#
+#         # Make a save of data
+#         save(features_file, features)
+#         save(labels_file, labels)
+#     else:
+#         # Reload data if exist
+#         features = load(features_file)
+#         labels = load(labels_file)
+#
+#     # Save data as projector to visualize them
+#     DataProjector.project_data(datas=features, labels=labels, path=join(output_dir, 'Projector'))

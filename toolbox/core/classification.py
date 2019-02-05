@@ -71,16 +71,20 @@ class Classifier:
         groups = inputs.get_groups()
         reference = inputs.get_reference()
 
+        # Check valid labels, at least several classes
+        if not self.__check_labels(labels):
+            raise ValueError('Not enough unique labels where found, at least 2.')
+
         # Encode labels to go from string to int
         results = []
         for fold, (train, test) in enumerate(self.__outer_cv.split(X=datas, y=labels, groups=groups)):
 
             # Check that current fold respect labels
             if not self.__check_labels(labels, self.sub(labels, train)):
-                warnings.warn('Invalid fold, missing labels for fold {fold}'.format(fold=fold+1))
+                warnings.warn('Invalid fold, missing labels for fold {fold}'.format(fold=fold + 1))
                 continue
 
-            print('Fold : {fold}'.format(fold=fold+1))
+            print('Fold : {fold}'.format(fold=fold + 1))
 
             # Clone model
             model = deepcopy(self.__model)
@@ -129,6 +133,10 @@ class Classifier:
         labels = inputs.get_labels()
         groups = inputs.get_groups()
 
+        # Check valid labels, at least several classes
+        if not self.__check_labels(labels):
+            raise ValueError('Not enough unique labels where found, at least 2.')
+
         # Clone model
         model = deepcopy(self.__model)
 
@@ -157,6 +165,10 @@ class Classifier:
         labels = inputs.get_labels()
         groups = inputs.get_groups()
         reference = inputs.get_reference()
+
+        # Check valid labels, at least several classes
+        if not self.__check_labels(labels):
+            raise ValueError('Not enough unique labels where found, at least 2.')
 
         # Prepare data
         generator = ResourcesGenerator(preprocessing_function=self.__params.get('preprocessing_function', None))
@@ -214,12 +226,14 @@ class Classifier:
             save(join(folder, str(index)), feature)
 
     @staticmethod
-    def __check_labels(labels, labels_fold):
-        return array_equal(unique(labels), unique(labels_fold))
+    def __check_labels(labels, labels_fold=[]):
+        if not labels_fold:
+            return len(unique(labels)) > 1
+        return len(unique(labels)) > 1 and array_equal(unique(labels), unique(labels_fold))
 
     def __check_params_multiple(self):
         for key, value in self.__params.items():
-            if isinstance(value, list) and len(value)>1:
+            if isinstance(value, list) and len(value) > 1:
                 return True
         return False
 
