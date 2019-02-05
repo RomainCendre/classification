@@ -11,10 +11,10 @@ from toolbox.IO import dermatology
 
 
 def extract_haralick(inputs):
-
     for data in inputs.data.data_set:
-        image = array(Image.open(data.data['Data']))
-        data.update({'Haralick': mahotas.features.haralick(image[:, :, 0]).flatten()})
+        print('Extract haralick from {path}'.format(path=data.data['Data']))
+        image = array(Image.open(data.data['Data']).convert('L'))
+        data.update({'Haralick': mahotas.features.haralick(image).flatten()})
 
 
 if __name__ == '__main__':

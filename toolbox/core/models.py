@@ -214,8 +214,8 @@ class SimpleModels:
                          ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
         # Define parameters to validate through grid CV
         parameters = {
-            'clf__C': geomspace(0.01, 1000, 6),
-            'clf__gamma': geomspace(0.01, 1000, 6)
+            'clf__C': geomspace(0.01, 1000, 6).tolist(),
+            'clf__gamma': geomspace(0.01, 1000, 6).tolist()
         }
         return pipe, parameters
 

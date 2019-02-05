@@ -12,8 +12,9 @@ from toolbox.IO import dermatology
 
 def extract_haralick(inputs):
     for data in inputs.data.data_set:
-        image = array(Image.open(data.data['Data']))
-        data.update({'Haralick': mahotas.features.haralick(image[:, :, 0]).flatten()})
+        print('Extract haralick from {path}'.format(path=data.data['Data']))
+        image = array(Image.open(data.data['Data']).convert('L'))
+        data.update({'Haralick': mahotas.features.haralick(image).flatten()})
 
 
 if __name__ == "__main__":
@@ -31,12 +32,12 @@ if __name__ == "__main__":
 
     # Input data
     filter_by = {'Modality': 'Microscopy',
-                 'Label': ['LM', 'LB', 'Normal']}
+                 'Label': ['Malignant', 'Benign', 'Normal']}
 
     input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
     inputs = Inputs(folders=input_folders, loader=dermatology.Reader.scan_folder,
-                    tags={'data_tag': 'Data', 'label_tag': 'Label'}, filter_by=filter_by)
+                    tags={'data_tag': 'Haralick', 'label_tag': 'Label'}, filter_by=filter_by)
     inputs.load()
 
     # Format Data
