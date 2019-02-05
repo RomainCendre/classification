@@ -226,8 +226,8 @@ class Classifier:
             save(join(folder, str(index)), feature)
 
     @staticmethod
-    def __check_labels(labels, labels_fold=[]):
-        if not labels_fold:
+    def __check_labels(labels, labels_fold=None):
+        if labels_fold is None:
             return len(unique(labels)) > 1
         return len(unique(labels)) > 1 and array_equal(unique(labels), unique(labels_fold))
 
