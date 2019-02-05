@@ -5,6 +5,7 @@ from PIL import Image
 from numpy.ma import array
 from sklearn.model_selection import StratifiedKFold
 from experiments.processes import Processes
+from toolbox.IO.writers import DataProjectorWriter
 from toolbox.core.models import SimpleModels
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
@@ -40,7 +41,7 @@ if __name__ == '__main__':
     extract_haralick(inputs)
 
     # Write data to visualize it
-    # DataProjector.project_data(datas=features, labels=labels, path=join(output_dir, 'Projector'))
+    DataProjectorWriter.project_data(inputs, output_folder)
 
     # Initiate model and params
     model, params = SimpleModels.get_linear_svm_process()

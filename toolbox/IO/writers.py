@@ -1,21 +1,70 @@
 from collections import Counter
 from math import ceil
 from os import makedirs
-
 import markups
 import pandas
 import pickle
 from matplotlib import pyplot, cm
 from os.path import join, exists
-
+from keras import backend as K
 from matplotlib.image import imsave
-from numpy import std, repeat, newaxis, uint8, arange
+from numpy import std, repeat, newaxis, uint8, arange, savetxt
 from sklearn.metrics import auc, roc_curve, classification_report
 from vis.utils.utils import load_img
 from vis.visualization import visualize_cam, overlay
-
+from tensorboard.plugins import projector
+import tensorflow
 from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.generators import ResourcesGenerator
+
+
+class DataProjectorWriter:
+
+    # Have to improve this tool, see callbacks.py to get clues
+    @staticmethod
+    def project_data(inputs, output_folder):
+
+        if not K.backend() == 'tensorflow':
+            return
+
+        # Create a specific folder
+        output_folder = join(output_folder, 'Projector')
+        if not exists(output_folder):
+            makedirs(output_folder)
+
+        # Write a batch to easily launch it
+            DataProjectorWriter.write_batch(output_folder)
+
+        sess = K.get_session()
+
+        datas = inputs.get_datas()
+        labels = inputs.get_labels()
+
+        # Write data
+        data_path = join(output_folder, 'data.ckpt')
+        tf_data = tensorflow.Variable(datas)
+        saver = tensorflow.train.Saver([tf_data])
+        sess.run(tf_data.initializer)
+        saver.save(sess, data_path)
+
+        # Write label as metadata
+        metadata_path = join(output_folder, 'metadata.tsv')
+        savetxt(metadata_path, labels, delimiter='\t', fmt='%s')
+
+        config = projector.ProjectorConfig()
+        # One can add multiple embeddings.
+        embedding = config.embeddings.add()
+        embedding.tensor_name = tf_data.name
+        # Link this tensor to its metadata(Labels) file
+        embedding.metadata_path = metadata_path
+        # Saves a config file that TensorBoard will read during startup.
+        projector.visualize_embeddings(tensorflow.summary.FileWriter(output_folder), config)
+
+    @staticmethod
+    def write_batch(output_folder):
+        file = open(join(output_folder, 'tb_launch.bat'), "w")
+        file.write('tensorboard --logdir={}'.format("./"))
+        file.close()
 
 
 class StatisticsWriter:

@@ -1,13 +1,9 @@
 import logging
 import sys
-
-from keras import backend as K
 from os.path import join
 from keras.callbacks import TensorBoard
-from numpy import savetxt
 from tensorboard import default
 from tensorboard import program
-from tensorboard.plugins import projector
 import tensorflow
 
 
@@ -66,33 +62,3 @@ class TensorBoardWriter(TensorBoard):
     def on_train_end(self, logs=None):
         super(TensorBoardWriter, self).on_train_end(logs)
         self.val_writer.close()
-
-
-class DataProjector:
-    # Have to improve this tool, see callbacks.py to get clues
-    def project_data(datas, labels, path):
-
-        if not K.backend() == 'tensorflow':
-            return
-
-        sess = K.get_session()
-
-        # Write data
-        data_path = join(path, 'data.ckpt')
-        tf_data = tensorflow.Variable(datas)
-        saver = tensorflow.train.Saver([tf_data])
-        sess.run(tf_data.initializer)
-        saver.save(sess, data_path)
-
-        # Write label as metadata
-        metadata_path = join(path, 'metadata.tsv')
-        savetxt(metadata_path, labels, delimiter='\t', fmt='%s')
-
-        config = projector.ProjectorConfig()
-        # One can add multiple embeddings.
-        embedding = config.embeddings.add()
-        embedding.tensor_name = tf_data.name
-        # Link this tensor to its metadata(Labels) file
-        embedding.metadata_path = metadata_path
-        # Saves a config file that TensorBoard will read during startup.
-        projector.visualize_embeddings(tensorflow.summary.FileWriter(path), config)
