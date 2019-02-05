@@ -1,13 +1,23 @@
+from PIL import Image
 from numpy import array
 from pywt import dwt
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cross_decomposition import PLSRegression
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from skimage.feature import greycomatrix, greycoprops
 import mahotas
 
 
-class ImageDescriptorTransform(BaseEstimator, TransformerMixin):
+class HaralickDescriptorTransform(BaseEstimator, TransformerMixin):
+
+    def fit(self, x, y=None):
+        """
+        This should fit this transformer, but DWT doesn't need to fit to train data
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+        """
+        return self
 
     def transform(self, x, y=None, copy=True):
         """
@@ -19,11 +29,12 @@ class ImageDescriptorTransform(BaseEstimator, TransformerMixin):
              y (:obj): Not used.
              copy (:obj): Not used.
         """
-        features = []
-        gcm = greycomatrix(x, [5], [0], 256, symmetric=True, normed=True)
-        for cur_prop in ['contrast', 'dissimilarity', 'homogeneity', 'energy', 'correlation', 'ASM']:
-            features.extend(greycoprops(gcm, prop=cur_prop))
-        return array(features).ravel()
+
+        haralick = []
+        for index, data in enumerate(x):
+            image = array(Image.open(data).convert('L'))
+            haralick.append(mahotas.features.haralick(image).flatten())
+        return array(haralick)
 
 
 class DWTTransform(BaseEstimator, TransformerMixin):
