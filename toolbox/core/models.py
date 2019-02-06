@@ -185,7 +185,7 @@ class SimpleModels:
 
     @staticmethod
     def get_haralick_process():
-        pipe = Pipeline([('haralick', HaralickDescriptorTransform(mean=True)),
+        pipe = Pipeline([('haralick', HaralickDescriptorTransform()),
                          ('scale', StandardScaler()),
                          ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
         # Define parameters to validate through grid CV
@@ -341,6 +341,7 @@ class KerasBatchClassifier(KerasClassifier):
         return self.classes_[classes]
 
     def predict_proba(self, X, **kwargs):
+        self.init_model()
         # Get arguments for generator
         fit_args = deepcopy(self.filter_sk_params(ResourcesGenerator.flow_from_paths))
         fit_args.update(self.__filter_params(kwargs, ResourcesGenerator.flow_from_paths))
