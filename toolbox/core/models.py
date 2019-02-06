@@ -185,7 +185,7 @@ class SimpleModels:
 
     @staticmethod
     def get_haralick_process():
-        pipe = Pipeline([('haralick', HaralickDescriptorTransform()),
+        pipe = Pipeline([('haralick', HaralickDescriptorTransform(mean=True)),
                          ('scale', StandardScaler()),
                          ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
         # Define parameters to validate through grid CV

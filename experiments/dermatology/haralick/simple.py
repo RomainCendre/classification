@@ -53,7 +53,7 @@ if __name__ == "__main__":
     # Launch process
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation)
-    process.checkpoint_step(inputs=inputs_patch, model=HaralickDescriptorTransform(), folder=patch_folder,
+    process.checkpoint_step(inputs=inputs_patch, model=HaralickDescriptorTransform(mean=True), folder=patch_folder,
                             projection_folder=projection_patch_folder)
     process.end(inputs=inputs_patch, model=model, params=params, output_folder=output_folder, name=name_patch)
 
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     inputs_full.load()
 
     # Launch process
-    process.checkpoint_step(inputs=inputs_full, model=HaralickDescriptorTransform(), folder=full_folder,
+    process.checkpoint_step(inputs=inputs_full, model=HaralickDescriptorTransform(mean=True), folder=full_folder,
                             projection_folder=projection_full_folder)
     process.end(inputs=inputs_full, model=model, params=params, output_folder=output_folder, name=name_full)
 

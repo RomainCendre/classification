@@ -9,6 +9,9 @@ import mahotas
 
 class HaralickDescriptorTransform(BaseEstimator, TransformerMixin):
 
+    def __init__(self, mean=False):
+        self.mean = mean
+
     def fit(self, x, y=None):
         """
         This should fit this transformer, but DWT doesn't need to fit to train data
@@ -33,7 +36,11 @@ class HaralickDescriptorTransform(BaseEstimator, TransformerMixin):
         haralick = []
         for index, data in enumerate(x):
             image = array(Image.open(data).convert('L'))
-            haralick.append(mahotas.features.haralick(image).flatten())
+            features = mahotas.features.haralick(image)
+            if self.mean:
+                haralick.append(features.mean(axis=0))
+            else:
+                haralick.append(features.flatten())
         return array(haralick)
 
 
