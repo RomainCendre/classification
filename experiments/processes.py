@@ -1,11 +1,14 @@
+from tempfile import gettempdir
+
 from keras.wrappers.scikit_learn import BaseWrapper
 from numpy.ma import arange
 from sklearn.model_selection import GroupKFold
-from toolbox.IO.writers import StatisticsWriter, VisualizationWriter, ResultWriter
+from toolbox.IO.writers import StatisticsWriter, VisualizationWriter, ResultWriter, DataProjectorWriter
 from toolbox.core.classification import Classifier
+from toolbox.core.models import ClassifierPatch
 
 
-class Processes:
+class Process:
 
     @staticmethod
     def dermatology(inputs, output_folder, model, params, name):
@@ -31,7 +34,7 @@ class Processes:
         StatisticsWriter(inputs).write_result(keys=keys, dir_name=output_folder, name=name)
 
         # Step 2-1 - Evaluate model
-        classifier = Classifier(model, m_params, callbacks=p_params.pop('callbacks', []),
+        classifier = Classifier(callbacks=p_params.pop('callbacks', []),
                                 inner_cv=p_params.pop('inner_cv', 5), outer_cv=p_params.pop('outer_cv', 5),
                                 scoring=None)
         classifier.write_bottleneck(inputs, temp_folder)
@@ -82,6 +85,22 @@ class Processes:
         ResultWriter(inputs, result).write_results(dir_name=output_folder, name=name)
 
     @staticmethod
+    def dermatology_pretrain_patch_test(pretrain_inputs, inputs, hierarchy, output_folder, model, params, name):
+        # Step 1 - Fit pre input
+        classifier = Classifier(model, params, callbacks=params.pop('callbacks', []),
+                                inner_cv=params.pop('inner_cv'), outer_cv=params.pop('outer_cv'), scoring=None)
+        fited_model, fited_params = classifier.fit(pretrain_inputs)
+        mod = fited_model
+        par = fited_params
+        classifier.change_model(ClassifierPatch(mod, 250, hierarchy), par)
+
+        # Step 2 - Write statistics, and Evaluate on final data
+        keys = ['Sex', 'PatientDiagnosis', 'PatientLabel', 'Label']
+        StatisticsWriter(inputs).write_result(keys=keys, dir_name=output_folder, name=name)
+        result = classifier.evaluate(inputs, name)
+        ResultWriter(inputs, result).write_results(dir_name=output_folder, name=name)
+
+    @staticmethod
     def otorhinolaryngology(inputs, output_folder, model, params, name):
         # Step 1 - Filter data
         inputs.data.apply_method(name='apply_average_filter', parameters={'size': 5})
@@ -97,3 +116,32 @@ class Processes:
                                 inner_cv=GroupKFold(n_splits=5), outer_cv=GroupKFold(n_splits=5))
         result = classifier.evaluate(inputs)
         ResultWriter(inputs, result).write_results(dir_name=output_folder, name=name)
+
+    def begin(self, inner_cv, outer_cv, callbacks=[], scoring=None):
+        self.classifier = Classifier(callbacks=callbacks, inner_cv=inner_cv, outer_cv=outer_cv, scoring=scoring)
+
+    def checkpoint_step(self, inputs, model, folder, projection_folder=None, params={}):
+        self.classifier.set_model(model, params)
+        self.classifier.features_checkpoint(inputs, folder)
+        # Write data to visualize it
+        if projection_folder is not None:
+            DataProjectorWriter.project_data(inputs, projection_folder)
+
+    def train_step(self, inputs, model, params={}):
+        self.classifier.set_model(model, params)
+        return self.classifier.fit(inputs)
+
+    def end(self, inputs, model, params={}, output_folder=gettempdir(), name='Default'):
+        # Step 1 - Write statistics on current data
+        keys = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
+        StatisticsWriter(inputs).write_result(keys=keys, dir_name=output_folder, name=name)
+
+        # Step 2 - Evaluate model
+        self.classifier.set_model(model, params)
+        results = self.classifier.evaluate(inputs, name)
+        ResultWriter(inputs, results).write_results(dir_name=output_folder, name=name)
+
+        # Step 3 - Visualization of CAM
+        if isinstance(model, BaseWrapper):
+            model, best_params = self.classifier.fit(inputs)
+            VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)

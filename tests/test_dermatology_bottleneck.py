@@ -4,7 +4,7 @@ from os.path import normpath, exists, dirname, splitext, basename, join
 
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import StratifiedKFold
-from experiments.processes import Processes
+from experiments.processes import Process
 from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.models import DeepModels
 from toolbox.core.structures import Inputs
@@ -52,14 +52,13 @@ if __name__ == "__main__":
     predictor = KerasClassifier(DeepModels.get_dummy_model)
     predictor_params = {'epochs': 2,
                         'output_classes': 3,
-                        'batch_size': 10,
-                        'callbacks': DeepModels.get_callbacks(output_folder),
-                        'inner_cv': validation,
-                        'outer_cv': validation}
+                        'batch_size': 10}
 
     # Launch process
-    Processes.dermatology_bottleneck(inputs, temp_folder, output_folder, model, model_params,
-                                     predictor, predictor_params, name)
+    process = Process()
+    process.begin(validation, validation, callbacks=DeepModels.get_callbacks(output_folder))
+    process.checkpoint_step(inputs, model=model, params=model_params, folder=temp_folder)
+    process.end(inputs, model=predictor, params=predictor_params, output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)

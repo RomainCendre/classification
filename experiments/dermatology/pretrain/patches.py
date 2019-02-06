@@ -33,7 +33,7 @@ if __name__ == '__main__':
     # Input data
     inputs = deepcopy(pretrain_inputs)
     filter_by = {'Modality': 'Microscopy',
-                 'Label': ['LM', 'LB', 'Normal']}
+                 'Label': ['Malignant', 'Benign', 'Normal']}
 
     input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
     # Launch process
     Processes.dermatology_pretrain_patch(pretrain_inputs, inputs, inputs.encode_label(['Normal'])[0],
-                                   inputs.encode_label(['LM'])[0], output_folder, model, params, name)
+                                   inputs.encode_label(['Malignant'])[0], output_folder, model, params, name)
 
     # Open result folder
     startfile(output_folder)

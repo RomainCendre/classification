@@ -2,7 +2,7 @@ from tempfile import gettempdir
 from os import makedirs, startfile
 from os.path import normpath, exists, dirname, splitext, basename
 from sklearn.model_selection import StratifiedKFold
-from experiments.processes import Processes
+from experiments.processes import Process
 from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.models import DeepModels
 from toolbox.core.structures import Inputs
@@ -39,13 +39,11 @@ if __name__ == "__main__":
     model = KerasBatchClassifier(DeepModels.get_dummy_model)
     params = {'epochs': 2,
               'batch_size': 10,
-              'preprocessing_function': None,
-              'callbacks': DeepModels.get_callbacks(output_folder),
-              'inner_cv': validation,
-              'outer_cv': validation}
+              'preprocessing_function': None}
 
-    # Launch process
-    Processes.dermatology(inputs, output_folder, model, params, name)
+    process = Process()
+    process.begin(validation, validation, DeepModels.get_callbacks(output_folder))
+    process.end(inputs, model, params, output_folder, name)
 
     # Open result folder
     startfile(output_folder)

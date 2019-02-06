@@ -2,7 +2,7 @@ from tempfile import gettempdir
 from os import makedirs, startfile
 from os.path import normpath, exists, join, dirname, splitext, basename
 from sklearn.model_selection import StratifiedKFold
-from experiments.processes import Processes
+from experiments.processes import Process
 from toolbox.core.models import SimpleModels
 from toolbox.core.structures import Inputs
 from toolbox.IO import otorhinolaryngology
@@ -33,8 +33,9 @@ if __name__ == "__main__":
     model, params = SimpleModels.get_dummy_process()
 
     for item_name, item_filter in filters_by.items():
-        Processes.otorhinolaryngology(inputs=inputs, output_folder=output_folder, model=model,
-                                      params=params, name=item_name)
+        process = Process()
+        process.begin(validation, validation)
+        process.end(inputs=inputs, output_folder=output_folder, model=model, params=params, name=item_name)
 
     # Open result folder
     startfile(output_folder)

@@ -1,16 +1,11 @@
 import glob
 import warnings
 from os.path import join
-
-import types
 from copy import deepcopy
-from keras import Sequential
-from keras.wrappers.scikit_learn import KerasClassifier
-from keras.utils.generic_utils import has_arg, to_list
-from numpy import arange, array, unique, searchsorted, hstack, asarray, mean, array_equal, save, load
+from numpy import arange,  unique, asarray, mean, array_equal, save, load
 from sklearn.model_selection import GridSearchCV
-from sklearn.utils.multiclass import unique_labels
 from toolbox.core.generators import ResourcesGenerator
+from toolbox.core.models import KerasBatchClassifier
 from toolbox.core.structures import Results, Result
 
 
@@ -28,7 +23,7 @@ class Classifier:
 
      """
 
-    def __init__(self, model, params, inner_cv, outer_cv, callbacks=[], scoring=None):
+    def __init__(self, inner_cv, outer_cv, callbacks=[], scoring=None):
         """Make an initialisation of SpectraClassifier object.
 
         Take a pipeline object from scikit learn to experiments data and params for parameters
@@ -39,13 +34,10 @@ class Classifier:
              inner_cv (:obj:):
              outer_cv (:obj:):
         """
-        self.__model = model
-        self.__params = params
         self.__callbacks = callbacks
         self.__inner_cv = inner_cv
         self.__outer_cv = outer_cv
         self.__scoring = scoring
-        self.__format_params()
 
     @staticmethod
     def sub(np_array, indices):
@@ -53,9 +45,10 @@ class Classifier:
             return None
         return np_array[indices]
 
-    def change_model(self, model, params):
+    def set_model(self, model, params):
         self.__model = model
         self.__params = params
+        self.__format_params()
 
     def evaluate(self, inputs, name='Default'):
         """
@@ -201,29 +194,29 @@ class Classifier:
 
         return Results(results, name)
 
-    def load_bottleneck(self, inputs, folder):
-        files = glob.glob(join(folder, '*.npy'))
-        features = []
-        for index in range(0, len(files)):
-            features.append(load(join(folder, '{index}.npy'.format(index=index))))
-
-        inputs.set_datas(features)
-
-    def write_bottleneck(self, inputs, folder):
+    def features_checkpoint(self, inputs, folder):
         # Extract needed data
         datas = inputs.get_datas()
         files = glob.glob(join(folder, '*.npy'))
 
+        features = []
         # Check if already extracted
-        if len(datas) == len(files):
-            return
+        if not len(datas) == len(files):
+            print('Writting data at {folder}'.format(folder=folder))
+            # Now browse data
+            if hasattr(self.__model, "transform"):
+                features = self.__model.transform(datas, **self.__params)
+            else:
+                features = self.__model.predict_proba(datas, **self.__params)
+            # Now save features as files
+            for index, feature in enumerate(features):
+                save(join(folder, str(index)), feature)
+        else:
+            print('Loading data at {folder}'.format(folder=folder))
+            for index in range(0, len(files)):
+                features.append(load(join(folder, '{index}.npy'.format(index=index))))
 
-        # Now browse data
-        features = self.__model.predict_proba(datas, **self.__params)
-
-        # Now save features as files
-        for index, feature in enumerate(features):
-            save(join(folder, str(index)), feature)
+        inputs.set_datas(features)
 
     @staticmethod
     def __check_labels(labels, labels_fold=None):
@@ -254,140 +247,3 @@ class Classifier:
             return probabilities.argmax(axis=-1)
         else:
             return (probabilities > 0.5).astype('int32')
-
-
-class KerasBatchClassifier(KerasClassifier):
-
-    def check_params(self, params):
-        """Checks for user typos in `params`.
-
-        # Arguments
-            params: dictionary; the parameters to be checked
-
-        # Raises
-            ValueError: if any member of `params` is not a valid argument.
-        """
-        local_param = deepcopy(params)
-        legal_params_fns = [ResourcesGenerator.__init__, ResourcesGenerator.flow_from_paths,
-                            Sequential.fit_generator, Sequential.predict_generator,
-                            Sequential.evaluate_generator]
-        found_params = set()
-        for param_name in params:
-            for fn in legal_params_fns:
-                if has_arg(fn, param_name):
-                    found_params.add(param_name)
-        if not len(found_params) == 0:
-            [local_param.pop(key) for key in list(found_params)]
-        super().check_params(local_param)
-
-    def init_model(self, y=[]):
-        self.sk_params.update({'output_classes': len(unique_labels(y))})
-        # Get the deep model
-        if self.build_fn is None:
-            self.model = self.__call__(**self.filter_sk_params(self.__call__))
-        elif not isinstance(self.build_fn, types.FunctionType) and not isinstance(self.build_fn, types.MethodType):
-            self.model = self.build_fn(**self.filter_sk_params(self.build_fn.__call__))
-        else:
-            self.model = self.build_fn(**self.filter_sk_params(self.build_fn))
-
-        # Store labels
-        y = array(y)
-        if len(y.shape) == 2 and y.shape[1] > 1:
-            self.classes_ = arange(y.shape[1])
-        elif (len(y.shape) == 2 and y.shape[1] == 1) or len(y.shape) == 1:
-            self.classes_ = unique(y)
-            y = searchsorted(self.classes_, y)
-        else:
-            raise ValueError('Invalid shape for y: ' + str(y.shape))
-
-    def fit(self, X, y, callbacks=[], X_validation=None, y_validation=None, **kwargs):
-        self.init_model(y)
-
-        # Get arguments for fit
-        fit_args = deepcopy(self.filter_sk_params(Sequential.fit_generator))
-        fit_args.update(kwargs)
-
-        # Create generator
-        generator = ResourcesGenerator(**self.filter_sk_params(ResourcesGenerator.__init__))
-        train = generator.flow_from_paths(X, y, **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
-
-        validation = None
-        if X_validation is not None:
-            validation = generator.flow_from_paths(X_validation, y_validation,
-                                                   **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
-
-        self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
-                                                **fit_args)
-
-        return self.history
-
-    def predict(self, X, **kwargs):
-        probs = self.predict_proba(X, **kwargs)
-        if probs.shape[-1] > 1:
-            classes = probs.argmax(axis=-1)
-        else:
-            classes = (probs > 0.5).astype('int32')
-        return self.classes_[classes]
-
-    def predict_proba(self, X, **kwargs):
-        # Get arguments for generator
-        fit_args = deepcopy(self.filter_sk_params(ResourcesGenerator.flow_from_paths))
-        fit_args.update(self.__filter_params(kwargs, ResourcesGenerator.flow_from_paths))
-        fit_args.update({'shuffle': False})
-        fit_args.update({'batch_size': 1})
-
-        # Create generator
-        generator = ResourcesGenerator(preprocessing_function=kwargs.get('Preprocess', None))
-        valid = generator.flow_from_paths(X, **fit_args)
-
-        # Get arguments for predict
-        fit_args = deepcopy(self.filter_sk_params(Sequential.predict_generator))
-        fit_args.update(self.__filter_params(kwargs, Sequential.predict_generator))
-
-        probs = self.model.predict_generator(generator=valid, **fit_args)
-
-        # check if binary classification
-        if probs.shape[1] == 1:
-            # first column is probability of class 0 and second is of class 1
-            probs = hstack([1 - probs, probs])
-        return probs
-
-    def score(self, X, y, **kwargs):
-        kwargs = self.filter_sk_params(Sequential.evaluate_generator, kwargs)
-
-        # Create generator
-        generator = ResourcesGenerator(preprocessing_function=kwargs.get('Preprocess', None))
-        valid = generator.flow_from_paths(X, y, batch_size=1, shuffle=False)
-
-        # Get arguments for fit
-        fit_args = deepcopy(self.filter_sk_params(Sequential.evaluate_generator))
-        fit_args.update(kwargs)
-
-        # sparse to numpy array
-        outputs = self.model.evaluate_generator(generator=valid, **fit_args)
-        outputs = to_list(outputs)
-        for name, output in zip(self.model.metrics_names, outputs):
-            if name == 'acc':
-                return output
-        raise ValueError('The model is not configured to compute accuracy. '
-                         'You should pass `metrics=["accuracy"]` to '
-                         'the `model.compile()` method.')
-
-    def __filter_params(self, params, fn, override=None):
-        """Filters `sk_params` and returns those in `fn`'s arguments.
-
-        # Arguments
-            fn : arbitrary function
-            override: dictionary, values to override `sk_params`
-
-        # Returns
-            res : dictionary containing variables
-                in both `sk_params` and `fn`'s arguments.
-        """
-        override = override or {}
-        res = {}
-        for name, value in params.items():
-            if has_arg(fn, name):
-                res.update({name: value})
-        res.update(override)
-        return res

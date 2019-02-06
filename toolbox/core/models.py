@@ -1,16 +1,16 @@
-from itertools import product
+from copy import deepcopy
 from os import makedirs
 from os.path import normpath
-
-from sklearn.preprocessing import StandardScaler
 from time import strftime, gmtime, time
 import keras
-from keras import Sequential, Model
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from keras.engine import Layer
 from keras.layers import Dense, K, Conv2D, GlobalMaxPooling2D
 from keras import applications
-from numpy import arange, geomspace
+from keras import Sequential, Model
+from keras.wrappers.scikit_learn import KerasClassifier
+from keras.utils.generic_utils import has_arg, to_list
+from numpy import arange, geomspace, array, searchsorted, unique, hstack, zeros, concatenate
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -19,7 +19,12 @@ from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
-from toolbox.core.transforms import DWTTransform, PLSTransform
+from sklearn.utils.multiclass import unique_labels
+from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.preprocessing import StandardScaler
+import types
+from toolbox.core.generators import ResourcesGenerator
+from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickDescriptorTransform
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
 
@@ -164,18 +169,16 @@ class SimpleModels:
         return pipe, parameters
 
     @staticmethod
-    def get_testing_process():
-        extractors = SimpleModels.get_extractors()
-        estimators = SimpleModels.get_estimators()
-
-        processes = []
-        for prod in product(extractors, estimators):
-            pipe = Pipeline(prod[0][0] + prod[1][0])
-            params = prod[0][1].copy()
-            params.update(prod[1][1])
-            processes.append({'pipe': pipe, 'params': params})
-
-        return processes
+    def get_haralick_process():
+        pipe = Pipeline([('haralick', HaralickDescriptorTransform()),
+                         ('scale', StandardScaler()),
+                         ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
+        # Define parameters to validate through grid CV
+        parameters = {
+            'clf__C': geomspace(0.01, 1000, 6).tolist(),
+            'clf__gamma': geomspace(0.01, 1000, 6).tolist()
+        }
+        return pipe, parameters
 
     @staticmethod
     def get_ahmed_process():
@@ -304,6 +307,219 @@ class SimpleModels:
                                'DWT__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']
                            }))
         return extractors
+
+
+class KerasBatchClassifier(KerasClassifier):
+
+    def check_params(self, params):
+        """Checks for user typos in `params`.
+
+        # Arguments
+            params: dictionary; the parameters to be checked
+
+        # Raises
+            ValueError: if any member of `params` is not a valid argument.
+        """
+        local_param = deepcopy(params)
+        legal_params_fns = [ResourcesGenerator.__init__, ResourcesGenerator.flow_from_paths,
+                            Sequential.fit_generator, Sequential.predict_generator,
+                            Sequential.evaluate_generator]
+        found_params = set()
+        for param_name in params:
+            for fn in legal_params_fns:
+                if has_arg(fn, param_name):
+                    found_params.add(param_name)
+        if not len(found_params) == 0:
+            [local_param.pop(key) for key in list(found_params)]
+        super().check_params(local_param)
+
+    def init_model(self, y=[]):
+        self.sk_params.update({'output_classes': len(unique_labels(y))})
+        # Get the deep model
+        if self.build_fn is None:
+            self.model = self.__call__(**self.filter_sk_params(self.__call__))
+        elif not isinstance(self.build_fn, types.FunctionType) and not isinstance(self.build_fn, types.MethodType):
+            self.model = self.build_fn(**self.filter_sk_params(self.build_fn.__call__))
+        else:
+            self.model = self.build_fn(**self.filter_sk_params(self.build_fn))
+
+        # Store labels
+        y = array(y)
+        if len(y.shape) == 2 and y.shape[1] > 1:
+            self.classes_ = arange(y.shape[1])
+        elif (len(y.shape) == 2 and y.shape[1] == 1) or len(y.shape) == 1:
+            self.classes_ = unique(y)
+            y = searchsorted(self.classes_, y)
+        else:
+            raise ValueError('Invalid shape for y: ' + str(y.shape))
+
+    def fit(self, X, y, callbacks=[], X_validation=None, y_validation=None, **kwargs):
+        self.init_model(y)
+
+        # Get arguments for fit
+        fit_args = deepcopy(self.filter_sk_params(Sequential.fit_generator))
+        fit_args.update(kwargs)
+
+        # Create generator
+        generator = ResourcesGenerator(**self.filter_sk_params(ResourcesGenerator.__init__))
+        train = generator.flow_from_paths(X, y, **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
+
+        validation = None
+        if X_validation is not None:
+            validation = generator.flow_from_paths(X_validation, y_validation,
+                                                   **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
+
+        if not self.model._is_compiled:
+            tr_x, tr_y = train[0]
+            self.model.fit(tr_x, tr_y)
+
+        self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
+                                                **fit_args)
+
+        return self.history
+
+    def predict(self, X, **kwargs):
+        probs = self.predict_proba(X, **kwargs)
+        if probs.shape[-1] > 1:
+            classes = probs.argmax(axis=-1)
+        else:
+            classes = (probs > 0.5).astype('int32')
+        return self.classes_[classes]
+
+    def predict_proba(self, X, **kwargs):
+        # Get arguments for generator
+        fit_args = deepcopy(self.filter_sk_params(ResourcesGenerator.flow_from_paths))
+        fit_args.update(self.__filter_params(kwargs, ResourcesGenerator.flow_from_paths))
+        fit_args.update({'shuffle': False})
+        fit_args.update({'batch_size': 1})
+
+        # Create generator
+        generator = ResourcesGenerator(preprocessing_function=kwargs.get('Preprocess', None))
+        valid = generator.flow_from_paths(X, **fit_args)
+
+        # Get arguments for predict
+        fit_args = deepcopy(self.filter_sk_params(Sequential.predict_generator))
+        fit_args.update(self.__filter_params(kwargs, Sequential.predict_generator))
+
+        probs = self.model.predict_generator(generator=valid, **fit_args)
+
+        # check if binary classification
+        if probs.shape[1] == 1:
+            # first column is probability of class 0 and second is of class 1
+            probs = hstack([1 - probs, probs])
+        return probs
+
+    def score(self, X, y, **kwargs):
+        kwargs = self.filter_sk_params(Sequential.evaluate_generator, kwargs)
+
+        # Create generator
+        generator = ResourcesGenerator(preprocessing_function=kwargs.get('Preprocess', None))
+        valid = generator.flow_from_paths(X, y, batch_size=1, shuffle=False)
+
+        # Get arguments for fit
+        fit_args = deepcopy(self.filter_sk_params(Sequential.evaluate_generator))
+        fit_args.update(kwargs)
+
+        # sparse to numpy array
+        outputs = self.model.evaluate_generator(generator=valid, **fit_args)
+        outputs = to_list(outputs)
+        for name, output in zip(self.model.metrics_names, outputs):
+            if name == 'acc':
+                return output
+        raise ValueError('The model is not configured to compute accuracy. '
+                         'You should pass `metrics=["accuracy"]` to '
+                         'the `model.compile()` method.')
+
+    def __filter_params(self, params, fn, override=None):
+        """Filters `sk_params` and returns those in `fn`'s arguments.
+
+        # Arguments
+            fn : arbitrary function
+            override: dictionary, values to override `sk_params`
+
+        # Returns
+            res : dictionary containing variables
+                in both `sk_params` and `fn`'s arguments.
+        """
+        override = override or {}
+        res = {}
+        for name, value in params.items():
+            if has_arg(fn, name):
+                res.update({name: value})
+        res.update(override)
+        return res
+
+
+class ClassifierPatch(BaseEstimator, ClassifierMixin):
+
+    def __init__(self, extractor, model, patch_size):
+        self.extractor = extractor
+        self.model = model
+        self.patch_size = patch_size
+
+    def fit(self, X, y, **kwargs):
+        features = self.__extract_features_patch(X, **kwargs)
+        self.model.fit(features, y)
+        return self
+
+    def predict(self, X, **kwargs):
+        features = self.__extract_features_patch(X, **kwargs)
+        return self.model.predict(features)
+
+    def predict_proba(self, X, **kwargs):
+        features = self.__extract_features_patch(X, **kwargs)
+        return self.model.predict_proba(features)
+
+    def __extract_features_patch(self, X, **kwargs):
+        # Create generator
+        generator = ResourcesGenerator(**self.__filter_params(kwargs, ResourcesGenerator.__init__))
+        train = generator.flow_from_paths(X, **self.__filter_params(kwargs, ResourcesGenerator.flow_from_paths))
+
+        # Browse images
+        predictions = []
+        probabilities = []
+        for index in arange(len(train)):
+            x, y = train[index]
+            patches = self.__get_patches(x)
+            sub_predictions = None
+            sub_probabilities = []
+            for patch in patches:
+                current = self.extractor.predict_proba(patch)
+                if sub_predictions is None:
+                    sub_predictions = zeros(current.shape)
+                sub_predictions[:, current.argmax(axis=1)] += 1
+                # sub_probabilities.append(current)
+            predictions.append(sub_predictions/len(patches))
+
+        return concatenate(array(predictions), axis=0)
+
+    @staticmethod
+    def __filter_params(params, fn, override=None):
+        """Filters `sk_params` and returns those in `fn`'s arguments.
+
+        # Arguments
+            fn : arbitrary function
+            override: dictionary, values to override `sk_params`
+
+        # Returns
+            res : dictionary containing variables
+                in both `sk_params` and `fn`'s arguments.
+        """
+        override = override or {}
+        res = {}
+        for name, value in params.items():
+            if has_arg(fn, name):
+                res.update({name: value})
+        res.update(override)
+        return res
+
+    def __get_patches(self, X):
+
+        patches = []
+        for r in range(0, X.shape[1] - self.patch_size+1, self.patch_size):
+            for c in range(0, X.shape[2] - self.patch_size+1, self.patch_size):
+                patches.append(X[:,r:r + self.patch_size, c:c + self.patch_size,:])
+        return patches
 
 
 class RandomLayer(Layer):
