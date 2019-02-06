@@ -61,7 +61,7 @@ if __name__ == '__main__':
     # Final model evaluation
     process.checkpoint_step(inputs=inputs, model=HaralickDescriptorTransform(), folder=temp_images_folder)
     patch_classifier = ClassifierPatch(model, SVC(kernel='linear', probability=True), 250)
-    process.end(inputs=inputs, model=patch_classifier, params=params, output_folder=output_folder, name=name)
+    process.end(inputs=inputs, model=patch_classifier, output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)
