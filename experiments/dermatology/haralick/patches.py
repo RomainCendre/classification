@@ -3,7 +3,6 @@ from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
 from sklearn.svm import SVC
-
 from experiments.processes import Process
 from toolbox.core.models import SimpleModels, ClassifierPatch
 from toolbox.core.structures import Inputs
@@ -23,15 +22,6 @@ if __name__ == '__main__':
     if not exists(output_folder):
         makedirs(output_folder)
 
-    # Temporary folder
-    temp_patch_folder = join(output_folder, 'Temp_patch')
-    if not exists(temp_patch_folder):
-        makedirs(temp_patch_folder)
-
-    temp_images_folder = join(output_folder, 'Temp_images')
-    if not exists(temp_images_folder):
-        makedirs(temp_images_folder)
-
     # Pretrain data
     pretrain_folder = normpath('{home}/Data/Skin/Thumbnails/'.format(home=home_path))
     pretrain_inputs = Inputs(folders=[pretrain_folder], loader=dermatology.Reader.scan_folder_for_images,
@@ -50,16 +40,14 @@ if __name__ == '__main__':
     inputs.load()
 
     # Initiate model and params
-    model, params = SimpleModels.get_linear_svm_process()
+    model, params = SimpleModels.get_haralick_process()
 
     # Launch process
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation)
     # Patch model training
-    process.checkpoint_step(inputs=pretrain_inputs, model=HaralickDescriptorTransform(), folder=temp_patch_folder)
     model, params = process.train_step(inputs=pretrain_inputs, model=model, params=params)
     # Final model evaluation
-    process.checkpoint_step(inputs=inputs, model=HaralickDescriptorTransform(), folder=temp_images_folder)
     patch_classifier = ClassifierPatch(model, SVC(kernel='linear', probability=True), 250)
     process.end(inputs=inputs, model=patch_classifier, output_folder=output_folder, name=name)
 

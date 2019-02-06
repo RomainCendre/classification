@@ -1,14 +1,16 @@
 from os import makedirs, startfile
-from os.path import normpath, exists, expanduser, splitext, basename, join
+
+from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import StratifiedKFold
+from os.path import exists, expanduser, normpath, basename, splitext, join
 from experiments.processes import Process
-from toolbox.core.models import SimpleModels
+from toolbox.core.classification import KerasBatchClassifier
+from toolbox.core.models import DeepModels
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
-from toolbox.core.transforms import HaralickDescriptorTransform
+from toolbox.tools.limitations import Parameters
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     # Parameters
     filename = splitext(basename(__file__))[0]
@@ -18,7 +20,8 @@ if __name__ == "__main__":
     validation = StratifiedKFold(n_splits=5, shuffle=True)
 
     # Output dir
-    output_folder = normpath('{home}/Results/Dermatology/Haralick/{filename}'.format(home=home_path, filename=filename))
+    output_folder = normpath(
+        '{home}/Results/Dermatology/Transfer_learning/{filename}'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
 
@@ -40,6 +43,9 @@ if __name__ == "__main__":
     if not exists(projection_full_folder):
         makedirs(projection_full_folder)
 
+    # Configure GPU consumption
+    Parameters.set_gpu(percent_gpu=0.5)
+
     ################# PATCH
     # Input patch
     input_folder = normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))
@@ -48,14 +54,22 @@ if __name__ == "__main__":
     inputs_patch.load()
 
     # Initiate model and params
-    model, params = SimpleModels.get_linear_svm_process()
+    extractor = KerasBatchClassifier(DeepModels.get_application_model)
+    extractor_params = {'architecture': 'InceptionV3',
+                        'batch_size': 1,
+                        'preprocessing_function': DeepModels.get_application_preprocessing()}
 
+    predictor = KerasClassifier(DeepModels.get_prediction_model)
+    predictor_params = {'batch_size': 1,
+                        'epochs': 100,
+                        'optimizer': 'adam',
+                        'output_classes': 3}
     # Launch process
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation)
-    process.checkpoint_step(inputs=inputs_patch, model=HaralickDescriptorTransform(), folder=patch_folder,
+    process.checkpoint_step(inputs=inputs_patch, model=extractor, params=extractor_params, folder=patch_folder,
                             projection_folder=projection_patch_folder)
-    process.end(inputs=inputs_patch, model=model, params=params, output_folder=output_folder, name=name_patch)
+    process.end(inputs=inputs_patch, model=predictor, params=predictor_params, output_folder=output_folder, name=name_patch)
 
     ################# FULL
     # Input full
@@ -68,9 +82,9 @@ if __name__ == "__main__":
     inputs_full.load()
 
     # Launch process
-    process.checkpoint_step(inputs=inputs_full, model=HaralickDescriptorTransform(), folder=full_folder,
+    process.checkpoint_step(inputs=inputs_full, model=extractor, params=extractor_params, folder=patch_folder,
                             projection_folder=projection_full_folder)
-    process.end(inputs=inputs_full, model=model, params=params, output_folder=output_folder, name=name_full)
+    process.end(inputs=inputs_full, model=predictor, params=predictor_params, output_folder=output_folder, name=name_full)
 
     # Open result folder
     startfile(output_folder)
