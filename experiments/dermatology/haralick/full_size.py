@@ -2,7 +2,6 @@ from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
 from experiments.processes import Process
-from toolbox.IO.writers import DataProjectorWriter
 from toolbox.core.models import SimpleModels
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology

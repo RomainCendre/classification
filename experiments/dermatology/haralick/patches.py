@@ -38,9 +38,6 @@ if __name__ == '__main__':
                     tags={'data_tag': 'Data', 'label_tag': 'Label'})
     inputs.load()
 
-    # Write data to visualize it
-    DataProjectorWriter.project_data(inputs, output_folder)
-
     # Initiate model and params
     model, params = SimpleModels.get_linear_svm_process()
 
