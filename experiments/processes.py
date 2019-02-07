@@ -1,13 +1,9 @@
 from os import makedirs
 from os.path import join, exists
 from tempfile import gettempdir
-
 from keras.wrappers.scikit_learn import BaseWrapper
-from numpy.ma import arange
-from sklearn.model_selection import GroupKFold
 from toolbox.IO.writers import StatisticsWriter, VisualizationWriter, ResultWriter, DataProjectorWriter
 from toolbox.core.classification import Classifier
-from toolbox.core.models import ClassifierPatch
 
 
 class Process:

@@ -432,8 +432,7 @@ class ClassifierPatch(BaseEstimator, ClassifierMixin):
         # Browse images
         predictions = []
         probabilities = []
-        for image_path in X:
-            patches = self.__get_patches(image_path)
+        for patches in X:
             sub_predictions = None
             sub_probabilities = []
             for patch in patches:
@@ -465,20 +464,6 @@ class ClassifierPatch(BaseEstimator, ClassifierMixin):
                 res.update({name: value})
         res.update(override)
         return res
-
-    def __get_patches(self, filename):
-        X = array(Image.open(filename).convert('L'))
-        patches = []
-        for r in range(0, X.shape[0] - self.patch_size+1, self.patch_size):
-            for c in range(0, X.shape[1] - self.patch_size+1, self.patch_size):
-                patch = X[r:r + self.patch_size, c:c + self.patch_size]
-                filename = '{filename}.png'.format(filename=join(tempfile._get_default_tempdir(),
-                                                        next(tempfile._get_candidate_names())))
-                filename = normpath(filename)
-                Image.fromarray(patch).save(filename)
-                patches.append(filename)
-        return patches
-
 
 class RandomLayer(Layer):
 
