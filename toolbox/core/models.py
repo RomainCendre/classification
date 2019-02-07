@@ -1,6 +1,9 @@
+import tempfile
 from copy import deepcopy
 from os import makedirs
-from os.path import normpath
+from os.path import normpath, join
+
+from PIL import Image
 from time import strftime, gmtime, time
 import keras
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
@@ -426,16 +429,11 @@ class ClassifierPatch(BaseEstimator, ClassifierMixin):
         return self.model.predict_proba(features)
 
     def __extract_features_patch(self, X, **kwargs):
-        # Create generator
-        generator = ResourcesGenerator(**self.__filter_params(kwargs, ResourcesGenerator.__init__))
-        train = generator.flow_from_paths(X, **self.__filter_params(kwargs, ResourcesGenerator.flow_from_paths))
-
         # Browse images
         predictions = []
         probabilities = []
-        for index in arange(len(train)):
-            x, y = train[index]
-            patches = self.__get_patches(x)
+        for image_path in X:
+            patches = self.__get_patches(image_path)
             sub_predictions = None
             sub_probabilities = []
             for patch in patches:
@@ -468,12 +466,17 @@ class ClassifierPatch(BaseEstimator, ClassifierMixin):
         res.update(override)
         return res
 
-    def __get_patches(self, X):
-
+    def __get_patches(self, filename):
+        X = array(Image.open(filename).convert('L'))
         patches = []
-        for r in range(0, X.shape[1] - self.patch_size+1, self.patch_size):
-            for c in range(0, X.shape[2] - self.patch_size+1, self.patch_size):
-                patches.append(X[:,r:r + self.patch_size, c:c + self.patch_size,:])
+        for r in range(0, X.shape[0] - self.patch_size+1, self.patch_size):
+            for c in range(0, X.shape[1] - self.patch_size+1, self.patch_size):
+                patch = X[r:r + self.patch_size, c:c + self.patch_size]
+                filename = '{filename}.png'.format(filename=join(tempfile._get_default_tempdir(),
+                                                        next(tempfile._get_candidate_names())))
+                filename = normpath(filename)
+                Image.fromarray(patch).save(filename)
+                patches.append(filename)
         return patches
 
 
@@ -488,8 +491,6 @@ class RandomLayer(Layer):
 
     def call(self, x):
         return K.random_uniform_variable(shape=(1, self.output_dim), low=0, high=1)
-        # val = random((1, self.output_dim))
-        # return K.variable(value=val)
 
     def compute_output_shape(self, input_shape):
         return (input_shape[0], self.output_dim)

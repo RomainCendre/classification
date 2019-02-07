@@ -44,7 +44,7 @@ if __name__ == "__main__":
     # Input patch
     input_folder = normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))
     inputs_patch = Inputs(folders=[input_folder], loader=dermatology.Reader.scan_folder_for_images,
-                          tags={'data_tag': 'Data', 'label_tag': 'Label'})
+                          tags={'data_tag': 'Data', 'label_tag': 'Label', 'reference_tag': ['Data']})
     inputs_patch.load()
 
     # Initiate model and params
@@ -64,7 +64,8 @@ if __name__ == "__main__":
     input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
     inputs_full = Inputs(folders=input_folders, loader=dermatology.Reader.scan_folder,
-                         tags={'data_tag': 'Data', 'label_tag': 'Label'}, filter_by=filter_by)
+                         tags={'data_tag': 'Data', 'label_tag': 'Label', 'reference_tag': ['ID', 'Path']},
+                         filter_by=filter_by)
     inputs_full.load()
 
     # Launch process

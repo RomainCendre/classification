@@ -1,13 +1,12 @@
 from copy import deepcopy
 from os import makedirs, startfile
-from os.path import normpath, exists, expanduser, splitext, basename, join
+from os.path import normpath, exists, expanduser, splitext, basename
 from sklearn.model_selection import StratifiedKFold
 from sklearn.svm import SVC
 from experiments.processes import Process
 from toolbox.core.models import SimpleModels, ClassifierPatch
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
-from toolbox.core.transforms import HaralickDescriptorTransform
 
 if __name__ == '__main__':
 
@@ -36,7 +35,7 @@ if __name__ == '__main__':
     input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
     inputs.change_data(folders=input_folders, filter_by=filter_by, loader=dermatology.Reader.scan_folder,
-                       tags={'data_tag': 'Data', 'label_tag': 'Label', 'groups': 'Patient'})
+                       tags={'data_tag': 'Data', 'label_tag': 'Label', 'groups': 'Patient', 'reference_tag': ['ID', 'Path']})
     inputs.load()
 
     # Initiate model and params

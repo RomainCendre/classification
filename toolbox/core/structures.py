@@ -1,3 +1,4 @@
+import hashlib
 from numpy import correlate, ones, interp, asarray
 from sklearn import preprocessing
 from sklearn.utils.multiclass import unique_labels
@@ -209,13 +210,16 @@ class Inputs:
         labels = self.data.get_data(key=self.tags['label_tag'], filter_by=self.filter_by)
         return self.labels_encoder.transform(labels)
 
-    def get_reference(self):
+    def get_reference(self, as_uuid=False):
         self.check_load()
         if 'reference_tag' not in self.tags:
             return None
 
         references = [self.data.get_data(key=reference, filter_by=self.filter_by) for reference in self.tags['reference_tag']]
-        return ['-'.join(map(str, x)) for x in zip(*references)]
+        if as_uuid:
+            return [hashlib.md5(('-'.join(map(str, x))).encode('utf-8')).hexdigest() for x in zip(*references)]
+        else:
+            return ['-'.join(map(str, x)) for x in zip(*references)]
 
     def get_unique_labels(self):
         self.check_load()

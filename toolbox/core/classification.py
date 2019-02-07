@@ -1,6 +1,6 @@
 import glob
 import warnings
-from os.path import join
+from os.path import join, basename, splitext
 from copy import deepcopy
 from numpy import arange,  unique, asarray, mean, array_equal, save, load
 from sklearn.model_selection import GridSearchCV
@@ -197,11 +197,14 @@ class Classifier:
     def features_checkpoint(self, inputs, folder):
         # Extract needed data
         datas = inputs.get_datas()
-        files = glob.glob(join(folder, '*.npy'))
+        references = inputs.get_reference(as_uuid=True)
 
+        # Extract files from folder
+        files = glob.glob(join(folder, '*.npy'))
+        files_bases = [splitext(basename(file))[0] for file in files]
         features = []
         # Check if already extracted
-        if not len(datas) == len(files):
+        if not set(references).issubset(files_bases):
             print('Writting data at {folder}'.format(folder=folder))
             # Now browse data
             if hasattr(self.__model, "transform"):
@@ -209,12 +212,13 @@ class Classifier:
             else:
                 features = self.__model.predict_proba(datas, **self.__params)
             # Now save features as files
-            for index, feature in enumerate(features):
-                save(join(folder, str(index)), feature)
+            for feature, reference in zip(features, references):
+                save(join(folder, reference), feature)
         else:
             print('Loading data at {folder}'.format(folder=folder))
-            for index in range(0, len(files)):
-                features.append(load(join(folder, '{index}.npy'.format(index=index))))
+            files = ['{join}.npy'.format(join=join(folder, reference)) for reference in references]
+            for file in files:
+                features.append(load(file))
 
         inputs.set_datas(features)
 
