@@ -436,7 +436,7 @@ class ClassifierPatch(BaseEstimator, ClassifierMixin):
             sub_predictions = None
             sub_probabilities = []
             for patch in patches:
-                current = self.extractor.predict_proba(patch)
+                current = self.extractor.predict_proba(patch.reshape(1, -1))
                 if sub_predictions is None:
                     sub_predictions = zeros(current.shape)
                 sub_predictions[:, current.argmax(axis=1)] += 1
