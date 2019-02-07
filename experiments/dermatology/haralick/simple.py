@@ -28,13 +28,9 @@ if __name__ == "__main__":
         makedirs(temp_folder)
 
     # Projection folder
-    projection_patch_folder = join(output_folder, 'Projection_patch')
-    if not exists(projection_patch_folder):
-        makedirs(projection_patch_folder)
-
-    projection_full_folder = join(output_folder, 'Projection_full')
-    if not exists(projection_full_folder):
-        makedirs(projection_full_folder)
+    projection_folder = join(output_folder, 'Projection')
+    if not exists(projection_folder):
+        makedirs(projection_folder)
 
     ################# PATCH
     # Input patch
@@ -50,7 +46,7 @@ if __name__ == "__main__":
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation)
     process.checkpoint_step(inputs=inputs_patch, model=HaralickDescriptorTransform(), folder=temp_folder,
-                            projection_folder=projection_patch_folder)
+                            projection_folder=projection_folder, projection_name=name_patch)
     process.end(inputs=inputs_patch, model=model, params=params, output_folder=output_folder, name=name_patch)
 
     ################# FULL
@@ -66,7 +62,7 @@ if __name__ == "__main__":
 
     # Launch process
     process.checkpoint_step(inputs=inputs_full, model=HaralickDescriptorTransform(), folder=temp_folder,
-                            projection_folder=projection_full_folder)
+                            projection_folder=projection_folder, projection_name=name_full)
     process.end(inputs=inputs_full, model=model, params=params, output_folder=output_folder, name=name_full)
 
     # Open result folder
