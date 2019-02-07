@@ -27,13 +27,8 @@ class DataProjectorWriter:
         if not K.backend() == 'tensorflow':
             return
 
-        # Create a specific folder
-        output_folder = join(output_folder, 'Projector')
-        if not exists(output_folder):
-            makedirs(output_folder)
-
         # Write a batch to easily launch it
-            DataProjectorWriter.write_batch(output_folder)
+        DataProjectorWriter.write_batch(output_folder)
 
         sess = K.get_session()
 
