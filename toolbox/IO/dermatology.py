@@ -66,7 +66,8 @@ class Reader:
         for data in data_set.data_set:
             patches = Reader.__get_patches(data.data['Full_path'], data.data['Reference'], patch_size, self.temp_folder)
             for patch in patches:
-                patch_data = deepcopy(data).update({'Full_path': patch})
+                patch_data = deepcopy(data)
+                patch_data.update({'Full_path': patch})
                 patch_data_set.append(patch_data)
 
         return DataSet(patch_data_set)
@@ -81,11 +82,12 @@ class Reader:
                 patch = X[r:r + patch_size, c:c + patch_size]
                 filename = '{reference}_{size}_{id}.png'.format(reference=join(temp_folder, reference),
                                                                 size=patch_size, id=index)
+                patches.append(filename)
+                # Check if need to write patch
                 if isfile(filename):
                     continue
                 filename = normpath(filename)
                 Image.fromarray(patch).save(filename)
-                patches.append(filename)
                 index += 1
         return patches
 
