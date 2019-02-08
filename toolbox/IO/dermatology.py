@@ -4,7 +4,7 @@ import pandas
 import pyocr
 import shutil
 from os import listdir, makedirs, path
-from os.path import isdir, join, normpath
+from os.path import isdir, join, normpath, isfile
 from PIL import Image
 from numpy.ma import array
 from pyocr import builders
@@ -13,35 +13,10 @@ from toolbox.core.structures import Data, DataSet
 
 class Reader:
 
-    @staticmethod
-    def __read_images_file(parent_folder, subdir):
+    def __init__(self, temp_folder=None):
+        self.temp_folder = temp_folder
 
-        # Patient file
-        images_file = join(parent_folder, subdir, 'images.csv')
-
-        # Read csv
-        csv = pandas.read_csv(images_file, dtype=str)
-
-        # Build spectrum
-        images = []
-        for ind, row in csv.iterrows():
-            data = row.to_dict()
-            data.update({'Data': join(parent_folder, subdir, data['Modality'], data['Path'])})
-            image = Data(data=data)
-            images.append(image)
-        return images
-
-    @staticmethod
-    def __read_patient_file(folder_path):
-        # Patient file
-        patient_file = join(folder_path, 'patient.csv')
-
-        # Read csv
-        csv = pandas.read_csv(patient_file, dtype=str).iloc[0]
-        return csv.to_dict()
-
-    @staticmethod
-    def scan_folder(folder_path):
+    def scan_folder(self, folder_path):
         # Subdirectories
         subdirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
 
@@ -52,31 +27,21 @@ class Reader:
             try:
                 meta = Reader.__read_patient_file(join(folder_path, subdir))
                 patient_datas = Reader.__read_images_file(folder_path, subdir)
+
                 # Update all meta data
                 [data.data.update(meta) for data in patient_datas]
+
+                # Add unique id
+                [data.data.update({'Reference': '{patient}_{image}'.format(patient=data.data['ID'], image=data.data['ID_Image'])})
+                 for data in patient_datas]
+
             except OSError:
                 print('Patient {}'.format(subdir))
             datas.extend(patient_datas)
 
         return DataSet(datas)
 
-    @staticmethod
-    def scan_folder_for_patches(folder_path, temp_folder, patch_size=250):
-        # Browse data
-        data_set = Reader.scan_folder(folder_path)
-
-        # Get into patches
-        patch_data_set = []
-        for data in data_set.data_set:
-            patches = Reader.__get_patches(data['Data'], patch_size, temp_folder)
-            for patch in patches:
-                patch_data = deepcopy(data).update({'Data': patch})
-                patch_data_set.append(patch_data)
-
-        return DataSet(patch_data_set)
-
-    @staticmethod
-    def scan_folder_for_images(folder_path):
+    def scan_folder_for_images(self, folder_path):
         # Subdirectories
         sub_dirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
 
@@ -91,22 +56,63 @@ class Reader:
                                            'Label': subdir}))
         return DataSet(data_set)
 
+    def scan_folder_for_patches(self, folder_path, patch_size=250):
+        # Browse data
+        data_set = self.scan_folder(folder_path)
+
+        # Get into patches
+        patch_data_set = []
+        for data in data_set.data_set:
+            patches = Reader.__get_patches(data.data['Full_path'], data.data['Reference'], patch_size, self.temp_folder)
+            for patch in patches:
+                patch_data = deepcopy(data).update({'Data': patch})
+                patch_data_set.append(patch_data)
+
+        return DataSet(patch_data_set)
+
     @staticmethod
-    def __get_patches(filename, patch_size, temp_folder):
-        hash_name = hashlib.md5(filename.encode('utf-8')).hexdigest()
+    def __get_patches(filename, reference, patch_size, temp_folder):
         X = array(Image.open(filename).convert('L'))
         patches = []
         index = 0
         for r in range(0, X.shape[0] - patch_size + 1, patch_size):
             for c in range(0, X.shape[1] - patch_size + 1, patch_size):
                 patch = X[r:r + patch_size, c:c + patch_size]
-                filename = '{hash_name}_{size}_{id}.png'.format(hash_name=join(temp_folder, hash_name),
+                filename = '{reference}_{size}_{id}.png'.format(reference=join(temp_folder, reference),
                                                                 size=patch_size, id=index)
+                if isfile(filename):
+                    continue
                 filename = normpath(filename)
                 Image.fromarray(patch).save(filename)
                 patches.append(filename)
                 index += 1
         return patches
+
+    @staticmethod
+    def __read_images_file(parent_folder, subdir):
+        # Patient file
+        images_file = join(parent_folder, subdir, 'images.csv')
+
+        # Read csv
+        csv = pandas.read_csv(images_file, dtype=str)
+
+        # Build spectrum
+        images = []
+        for ind, row in csv.iterrows():
+            data = row.to_dict()
+            data.update({'Full_path': join(parent_folder, subdir, data['Modality'], data['Path'])})
+            image = Data(data=data)
+            images.append(image)
+        return images
+
+    @staticmethod
+    def __read_patient_file(folder_path):
+        # Patient file
+        patient_file = join(folder_path, 'patient.csv')
+
+        # Read csv
+        csv = pandas.read_csv(patient_file, dtype=str).iloc[0]
+        return csv.to_dict()
 
 
 class ConfocalBuilder(builders.TextBuilder):

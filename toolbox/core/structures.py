@@ -144,10 +144,11 @@ class Spectrum(Data):
 # Manage data for input on machine learning pipes
 class Inputs:
 
-    def __init__(self, folders, loader, tags, filter_by={}):
+    def __init__(self, folders, instance, loader, tags, filter_by={}):
         self.data = DataSet()
         self.folders = folders
         self.load_state = False
+        self.instance = instance
         self.loader = loader
         self.tags = tags
         self.filter_by = filter_by
@@ -233,7 +234,7 @@ class Inputs:
 
         self.data = DataSet()
         for folder in self.folders:
-            self.data += self.loader(folder)
+            self.data += self.loader(self.instance, folder)
 
         try:
             check_is_fitted(self.labels_encoder, 'classes_')

@@ -1,8 +1,7 @@
 from copy import deepcopy
 from os import makedirs, startfile
-from os.path import normpath, exists, expanduser, splitext, basename, join, dirname
+from os.path import normpath, exists, expanduser, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
-from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from experiments.processes import Process
 from toolbox.core.models import SimpleModels, ClassifierPatch
@@ -34,7 +33,7 @@ if __name__ == '__main__':
 
     # Inputs data
     pretrain_folder = normpath('{home}/Data/Skin/Thumbnails/'.format(home=home_path))
-    pretrain_inputs = Inputs(folders=[pretrain_folder], loader=dermatology.Reader.scan_folder_for_images,
+    pretrain_inputs = Inputs(folders=[pretrain_folder], instance=dermatology.Reader(patch_folder), loader=dermatology.Reader.scan_folder_for_images,
                              tags={'data_tag': 'Data', 'label_tag': 'Label', 'reference_tag': ['Data']})
     pretrain_inputs.load()
 
