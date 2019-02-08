@@ -38,24 +38,12 @@ class HaralickDescriptorTransform(BaseEstimator, TransformerMixin):
 
         haralick = []
         for index, data in enumerate(x):
-            if not isinstance(data, str):
-                features = []
-                for sub_data in data:
-                    image = array(Image.open(sub_data).convert('L'))
-                    sub_features = mahotas.features.haralick(image)
-                    if self.mean:
-                        sub_features = sub_features.mean(axis=0)
-                    else:
-                        sub_features = sub_features.flatten()
-                    features.append(sub_features)
-                haralick.append(features)
+            image = array(Image.open(data).convert('L'))
+            features = mahotas.features.haralick(image)
+            if self.mean:
+                haralick.append(features.mean(axis=0))
             else:
-                image = array(Image.open(data).convert('L'))
-                features = mahotas.features.haralick(image)
-                if self.mean:
-                    haralick.append(features.mean(axis=0))
-                else:
-                    haralick.append(features.flatten())
+                haralick.append(features.flatten())
         return array(haralick)
 
 

@@ -1,9 +1,6 @@
-import tempfile
 from copy import deepcopy
 from os import makedirs
-from os.path import normpath, join
-
-from PIL import Image
+from os.path import normpath
 from time import strftime, gmtime, time
 import keras
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
@@ -16,10 +13,8 @@ from keras.utils.generic_utils import has_arg, to_list
 from numpy import arange, geomspace, array, searchsorted, unique, hstack, zeros, concatenate
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
-from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
-from sklearn.neural_network import MLPClassifier
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from sklearn.utils.multiclass import unique_labels
