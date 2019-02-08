@@ -4,7 +4,7 @@ import pandas
 import pyocr
 import shutil
 from os import listdir, makedirs, path
-from os.path import isdir, join, normpath, isfile
+from os.path import isdir, join, normpath, isfile, basename, splitext
 from PIL import Image
 from numpy.ma import array
 from pyocr import builders
@@ -52,8 +52,9 @@ class Reader:
             sub_files = glob(join(sub_folder, '*.bmp'))
 
             for sub_file in sub_files:
-                data_set.append(Data(data={'Data': sub_file,
-                                           'Label': subdir}))
+                data_set.append(Data(data={'Full_path': sub_file,
+                                           'Label': subdir,
+                                           'Reference': '{label}-{file}'.format(label=subdir, file=splitext(basename(sub_file))[0])}))
         return DataSet(data_set)
 
     def scan_folder_for_patches(self, folder_path, patch_size=250):
@@ -65,7 +66,7 @@ class Reader:
         for data in data_set.data_set:
             patches = Reader.__get_patches(data.data['Full_path'], data.data['Reference'], patch_size, self.temp_folder)
             for patch in patches:
-                patch_data = deepcopy(data).update({'Data': patch})
+                patch_data = deepcopy(data).update({'Full_path': patch})
                 patch_data_set.append(patch_data)
 
         return DataSet(patch_data_set)

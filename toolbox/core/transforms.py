@@ -1,6 +1,3 @@
-import hashlib
-from os.path import normpath, join
-
 from PIL import Image
 from numpy import array
 from pywt import dwt
