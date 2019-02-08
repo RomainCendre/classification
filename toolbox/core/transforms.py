@@ -7,6 +7,38 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import mahotas
 
 
+class PredictorTransform(BaseEstimator, TransformerMixin):
+
+    def __init__(self, predictor, probabilities=True):
+        self.predictor = predictor
+        self.probabilities = probabilities
+
+    def fit(self, x, y=None):
+        """
+        This should fit this transformer, but DWT doesn't need to fit to train data
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+        """
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        """
+        This method is the main part of this transformer.
+        Return a wavelet transform, as specified mode.
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+             copy (:obj): Not used.
+        """
+        if self.probabilities:
+            return array(self.predictor.predict_proba(x))
+        else:
+            return array(self.predictor.predict(x))
+
+
 class HaralickDescriptorTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, mean=False):

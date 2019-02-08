@@ -2,12 +2,13 @@ from copy import deepcopy
 from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
+from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from experiments.processes import Process
 from toolbox.core.models import SimpleModels, ClassifierPatch
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
-from toolbox.core.transforms import HaralickDescriptorTransform
+from toolbox.core.transforms import HaralickDescriptorTransform, PredictorTransform
 
 if __name__ == '__main__':
 
@@ -60,9 +61,11 @@ if __name__ == '__main__':
     model, params = process.train_step(inputs=pretrain_inputs, model=model, params=params)
 
     # Final model evaluation
-    process.checkpoint_step(inputs=inputs, model=HaralickDescriptorTransform(), folder=features_folder)
-    patch_classifier = ClassifierPatch(model, SVC(kernel='linear', probability=True), 250)
-    process.end(inputs=inputs, model=patch_classifier, output_folder=output_folder, name=name)
+    process.checkpoint_step(inputs=inputs, folder=features_folder,
+                            model=Pipeline([('Haralick', HaralickDescriptorTransform()),
+                                            ('Predictor', PredictorTransform(model)),
+                                            ('clf',None)]))
+    process.end(inputs=inputs, model=model, output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)
