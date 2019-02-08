@@ -197,7 +197,7 @@ class Classifier:
     def features_checkpoint(self, inputs, folder):
         # Extract needed data
         datas = inputs.get_datas()
-        references = inputs.get_reference(as_uuid=True)
+        references = inputs.get_reference()
 
         # Extract files from folder
         files = glob.glob(join(folder, '*.npy'))
