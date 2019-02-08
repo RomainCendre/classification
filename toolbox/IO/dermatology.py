@@ -100,11 +100,15 @@ class DataManager:
         images = []
         folder = path.join(self.dermoscopy_folder, source_id)
         files = glob(folder + " (*.jpg", recursive=True)
-        for file in files:
-            destination_file = path.join(destination_folder, path.basename(file))
-            shutil.copy(file, destination_file)
+        for source_file in files:
+            image = Image.open(source_file)
+            width, height = image.size
+            destination_file = path.join(destination_folder, path.basename(source_file))
+            shutil.copy(source_file, destination_file)
             images.append({'Modality': 'Dermoscopy',
-                           'Path': path.relpath(destination_file, destination_folder)})
+                           'Path': path.relpath(destination_file, destination_folder),
+                           'Height': height,
+                           'Width': width})
 
         return images
 
@@ -116,11 +120,15 @@ class DataManager:
         images = []
         folder = path.join(self.photography_folder, source_id)
         files = glob(folder + " (*.jpg", recursive=True)
-        for file in files:
-            destination_file = path.join(destination_folder, path.basename(file))
-            shutil.copy(file, destination_file)
+        for source_file in files:
+            image = Image.open(source_file)
+            width, height = image.size
+            destination_file = path.join(destination_folder, path.basename(source_file))
+            shutil.copy(source_file, destination_file)
             images.append({'Modality': 'Photography',
-                           'Path': path.relpath(destination_file, destination_folder)})
+                           'Path': path.relpath(destination_file, destination_folder),
+                           'Height': height,
+                           'Width': width})
 
         return images
 
@@ -175,10 +183,13 @@ class DataManager:
                         image = raw_image.crop((0, 0, width, height - 45))
 
                     image.save(destination_file, "BMP")
+                    width, height = image.size
                     images.append({'Modality': 'Microscopy',
                                    'Path': path.relpath(destination_file, destination_folder),
                                    'Label': label,
-                                   'Depth(um)': digits})
+                                   'Depth(um)': digits,
+                                   'Height': height,
+                                   'Width': width})
         return images
 
     def launch_converter(self, output_folder, excluded_meta):
