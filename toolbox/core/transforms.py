@@ -10,54 +10,6 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import mahotas
 
 
-class PatchMakerTransform(BaseEstimator, TransformerMixin):
-
-    def __init__(self, folder, patch_size=250):
-        self.folder = folder
-        self.patch_size = patch_size
-
-    def fit(self, x, y=None):
-        """
-        This should fit this transformer, but DWT doesn't need to fit to train data
-
-        Args:
-             x (:obj): Not used.
-             y (:obj): Not used.
-        """
-        return self
-
-    def transform(self, x, y=None, copy=True):
-        """
-        This method is the main part of this transformer.
-        Return a wavelet transform, as specified mode.
-
-        Args:
-             x (:obj): Not used.
-             y (:obj): Not used.
-             copy (:obj): Not used.
-        """
-
-        patches = []
-        for index, data in enumerate(x):
-            patches.append(self.__get_patches(data))
-        return array(patches)
-
-    def __get_patches(self, filename):
-        hash_name = hashlib.md5(filename.encode('utf-8')).hexdigest()
-        X = array(Image.open(filename).convert('L'))
-        patches = []
-        index = 0
-        for r in range(0, X.shape[0] - self.patch_size + 1, self.patch_size):
-            for c in range(0, X.shape[1] - self.patch_size + 1, self.patch_size):
-                patch = X[r:r + self.patch_size, c:c + self.patch_size]
-                filename = '{hash_name}_{id}.png'.format(hash_name=join(self.folder, hash_name), id=index)
-                filename = normpath(filename)
-                Image.fromarray(patch).save(filename)
-                patches.append(filename)
-                index += 1
-        return patches
-
-
 class HaralickDescriptorTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, mean=False):

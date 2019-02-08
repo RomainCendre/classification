@@ -8,7 +8,7 @@ from experiments.processes import Process
 from toolbox.core.models import SimpleModels, ClassifierPatch
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
-from toolbox.core.transforms import HaralickDescriptorTransform, PatchMakerTransform
+from toolbox.core.transforms import HaralickDescriptorTransform
 
 if __name__ == '__main__':
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
 
-    inputs.change_data(folders=input_folders, filter_by=filter_by, loader=dermatology.Reader.scan_folder,
+    inputs.change_data(folders=input_folders, filter_by=filter_by, loader=dermatology.Reader.scan_folder_for_patches,
                        tags={'data_tag': 'Data', 'label_tag': 'Label', 'groups': 'Patient', 'reference_tag': ['ID', 'Path']})
     inputs.load()
 
@@ -61,10 +61,7 @@ if __name__ == '__main__':
     model, params = process.train_step(inputs=pretrain_inputs, model=model, params=params)
 
     # Final model evaluation
-    test = Pipeline([('Patch', PatchMakerTransform(folder=patch_folder)),
-                     ('Hara', HaralickDescriptorTransform()),
-                     ('None', None)])
-    process.checkpoint_step(inputs=inputs, model=test, folder=features_folder)
+    process.checkpoint_step(inputs=inputs, model=HaralickDescriptorTransform(), folder=features_folder)
     patch_classifier = ClassifierPatch(model, SVC(kernel='linear', probability=True), 250)
     process.end(inputs=inputs, model=patch_classifier, output_folder=output_folder, name=name)
 

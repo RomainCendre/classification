@@ -1,10 +1,12 @@
+from copy import deepcopy
 from glob import glob
 import pandas
 import pyocr
 import shutil
 from os import listdir, makedirs, path
-from os.path import isdir, join
+from os.path import isdir, join, normpath
 from PIL import Image
+from numpy.ma import array
 from pyocr import builders
 from toolbox.core.structures import Data, DataSet
 
@@ -59,6 +61,21 @@ class Reader:
         return DataSet(datas)
 
     @staticmethod
+    def scan_folder_for_patches(folder_path, temp_folder, patch_size=250):
+        # Browse data
+        data_set = Reader.scan_folder(folder_path)
+
+        # Get into patches
+        patch_data_set = []
+        for data in data_set.data_set:
+            patches = Reader.__get_patches(data['Data'], patch_size, temp_folder)
+            for patch in patches:
+                patch_data = deepcopy(data).update({'Data': patch})
+                patch_data_set.append(patch_data)
+
+        return DataSet(patch_data_set)
+
+    @staticmethod
     def scan_folder_for_images(folder_path):
         # Subdirectories
         sub_dirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
@@ -73,6 +90,23 @@ class Reader:
                 data_set.append(Data(data={'Data': sub_file,
                                            'Label': subdir}))
         return DataSet(data_set)
+
+    @staticmethod
+    def __get_patches(filename, patch_size, temp_folder):
+        hash_name = hashlib.md5(filename.encode('utf-8')).hexdigest()
+        X = array(Image.open(filename).convert('L'))
+        patches = []
+        index = 0
+        for r in range(0, X.shape[0] - patch_size + 1, patch_size):
+            for c in range(0, X.shape[1] - patch_size + 1, patch_size):
+                patch = X[r:r + patch_size, c:c + patch_size]
+                filename = '{hash_name}_{size}_{id}.png'.format(hash_name=join(temp_folder, hash_name),
+                                                                size=patch_size, id=index)
+                filename = normpath(filename)
+                Image.fromarray(patch).save(filename)
+                patches.append(filename)
+                index += 1
+        return patches
 
 
 class ConfocalBuilder(builders.TextBuilder):
@@ -234,7 +268,9 @@ class DataManager:
                 images.extend(self.compute_microscopy(row['ID_RCM'], out_patient_folder))
 
             # Write images list
-            pandas.DataFrame(images).to_csv(path.join(out_patient_folder, 'images.csv'), index=False)
+            dataframe = pandas.DataFrame(images)
+            dataframe.index.name = 'ID_Image'
+            dataframe.to_csv(path.join(out_patient_folder, 'images.csv'))
 
     @staticmethod
     def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):
