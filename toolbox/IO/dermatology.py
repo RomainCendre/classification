@@ -65,9 +65,10 @@ class Reader:
         patch_data_set = []
         for data in data_set.data_set:
             patches = Reader.__get_patches(data.data['Full_path'], data.data['Reference'], patch_size, self.temp_folder)
-            for patch in patches:
+            for index, patch in enumerate(patches):
                 patch_data = deepcopy(data)
                 patch_data.update({'Full_path': patch})
+                patch_data.update({'Reference': '{ref}_{index}'.format(ref=data.data['Reference'], index=index)})
                 patch_data_set.append(patch_data)
 
         return DataSet(patch_data_set)
