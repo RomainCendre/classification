@@ -2,10 +2,9 @@ from copy import deepcopy
 from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
-from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from experiments.processes import Process
-from toolbox.core.models import SimpleModels, ClassifierPatch
+from toolbox.core.models import SimpleModels
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
 from toolbox.core.transforms import HaralickDescriptorTransform, PredictorTransform
@@ -31,6 +30,10 @@ if __name__ == '__main__':
     features_folder = join(output_folder, 'Features')
     if not exists(features_folder):
         makedirs(features_folder)
+
+    predict_folder = join(output_folder, 'Predictions')
+    if not exists(predict_folder):
+        makedirs(predict_folder)
 
     # Inputs data
     pretrain_folder = normpath('{home}/Data/Skin/Thumbnails/'.format(home=home_path))
@@ -58,15 +61,13 @@ if __name__ == '__main__':
 
     # Patch model training
     process.checkpoint_step(inputs=pretrain_inputs, model=HaralickDescriptorTransform(), folder=features_folder)
-    # model, params = process.train_step(inputs=pretrain_inputs, model=model, params=params)
+    model, params = process.train_step(inputs=pretrain_inputs, model=model, params=params)
 
     # Final model evaluation
-    process.checkpoint_step(inputs=inputs, folder=features_folder,
-                            model=Pipeline([('Haralick', HaralickDescriptorTransform()),
-                                            ('Predictor', PredictorTransform(model)),
-                                            ('clf', None)]))
+    process.checkpoint_step(inputs=inputs, model=HaralickDescriptorTransform(), folder=features_folder)
+    process.checkpoint_step(inputs=inputs, model=PredictorTransform(model), folder=predict_folder)
     inputs.patch_method()
-    process.end(inputs=inputs, model=model, output_folder=output_folder, name=name)
+    process.end(inputs=inputs, model=SVC(kernel='linear'), output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)
