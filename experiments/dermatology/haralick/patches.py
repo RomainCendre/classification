@@ -65,9 +65,9 @@ if __name__ == '__main__':
 
     # Final model evaluation
     process.checkpoint_step(inputs=inputs, model=HaralickDescriptorTransform(), folder=features_folder)
-    process.checkpoint_step(inputs=inputs, model=PredictorTransform(model), folder=predict_folder)
+    process.checkpoint_step(inputs=inputs, model=PredictorTransform(model, probabilities=False), folder=predict_folder)
     inputs.patch_method()
-    process.end(inputs=inputs, model=SVC(kernel='linear'), output_folder=output_folder, name=name)
+    process.end(inputs=inputs, model=SVC(kernel='linear', probability=True), output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)

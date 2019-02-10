@@ -10,6 +10,7 @@ from toolbox.IO import dermatology
 from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.models import DeepModels, ClassifierPatch
 from toolbox.core.structures import Inputs
+from toolbox.core.transforms import PredictorTransform
 
 if __name__ == '__main__':
 
@@ -77,9 +78,9 @@ if __name__ == '__main__':
 
     # Final model evaluation
     process.checkpoint_step(inputs=inputs, model=extractor, params=extractor_params, folder=features_folder)
-    process.checkpoint_step(inputs=inputs, model=predictor, params=predictor_params, folder=predict_folder)
+    process.checkpoint_step(inputs=inputs, model=PredictorTransform(model, probabilities=False), params=predictor_params, folder=predict_folder)
     inputs.patch_method()
-    process.end(inputs=inputs, model=SVC(kernel='linear'), output_folder=output_folder, name=name)
+    process.end(inputs=inputs, model=SVC(kernel='linear', probability=True), output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)

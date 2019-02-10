@@ -217,7 +217,10 @@ class Inputs:
         if 'reference_tag' not in self.tags:
             return None
 
-        references = [self.data.get_data(key=reference, filter_by=self.filter_by) for reference in self.tags['reference_tag']]
+        keys = self.tags['reference_tag']
+        if not isinstance(keys, list):
+            keys = [keys]
+        references = [self.data.get_data(key=reference, filter_by=self.filter_by) for reference in keys]
         return ['-'.join(map(str, x)) for x in zip(*references)]
 
     def get_unique_labels(self):
@@ -265,7 +268,7 @@ class Inputs:
         new_data = []
         for reference in references:
             entities = self.to_sub_input({'Reference': reference})
-            data = entities.get_datas()
+            data = entities.get_datas().tolist()
             probabilities = zeros(3)
             for index in range(0, 3):
                 probabilities[index] = data.count(index)
