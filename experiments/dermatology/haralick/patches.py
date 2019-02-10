@@ -46,7 +46,7 @@ if __name__ == '__main__':
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
 
     inputs.change_data(folders=input_folders, filter_by=filter_by, loader=dermatology.Reader.scan_folder_for_patches,
-                       tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'groups': 'Patient', 'reference_tag': ['Reference']})
+                       tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'groups': 'Patient', 'reference_tag': ['Patch_Reference']})
     inputs.load()
 
     # Initiate model and params
@@ -58,13 +58,14 @@ if __name__ == '__main__':
 
     # Patch model training
     process.checkpoint_step(inputs=pretrain_inputs, model=HaralickDescriptorTransform(), folder=features_folder)
-    model, params = process.train_step(inputs=pretrain_inputs, model=model, params=params)
+    # model, params = process.train_step(inputs=pretrain_inputs, model=model, params=params)
 
     # Final model evaluation
     process.checkpoint_step(inputs=inputs, folder=features_folder,
                             model=Pipeline([('Haralick', HaralickDescriptorTransform()),
                                             ('Predictor', PredictorTransform(model)),
-                                            ('clf',None)]))
+                                            ('clf', None)]))
+    inputs.patch_method()
     process.end(inputs=inputs, model=model, output_folder=output_folder, name=name)
 
     # Open result folder

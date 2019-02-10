@@ -63,12 +63,17 @@ class Reader:
 
         # Get into patches
         patch_data_set = []
-        for data in data_set.data_set:
+
+        DataManager.print_progress_bar(0, len(data_set.data_set), prefix='Progress:')
+        for index, data in enumerate(data_set.data_set):
+            if not data.data['Modality'] == 'Microscopy':
+                continue
+            DataManager.print_progress_bar(index, len(data_set.data_set), prefix='Progress:')
             patches = Reader.__get_patches(data.data['Full_path'], data.data['Reference'], patch_size, self.temp_folder)
             for index, patch in enumerate(patches):
                 patch_data = deepcopy(data)
                 patch_data.update({'Full_path': patch})
-                patch_data.update({'Reference': '{ref}_{index}'.format(ref=data.data['Reference'], index=index)})
+                patch_data.update({'Patch_Reference': '{ref}_{index}'.format(ref=data.data['Reference'], index=index)})
                 patch_data_set.append(patch_data)
 
         return DataSet(patch_data_set)

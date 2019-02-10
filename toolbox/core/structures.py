@@ -1,4 +1,6 @@
-from numpy import correlate, ones, interp, asarray
+from copy import copy
+
+from numpy import correlate, ones, interp, asarray, zeros
 from sklearn import preprocessing
 from sklearn.utils.multiclass import unique_labels
 from sklearn.utils.validation import check_is_fitted
@@ -46,10 +48,10 @@ class DataSet:
             getattr(data, name)(**parameters)
 
     def get_data(self, key: object, filter_by: object = {}) -> object:
-        return asarray([data.data[key] for data in self.__filter_by(filter_by)])
+        return asarray([data.data[key] for data in self.filter_by(filter_by)])
 
     def get_keys(self, filter_by={}):
-        filtered_gen = self.__filter_by(filter_by)
+        filtered_gen = self.filter_by(filter_by)
         # Init keys
         try:
             valid_keys = next(filtered_gen).data.keys()
@@ -89,10 +91,10 @@ class DataSet:
         return valid_methods
 
     def set_data(self, key: object, new_data, filter_by: object = {}) -> object:
-        for data, n_data in zip(self.__filter_by(filter_by), new_data):
+        for data, n_data in zip(self.filter_by(filter_by), new_data):
             data.data[key] = n_data
 
-    def __filter_by(self, filter_by):
+    def filter_by(self, filter_by):
         for data in self.data_set:
             if data.is_in_data(filter_by):
                 yield data
@@ -248,6 +250,32 @@ class Inputs:
 
         self.data.set_data(key=self.tags['data_tag'], new_data=new_data, filter_by=self.filter_by)
 
+    def to_sub_input(self, filter=None):
+        if filter is None:
+            current_filter = self.filter_by
+        else:
+            current_filter = filter
+
+        inputs = copy(self)
+        inputs.data = DataSet(list(self.data.filter_by(current_filter)))
+        return inputs
+
+    def patch_method(self):
+        references = list(set(self.get_from_key('Reference')))
+        new_data = []
+        for reference in references:
+            entities = self.to_sub_input({'Reference': reference})
+            data = entities.get_datas()
+            probabilities = zeros(3)
+            for index in range(0, 3):
+                probabilities[index] = data.count(index)
+            probabilities /= len(data)
+            data = entities.data.data_set[0]
+            data.update({'Data': probabilities})
+            new_data.append(data)
+        self.tags.update({'reference_tag': 'Reference',
+                          'data_tag': 'Data'})
+        self.data = DataSet(new_data)
 
 class Result(Data):
 
