@@ -55,7 +55,7 @@ if __name__ == "__main__":
                  'Label': ['Malignant', 'Benign', 'Normal']}
     input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
-    inputs_full = Inputs(folders=input_folders, loader=dermatology.Reader.scan_folder,
+    inputs_full = Inputs(folders=input_folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
                          tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'reference_tag': 'Reference'},
                          filter_by=filter_by)
     inputs_full.load()
