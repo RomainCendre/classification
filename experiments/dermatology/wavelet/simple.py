@@ -35,7 +35,7 @@ if __name__ == "__main__":
     # Input patch
     input_folder = normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))
     inputs_patch = Inputs(folders=[input_folder], instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder_for_images,
-                          tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'reference_tag': ['Full_path']})
+                          tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'reference_tag': ['Reference']})
     inputs_patch.load()
 
     # Initiate model and params

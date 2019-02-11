@@ -78,11 +78,12 @@ class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
             for direction in directions:
                 coefficients.append(self.get_coefficients(direction.flatten()))
 
-            features.append(array(coefficients))
+            features.append(array(coefficients).flatten())
         return array(features)
 
     def get_coefficients(self, x):
         return gennorm.fit(x)
+
 
 class HaralickDescriptorTransform(BaseEstimator, TransformerMixin):
 
