@@ -153,6 +153,7 @@ class Inputs:
         self.loader = loader
         self.tags = tags
         self.filter_by = filter_by
+        self.encoding_label = True
         self.groups_encoder = preprocessing.LabelEncoder()
         self.labels_encoder = preprocessing.LabelEncoder()
 
@@ -210,7 +211,10 @@ class Inputs:
             return None
 
         labels = self.data.get_data(key=self.tags['label_tag'], filter_by=self.filter_by)
-        return self.labels_encoder.transform(labels)
+        if self.encoding_label:
+            return self.labels_encoder.transform(labels)
+        else:
+            return labels
 
     def get_reference(self):
         self.check_load()

@@ -17,7 +17,7 @@ if __name__ == '__main__':
     validation = StratifiedKFold(n_splits=5, shuffle=True)
 
     # Output dir
-    output_folder = normpath('{home}/Results/Dermatology/Haralick/{filename}'.format(home=home_path, filename=filename))
+    output_folder = normpath('{home}/Results/Dermatology/DWT/{filename}'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
 
@@ -59,8 +59,8 @@ if __name__ == '__main__':
     process.begin(inner_cv=validation, outer_cv=validation)
 
     # Patch model training
-    process.checkpoint_step(inputs=pretrain_inputs, model=HaralickDescriptorTransform(), folder=features_folder)
-    # model, params = process.train_step(inputs=pretrain_inputs, model=model, params=params)
+    process.checkpoint_step(inputs=pretrain_inputs, model=DWT(), folder=features_folder)
+    model, params = process.train_step(inputs=pretrain_inputs, model=model, params=params)
 
     # Final model evaluation
     process.checkpoint_step(inputs=inputs, model=HaralickDescriptorTransform(), folder=features_folder)

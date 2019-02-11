@@ -1,6 +1,10 @@
+import pywt
+
 from PIL import Image
 from numpy import array
 from pywt import dwt
+from scipy.optimize import optimize
+from scipy.stats import gennorm
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cross_decomposition import PLSRegression
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
@@ -38,6 +42,47 @@ class PredictorTransform(BaseEstimator, TransformerMixin):
         else:
             return array(self.predictor.predict(x))
 
+
+class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
+
+    def __init__(self, mode='db1', mean=False):
+        self.mode = mode
+        self.mean = mean
+
+    def fit(self, x, y=None):
+        """
+        This should fit this transformer, but DWT doesn't need to fit to train data
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+        """
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        """
+        This method is the main part of this transformer.
+        Return a wavelet transform, as specified mode.
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+             copy (:obj): Not used.
+        """
+        features = []
+        for index, data in enumerate(x):
+            image = array(Image.open(data).convert('L'))
+            cA, (cH, cV, cD) = pywt.dwt2(image, self.mode)
+            directions = [cH, cV, cD]
+            coefficients = []
+            for direction in directions:
+                coefficients.append(self.get_coefficients(direction.flatten()))
+
+            features.append(array(coefficients))
+        return array(features)
+
+    def get_coefficients(self, x):
+        return gennorm.fit(x)
 
 class HaralickDescriptorTransform(BaseEstimator, TransformerMixin):
 
@@ -131,7 +176,7 @@ class DWTTransform(BaseEstimator, TransformerMixin):
         #
         # res = None
         # for i in range(len(chunks)):
-        #     (cA, _) = dwt(chunks[i], self.mode)
+        #     (cA, _) = wavelet(chunks[i], self.mode)
         #     if res is None:
         #         res = cA
         #     else:

@@ -1,6 +1,8 @@
 from copy import deepcopy
 from os import makedirs
 from os.path import normpath
+
+from sklearn.metrics import roc_curve
 from time import strftime, gmtime, time
 import keras
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
@@ -161,7 +163,7 @@ class SimpleModels:
 
     @staticmethod
     def get_ahmed_process():
-        pipe = Pipeline([('dwt', DWTTransform()),
+        pipe = Pipeline([('wavelet', DWTTransform()),
                          ('cluster', KMeans()),
                          ('clf', SVC(probability=True)),
                          ])
@@ -248,7 +250,7 @@ class SimpleModels:
 
     @staticmethod
     def get_dwt_process():
-        pipe = Pipeline([('dwt', DWTTransform()),
+        pipe = Pipeline([('wavelet', DWTTransform()),
                          ('clf', SVC(probability=True)),
                          ])
         # Define parameters to validate through grid CV
@@ -460,6 +462,7 @@ class ClassifierPatch(BaseEstimator, ClassifierMixin):
         res.update(override)
         return res
 
+
 class RandomLayer(Layer):
 
     def __init__(self, output_dim, **kwargs):
@@ -479,3 +482,42 @@ class RandomLayer(Layer):
         base_config = super().get_config()
         base_config['output_dim'] = self.output_dim
         return base_config
+
+
+class PatchClassifier(BaseEstimator, ClassifierMixin):
+
+    def __init__(self, hierarchies):
+        self.hierarchies = hierarchies
+        self.thresholds = None
+
+    def fit(self, x, y=None):
+        """
+        This should fit this transformer, but DWT doesn't need to fit to train data
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+        """
+        # if not x:
+        #     raise Exception('At least one X has to be found.')
+
+        self.thresholds = zeros(len(self.hierarchies))
+        for hierarchy in self.hierarchies:
+            fpr, tpr, thresholds = roc_curve(y, x[:, hierarchy], pos_label=hierarchy)
+            print('test')
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        """
+        This method is the main part of this transformer.
+        Return a wavelet transform, as specified mode.
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+             copy (:obj): Not used.
+        """
+        if self.probabilities:
+            return array(self.predictor.predict_proba(x))
+        else:
+            return array(self.predictor.predict(x))
