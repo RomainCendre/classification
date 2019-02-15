@@ -28,8 +28,8 @@ if __name__ == "__main__":
                  'Label': ['Malignant', 'Benign', 'Normal']}
     input_folders = [normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
                      normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
-    inputs = Inputs(folders=input_folders, loader=dermatology.Reader.scan_folder,
-                    tags={'data_tag': 'Data', 'label_tag': 'Label'}, filter_by=filter_by)
+    inputs = Inputs(folders=input_folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
+                    tags={'data_tag': 'Full_path', 'label_tag': 'Label'}, filter_by=filter_by)
     inputs.load()
 
     # Configure GPU consumption
