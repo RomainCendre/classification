@@ -1,4 +1,5 @@
 from collections import Counter
+from itertools import cycle
 from math import ceil
 from os import makedirs
 import markups
@@ -101,7 +102,8 @@ class ResultWriter:
 
     def write_results(self, dir_name, name, pos_label=[], use_std=True):
         self.write_report(use_std=use_std, path=join(dir_name, "{name}_report.html".format(name=name)))
-        self.write_roc(pos_label, path=join(dir_name, "{name}_roc.pdf".format(name=name)))
+        self.write_roc(pos_label, path=join(dir_name, "{name}_rocs.pdf".format(name=name)), single_axe=False)
+        self.write_roc(pos_label, path=join(dir_name, "{name}_roc.pdf".format(name=name)), single_axe=True)
         self.write_misclassified(path=join(dir_name, "{name}_misclassified.csv".format(name=name)))
 
     def write_misclassified(self, path=None):
@@ -138,7 +140,7 @@ class ResultWriter:
             with open(path, "w") as text_file:
                 text_file.write("%s" % mk_report.get_document_body())
 
-    def write_roc(self, positives_classes=[], path=None):
+    def write_roc(self, positives_classes=[], single_axe=False, path=None):
         if not self.results.is_valid_keys(['Label', 'Prediction', 'Probability']):
             print('Missing tag for Roc Curves report.')
             return
@@ -150,27 +152,47 @@ class ResultWriter:
 
         labels = self.results.get_data(key='Label')
         probabilities = self.results.get_data(key='Probability')
+        lines = ['-', '-.', ':']
+        linecycler = cycle(lines)
 
-        figure, axes = pyplot.subplots(ncols=len(positives_indices), figsize=(21, 7), sharex=True, sharey=True)
-        if len(positives_classes) == 1:
-            axes = [axes]
-
-        for index, axe in enumerate(axes):
-            # Get AUC results for current positive class
-            positive_index = positives_indices[index]
-            positive_class = self.inputs.decode_label([positive_index])[0]
-            fpr, tpr, threshold = roc_curve(labels,
-                                            probabilities[:, positive_index],
-                                            pos_label=positive_index)
-
-            axe.plot(fpr, tpr, label=r'ROC %s (AUC = %0.2f)' % (self.results.name, auc(fpr, tpr)), lw=2, alpha=.8)
+        if single_axe:
+            figure, axe = pyplot.subplots(ncols=1, figsize=(21, 7), sharex=True, sharey=True)
             axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r', label='Luck', alpha=.8)
-            axe.set(adjustable='box',
-                    aspect='equal',
-                    xlabel='False Positive Rate (1-Specificity)',
-                    ylabel='True Positive Rate (Sensitivity)',
-                    title='Receiver operating characteristic - Label {label}'.format(label=positive_class))
-            axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
+            for index, positive_index in enumerate(positives_indices):
+                # Get AUC results for current positive class
+                positive_class = self.inputs.decode_label([positive_index])[0]
+                fpr, tpr, threshold = roc_curve(labels,
+                                                probabilities[:, positive_index],
+                                                pos_label=positive_index)
+
+                axe.plot(fpr, tpr, next(linecycler), label=r'ROC %s (AUC = %0.2f)' % (self.results.name, auc(fpr, tpr)), lw=2, alpha=.8)
+                axe.set(adjustable='box',
+                        aspect='equal',
+                        xlabel='False Positive Rate (1-Specificity)',
+                        ylabel='True Positive Rate (Sensitivity)',
+                        title='Receiver operating characteristic - Label {label}'.format(label=positive_class))
+                axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
+        else:
+            figure, axes = pyplot.subplots(ncols=len(positives_indices), figsize=(21, 7), sharex=True, sharey=True)
+            if len(positives_classes) == 1:
+                axes = [axes]
+
+            for index, axe in enumerate(axes):
+                # Get AUC results for current positive class
+                positive_index = positives_indices[index]
+                positive_class = self.inputs.decode_label([positive_index])[0]
+                fpr, tpr, threshold = roc_curve(labels,
+                                                probabilities[:, positive_index],
+                                                pos_label=positive_index)
+
+                axe.plot(fpr, tpr, label=r'ROC %s (AUC = %0.2f)' % (self.results.name, auc(fpr, tpr)), lw=2, alpha=.8)
+                axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r', label='Luck', alpha=.8)
+                axe.set(adjustable='box',
+                        aspect='equal',
+                        xlabel='False Positive Rate (1-Specificity)',
+                        ylabel='True Positive Rate (Sensitivity)',
+                        title='Receiver operating characteristic - Label {label}'.format(label=positive_class))
+                axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
 
         if path is None:
             pyplot.show()
