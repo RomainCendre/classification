@@ -26,22 +26,14 @@ if __name__ == '__main__':
         makedirs(output_folder)
 
     # Temporary folder
-    patch_folder = join(output_folder, 'Features_patch')
-    if not exists(patch_folder):
-        makedirs(patch_folder)
-
-    full_folder = join(output_folder, 'Features_full')
-    if not exists(full_folder):
-        makedirs(full_folder)
+    temp_folder = join(output_folder, 'Features')
+    if not exists(temp_folder):
+        makedirs(temp_folder)
 
     # Projection folder
-    projection_patch_folder = join(output_folder, 'Projection_patch')
-    if not exists(projection_patch_folder):
-        makedirs(projection_patch_folder)
-
-    projection_full_folder = join(output_folder, 'Projection_full')
-    if not exists(projection_full_folder):
-        makedirs(projection_full_folder)
+    projection_folder = join(output_folder, 'Projection')
+    if not exists(projection_folder):
+        makedirs(projection_folder)
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
@@ -67,8 +59,8 @@ if __name__ == '__main__':
     # Launch process
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation)
-    process.checkpoint_step(inputs=inputs_patch, model=extractor, params=extractor_params, folder=patch_folder,
-                            projection_folder=projection_patch_folder)
+    process.checkpoint_step(inputs=inputs_patch, model=extractor, params=extractor_params, folder=temp_folder,
+                            projection_folder=projection_folder, projection_name=name_patch)
     process.end(inputs=inputs_patch, model=predictor, params=predictor_params, output_folder=output_folder, name=name_patch)
 
     ################# FULL
@@ -82,8 +74,8 @@ if __name__ == '__main__':
     inputs_full.load()
 
     # Launch process
-    process.checkpoint_step(inputs=inputs_full, model=extractor, params=extractor_params, folder=patch_folder,
-                            projection_folder=projection_full_folder)
+    process.checkpoint_step(inputs=inputs_full, model=extractor, params=extractor_params, folder=temp_folder,
+                            projection_folder=projection_folder, projection_name=name_full)
     process.end(inputs=inputs_full, model=predictor, params=predictor_params, output_folder=output_folder, name=name_full)
 
     # Open result folder
