@@ -1,6 +1,8 @@
 from tempfile import gettempdir
 from os import makedirs, startfile
-from os.path import normpath, exists, dirname, splitext, basename
+from os.path import normpath, exists, dirname, splitext, basename, join
+
+from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import StratifiedKFold
 from experiments.processes import Process
 from toolbox.core.classification import KerasBatchClassifier
@@ -23,27 +25,37 @@ if __name__ == "__main__":
     if not exists(output_folder):
         makedirs(output_folder)
 
+    # Temporary folder
+    temp_folder = join(output_folder, 'Features')
+    if not exists(temp_folder):
+        makedirs(temp_folder)
+
     # Input data
     filter_by = {'Modality': 'Microscopy',
                  'Label': ['Malignant', 'Benign', 'Normal']}
     input_folders = [normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
                      normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
     inputs = Inputs(folders=input_folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
-                    tags={'data_tag': 'Full_path', 'label_tag': 'Label'}, filter_by=filter_by)
+                    tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'reference_tag': 'Reference'}, filter_by=filter_by)
     inputs.load()
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
 
     # Initiate model and params
-    model = KerasBatchClassifier(DeepModels.get_dummy_model)
-    params = {'epochs': 2,
-              'batch_size': 10,
-              'preprocessing_function': None}
+    extractor = KerasBatchClassifier(DeepModels.get_application_model)
+    extractor_params = {'architecture': 'MobileNet',
+                        'batch_size': 1,
+                        'preprocessing_function': None}
+
+    predictor = KerasClassifier(DeepModels.get_dummy_model)
+    predictor_params = {'batch_size': 10,
+                        'output_classes': 3}
 
     process = Process()
     process.begin(validation, validation, DeepModels.get_callbacks(output_folder))
-    process.end(inputs, model, params, output_folder, name)
+    process.checkpoint_step(inputs=inputs, model=extractor, params=extractor_params, folder=temp_folder)
+    process.end(inputs=inputs, model=predictor, params=predictor_params, output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)
