@@ -197,13 +197,14 @@ class Classifier:
 
         return Results(results, name)
 
-    def features_checkpoint(self, inputs, folder, prefix=''):
+    def features_checkpoint(self, inputs, folder):
 
         # Extract needed data
         datas = inputs.get_datas()
         references = inputs.get_reference()
 
         # Location of folder followed by prefix
+        prefix = type(self.__model).__name__
         folder_prefix = '{prefix}_'.format(prefix=join(folder, prefix))
         expected_files = ['{folder_prefix}{reference}.npy'.format(folder_prefix=folder_prefix, reference=reference) for reference in references]
 
@@ -212,7 +213,7 @@ class Classifier:
 
         features = []
         # Check if already extracted
-        if not set(files).issubset(expected_files):
+        if not set(expected_files).issubset(files):
             # Now browse data
             print('Extraction features with {prefix}'.format(prefix=prefix))
             if hasattr(self.__model, "transform"):

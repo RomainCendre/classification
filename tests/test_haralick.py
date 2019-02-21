@@ -6,7 +6,7 @@ from experiments.processes import Process
 from toolbox.core.models import DeepModels, SimpleModels
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
-from toolbox.core.transforms import HaralickDescriptorTransform
+from toolbox.core.transforms import HaralickTransform
 
 if __name__ == "__main__":
 
@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     process = Process()
     process.begin(validation, validation, DeepModels.get_callbacks(output_folder))
-    process.checkpoint_step(inputs=inputs, model=HaralickDescriptorTransform(), folder=features_folder, prefix='Haralick')
+    process.checkpoint_step(inputs=inputs, model=HaralickTransform(), folder=features_folder)
     process.end(inputs=inputs, model=model, params=params, output_folder=output_folder, name=name)
 
     # Open result folder

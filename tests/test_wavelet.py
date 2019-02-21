@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     process = Process()
     process.begin(validation, validation, DeepModels.get_callbacks(output_folder))
-    process.checkpoint_step(inputs=inputs, model=DWTDescriptorTransform(), folder=features_folder, prefix='Wavelet')
+    process.checkpoint_step(inputs=inputs, model=DWTDescriptorTransform(), folder=features_folder)
     process.end(inputs=inputs, model=model, params=params, output_folder=output_folder, name=name)
 
     # Open result folder

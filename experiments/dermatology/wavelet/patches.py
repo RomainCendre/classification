@@ -6,7 +6,7 @@ from experiments.processes import Process
 from toolbox.core.models import SimpleModels, PatchClassifier
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
-from toolbox.core.transforms import HaralickDescriptorTransform, PredictorTransform
+from toolbox.core.transforms import HaralickTransform, PredictorTransform
 
 if __name__ == '__main__':
 
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     model, params = process.train_step(inputs=pretrain_inputs, model=model, params=params)
 
     # Final model evaluation
-    process.checkpoint_step(inputs=inputs, model=HaralickDescriptorTransform(), folder=features_folder)
+    process.checkpoint_step(inputs=inputs, model=HaralickTransform(), folder=features_folder)
     process.checkpoint_step(inputs=inputs, model=PredictorTransform(model, probabilities=False), folder=predict_folder)
     inputs.patch_method()
     hierarchies = [inputs.encode_label(['Malignant'])[0],

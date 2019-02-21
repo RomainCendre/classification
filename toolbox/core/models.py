@@ -24,7 +24,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.preprocessing import StandardScaler
 import types
 from toolbox.core.generators import ResourcesGenerator
-from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickDescriptorTransform
+from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
 
@@ -185,7 +185,7 @@ class SimpleModels:
 
     @staticmethod
     def get_haralick_process():
-        pipe = Pipeline([('haralick', HaralickDescriptorTransform()),
+        pipe = Pipeline([('haralick', HaralickTransform()),
                          ('scale', StandardScaler()),
                          ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
         # Define parameters to validate through grid CV

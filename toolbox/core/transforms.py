@@ -83,7 +83,7 @@ class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
         return gennorm.fit(x)
 
 
-class HaralickDescriptorTransform(BaseEstimator, TransformerMixin):
+class HaralickTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, mean=False):
         self.mean = mean
