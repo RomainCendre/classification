@@ -197,31 +197,37 @@ class Classifier:
 
         return Results(results, name)
 
-    def features_checkpoint(self, inputs, folder):
+    def features_checkpoint(self, inputs, folder, prefix=''):
+
         # Extract needed data
         datas = inputs.get_datas()
         references = inputs.get_reference()
 
+        # Location of folder followed by prefix
+        folder_prefix = '{prefix}_'.format(prefix=join(folder, prefix))
+        expected_files = ['{folder_prefix}{reference}.npy'.format(folder_prefix=folder_prefix, reference=reference) for reference in references]
+
         # Extract files from folder
-        files = glob.glob(join(folder, '*.npy'))
-        files_bases = [splitext(basename(file))[0] for file in files]
+        files = glob.glob('{folder_prefix}*.npy'.format(folder_prefix=folder_prefix))
+
         features = []
         # Check if already extracted
-        if not set(references).issubset(files_bases):
-            print('Writting data at {folder}'.format(folder=folder))
+        if not set(files).issubset(expected_files):
             # Now browse data
+            print('Extraction features with {prefix}'.format(prefix=prefix))
             if hasattr(self.__model, "transform"):
                 features = self.__model.transform(datas, **self.__params)
             else:
                 features = self.__model.predict_proba(datas, **self.__params)
+
             # Now save features as files
+            print('Writting data at {folder}'.format(folder=folder))
             for feature, reference in zip(features, references):
-                save(join(folder, reference), feature)
+                save('{folder_prefix}{reference}.npy'.format(folder_prefix=folder_prefix, reference=reference), feature)
         else:
             print('Loading data at {folder}'.format(folder=folder))
-            files = ['{join}.npy'.format(join=join(folder, reference)) for reference in references]
-            for file in files:
-                features.append(load(file))
+            for expected_file in expected_files:
+                features.append(load(expected_file))
 
         inputs.set_datas(features)
 

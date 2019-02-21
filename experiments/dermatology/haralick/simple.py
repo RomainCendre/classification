@@ -23,9 +23,9 @@ if __name__ == "__main__":
         makedirs(output_folder)
 
     # Temporary folder
-    temp_folder = join(output_folder, 'Features')
-    if not exists(temp_folder):
-        makedirs(temp_folder)
+    features_folder = join(output_folder, 'Features')
+    if not exists(features_folder):
+        makedirs(features_folder)
 
     # Projection folder
     projection_folder = join(output_folder, 'Projection')
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     inputs_full.load()
 
     # Launch process
-    process.checkpoint_step(inputs=inputs_full, model=HaralickDescriptorTransform(), folder=temp_folder,
+    process.checkpoint_step(inputs=inputs_full, model=HaralickDescriptorTransform(), folder=features_folder, prefix='Haralick',
                             projection_folder=projection_folder, projection_name=name_full)
     process.end(inputs=inputs_full, model=model, params=params, output_folder=output_folder, name=name_full)
 

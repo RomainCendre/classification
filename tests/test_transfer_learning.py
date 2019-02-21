@@ -25,10 +25,10 @@ if __name__ == "__main__":
     if not exists(output_folder):
         makedirs(output_folder)
 
-    # Temporary folder
-    temp_folder = join(output_folder, 'Features')
-    if not exists(temp_folder):
-        makedirs(temp_folder)
+    # Feature folder
+    features_folder = join(output_folder, 'Features')
+    if not exists(features_folder):
+        makedirs(features_folder)
 
     # Input data
     filter_by = {'Modality': 'Microscopy',
@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
     process = Process()
     process.begin(validation, validation, DeepModels.get_callbacks(output_folder))
-    process.checkpoint_step(inputs=inputs, model=extractor, params=extractor_params, folder=temp_folder)
+    process.checkpoint_step(inputs=inputs, model=extractor, params=extractor_params, folder=features_folder, prefix='DL')
     process.end(inputs=inputs, model=predictor, params=predictor_params, output_folder=output_folder, name=name)
 
     # Open result folder

@@ -32,10 +32,6 @@ if __name__ == "__main__":
     if not exists(features_folder):
         makedirs(features_folder)
 
-    predict_folder = join(output_folder, 'Predictions')
-    if not exists(predict_folder):
-        makedirs(predict_folder)
-
     # Input data
     # Inputs data
     pretrain_folder = normpath('{here}/data/dermatology/Thumbnails/'.format(here=here_path))
@@ -61,11 +57,12 @@ if __name__ == "__main__":
     process.begin(validation, validation)
 
     # Patch model training
-    process.checkpoint_step(inputs=pretrain_inputs, model=HaralickDescriptorTransform(), folder=features_folder)
+    process.checkpoint_step(inputs=pretrain_inputs, model=HaralickDescriptorTransform(), folder=features_folder, prefix='Haralick')
     model, params = process.train_step(inputs=pretrain_inputs, model=model, params=params)
 
-    process.checkpoint_step(inputs=inputs, model=HaralickDescriptorTransform(), folder=features_folder)
-    process.checkpoint_step(inputs=inputs, model=PredictorTransform(model, probabilities=False), folder=predict_folder)
+    # Patch model predicting
+    process.checkpoint_step(inputs=inputs, model=HaralickDescriptorTransform(), folder=features_folder, prefix='Haralick')
+    process.checkpoint_step(inputs=inputs, model=PredictorTransform(model, probabilities=False), folder=features_folder, prefix='Predictions')
     inputs.patch_method()
     hierarchies = [inputs.encode_label(['Malignant'])[0],
                    inputs.encode_label(['Benign'])[0],

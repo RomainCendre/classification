@@ -12,7 +12,7 @@ from keras import applications
 from keras import Sequential, Model
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras.utils.generic_utils import has_arg, to_list
-from numpy import arange, geomspace, array, searchsorted, unique, hstack, zeros, concatenate, ones, argmax
+from numpy import arange, geomspace, array, searchsorted, unique, hstack, zeros, concatenate, ones, argmax, sort
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
 from sklearn.pipeline import Pipeline
@@ -507,12 +507,12 @@ class PatchClassifier(BaseEstimator, ClassifierMixin):
         global_score = 0
         self.thresholds = zeros(len(self.hierarchies))
         for index, hierarchy in enumerate(self.hierarchies):
-            potential_thresholds = unique(x[:, hierarchy])
+            potential_thresholds = sort(unique(x[:, hierarchy]))
             for thresh in potential_thresholds:
                 thresholds = copy(self.thresholds)
                 thresholds[index] = thresh
                 score = self.metric(self.get_predictions(x, thresholds), y)
-                if global_score <= score:
+                if global_score < score:
                     global_score = score
                     self.thresholds[index] = thresh
         return self
@@ -535,4 +535,4 @@ class PatchClassifier(BaseEstimator, ClassifierMixin):
         return argmax(thresh_values*priorities, axis=1)
 
     def predict_proba(self, x, y=None, copy=True):
-        return None# return array(self.predictor.predict_proba(x))
+        return x
