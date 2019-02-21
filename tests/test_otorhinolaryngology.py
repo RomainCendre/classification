@@ -24,7 +24,7 @@ if __name__ == "__main__":
     # Input data
     filters_by = {'Results_SvsC': {'label': ['Sain', 'Cancer']}}
     input_folder = normpath('{here}/data/spectroscopy'.format(here=here_path))
-    inputs = Inputs(folders=[join(input_folder, 'Patients.csv')], loader=otorhinolaryngology.Reader.read_table,
+    inputs = Inputs(folders=[join(input_folder, 'Patients.csv')], instance=otorhinolaryngology.Reader(), loader=otorhinolaryngology.Reader.read_table,
                     tags={'data_tag': 'Data', 'label_tag': 'label',
                           'group_tag': 'patient_name', 'references_tags': ['patient_name', 'spectrum_id']})
     inputs.load()

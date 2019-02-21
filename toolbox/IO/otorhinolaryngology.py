@@ -43,8 +43,7 @@ class Reader:
             spectra.append(spectrum)
         return spectra
 
-    @staticmethod
-    def read_table(table_path):
+    def read_table(self, table_path):
         """Read a specific file that map meta data and spectrum files
 
         Args:

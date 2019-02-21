@@ -1,9 +1,7 @@
 import pywt
-
 from PIL import Image
 from numpy import array
 from pywt import dwt
-from scipy.optimize import optimize
 from scipy.stats import gennorm
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cross_decomposition import PLSRegression

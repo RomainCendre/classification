@@ -165,12 +165,13 @@ class ResultWriter:
                                                 probabilities[:, positive_index],
                                                 pos_label=positive_index)
 
-                axe.plot(fpr, tpr, next(linecycler), label=r'ROC %s (AUC = %0.2f)' % (self.results.name, auc(fpr, tpr)), lw=2, alpha=.8)
+                axe.plot(fpr, tpr, next(linecycler), lw=2, alpha=.8,
+                         label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr)))
                 axe.set(adjustable='box',
                         aspect='equal',
                         xlabel='False Positive Rate (1-Specificity)',
                         ylabel='True Positive Rate (Sensitivity)',
-                        title='Receiver operating characteristic - Label {label}'.format(label=positive_class))
+                        title='Receiver operating characteristic')
                 axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
         else:
             figure, axes = pyplot.subplots(ncols=len(positives_indices), figsize=(21, 7), sharex=True, sharey=True)
