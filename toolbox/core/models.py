@@ -507,8 +507,8 @@ class PatchClassifier(BaseEstimator, ClassifierMixin):
         global_score = 0
         self.thresholds = zeros(len(self.hierarchies))
         for index, hierarchy in enumerate(self.hierarchies):
-            fpr, tpr, roc_thresholds = roc_curve(y, x[:, hierarchy], pos_label=hierarchy)
-            for thresh in roc_thresholds:
+            potential_thresholds = unique(x[:, hierarchy])
+            for thresh in potential_thresholds:
                 thresholds = copy(self.thresholds)
                 thresholds[index] = thresh
                 score = self.metric(self.get_predictions(x, thresholds), y)
