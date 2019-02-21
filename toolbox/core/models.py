@@ -1,8 +1,8 @@
-from copy import deepcopy
+from copy import deepcopy, copy
 from os import makedirs
 from os.path import normpath
 
-from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_curve, accuracy_score
 from time import strftime, gmtime, time
 import keras
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
@@ -12,7 +12,7 @@ from keras import applications
 from keras import Sequential, Model
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras.utils.generic_utils import has_arg, to_list
-from numpy import arange, geomspace, array, searchsorted, unique, hstack, zeros, concatenate
+from numpy import arange, geomspace, array, searchsorted, unique, hstack, zeros, concatenate, ones, argmax
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
 from sklearn.pipeline import Pipeline
@@ -486,7 +486,11 @@ class RandomLayer(Layer):
 
 class PatchClassifier(BaseEstimator, ClassifierMixin):
 
-    def __init__(self, hierarchies):
+    def __init__(self, hierarchies, metric=None):
+        if metric:
+            self.metric = metric
+        else:
+            self.metric = accuracy_score
         self.hierarchies = hierarchies
         self.thresholds = None
 
@@ -500,14 +504,20 @@ class PatchClassifier(BaseEstimator, ClassifierMixin):
         """
         # if not x:
         #     raise Exception('At least one X has to be found.')
-
+        global_score = 0
         self.thresholds = zeros(len(self.hierarchies))
-        for hierarchy in self.hierarchies:
-            fpr, tpr, thresholds = roc_curve(y, x[:, hierarchy], pos_label=hierarchy)
-            print('test')
+        for index, hierarchy in enumerate(self.hierarchies):
+            fpr, tpr, roc_thresholds = roc_curve(y, x[:, hierarchy], pos_label=hierarchy)
+            for thresh in roc_thresholds:
+                thresholds = copy(self.thresholds)
+                thresholds[index] = thresh
+                score = self.metric(self.get_predictions(x, thresholds), y)
+                if global_score <= score:
+                    global_score = score
+                    self.thresholds[index] = thresh
         return self
 
-    def transform(self, x, y=None, copy=True):
+    def predict(self, x, y=None, copy=True):
         """
         This method is the main part of this transformer.
         Return a wavelet transform, as specified mode.
@@ -517,7 +527,12 @@ class PatchClassifier(BaseEstimator, ClassifierMixin):
              y (:obj): Not used.
              copy (:obj): Not used.
         """
-        if self.probabilities:
-            return array(self.predictor.predict_proba(x))
-        else:
-            return array(self.predictor.predict(x))
+        return self.get_predictions(x, self.thresholds)
+
+    def get_predictions(self, x, thresholds):
+        thresh_values = ((ones(x.shape) * thresholds) < x).astype(int)
+        priorities = arange(len(thresholds), 0, -1)[self.hierarchies]
+        return argmax(thresh_values*priorities, axis=1)
+
+    def predict_proba(self, x, y=None, copy=True):
+        return None# return array(self.predictor.predict_proba(x))

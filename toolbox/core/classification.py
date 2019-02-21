@@ -100,8 +100,10 @@ class Classifier:
                 model.fit(self.sub(datas, train), y=self.sub(labels, train))
 
             # Try to predict test data
-            probabilities = model.predict_proba(datas[test])
             predictions = model.predict(datas[test])
+            probabilities = None
+            if hasattr(model, 'predict_proba'):
+                probabilities = model.predict_proba(datas[test])
 
             # Now store all computed data
             for index, test_index in enumerate(test):
@@ -112,8 +114,9 @@ class Classifier:
                     result.update({"Reference": reference[test_index]})
 
                 # Get probabilities and predictions
-                result.update({"Probability": probabilities[index]})
                 result.update({"Prediction": predictions[index]})
+                if probabilities is not None:
+                    result.update({"Probability": probabilities[index]})
 
                 # Append element and go on next one
                 results.append(result)
