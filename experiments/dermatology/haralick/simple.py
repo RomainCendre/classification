@@ -5,7 +5,7 @@ from experiments.processes import Process
 from toolbox.core.models import SimpleModels
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
-from toolbox.core.transforms import HaralickDescriptorTransform
+from toolbox.core.transforms import HaralickTransform
 
 
 if __name__ == "__main__":
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     # Launch process
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation)
-    process.checkpoint_step(inputs=inputs_patch, model=HaralickDescriptorTransform(), folder=temp_folder,
+    process.checkpoint_step(inputs=inputs_patch, model=HaralickTransform(), folder=features_folder,
                             projection_folder=projection_folder, projection_name=name_patch)
     process.end(inputs=inputs_patch, model=model, params=params, output_folder=output_folder, name=name_patch)
 
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     inputs_full.load()
 
     # Launch process
-    process.checkpoint_step(inputs=inputs_full, model=HaralickDescriptorTransform(), folder=features_folder, prefix='Haralick',
+    process.checkpoint_step(inputs=inputs_full, model=HaralickTransform(), folder=features_folder,
                             projection_folder=projection_folder, projection_name=name_full)
     process.end(inputs=inputs_full, model=model, params=params, output_folder=output_folder, name=name_full)
 
