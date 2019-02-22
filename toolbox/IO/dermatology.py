@@ -72,7 +72,7 @@ class Reader:
             patches = Reader.__get_patches(data.data['Full_path'], data.data['Reference'], patch_size, self.temp_folder)
             for index, patch in enumerate(patches):
                 patch_data = deepcopy(data)
-                patch_data.update({'Full_path': patch})
+                patch_data.update({'Patch_path': patch})
                 patch_data.update({'Patch_Reference': '{ref}_{index}'.format(ref=data.data['Reference'], index=index)})
                 patch_data_set.append(patch_data)
 
@@ -89,12 +89,12 @@ class Reader:
                 filename = '{reference}_{size}_{id}.png'.format(reference=join(temp_folder, reference),
                                                                 size=patch_size, id=index)
                 patches.append(filename)
+                index += 1 # Increment patch id
                 # Check if need to write patch
                 if isfile(filename):
                     continue
                 filename = normpath(filename)
                 Image.fromarray(patch).save(filename)
-                index += 1
         return patches
 
     @staticmethod

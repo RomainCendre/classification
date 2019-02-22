@@ -1,3 +1,4 @@
+import warnings
 from copy import copy
 
 from numpy import correlate, ones, interp, asarray, zeros
@@ -16,7 +17,7 @@ class Data:
 
     def is_in_data(self, check):
         for key, value in check.items():
-            if self.data[key] not in value:
+            if key not in self.data or self.data[key] not in value:
                 return False
         return True
 
@@ -90,9 +91,17 @@ class DataSet:
 
         return valid_methods
 
-    def set_data(self, key: object, new_data, filter_by: object = {}) -> object:
-        for data, n_data in zip(self.filter_by(filter_by), new_data):
-            data.data[key] = n_data
+    def update_data(self, key, datas, key_ref, references):
+        if len(datas) != len(references):
+            raise Exception('Data and references have mismatching sizes.')
+
+        for data, reference in zip(datas, references):
+            try:
+                dataset = list(self.filter_by({key_ref: [reference]}))[0]
+                dataset.data.update({key: data})
+            except:
+                warnings.warn('Reference {ref} not found.'.format(ref=reference))
+                continue
 
     def filter_by(self, filter_by):
         for data in self.data_set:
@@ -191,26 +200,26 @@ class Inputs:
 
     def get_datas(self):
         self.check_load()
-        if 'data_tag' not in self.tags:
+        if 'data' not in self.tags:
             return None
 
-        return self.data.get_data(key=self.tags['data_tag'], filter_by=self.filter_by)
+        return self.data.get_data(key=self.tags['data'], filter_by=self.filter_by)
 
     def get_groups(self):
         self.check_load()
-        if 'group_tag' not in self.tags:
+        if 'group' not in self.tags:
             return None
 
-        groups = self.data.get_data(key=self.tags['group_tag'], filter_by=self.filter_by)
+        groups = self.data.get_data(key=self.tags['group'], filter_by=self.filter_by)
         self.groups_encoder.fit(groups)
         return self.groups_encoder.transform(groups)
 
     def get_labels(self):
         self.check_load()
-        if 'label_tag' not in self.tags:
+        if 'label' not in self.tags:
             return None
 
-        labels = self.data.get_data(key=self.tags['label_tag'], filter_by=self.filter_by)
+        labels = self.data.get_data(key=self.tags['label'], filter_by=self.filter_by)
         if self.encoding_label:
             return self.labels_encoder.transform(labels)
         else:
@@ -218,23 +227,19 @@ class Inputs:
 
     def get_reference(self):
         self.check_load()
-        if 'reference_tag' not in self.tags:
+        if 'reference' not in self.tags:
             return None
 
-        keys = self.tags['reference_tag']
-        if not isinstance(keys, list):
-            keys = [keys]
-        references = [self.data.get_data(key=reference, filter_by=self.filter_by) for reference in keys]
-        return ['-'.join(map(str, x)) for x in zip(*references)]
+        return self.data.get_data(key=self.tags['reference'], filter_by=self.filter_by)
 
     def get_unique_labels(self):
         self.check_load()
-        labels = self.data.get_unique_values(key=self.tags['label_tag'], filter_by=self.filter_by)
+        labels = self.data.get_unique_values(key=self.tags['label'], filter_by=self.filter_by)
         return self.labels_encoder.transform(labels)
 
     def load(self, refresh_encoder=False):
-        if 'data_tag' not in self.tags:
-            print('data_tag is needed at least.')
+        if 'data' not in self.tags:
+            print('data is needed at least.')
             return
 
         self.data = DataSet()
@@ -244,18 +249,19 @@ class Inputs:
         try:
             check_is_fitted(self.labels_encoder, 'classes_')
             if refresh_encoder:
-                self.labels_encoder.fit(self.data.get_data(key=self.tags['data_tag'], filter_by=self.filter_by))
+                self.labels_encoder.fit(self.data.get_data(key=self.tags['data'], filter_by=self.filter_by))
         except:
-            self.labels_encoder.fit(self.data.get_data(key=self.tags['label_tag'], filter_by=self.filter_by))
+            self.labels_encoder.fit(self.data.get_data(key=self.tags['label'], filter_by=self.filter_by))
         # Set load property to true
         self.load_state = True
 
-    def set_datas(self, new_data):
+    def update_data(self, key, datas, references):
         self.check_load()
-        if 'data_tag' not in self.tags:
+        if 'reference' not in self.tags:
             return None
 
-        self.data.set_data(key=self.tags['data_tag'], new_data=new_data, filter_by=self.filter_by)
+        self.data.update_data(key=key, datas=datas, key_ref=self.tags['reference'], references=references)
+        self.tags.update({'data': key})
 
     def to_sub_input(self, filter=None):
         if filter is None:
@@ -280,9 +286,10 @@ class Inputs:
             data = entities.data.data_set[0]
             data.update({'Data': probabilities})
             new_data.append(data)
-        self.tags.update({'reference_tag': 'Reference',
-                          'data_tag': 'Data'})
+        self.tags.update({'reference': 'Reference',
+                          'data': 'Data'})
         self.data = DataSet(new_data)
+
 
 class Result(Data):
 

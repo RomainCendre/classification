@@ -235,7 +235,7 @@ class Classifier:
             for expected_file in expected_files:
                 features.append(load(expected_file))
 
-        inputs.set_datas(features)
+        inputs.update_data(prefix, features, references)
 
     @staticmethod
     def __check_labels(labels, labels_fold=None):
