@@ -4,7 +4,7 @@ from os import makedirs, startfile
 from os.path import normpath, exists, dirname, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
 from experiments.processes import Process
-from toolbox.core.models import DeepModels, SimpleModels, PatchClassifier
+from toolbox.core.models import PatchClassifier, Classifiers, Transforms
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
 from toolbox.core.transforms import HaralickTransform, PredictorTransform
@@ -32,7 +32,6 @@ if __name__ == "__main__":
     if not exists(features_folder):
         makedirs(features_folder)
 
-    # Input data
     # Inputs data
     pretrain_folder = normpath('{here}/data/dermatology/Thumbnails/'.format(here=here_path))
     pretrain_inputs = Inputs(folders=[pretrain_folder], instance=dermatology.Reader(patch_folder),
@@ -46,28 +45,26 @@ if __name__ == "__main__":
     input_folders = [normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
                      normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
     inputs.change_data(folders=input_folders, filter_by=filter_by, loader=dermatology.Reader.scan_folder_for_patches,
-                       tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'groups': 'Patient', 'reference_tag': ['Patch_Reference']})
+                       tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'groups': 'Patient',
+                             'reference_tag': ['Patch_Reference']})
     inputs.load()
-
-    # Initiate model and params
-    model, params = SimpleModels.get_dummy_process()
 
     # Launch process
     process = Process()
     process.begin(validation, validation)
 
     # Patch model training
-    process.checkpoint_step(inputs=pretrain_inputs, model=HaralickTransform(), folder=features_folder)
-    model, params = process.train_step(inputs=pretrain_inputs, model=model, params=params)
+    process.checkpoint_step(inputs=pretrain_inputs, model=Transforms.get_haralick(), folder=features_folder)
+    model, params = process.train_step(inputs=pretrain_inputs, model=Classifiers.get_dummy_simple())
 
     # Patch model predicting
-    process.checkpoint_step(inputs=inputs, model=HaralickTransform(), folder=features_folder)
+    process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(), folder=features_folder)
     process.checkpoint_step(inputs=inputs, model=PredictorTransform(model, probabilities=False), folder=features_folder)
     inputs.patch_method()
-    hierarchies = [inputs.encode_label(['Malignant'])[0],
-                   inputs.encode_label(['Benign'])[0],
-                   inputs.encode_label(['Normal'])[0]]
-    process.end(inputs=inputs, model=PatchClassifier(hierarchies=hierarchies), output_folder=output_folder, name=name)
+    model = PatchClassifier(hierarchies=[inputs.encode_label(['Malignant'])[0],
+                                         inputs.encode_label(['Benign'])[0],
+                                         inputs.encode_label(['Normal'])[0]])
+    process.end(inputs=inputs, model=model, output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)

@@ -45,9 +45,14 @@ class Classifier:
             return None
         return np_array[indices]
 
-    def set_model(self, model, params):
-        self.__model = model
-        self.__params = params
+    def set_model(self, model):
+
+        if isinstance(model, tuple):
+            self.__model = model[0]
+            self.__params = model[1]
+        else:
+            self.__model = model
+            self.__params = {}
         self.__format_params()
 
     def evaluate(self, inputs, name='Default'):

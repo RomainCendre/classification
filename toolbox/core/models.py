@@ -2,7 +2,7 @@ from copy import deepcopy, copy
 from os import makedirs
 from os.path import normpath
 
-from sklearn.metrics import roc_curve, accuracy_score
+from sklearn.metrics import accuracy_score
 from time import strftime, gmtime, time
 import keras
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
@@ -28,33 +28,55 @@ from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransfor
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
 
-class DeepModels:
+class Transforms:
 
     @staticmethod
-    def get_application_model(architecture='InceptionV3'):
+    def get_dwt():
+        pipe = Pipeline([('wavelet', DWTTransform())])
+        # Define parameters to validate through grid CV
+        parameters = {'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']}
+        return pipe, parameters
+
+    @staticmethod
+    def get_haralick():
+        pipe = Pipeline([('haralick', HaralickTransform())])
+        # Define parameters to validate through grid CV
+        parameters = {}
+        return pipe, parameters
+
+    @staticmethod
+    def get_pca():
+        pipe = Pipeline([('pca', PCA())])
+        # Define parameters to validate through grid CV
+        parameters = {'pca__n_components': [0.95, 0.975, 0.99]}
+        return pipe, parameters
+
+    @staticmethod
+    def get_pls():
+        pipe = Pipeline([('pls', PLSTransform())])
+        # Define parameters to validate through grid CV
+        parameters = {'pls__n_components': range(2, 12, 2)}
+        return pipe, parameters
+
+    @staticmethod
+    def get_application(architecture='InceptionV3', pooling='max'):
         # We get the deep extractor part as include_top is false
         if architecture == 'MobileNet':
-            model = applications.MobileNet(weights='imagenet', include_top=False, pooling='max')
+            model = applications.MobileNet(weights='imagenet', include_top=False, pooling=pooling)
         elif architecture == 'VGG16':
-            model = applications.VGG16(weights='imagenet', include_top=False, pooling='max')
+            model = applications.VGG16(weights='imagenet', include_top=False, pooling=pooling)
         elif architecture == 'VGG19':
-            model = applications.VGG19(weights='imagenet', include_top=False, pooling='max')
+            model = applications.VGG19(weights='imagenet', include_top=False, pooling=pooling)
         else:
-            model = applications.InceptionV3(weights='imagenet', include_top=False, pooling='max')
+            model = applications.InceptionV3(weights='imagenet', include_top=False, pooling=pooling)
 
         return model
 
-    @staticmethod
-    def get_application_preprocessing(architecture='InceptionV3'):
-        if architecture == 'VGG16':
-            return applications.vgg16.preprocess_input
-        if architecture == 'VGG19':
-            return applications.vgg19.preprocess_input
-        else:
-            return applications.inception_v3.preprocess_input
+
+class Classifiers:
 
     @staticmethod
-    def get_callbacks(model_calls=[], folder=None):
+    def get_keras_callbacks(model_calls=[], folder=None):
         callbacks = []
         if folder is not None:
             # Workdir creation
@@ -78,7 +100,22 @@ class DeepModels:
         return callbacks
 
     @staticmethod
-    def get_dummy_model(output_classes):
+    def get_dense(output_classes, activation='softmax', optimizer='adam', metrics=['accuracy']):
+        # Now we customize the output consider our application field
+        model = Sequential()
+        # Now we customize the output consider our application field
+        model.add(Dense(output_classes, activation=activation, name='predictions'))
+
+        if output_classes > 2:
+            loss = 'categorical_crossentropy'
+        else:
+            loss = 'binary_crossentropy'
+
+        model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
+        return model
+
+    @staticmethod
+    def get_dummy_deep(output_classes):
         keras.layers.RandomLayer = RandomLayer
         # Extract labels
         model = Sequential()
@@ -87,52 +124,22 @@ class DeepModels:
         return model
 
     @staticmethod
-    def get_scratch_model(output_classes, mode):
-        model = Sequential()
-        if mode == 'patch':
-            model.add(Conv2D(10, (1, 3), strides=(2, 2), input_shape=(250, 250, 3), activation='linear', name='Convolution_1'))
-        else:
-            model.add(Conv2D(10, (1, 3), strides=(2, 2), input_shape=(1000, 1000, 3), activation='linear', name='Convolution_1'))
-        model.add(Conv2D(10, (3, 1), strides=(2, 2), activation='relu', name='Convolution_2'))
-        model.add(GlobalMaxPooling2D(name='Pooling_2D'))
-        model.add(Dense(output_classes, activation='softmax', name='Predictions'))
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-        return model
+    def get_dummy_simple():
+        pipe = Pipeline([('clf', DummyClassifier())])
+        # Define parameters to validate through grid CV
+        parameters = {}
+        return pipe, parameters
 
     @staticmethod
-    def get_prediction_model(output_classes, optimizer='adam', metrics=['accuracy']):
-        # Now we customize the output consider our application field
-        model = Sequential()
-        # Now we customize the output consider our application field
-        model.add(Dense(output_classes, activation='softmax', name='predictions'))
-
-        if output_classes > 2:
-            loss = 'categorical_crossentropy'
-        else:
-            loss = 'binary_crossentropy'
-
-        model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
-        return model
-
-    @staticmethod
-    def get_transfer_learning_model(output_classes, architecture='InceptionV3', optimizer='adam', metrics=['accuracy']):
-
-        # We get the deep extractor part as include_top is false
-        base_model = DeepModels.get_application_model(architecture)
-
-        # Now we customize the output consider our application field
-        prediction_layers = Dense(output_classes, activation='softmax', name='predictions')(base_model.output)
-
-        if output_classes > 2:
-            loss = 'categorical_crossentropy'
-        else:
-            loss = 'binary_crossentropy'
-
-        # And defined model based on our input and next output
-        model = Model(inputs=base_model.input, outputs=prediction_layers)
-        model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
-
-        return model
+    def get_linear_svm():
+        pipe = Pipeline([('scale', StandardScaler()),
+                         ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
+        # Define parameters to validate through grid CV
+        parameters = {
+            'clf__C': geomspace(0.01, 1000, 6).tolist(),
+            'clf__gamma': geomspace(0.01, 1000, 6).tolist()
+        }
+        return pipe, parameters
 
     @staticmethod
     def get_memory_usage(batch_size, model, unit=(1024.0 ** 3)):
@@ -158,8 +165,52 @@ class DeepModels:
         total_memory = number_size * (batch_size * shapes_mem_count + trainable_count + non_trainable_count)
         return round(total_memory / unit, 3)
 
+    @staticmethod
+    def get_preprocessing_application(architecture='InceptionV3'):
+        if architecture == 'MobileNet':
+            return applications.mobilenet.preprocess_input
+        elif architecture == 'VGG16':
+            return applications.vgg16.preprocess_input
+        elif architecture == 'VGG19':
+            return applications.vgg19.preprocess_input
+        else:
+            return applications.inception_v3.preprocess_input
 
-class SimpleModels:
+    @staticmethod
+    def get_scratch(output_classes, mode):
+        model = Sequential()
+        if mode == 'patch':
+            model.add(Conv2D(10, (1, 3), strides=(2, 2), input_shape=(250, 250, 3), activation='linear', name='Convolution_1'))
+        else:
+            model.add(Conv2D(10, (1, 3), strides=(2, 2), input_shape=(1000, 1000, 3), activation='linear', name='Convolution_1'))
+        model.add(Conv2D(10, (3, 1), strides=(2, 2), activation='relu', name='Convolution_2'))
+        model.add(GlobalMaxPooling2D(name='Pooling_2D'))
+        model.add(Dense(output_classes, activation='softmax', name='Predictions'))
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        return model
+
+    @staticmethod
+    def get_transfer_learning(output_classes, architecture='InceptionV3', optimizer='adam', metrics=['accuracy']):
+
+        # We get the deep extractor part as include_top is false
+        base_model = Transformers.get_application(architecture)
+
+        # Now we customize the output consider our application field
+        prediction_layers = Dense(output_classes, activation='softmax', name='predictions')(base_model.output)
+
+        if output_classes > 2:
+            loss = 'categorical_crossentropy'
+        else:
+            loss = 'binary_crossentropy'
+
+        # And defined model based on our input and next output
+        model = Model(inputs=base_model.input, outputs=prediction_layers)
+        model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
+
+        return model
+
+
+class BuiltInModels:
 
     @staticmethod
     def get_ahmed_process():
@@ -248,19 +299,6 @@ class SimpleModels:
         }
         return pipe, parameters
 
-    @staticmethod
-    def get_dwt_process():
-        pipe = Pipeline([('wavelet', DWTTransform()),
-                         ('clf', SVC(probability=True)),
-                         ])
-        # Define parameters to validate through grid CV
-        parameters = {
-            'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6'],
-            'clf__C': geomspace(0.01, 1000, 6),
-            'clf__gamma': [0.001, 0.0001],
-            'clf__kernel': ['rbf']
-        }
-        return pipe, parameters
 
 
 class KerasBatchClassifier(KerasClassifier):
