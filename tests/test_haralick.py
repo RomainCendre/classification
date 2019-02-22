@@ -3,10 +3,9 @@ from os import makedirs, startfile
 from os.path import normpath, exists, dirname, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
 from experiments.processes import Process
-from toolbox.core.models import DeepModels, SimpleModels
+from toolbox.core.models import Classifiers, Transforms
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
-from toolbox.core.transforms import HaralickTransform
 
 if __name__ == "__main__":
 
@@ -33,16 +32,14 @@ if __name__ == "__main__":
     input_folders = [normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
                      normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
     inputs = Inputs(folders=input_folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
-                    tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'reference_tag': 'Reference'}, filter_by=filter_by)
+                    tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by)
     inputs.load()
 
     # Initiate model and params
-    model, params = SimpleModels.get_dummy_process()
-
     process = Process()
-    process.begin(validation, validation, DeepModels.get_callbacks(output_folder))
-    process.checkpoint_step(inputs=inputs, model=HaralickTransform(), folder=features_folder)
-    process.end(inputs=inputs, model=model, params=params, output_folder=output_folder, name=name)
+    process.begin(validation, validation)
+    process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(), folder=features_folder)
+    process.end(inputs=inputs, model=Classifiers.get_dummy_simple(), output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)

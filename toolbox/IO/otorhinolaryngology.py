@@ -68,5 +68,7 @@ class Reader:
 
             patient_datas = Reader.read_file(join(base_folder, current_file))
             [data.data.update(meta) for data in patient_datas]
+            [data.data.update({'Reference': '{patient}-{id}'.format(patient=meta['patient_name'], id=data.data['spectrum_id'])})
+             for data in patient_datas]
             spectra.extend(patient_datas)
         return DataSet(spectra)

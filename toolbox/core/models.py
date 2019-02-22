@@ -24,22 +24,40 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.preprocessing import StandardScaler
 import types
 from toolbox.core.generators import ResourcesGenerator
-from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform
+from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform, DWTDescriptorTransform
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
 
 class Transforms:
 
     @staticmethod
-    def get_dwt():
-        pipe = Pipeline([('wavelet', DWTTransform())])
+    def get_image_dwt():
+        pipe = Pipeline([('dwt', DWTDescriptorTransform(mode='db1'))])
+        pipe.name = 'DWT'
         # Define parameters to validate through grid CV
-        parameters = {'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']}
+        parameters = {}#{'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']}
+        return pipe, parameters
+
+    @staticmethod
+    def get_linear_dwt():
+        pipe = Pipeline([('dwt', DWTTransform(mode='db1'))])
+        pipe.name = 'DWT'
+        # Define parameters to validate through grid CV
+        parameters = {}#{'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']}
+        return pipe, parameters
+
+    @staticmethod
+    def get_dwt():
+        pipe = Pipeline([('dwt', DWTTransform(mode='db1'))])
+        pipe.name = 'DWT'
+        # Define parameters to validate through grid CV
+        parameters = {}#{'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']}
         return pipe, parameters
 
     @staticmethod
     def get_haralick():
         pipe = Pipeline([('haralick', HaralickTransform())])
+        pipe.name = 'Haralick'
         # Define parameters to validate through grid CV
         parameters = {}
         return pipe, parameters
@@ -47,6 +65,7 @@ class Transforms:
     @staticmethod
     def get_pca():
         pipe = Pipeline([('pca', PCA())])
+        pipe.name = 'PCA'
         # Define parameters to validate through grid CV
         parameters = {'pca__n_components': [0.95, 0.975, 0.99]}
         return pipe, parameters
@@ -54,6 +73,7 @@ class Transforms:
     @staticmethod
     def get_pls():
         pipe = Pipeline([('pls', PLSTransform())])
+        pipe.name = 'PLS'
         # Define parameters to validate through grid CV
         parameters = {'pls__n_components': range(2, 12, 2)}
         return pipe, parameters
@@ -69,6 +89,7 @@ class Transforms:
             model = applications.VGG19(weights='imagenet', include_top=False, pooling=pooling)
         else:
             model = applications.InceptionV3(weights='imagenet', include_top=False, pooling=pooling)
+        model.name = architecture
 
         return model
 
@@ -121,11 +142,13 @@ class Classifiers:
         model = Sequential()
         model.add(RandomLayer(output_classes))
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        model.name = 'Dummy_Deep'
         return model
 
     @staticmethod
     def get_dummy_simple():
         pipe = Pipeline([('clf', DummyClassifier())])
+        pipe.name = 'Dummy_Simple'
         # Define parameters to validate through grid CV
         parameters = {}
         return pipe, parameters
@@ -134,6 +157,7 @@ class Classifiers:
     def get_linear_svm():
         pipe = Pipeline([('scale', StandardScaler()),
                          ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
+        pipe.name = 'LinearSVM'
         # Define parameters to validate through grid CV
         parameters = {
             'clf__C': geomspace(0.01, 1000, 6).tolist(),
@@ -193,7 +217,7 @@ class Classifiers:
     def get_transfer_learning(output_classes, architecture='InceptionV3', optimizer='adam', metrics=['accuracy']):
 
         # We get the deep extractor part as include_top is false
-        base_model = Transformers.get_application(architecture)
+        base_model = Transforms.get_application(architecture)
 
         # Now we customize the output consider our application field
         prediction_layers = Dense(output_classes, activation='softmax', name='predictions')(base_model.output)

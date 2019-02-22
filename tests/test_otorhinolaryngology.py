@@ -3,7 +3,7 @@ from os import makedirs, startfile
 from os.path import normpath, exists, join, dirname, splitext, basename
 from sklearn.model_selection import StratifiedKFold
 from experiments.processes import Process
-from toolbox.core.models import SimpleModels
+from toolbox.core.models import Classifiers
 from toolbox.core.structures import Inputs
 from toolbox.IO import otorhinolaryngology
 
@@ -25,17 +25,14 @@ if __name__ == "__main__":
     filters_by = {'Results_SvsC': {'label': ['Sain', 'Cancer']}}
     input_folder = normpath('{here}/data/spectroscopy'.format(here=here_path))
     inputs = Inputs(folders=[join(input_folder, 'Patients.csv')], instance=otorhinolaryngology.Reader(), loader=otorhinolaryngology.Reader.read_table,
-                    tags={'data_tag': 'Data', 'label_tag': 'label',
-                          'group_tag': 'patient_name', 'references_tags': ['patient_name', 'spectrum_id']})
+                    tags={'data': 'Data', 'label': 'label', 'group': 'patient_name', 'references': 'Reference'})
     inputs.load()
 
     # Get experiments
-    model, params = SimpleModels.get_dummy_process()
-
     for item_name, item_filter in filters_by.items():
         process = Process()
         process.begin(validation, validation)
-        process.end(inputs=inputs, output_folder=output_folder, model=model, params=params, name=item_name)
+        process.end(inputs=inputs, model=Classifiers.get_dummy_simple(), output_folder=output_folder, name=item_name)
 
     # Open result folder
     startfile(output_folder)

@@ -209,7 +209,11 @@ class Classifier:
         references = inputs.get_reference()
 
         # Location of folder followed by prefix
-        prefix = type(self.__model).__name__
+        if hasattr(self.__model, 'name'):
+            prefix = self.__model.name
+        else:
+            prefix = type(self.__model).__name__
+
         folder_prefix = '{prefix}_'.format(prefix=join(folder, prefix))
         expected_files = ['{folder_prefix}{reference}.npy'.format(folder_prefix=folder_prefix, reference=reference) for reference in references]
 
@@ -221,7 +225,7 @@ class Classifier:
         if not set(expected_files).issubset(files):
             # Now browse data
             print('Extraction features with {prefix}'.format(prefix=prefix))
-            if hasattr(self.__model, "transform"):
+            if hasattr(self.__model, 'transform'):
                 features = self.__model.transform(datas, **self.__params)
             else:
                 features = self.__model.predict_proba(datas, **self.__params)
