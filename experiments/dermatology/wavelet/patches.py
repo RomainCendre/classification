@@ -33,7 +33,7 @@ if __name__ == '__main__':
     # Inputs data
     pretrain_folder = normpath('{home}/Data/Skin/Thumbnails/'.format(home=home_path))
     pretrain_inputs = Inputs(folders=[pretrain_folder], instance=dermatology.Reader(patch_folder), loader=dermatology.Reader.scan_folder_for_images,
-                             tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'reference_tag': ['Reference']})
+                             tags={'data': 'Full_path', 'label': 'Label', 'reference': ['Reference']})
     pretrain_inputs.load()
 
     inputs = deepcopy(pretrain_inputs)
@@ -44,7 +44,7 @@ if __name__ == '__main__':
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
 
     inputs.change_data(folders=input_folders, filter_by=filter_by, loader=dermatology.Reader.scan_folder_for_patches,
-                       tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'groups': 'Patient', 'reference_tag': 'Patch_Reference'})
+                       tags={'data': 'Full_path', 'label': 'Label', 'groups': 'Patient', 'reference': 'Patch_Reference'})
     inputs.load()
 
     # Launch process
