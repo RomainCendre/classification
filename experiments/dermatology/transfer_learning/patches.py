@@ -73,7 +73,7 @@ if __name__ == '__main__':
 
     # Final model evaluation
     process.checkpoint_step(inputs=inputs, model=(extractor, extractor_params), folder=features_folder)
-    process.checkpoint_step(inputs=inputs, model=(PredictorTransform(model, probabilities=False), predictor_params), folder=predict_folder)
+    process.checkpoint_step(inputs=inputs, model=(PredictorTransform(model, probabilities=False), predictor_params), folder=features_folder)
     inputs.patch_method()
     model = PatchClassifier(hierarchies=[inputs.encode_label(['Malignant'])[0],
                                          inputs.encode_label(['Benign'])[0],
