@@ -21,7 +21,7 @@ if __name__ == '__main__':
     if not exists(output_folder):
         makedirs(output_folder)
 
-    # Temporary folder
+    # Features folder
     patch_folder = join(output_folder, 'Patch')
     if not exists(patch_folder):
         makedirs(patch_folder)
