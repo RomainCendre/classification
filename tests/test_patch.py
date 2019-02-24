@@ -7,7 +7,7 @@ from experiments.processes import Process
 from toolbox.core.models import PatchClassifier, Classifiers, Transforms
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
-from toolbox.core.transforms import HaralickTransform, PredictorTransform
+from toolbox.core.transforms import PredictorTransform
 
 if __name__ == "__main__":
 
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     # Launch process
     process = Process()
-    process.begin(validation, validation)
+    process.begin(inner_cv=validation, outer_cv=validation)
 
     # Patch model training
     process.checkpoint_step(inputs=pretrain_inputs, model=Transforms.get_haralick(), folder=features_folder)

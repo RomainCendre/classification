@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     # Initiate model and params
     process = Process()
-    process.begin(validation, validation)
+    process.begin(inner_cv=validation, outer_cv=validation)
     process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(), folder=features_folder)
     process.end(inputs=inputs, model=Classifiers.get_dummy_simple(), output_folder=output_folder, name=name)
 

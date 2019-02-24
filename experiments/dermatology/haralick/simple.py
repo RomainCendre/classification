@@ -2,10 +2,9 @@ from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
 from experiments.processes import Process
-from toolbox.core.models import SimpleModels
+from toolbox.core.models import Transforms, Classifiers
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
-from toolbox.core.transforms import HaralickTransform
 
 
 if __name__ == "__main__":
@@ -22,7 +21,7 @@ if __name__ == "__main__":
     if not exists(output_folder):
         makedirs(output_folder)
 
-    # Temporary folder
+    # Features folder
     features_folder = join(output_folder, 'Features')
     if not exists(features_folder):
         makedirs(features_folder)
@@ -36,18 +35,15 @@ if __name__ == "__main__":
     # Input patch
     input_folder = normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))
     inputs_patch = Inputs(folders=[input_folder], instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder_for_images,
-                          tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'reference_tag': ['Reference']})
+                          tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'reference_tag': 'Reference'})
     inputs_patch.load()
-
-    # Initiate model and params
-    model, params = SimpleModels.get_linear_svm_process()
 
     # Launch process
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation)
-    process.checkpoint_step(inputs=inputs_patch, model=HaralickTransform(), folder=features_folder,
+    process.checkpoint_step(inputs=inputs_patch, model=Transforms.get_haralick(), folder=features_folder,
                             projection_folder=projection_folder, projection_name=name_patch)
-    process.end(inputs=inputs_patch, model=model, params=params, output_folder=output_folder, name=name_patch)
+    process.end(inputs=inputs_patch, model=Classifiers.get_linear_svm(), output_folder=output_folder, name=name_patch)
 
     ################# FULL
     # Input full
@@ -61,9 +57,9 @@ if __name__ == "__main__":
     inputs_full.load()
 
     # Launch process
-    process.checkpoint_step(inputs=inputs_full, model=HaralickTransform(), folder=features_folder,
+    process.checkpoint_step(inputs=inputs_full, model=Transforms.get_haralick(), folder=features_folder,
                             projection_folder=projection_folder, projection_name=name_full)
-    process.end(inputs=inputs_full, model=model, params=params, output_folder=output_folder, name=name_full)
+    process.end(inputs=inputs_full, model=Classifiers.get_linear_svm(), output_folder=output_folder, name=name_full)
 
     # Open result folder
     startfile(output_folder)
