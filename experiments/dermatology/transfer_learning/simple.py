@@ -1,11 +1,10 @@
 from os import makedirs, startfile
-
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import StratifiedKFold
 from os.path import exists, expanduser, normpath, basename, splitext, join
 from experiments.processes import Process
 from toolbox.core.classification import KerasBatchClassifier
-from toolbox.core.models import DeepModels
+from toolbox.core.models import Transforms, Classifiers
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
 from toolbox.tools.limitations import Parameters
@@ -25,7 +24,7 @@ if __name__ == '__main__':
     if not exists(output_folder):
         makedirs(output_folder)
 
-    # Temporary folder
+    # Features folder
     temp_folder = join(output_folder, 'Features')
     if not exists(temp_folder):
         makedirs(temp_folder)
@@ -42,16 +41,16 @@ if __name__ == '__main__':
     # Input patch
     input_folder = normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))
     inputs_patch = Inputs(folders=[input_folder], instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder_for_images,
-                          tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'reference_tag': 'Reference'})
+                          tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'})
     inputs_patch.load()
 
     # Initiate model and params
-    extractor = KerasBatchClassifier(DeepModels.get_application_model)
+    extractor = KerasBatchClassifier(Transforms.get_application)
     extractor_params = {'architecture': 'InceptionV3',
                         'batch_size': 1,
-                        'preprocessing_function': DeepModels.get_application_preprocessing()}
+                        'preprocessing_function': Classifiers.get_preprocessing_application()}
 
-    predictor = KerasClassifier(DeepModels.get_prediction_model)
+    predictor = KerasClassifier(Classifiers.get_dense)
     predictor_params = {'batch_size': 1,
                         'epochs': 100,
                         'optimizer': 'adam',
@@ -59,9 +58,9 @@ if __name__ == '__main__':
     # Launch process
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation)
-    process.checkpoint_step(inputs=inputs_patch, model=extractor, params=extractor_params, folder=temp_folder,
+    process.checkpoint_step(inputs=inputs_patch, model=(extractor, extractor_params), folder=temp_folder,
                             projection_folder=projection_folder, projection_name=name_patch)
-    process.end(inputs=inputs_patch, model=predictor, params=predictor_params, output_folder=output_folder, name=name_patch)
+    process.end(inputs=inputs_patch, model=(predictor, predictor_params), output_folder=output_folder, name=name_patch)
 
     ################# FULL
     # Input full
@@ -70,13 +69,13 @@ if __name__ == '__main__':
     input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
     inputs_full = Inputs(folders=input_folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
-                         tags={'data_tag': 'Full_path', 'label_tag': 'Label', 'reference_tag': 'Reference'}, filter_by=filter_by)
+                         tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by)
     inputs_full.load()
 
     # Launch process
-    process.checkpoint_step(inputs=inputs_full, model=extractor, params=extractor_params, folder=temp_folder,
+    process.checkpoint_step(inputs=inputs_full, model=(extractor, extractor_params), folder=temp_folder,
                             projection_folder=projection_folder, projection_name=name_full)
-    process.end(inputs=inputs_full, model=predictor, params=predictor_params, output_folder=output_folder, name=name_full)
+    process.end(inputs=inputs_full, model=(predictor, predictor_params), output_folder=output_folder, name=name_full)
 
     # Open result folder
     startfile(output_folder)

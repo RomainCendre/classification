@@ -1,6 +1,5 @@
 from copy import deepcopy
 from os import makedirs, startfile
-
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import StratifiedKFold
 from os.path import exists, expanduser, normpath, splitext, basename, join
@@ -8,7 +7,7 @@ from sklearn.svm import SVC
 from experiments.processes import Process
 from toolbox.IO import dermatology
 from toolbox.core.classification import KerasBatchClassifier
-from toolbox.core.models import DeepModels, ClassifierPatch
+from toolbox.core.models import Transforms, Classifiers, PatchClassifier
 from toolbox.core.structures import Inputs
 from toolbox.core.transforms import PredictorTransform
 
@@ -35,14 +34,10 @@ if __name__ == '__main__':
     if not exists(features_folder):
         makedirs(features_folder)
 
-    predict_folder = join(output_folder, 'Predictions')
-    if not exists(predict_folder):
-        makedirs(predict_folder)
-
     # Pretrain data
     pretrain_folder = normpath('{home}/Data/Skin/Thumbnails/'.format(home=home_path))
     pretrain_inputs = Inputs(folders=[pretrain_folder], loader=dermatology.Reader.scan_folder_for_images,
-                             tags={'data_tag': 'Data', 'label_tag': 'Label'})
+                             tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'})
     pretrain_inputs.load()
 
     # Input data
@@ -53,17 +48,17 @@ if __name__ == '__main__':
     input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
     inputs.change_data(folders=input_folders, filter_by=filter_by, loader=dermatology.Reader.scan_folder,
-                       tags={'data_tag': 'Data', 'label_tag': 'Label', 'groups': 'Patient'})
+                       tags={'data': 'Full_path', 'label': 'Label', 'groups': 'Patient', 'reference': 'Patch_Reference'})
     inputs.load()
 
     # Initiate model and params
-    extractor = KerasBatchClassifier(DeepModels.get_transfer_learning_model)
+    extractor = KerasBatchClassifier(Transforms.get_application)
     extractor_params = {'architecture': 'InceptionV3',
                         'epochs': 100,
                         'batch_size': 10,
-                        'preprocessing_function': DeepModels.get_application_preprocessing()}
+                        'preprocessing_function': Classifiers.get_preprocessing_application()}
 
-    predictor = KerasClassifier(DeepModels.get_prediction_model)
+    predictor = KerasClassifier(Classifiers.get_dense)
     predictor_params = {'batch_size': 1,
                         'epochs': 100,
                         'optimizer': 'adam',
@@ -73,14 +68,17 @@ if __name__ == '__main__':
     process.begin(inner_cv=validation, outer_cv=validation)
 
     # Patch model training
-    process.checkpoint_step(inputs=pretrain_inputs, model=extractor, params=extractor_params, folder=features_folder)
-    model, params = process.train_step(inputs=pretrain_inputs, model=predictor, params=predictor_params)
+    process.checkpoint_step(inputs=pretrain_inputs, model=(extractor, extractor_params), folder=features_folder)
+    model, params = process.train_step(inputs=pretrain_inputs, model=(predictor, predictor_params))
 
     # Final model evaluation
-    process.checkpoint_step(inputs=inputs, model=extractor, params=extractor_params, folder=features_folder)
-    process.checkpoint_step(inputs=inputs, model=PredictorTransform(model, probabilities=False), params=predictor_params, folder=predict_folder)
+    process.checkpoint_step(inputs=inputs, model=(extractor, extractor_params), folder=features_folder)
+    process.checkpoint_step(inputs=inputs, model=(PredictorTransform(model, probabilities=False), predictor_params), folder=predict_folder)
     inputs.patch_method()
-    process.end(inputs=inputs, model=SVC(kernel='linear', probability=True), output_folder=output_folder, name=name)
+    model = PatchClassifier(hierarchies=[inputs.encode_label(['Malignant'])[0],
+                                         inputs.encode_label(['Benign'])[0],
+                                         inputs.encode_label(['Normal'])[0]])
+    process.end(inputs=inputs, model=model, output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)
