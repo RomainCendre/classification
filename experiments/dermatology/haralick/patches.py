@@ -3,10 +3,10 @@ from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
 from experiments.processes import Process
-from toolbox.core.models import SimpleModels, PatchClassifier, Transforms, Classifiers
+from toolbox.core.models import PatchClassifier, Transforms, Classifiers
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
-from toolbox.core.transforms import HaralickTransform, PredictorTransform
+from toolbox.core.transforms import PredictorTransform
 
 if __name__ == '__main__':
 
