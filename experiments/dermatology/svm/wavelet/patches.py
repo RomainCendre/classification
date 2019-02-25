@@ -32,7 +32,8 @@ if __name__ == '__main__':
 
     # Inputs data
     pretrain_folder = normpath('{home}/Data/Skin/Thumbnails/'.format(home=home_path))
-    pretrain_inputs = Inputs(folders=[pretrain_folder], instance=dermatology.Reader(patch_folder), loader=dermatology.Reader.scan_folder_for_images,
+    pretrain_inputs = Inputs(folders=[pretrain_folder], instance=dermatology.Reader(patch_folder),
+                             loader=dermatology.Reader.scan_folder_for_images,
                              tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'})
     pretrain_inputs.load()
 
