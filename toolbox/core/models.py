@@ -7,7 +7,7 @@ from time import strftime, gmtime, time
 import keras
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from keras.engine import Layer
-from keras.layers import Dense, K, Conv2D, GlobalMaxPooling2D
+from keras.layers import Dense, K, Conv2D, GlobalMaxPooling2D, Dropout
 from keras import applications
 from keras import Sequential, Model
 from keras.wrappers.scikit_learn import KerasClassifier
@@ -140,11 +140,21 @@ class Classifiers:
         return predictor,predictor_params
 
     @staticmethod
-    def get_dense(output_classes, activation='softmax', optimizer='adam', metrics=['accuracy']):
+    def get_dense(output_classes, nb_layers=1, activation='softmax', optimizer='adam', metrics=['accuracy']):
         # Now we customize the output consider our application field
         model = Sequential()
+
+        if nb_layers > 2:
+            model.add(Dense(1024, activation='relu', name='predictions_dense_1'))
+            model.add(Dropout(0.5, name='predictions_dropout_1'))
+            model.add(Dense(1024, activation='relu', name='predictions_dense_2'))
+            model.add(Dropout(0.5, name='predictions_dropout_2'))
+        elif nb_layers == 2:
+            model.add(Dense(1024, activation='relu', name='predictions_dense_1'))
+            model.add(Dropout(0.5, name='predictions_dropout_1'))
+
         # Now we customize the output consider our application field
-        model.add(Dense(output_classes, activation=activation, name='predictions'))
+        model.add(Dense(output_classes, activation=activation, name='predictions_final'))
 
         if output_classes > 2:
             loss = 'categorical_crossentropy'
