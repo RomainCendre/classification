@@ -31,12 +31,37 @@ from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 class Transforms:
 
     @staticmethod
+    def get_application(architecture='InceptionV3', pooling='max'):
+        # We get the deep extractor part as include_top is false
+        if architecture == 'MobileNet':
+            model = applications.MobileNet(weights='imagenet', include_top=False, pooling=pooling)
+        elif architecture == 'VGG16':
+            model = applications.VGG16(weights='imagenet', include_top=False, pooling=pooling)
+        elif architecture == 'VGG19':
+            model = applications.VGG19(weights='imagenet', include_top=False, pooling=pooling)
+        else:
+            model = applications.InceptionV3(weights='imagenet', include_top=False, pooling=pooling)
+        model.name = architecture
+
+        return model
+
+    @staticmethod
     def get_image_dwt():
         pipe = Pipeline([('dwt', DWTDescriptorTransform(mode='db1'))])
         pipe.name = 'DWT'
         # Define parameters to validate through grid CV
         parameters = {}#{'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']}
         return pipe, parameters
+
+    @staticmethod
+    def get_keras_extractor(architecture='InceptionV3', pooling='max'):
+        extractor = KerasBatchClassifier(Transforms.get_application)
+        extractor_params = {'architecture': architecture,
+                            'batch_size': 1,
+                            'pooling': pooling,
+                            'preprocessing_function':
+                                Classifiers.get_preprocessing_application(architecture=architecture)}
+        return extractor, extractor_params
 
     @staticmethod
     def get_linear_dwt():
@@ -78,21 +103,6 @@ class Transforms:
         parameters = {'pls__n_components': range(2, 12, 2)}
         return pipe, parameters
 
-    @staticmethod
-    def get_application(architecture='InceptionV3', pooling='max'):
-        # We get the deep extractor part as include_top is false
-        if architecture == 'MobileNet':
-            model = applications.MobileNet(weights='imagenet', include_top=False, pooling=pooling)
-        elif architecture == 'VGG16':
-            model = applications.VGG16(weights='imagenet', include_top=False, pooling=pooling)
-        elif architecture == 'VGG19':
-            model = applications.VGG19(weights='imagenet', include_top=False, pooling=pooling)
-        else:
-            model = applications.InceptionV3(weights='imagenet', include_top=False, pooling=pooling)
-        model.name = architecture
-
-        return model
-
 
 class Classifiers:
 
@@ -119,6 +129,15 @@ class Classifiers:
             callbacks.append(EarlyStopping(monitor='loss', min_delta=0.0001, patience=5, verbose=1, mode='auto'))
 
         return callbacks
+
+    @staticmethod
+    def get_keras_classifier(output_classes):
+        predictor = KerasClassifier(Classifiers.get_dense)
+        predictor_params = {'batch_size': 1,
+                            'epochs': 100,
+                            'optimizer': 'adam',
+                            'output_classes': output_classes}
+        return predictor,predictor_params
 
     @staticmethod
     def get_dense(output_classes, activation='softmax', optimizer='adam', metrics=['accuracy']):

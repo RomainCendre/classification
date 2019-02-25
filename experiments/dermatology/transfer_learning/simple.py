@@ -37,18 +37,6 @@ if __name__ == '__main__':
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
 
-    # Initiate model and params
-    extractor = KerasBatchClassifier(Transforms.get_application)
-    extractor_params = {'architecture': 'InceptionV3',
-                        'batch_size': 1,
-                        'preprocessing_function': Classifiers.get_preprocessing_application()}
-
-    predictor = KerasClassifier(Classifiers.get_dense)
-    predictor_params = {'batch_size': 1,
-                        'epochs': 100,
-                        'optimizer': 'adam',
-                        'output_classes': 3}
-
     ################# PATCH
     # Input patch
     input_folder = normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))
@@ -60,9 +48,10 @@ if __name__ == '__main__':
     # Launch process
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation)
-    process.checkpoint_step(inputs=inputs, model=(extractor, extractor_params), folder=temp_folder,
+    process.checkpoint_step(inputs=inputs, model=Transforms.get_keras_extractor(), folder=temp_folder,
                             projection_folder=projection_folder, projection_name=name_patch)
-    process.end(inputs=inputs, model=(predictor, predictor_params), output_folder=output_folder, name=name_patch)
+    process.end(inputs=inputs, model=Classifiers.get_keras_classifier(output_classes=3),
+                output_folder=output_folder, name=name_patch)
 
     ################# FULL
     # Input full
@@ -75,9 +64,10 @@ if __name__ == '__main__':
     inputs.load()
 
     # Launch process
-    process.checkpoint_step(inputs=inputs, model=(extractor, extractor_params), folder=temp_folder,
+    process.checkpoint_step(inputs=inputs, model=Transforms.get_keras_extractor(), folder=temp_folder,
                             projection_folder=projection_folder, projection_name=name_full)
-    process.end(inputs=inputs, model=(predictor, predictor_params), output_folder=output_folder, name=name_full)
+    process.end(inputs=inputs, model=Classifiers.get_keras_classifier(output_classes=3),
+                output_folder=output_folder, name=name_full)
 
     # Open result folder
     startfile(output_folder)
