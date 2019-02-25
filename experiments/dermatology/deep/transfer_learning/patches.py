@@ -60,11 +60,12 @@ if __name__ == '__main__':
 
     # Patch model training
     process.checkpoint_step(inputs=pretrain_inputs, model=Transforms.get_keras_extractor(), folder=features_folder)
-    model, params = process.train_step(inputs=pretrain_inputs, model=Classifiers.get_linear_svm())
+    model, params = process.train_step(inputs=pretrain_inputs, model=Classifiers.get_keras_classifier(output_classes=3))
 
     # Final model evaluation
     process.checkpoint_step(inputs=inputs, model=Transforms.get_keras_extractor(), folder=features_folder)
-    process.checkpoint_step(inputs=inputs, model=PredictorTransform(model, probabilities=False), folder=features_folder)
+    process.checkpoint_step(inputs=inputs, model=(PredictorTransform(model, probabilities=False), params),
+                            folder=features_folder)
     inputs.patch_method()
     model = PatchClassifier(hierarchies=[inputs.encode_label(['Malignant'])[0],
                                          inputs.encode_label(['Benign'])[0],
