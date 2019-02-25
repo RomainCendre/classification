@@ -33,16 +33,16 @@ if __name__ == "__main__":
     ################# PATCH
     # Input patch
     input_folder = normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))
-    inputs_patch = Inputs(folders=[input_folder], instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder_for_images,
-                          tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'})
-    inputs_patch.load()
+    inputs = Inputs(folders=[input_folder], instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder_for_images,
+                    tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'})
+    inputs.load()
 
     # Launch process
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation)
-    process.checkpoint_step(inputs=inputs_patch, model=Transforms.get_image_dwt(), folder=temp_folder,
+    process.checkpoint_step(inputs=inputs, model=Transforms.get_image_dwt(), folder=temp_folder,
                             projection_folder=projection_folder, projection_name=name_patch)
-    process.end(inputs=inputs_patch, model=Classifiers.get_linear_svm(), output_folder=output_folder, name=name_patch)
+    process.end(inputs=inputs, model=Classifiers.get_linear_svm(), output_folder=output_folder, name=name_patch)
 
     ################# FULL
     # Input full
@@ -50,15 +50,15 @@ if __name__ == "__main__":
                  'Label': ['Malignant', 'Benign', 'Normal']}
     input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
-    inputs_full = Inputs(folders=input_folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
-                         tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'},
-                         filter_by=filter_by)
-    inputs_full.load()
+    inputs = Inputs(folders=input_folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
+                    tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'},
+                    filter_by=filter_by)
+    inputs.load()
 
     # Launch process
-    process.checkpoint_step(inputs=inputs_full, model=Transforms.get_image_dwt(), folder=temp_folder,
+    process.checkpoint_step(inputs=inputs, model=Transforms.get_image_dwt(), folder=temp_folder,
                             projection_folder=projection_folder, projection_name=name_full)
-    process.end(inputs=inputs_full, model=Classifiers.get_linear_svm(), output_folder=output_folder, name=name_full)
+    process.end(inputs=inputs, model=Classifiers.get_linear_svm(), output_folder=output_folder, name=name_full)
 
     # Open result folder
     startfile(output_folder)
