@@ -1,11 +1,9 @@
 from copy import deepcopy
 from os import makedirs, startfile
-from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import StratifiedKFold
 from os.path import exists, expanduser, normpath, splitext, basename, join
 from experiments.processes import Process
 from toolbox.IO import dermatology
-from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.models import Transforms, Classifiers, PatchClassifier
 from toolbox.core.structures import Inputs
 from toolbox.core.transforms import PredictorTransform
@@ -48,7 +46,7 @@ if __name__ == '__main__':
 
     input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                      normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
-    inputs.change_data(folders=input_folders, filter_by=filter_by, loader=dermatology.Reader.scan_folder,
+    inputs.change_data(folders=input_folders, filter_by=filter_by, loader=dermatology.Reader.scan_folder_for_patches,
                        tags={'data': 'Full_path', 'label': 'Label', 'groups': 'Patient', 'reference': 'Patch_Reference'})
     inputs.load()
 

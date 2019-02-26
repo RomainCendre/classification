@@ -133,11 +133,12 @@ class Classifiers:
     @staticmethod
     def get_keras_classifier(output_classes):
         predictor = KerasClassifier(Classifiers.get_dense)
+        predictor.name = 'Deep_predictor'
         predictor_params = {'batch_size': 1,
                             'epochs': 100,
                             'optimizer': 'adam',
                             'output_classes': output_classes}
-        return predictor,predictor_params
+        return predictor, predictor_params
 
     @staticmethod
     def get_dense(output_classes, nb_layers=1, activation='softmax', optimizer='adam', metrics=['accuracy']):
