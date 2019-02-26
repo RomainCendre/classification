@@ -20,7 +20,7 @@ if __name__ == '__main__':
 
     # Output dir
     output_folder = normpath(
-        '{home}/Results/Dermatology/Transfer_learning/{filename}'.format(home=home_path, filename=filename))
+        '{home}/Results/Dermatology/Deep/Transfer_learning/{filename}'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
 
