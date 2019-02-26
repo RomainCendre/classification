@@ -1,9 +1,7 @@
 from os import makedirs, startfile
-from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import StratifiedKFold
 from os.path import exists, expanduser, normpath, basename, splitext, join
 from experiments.processes import Process
-from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.models import Transforms, Classifiers
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology

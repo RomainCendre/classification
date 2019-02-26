@@ -1,9 +1,7 @@
 from os import makedirs, startfile
-from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import StratifiedKFold
 from os.path import exists, expanduser, normpath, basename, splitext, join
 from experiments.processes import Process
-from toolbox.core.classification import KerasBatchClassifier
 from toolbox.core.models import Transforms, Classifiers
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
@@ -40,7 +38,8 @@ if __name__ == '__main__':
     ################# PATCH
     # Input patch
     input_folder = normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))
-    inputs = Inputs(folders=[input_folder], instance=dermatology.Reader(),
+    filter_by = {'Label': ['Malignant', 'Normal']}
+    inputs = Inputs(folders=[input_folder], instance=dermatology.Reader(), filter_by=filter_by,
                     loader=dermatology.Reader.scan_folder_for_images,
                     tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'})
     inputs.load()
@@ -50,7 +49,7 @@ if __name__ == '__main__':
     process.begin(inner_cv=validation, outer_cv=validation)
     process.checkpoint_step(inputs=inputs, model=Transforms.get_keras_extractor(), folder=temp_folder,
                             projection_folder=projection_folder, projection_name=name_patch)
-    process.end(inputs=inputs, model=Classifiers.get_keras_classifier(output_classes=3),
+    process.end(inputs=inputs, model=Classifiers.get_keras_classifier(output_classes=2),
                 output_folder=output_folder, name=name_patch)
 
     ################# FULL

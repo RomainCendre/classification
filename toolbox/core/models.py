@@ -406,14 +406,11 @@ class KerasBatchClassifier(KerasClassifier):
         fit_args = deepcopy(self.filter_sk_params(Sequential.fit_generator))
         fit_args.update(kwargs)
 
-        # Create generator
-        generator = ResourcesGenerator(**self.filter_sk_params(ResourcesGenerator.__init__))
-        train = generator.flow_from_paths(X, y, **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
-
+        # Get generator
+        train = self.__create_generator(X=X, y=y)
         validation = None
         if X_validation is not None:
-            validation = generator.flow_from_paths(X_validation, y_validation,
-                                                   **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
+            validation = self.__create_generator(X=X_validation, y=y_validation)
 
         if not self.model._is_compiled:
             tr_x, tr_y = train[0]
@@ -441,8 +438,7 @@ class KerasBatchClassifier(KerasClassifier):
         fit_args.update({'batch_size': 1})
 
         # Create generator
-        generator = ResourcesGenerator(preprocessing_function=kwargs.get('Preprocess', None))
-        valid = generator.flow_from_paths(X, **fit_args)
+        valid = self.__create_generator(X=X)
 
         # Get arguments for predict
         fit_args = deepcopy(self.filter_sk_params(Sequential.predict_generator))
@@ -476,6 +472,13 @@ class KerasBatchClassifier(KerasClassifier):
         raise ValueError('The model is not configured to compute accuracy. '
                          'You should pass `metrics=["accuracy"]` to '
                          'the `model.compile()` method.')
+
+    def __create_generator(self, X, y=None):
+        generator = ResourcesGenerator(**self.filter_sk_params(ResourcesGenerator.__init__))
+        if y is not None:
+            return generator.flow_from_paths(X, y, **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
+        else:
+            return generator.flow_from_paths(X, **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
 
     def __filter_params(self, params, fn, override=None):
         """Filters `sk_params` and returns those in `fn`'s arguments.
