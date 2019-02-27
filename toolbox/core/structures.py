@@ -162,7 +162,6 @@ class Inputs:
         self.loader = loader
         self.tags = tags
         self.filter_by = filter_by
-        self.encoding_label = True
         self.groups_encoder = preprocessing.LabelEncoder()
         self.labels_encoder = preprocessing.LabelEncoder()
 
@@ -214,13 +213,13 @@ class Inputs:
         self.groups_encoder.fit(groups)
         return self.groups_encoder.transform(groups)
 
-    def get_labels(self):
+    def get_labels(self, encode=True):
         self.check_load()
         if 'label' not in self.tags:
             return None
 
         labels = self.data.get_data(key=self.tags['label'], filter_by=self.filter_by)
-        if self.encoding_label:
+        if encode:
             return self.labels_encoder.transform(labels)
         else:
             return labels

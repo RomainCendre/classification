@@ -34,7 +34,7 @@ class DataProjectorWriter:
         sess = K.get_session()
 
         datas = inputs.get_datas()
-        labels = inputs.get_labels()
+        labels = inputs.get_labels(encode=False)
 
         # Write data
         data_path = join(output_folder, 'data.ckpt')
