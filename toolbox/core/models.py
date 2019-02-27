@@ -55,13 +55,13 @@ class Transforms:
 
     @staticmethod
     def get_keras_extractor(architecture='InceptionV3', pooling='max'):
-        extractor = KerasBatchClassifier(Transforms.get_application)
         extractor_params = {'architecture': architecture,
                             'batch_size': 1,
                             'pooling': pooling,
                             'preprocessing_function':
                                 Classifiers.get_preprocessing_application(architecture=architecture)}
-        return extractor, extractor_params
+        extractor = KerasBatchClassifier(Transforms.get_application, **extractor_params)
+        return extractor
 
     @staticmethod
     def get_linear_dwt():
@@ -354,7 +354,6 @@ class BuiltInModels:
         return pipe, parameters
 
 
-
 class KerasBatchClassifier(KerasClassifier):
 
     def check_params(self, params):
@@ -380,6 +379,10 @@ class KerasBatchClassifier(KerasClassifier):
         super().check_params(local_param)
 
     def init_model(self, y=[]):
+        # If already init
+        if hasattr(self, 'model'):
+            return
+
         self.sk_params.update({'output_classes': len(unique_labels(y))})
         # Get the deep model
         if self.build_fn is None:
@@ -432,13 +435,13 @@ class KerasBatchClassifier(KerasClassifier):
     def predict_proba(self, X, **kwargs):
         self.init_model()
         # Get arguments for generator
-        fit_args = deepcopy(self.filter_sk_params(ResourcesGenerator.flow_from_paths))
+        fit_args = deepcopy(self.filter_sk_params(ResourcesGenerator.__init__))
         fit_args.update(self.__filter_params(kwargs, ResourcesGenerator.flow_from_paths))
         fit_args.update({'shuffle': False})
         fit_args.update({'batch_size': 1})
 
         # Create generator
-        valid = self.__create_generator(X=X)
+        valid = self.__create_generator(X=X, params=fit_args)
 
         # Get arguments for predict
         fit_args = deepcopy(self.filter_sk_params(Sequential.predict_generator))
@@ -473,12 +476,12 @@ class KerasBatchClassifier(KerasClassifier):
                          'You should pass `metrics=["accuracy"]` to '
                          'the `model.compile()` method.')
 
-    def __create_generator(self, X, y=None):
-        generator = ResourcesGenerator(**self.filter_sk_params(ResourcesGenerator.__init__))
+    def __create_generator(self, X, y=None, params={}):
+        generator = ResourcesGenerator(**self.__filter_params(params, ResourcesGenerator.__init__))
         if y is not None:
-            return generator.flow_from_paths(X, y, **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
+            return generator.flow_from_paths(X, y, **self.__filter_params(params, ResourcesGenerator.flow_from_paths))
         else:
-            return generator.flow_from_paths(X, **self.filter_sk_params(ResourcesGenerator.flow_from_paths))
+            return generator.flow_from_paths(X, **self.__filter_params(params, ResourcesGenerator.flow_from_paths))
 
     def __filter_params(self, params, fn, override=None):
         """Filters `sk_params` and returns those in `fn`'s arguments.
