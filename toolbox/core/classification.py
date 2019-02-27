@@ -91,7 +91,7 @@ class Classifier:
             # Estimate best combination
             if self.__check_params_multiple():
                 grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
-                                           scoring=self.__scoring, verbose=1, iid=False)
+                                           n_jobs=self.n_jobs, scoring=self.__scoring, verbose=1, iid=False)
                 grid_search.fit(self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train))
                 best_params = grid_search.best_params_
             else:
