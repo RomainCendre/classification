@@ -23,7 +23,7 @@ class Classifier:
 
      """
 
-    def __init__(self, inner_cv, outer_cv, callbacks=[], scoring=None):
+    def __init__(self, inner_cv, outer_cv, n_jobs=-1, callbacks=[], scoring=None):
         """Make an initialisation of SpectraClassifier object.
 
         Take a pipeline object from scikit learn to experiments data and params for parameters
@@ -38,6 +38,7 @@ class Classifier:
         self.__inner_cv = inner_cv
         self.__outer_cv = outer_cv
         self.__scoring = scoring
+        self.n_jobs = n_jobs
 
     @staticmethod
     def sub(np_array, indices):
@@ -144,7 +145,7 @@ class Classifier:
         # Estimate best combination
         if self.__check_params_multiple():
             grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
-                                       refit=False, scoring=self.__scoring, verbose=1, iid=False)
+                                       n_jobs=self.n_jobs ,refit=False, scoring=self.__scoring, verbose=1, iid=False)
             grid_search.fit(datas, y=labels, groups=groups)
             best_params = grid_search.best_params_
         else:

@@ -8,8 +8,9 @@ from toolbox.core.classification import Classifier
 
 class Process:
 
-    def begin(self, inner_cv, outer_cv, callbacks=[], scoring=None):
-        self.classifier = Classifier(callbacks=callbacks, inner_cv=inner_cv, outer_cv=outer_cv, scoring=scoring)
+    def begin(self, inner_cv, outer_cv, n_jobs=-1, callbacks=[], scoring=None):
+        self.classifier = Classifier(callbacks=callbacks, inner_cv=inner_cv, outer_cv=outer_cv,
+                                     n_jobs=n_jobs, scoring=scoring)
 
     def checkpoint_step(self, inputs, model, folder, projection_folder=None, projection_name=None):
         self.classifier.set_model(model)
