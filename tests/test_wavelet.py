@@ -1,11 +1,17 @@
 from tempfile import gettempdir
 from os import makedirs, startfile
 from os.path import normpath, exists, dirname, splitext, basename, join
+
+from joblib import Memory
+from sklearn.dummy import DummyClassifier
 from sklearn.model_selection import StratifiedKFold
+from sklearn.pipeline import Pipeline
+
 from experiments.processes import Process
 from toolbox.core.models import Classifiers, Transforms
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
+from toolbox.core.transforms import DWTDescriptorTransform
 
 if __name__ == "__main__":
 
@@ -35,11 +41,21 @@ if __name__ == "__main__":
                     tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by)
     inputs.load()
 
+    # Cache steps
+    memory = Memory(cachedir=features_folder, verbose=10)
+
+    pipe = Pipeline([('dwt', DWTDescriptorTransform(mode='db1')), ('clf', DummyClassifier())],
+                    memory=memory)
+    pipe.name = 'DWT'
+    # Define parameters to validate through grid CV
+    parameters = {'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']}
+
     # Initiate model and params
     process = Process()
     process.begin(validation, validation)
-    process.checkpoint_step(inputs=inputs, model=Transforms.get_image_dwt(), folder=features_folder)
-    process.end(inputs=inputs, model=Classifiers.get_dummy_simple(), output_folder=output_folder, name=name)
+    process.end(inputs=inputs, model=(pipe, parameters), output_folder=output_folder, name=name)
+
+
 
     # Open result folder
     startfile(output_folder)
