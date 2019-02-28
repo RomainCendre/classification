@@ -1,14 +1,11 @@
 from tempfile import gettempdir
 from os import makedirs, startfile
 from os.path import normpath, exists, dirname, splitext, basename, join
-
 from joblib import Memory
 from sklearn.dummy import DummyClassifier
 from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import Pipeline
-
 from experiments.processes import Process
-from toolbox.core.models import Classifiers, Transforms
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
 from toolbox.core.transforms import DWTDescriptorTransform
@@ -48,7 +45,7 @@ if __name__ == "__main__":
                     memory=memory)
     pipe.name = 'DWT'
     # Define parameters to validate through grid CV
-    parameters = {'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']}
+    parameters = {'dwt__mode': ['db1', 'db2']}
 
     # Initiate model and params
     process = Process()

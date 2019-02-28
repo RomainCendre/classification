@@ -2,6 +2,7 @@ from copy import deepcopy, copy
 from os import makedirs
 from os.path import normpath
 
+from joblib import Memory
 from sklearn.metrics import accuracy_score
 from time import strftime, gmtime, time
 import keras
@@ -277,6 +278,23 @@ class Classifiers:
 
 
 class BuiltInModels:
+
+    @staticmethod
+    def get_model(methods, cachedir=None):
+
+        if cachedir is not None:
+            memory = Memory(cachedir=cachedir)
+        else:
+            memory = None
+
+        steps = []
+        parameters = {}
+        for method in methods:
+            print()
+
+        pipe = Pipeline(steps, memory=memory)
+        return pipe, parameters
+
 
     @staticmethod
     def get_ahmed_process():
