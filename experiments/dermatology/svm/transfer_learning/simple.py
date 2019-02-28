@@ -45,10 +45,10 @@ if __name__ == '__main__':
 
     # Launch process
     process = Process()
-    process.begin(inner_cv=validation, outer_cv=validation)
+    process.begin(inner_cv=validation, outer_cv=validation, n_jobs=2)
     process.checkpoint_step(inputs=inputs, model=Transforms.get_keras_extractor(), folder=temp_folder,
                             projection_folder=projection_folder, projection_name=name_patch)
-    process.end(inputs=inputs, model=Classifiers.get_linear_svm(), output_folder=output_folder, name=name_patch)
+    process.end(inputs=inputs, model=Classifiers.get_linear_svm(reduce=0.95), output_folder=output_folder, name=name_patch)
 
     ################# FULL
     # Input full

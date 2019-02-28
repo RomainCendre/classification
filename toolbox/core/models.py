@@ -184,15 +184,27 @@ class Classifiers:
         return pipe, parameters
 
     @staticmethod
-    def get_linear_svm():
-        pipe = Pipeline([('scale', StandardScaler()),
-                         ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
+    def get_linear_svm(reduce=None, scaling=True):
+        steps = []
+        parameters = {}
+
+        # Add dimensions reducer
+        if reduce is not None:
+            steps.append(('pca', PCA()))
+            parameters.update({'pca__n_components': [reduce]})
+
+        # Add scaling step
+        if scaling:
+            steps.append(('scale', StandardScaler()))
+
+        steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
+        pipe = Pipeline(steps)
         pipe.name = 'LinearSVM'
         # Define parameters to validate through grid CV
-        parameters = {
+        parameters.update({
             'clf__C': geomspace(0.01, 1000, 6).tolist(),
             'clf__gamma': geomspace(0.01, 1000, 6).tolist()
-        }
+        })
         return pipe, parameters
 
     @staticmethod
