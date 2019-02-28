@@ -2,10 +2,11 @@ name: SkinGPU
 channels:
   - defaults
 dependencies:
-  - keras=2.2.4
   - _tflow_select=2.1.0=gpu
   - cudatoolkit=9.0=1
   - cudnn=7.1.4=cuda9.0_0
+  - joblib=0.13.2
+  - keras=2.2.4
   - keras-applications=1.0.6
   - keras-base=2.2.4
   - keras-gpu=2.2.4
