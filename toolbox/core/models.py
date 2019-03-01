@@ -625,6 +625,7 @@ class PatchClassifier(BaseEstimator, ClassifierMixin):
                 if global_score < score:
                     global_score = score
                     self.thresholds[index] = thresh
+        print(self.thresholds)
         return self
 
     def predict(self, x, y=None, copy=True):

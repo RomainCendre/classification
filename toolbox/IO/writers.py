@@ -5,11 +5,13 @@ from os import makedirs
 import markups
 import pandas
 import pickle
+
+from PIL import Image
 from matplotlib import pyplot, cm
 from os.path import join, exists
 from keras import backend as K
 from matplotlib.image import imsave
-from numpy import std, repeat, newaxis, uint8, arange, savetxt
+from numpy import std, repeat, newaxis, uint8, arange, savetxt, array, copy
 from sklearn.metrics import auc, roc_curve, classification_report
 from vis.utils.utils import load_img
 from vis.visualization import visualize_cam, overlay
@@ -111,8 +113,8 @@ class ResultWriter:
             print('Missing tag for misclassification report.')
             return
 
-        labels = self.inputs.decode_label(self.results.get_data(key='Label'))
-        predictions = self.inputs.decode_label(self.results.get_data(key='Prediction'))
+        labels = self.inputs.decode('label', self.results.get_data(key='Label'))
+        predictions = self.inputs.decode('label', self.results.get_data(key='Prediction'))
         references = self.results.get_data(key='Reference')
         misclassified = [index for index, (i, j) in enumerate(zip(labels, predictions)) if i != j]
         data = {'paths': references[misclassified],
@@ -160,12 +162,12 @@ class ResultWriter:
             axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r', label='Luck', alpha=.8)
             for index, positive_index in enumerate(positives_indices):
                 # Get AUC results for current positive class
-                positive_class = self.inputs.decode_label([positive_index])[0]
+                positive_class = self.inputs.decode('label', positive_index)
                 fpr, tpr, threshold = roc_curve(labels,
                                                 probabilities[:, positive_index],
                                                 pos_label=positive_index)
 
-                axe.plot(fpr, tpr, next(linecycler), lw=2, alpha=.8,
+                axe.plot(fpr, tpr, next(linecycler), lw=2, alpha=.8, color=self.inputs.get_style('draw', positive_class),
                          label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr)))
                 axe.set(adjustable='box',
                         aspect='equal',
@@ -181,7 +183,7 @@ class ResultWriter:
             for index, axe in enumerate(axes):
                 # Get AUC results for current positive class
                 positive_index = positives_indices[index]
-                positive_class = self.inputs.decode_label([positive_index])[0]
+                positive_class = self.inputs.decode('label', positive_index)
                 fpr, tpr, threshold = roc_curve(labels,
                                                 probabilities[:, positive_index],
                                                 pos_label=positive_index)
@@ -209,7 +211,7 @@ class ResultWriter:
 
         # Label
         ulabels = self.results.get_unique_values('Label')
-        ulabels = self.inputs.decode_label(ulabels)
+        ulabels = self.inputs.decode('label', ulabels)
         for ind, label in enumerate(ulabels):
             label_report = dict_report[label]
             report += '|' + label.capitalize()
@@ -257,8 +259,8 @@ class ResultWriter:
             filter_by = {'Fold': [fold]}
             labels = self.results.get_data(key='Label', filter_by=filter_by)
             predictions = self.results.get_data(key='Prediction', filter_by=filter_by)
-        return classification_report(self.inputs.decode_label(labels),
-                                     self.inputs.decode_label(predictions), output_dict=True)
+        return classification_report(self.inputs.decode('label', labels),
+                                     self.inputs.decode('label', predictions), output_dict=True)
 
 
 class VisualizationWriter:
@@ -302,7 +304,7 @@ class VisualizationWriter:
             x, y = valid_generator[index]
 
             for label_index in ulabels:
-                dir_path = join(activation_dir, inputs.decode_label([label_index])[0])
+                dir_path = join(activation_dir, inputs.decode('label', label_index))
                 if not exists(dir_path):
                     makedirs(dir_path)
 
@@ -314,6 +316,31 @@ class VisualizationWriter:
                     imsave(file_path, activation)
                 except:
                     print('Incompatible model or trouble occurred.')
+
+
+class PatchWriter:
+
+    def __init__(self, inputs):
+        self.inputs = inputs
+
+    def write_patch(self, folder, patch_size=250):
+        print(folder)
+        references = list(set(self.inputs.get_from_key('Reference')))
+
+        for index, reference in enumerate(references):
+            entities = self.inputs.to_sub_input({'Reference': [reference]})
+            path = list(set(entities.get_from_key('Full_path')))
+            label = list(set(entities.get_from_key('Label')))
+            image = array(Image.open(path[0]).convert('L'))
+            image = repeat(image[:, :, newaxis], 3, axis=2)
+            predict_map = copy(image)
+            for entity in entities.data.data_set:
+                X = entity.data['Patch_Position_X']
+                Y = entity.data['Patch_Position_Y']
+                predict = entity.data['PredictorTransform']
+                color = self.inputs.get_style('patches', self.inputs.decode('label', predict.item(0)))
+                predict_map[X:X+patch_size, Y:Y+patch_size, :] = color
+            imsave(join(folder, '{ref}_{lab}'.format(ref=reference, lab=label[0])), overlay(predict_map, image))
 
 
 class ObjectManager:

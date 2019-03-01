@@ -9,6 +9,29 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import mahotas
 
 
+class OrderedEncoder(BaseEstimator, TransformerMixin):
+
+    def fit(self, y):
+        self.map_list = y
+        return self
+
+    def fit_transform(self, y):
+        self.fit(y)
+        return self.transform(y)
+
+    def transform(self, y):
+        elements = y.tolist()
+        if not isinstance(elements, list):
+            elements = [elements]
+        return array([self.map_list.index(element) for element in elements])
+
+    def inverse_transform(self, y):
+        elements = y.tolist()
+        if not isinstance(elements, list):
+            elements = [elements]
+        return array([self.map_list[element] for element in elements])
+
+
 class PredictorTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, predictor, probabilities=True):

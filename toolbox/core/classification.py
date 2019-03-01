@@ -205,6 +205,9 @@ class Classifier:
 
     def features_checkpoint(self, inputs, folder):
 
+        if self.__model is None:
+            return
+
         # Extract needed data
         datas = inputs.get_datas()
         references = inputs.get_reference()

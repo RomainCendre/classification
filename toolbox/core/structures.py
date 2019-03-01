@@ -1,8 +1,9 @@
 import warnings
 from copy import copy
 
-from numpy import correlate, ones, interp, asarray, zeros
+from numpy import correlate, ones, interp, asarray, zeros, array, ndarray
 from sklearn import preprocessing
+from sklearn.exceptions import NotFittedError
 from sklearn.utils.multiclass import unique_labels
 from sklearn.utils.validation import check_is_fitted
 
@@ -154,22 +155,23 @@ class Spectrum(Data):
 # Manage data for input on machine learning pipes
 class Inputs:
 
-    def __init__(self, folders, instance, loader, tags, filter_by={}):
+    def __init__(self, folders, instance, loader, tags, encoders={}, style={}, filter_by={}):
         self.data = DataSet()
         self.folders = folders
         self.load_state = False
         self.instance = instance
         self.loader = loader
         self.tags = tags
+        self.encoders = encoders
+        self.style = style
         self.filter_by = filter_by
-        self.groups_encoder = preprocessing.LabelEncoder()
-        self.labels_encoder = preprocessing.LabelEncoder()
 
-    def change_data(self, folders,  filter_by={}, tags={}, loader=None, keep=False):
+    def change_data(self, folders,  filter_by={}, encoders={}, tags={}, loader=None, keep=False):
         if loader is not None:
             self.loader = loader
 
         self.filter_by = filter_by
+        self.encoders.update(encoders)
         self.tags.update(tags)
 
         if keep:
@@ -182,13 +184,47 @@ class Inputs:
 
     def check_load(self):
         if not self.load_state:
-            raise Exception('Data not loaded !!!')
+            raise Exception('Data not loaded !')
 
-    def decode_label(self, indices):
-        return self.labels_encoder.inverse_transform(indices)
+    def decode(self, key, indices):
+        is_list = isinstance(indices, ndarray)
+        if not is_list:
+            indices = array([indices])
 
-    def encode_label(self, label):
-        return self.labels_encoder.transform(label)
+        encoder = self.encoders.get(key, None)
+        if encoder is None:
+            result = indices
+        else:
+            try:
+                result = encoder.inverse_transform(indices)
+            except NotFittedError as e:
+                encoder.fit(indices)
+                result = encoder.inverse_transform(indices)
+
+        if not is_list:
+            result = result[0]
+
+        return result
+
+    def encode(self, key, data):
+        is_list = isinstance(data, ndarray)
+        if not is_list:
+            data = array([data])
+
+        encoder = self.encoders.get(key, None)
+        if encoder is None:
+            result = data
+        else:
+            try:
+                result = encoder.transform(data)
+            except NotFittedError as e:
+                encoder.fit(data)
+                result = encoder.transform(data)
+
+        if not is_list:
+            result = result[0]
+
+        return result
 
     def get_from_key(self, key):
         self.check_load()
@@ -210,8 +246,8 @@ class Inputs:
             return None
 
         groups = self.data.get_data(key=self.tags['group'], filter_by=self.filter_by)
-        self.groups_encoder.fit(groups)
-        return self.groups_encoder.transform(groups)
+
+        return self.encode(key='groups', data=groups)
 
     def get_labels(self, encode=True):
         self.check_load()
@@ -220,7 +256,7 @@ class Inputs:
 
         labels = self.data.get_data(key=self.tags['label'], filter_by=self.filter_by)
         if encode:
-            return self.labels_encoder.transform(labels)
+            return self.encode(key='label', data=labels)
         else:
             return labels
 
@@ -231,12 +267,15 @@ class Inputs:
 
         return self.data.get_data(key=self.tags['reference'], filter_by=self.filter_by)
 
+    def get_style(self, key, label):
+        return self.style[key][label]
+
     def get_unique_labels(self):
         self.check_load()
         labels = self.data.get_unique_values(key=self.tags['label'], filter_by=self.filter_by)
-        return self.labels_encoder.transform(labels)
+        return self.encode(key='label', data=labels)
 
-    def load(self, refresh_encoder=False):
+    def load(self):
         if 'data' not in self.tags:
             print('data is needed at least.')
             return
@@ -245,12 +284,6 @@ class Inputs:
         for folder in self.folders:
             self.data += self.loader(self.instance, folder)
 
-        try:
-            check_is_fitted(self.labels_encoder, 'classes_')
-            if refresh_encoder:
-                self.labels_encoder.fit(self.data.get_data(key=self.tags['data'], filter_by=self.filter_by))
-        except:
-            self.labels_encoder.fit(self.data.get_data(key=self.tags['label'], filter_by=self.filter_by))
         # Set load property to true
         self.load_state = True
 
@@ -263,10 +296,9 @@ class Inputs:
         self.tags.update({'data': key})
 
     def to_sub_input(self, filter=None):
-        if filter is None:
-            current_filter = self.filter_by
-        else:
-            current_filter = filter
+        current_filter = copy(self.filter_by)
+        if filter is not None:
+            current_filter.update(filter)
 
         inputs = copy(self)
         inputs.data = DataSet(list(self.data.filter_by(current_filter)))
@@ -276,7 +308,7 @@ class Inputs:
         references = list(set(self.get_from_key('Reference')))
         new_data = []
         for reference in references:
-            entities = self.to_sub_input({'Reference': reference})
+            entities = self.to_sub_input({'Reference': [reference]})
             data = entities.get_datas().tolist()
             probabilities = zeros(3)
             for index in range(0, 3):
@@ -315,3 +347,4 @@ class Results(DataSet):
         """
         super().__init__(results)
         self.name = name
+

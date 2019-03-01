@@ -72,8 +72,10 @@ class Reader:
             patches = Reader.__get_patches(data.data['Full_path'], data.data['Reference'], patch_size, self.temp_folder)
             for index, patch in enumerate(patches):
                 patch_data = deepcopy(data)
-                patch_data.update({'Patch_path': patch})
-                patch_data.update({'Patch_Reference': '{ref}_{index}'.format(ref=data.data['Reference'], index=index)})
+                patch_data.update({'Patch_Path': patch['Path']})
+                patch_data.update({'Patch_Reference': '{ref}_{index}'.format(ref=data.data['Reference'], index=patch['Index'])})
+                patch_data.update({'Patch_Position_X': patch['Pos_X']})
+                patch_data.update({'Patch_Position_Y': patch['Pos_Y']})
                 patch_data_set.append(patch_data)
 
         return DataSet(patch_data_set)
@@ -82,19 +84,23 @@ class Reader:
     def __get_patches(filename, reference, patch_size, temp_folder):
         X = array(Image.open(filename).convert('L'))
         patches = []
-        index = 0
+        patch_index = 0
         for r in range(0, X.shape[0] - patch_size + 1, patch_size):
             for c in range(0, X.shape[1] - patch_size + 1, patch_size):
-                patch = X[r:r + patch_size, c:c + patch_size]
-                filename = '{reference}_{size}_{id}.png'.format(reference=join(temp_folder, reference),
-                                                                size=patch_size, id=index)
-                patches.append(filename)
-                index += 1 # Increment patch id
+                # Create patch informations
+                patch = dict()
+                patch.update({'Path': normpath('{reference}_{size}_{id}.png'.format(reference=join(temp_folder, reference),
+                                                                                    size=patch_size, id=patch_index))})
+                patch.update({'Pos_X': r})
+                patch.update({'Pos_Y': c})
+                patch.update({'Index': patch_index})
+                patch_index += 1
+                patches.append(patch)
+
                 # Check if need to write patch
-                if isfile(filename):
-                    continue
-                filename = normpath(filename)
-                Image.fromarray(patch).save(filename)
+                if not isfile(patch['Path']):
+                    Image.fromarray(X[r:r + patch_size, c:c + patch_size]).save(patch['Path'])
+
         return patches
 
     @staticmethod
