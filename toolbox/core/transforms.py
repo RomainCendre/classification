@@ -41,7 +41,7 @@ class PredictorTransform(BaseEstimator, TransformerMixin):
             return array(self.predictor.predict(x))
 
 
-class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
+class ImageDWTTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, mode='db1', mean=False):
         self.mode = mode
@@ -83,7 +83,7 @@ class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
         return gennorm.fit(x)
 
 
-class HaralickTransform(BaseEstimator, TransformerMixin):
+class ImageHaralickTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, mean=False):
         self.mean = mean
