@@ -200,7 +200,9 @@ class DermatologyPipes:
         else:
             memory = None
 
-        pipe = Pipeline(steps=[('pca', PCA()),
+        # Initiate model and params
+        pipe = Pipeline(steps=[('deep', KerasBatchClassifier(Transforms.get_application)),
+                               ('pca', PCA()),
                                ('scale', StandardScaler()),
                                ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))],
                         memory=memory)

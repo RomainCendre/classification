@@ -7,6 +7,7 @@ from toolbox.core.pipes import DermatologyPipes
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
 
+
 if __name__ == "__main__":
 
     # Parameters
@@ -14,7 +15,7 @@ if __name__ == "__main__":
     here_path = dirname(__file__)
     temp_path = gettempdir()
     name = filename
-    validation = StratifiedKFold(n_splits=2, shuffle=True)
+    validation = StratifiedKFold(n_splits=2)
 
     # Output dir
     output_folder = normpath('{temp}/dermatology/{filename}'.format(temp=temp_path, filename=filename))
@@ -38,8 +39,7 @@ if __name__ == "__main__":
     # Initiate model and params
     process = Process()
     process.begin(validation, validation, n_jobs=2)
-    process.end(inputs=inputs, model=DermatologyPipes.get_wavelet(cache_folder=features_folder),
-                output_folder=output_folder, name=name)
+    process.end(inputs=inputs, model=DermatologyPipes.get_dummy(), output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)

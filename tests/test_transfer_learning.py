@@ -42,19 +42,9 @@ if __name__ == "__main__":
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
 
-    # Initiate model and params
-    extractor = KerasBatchClassifier(Transforms.get_application)
-    extractor_params = {'architecture': 'MobileNet',
-                        'batch_size': 1,
-                        'preprocessing_function': None}
-
-    predictor = KerasClassifier(Classifiers.get_dummy_deep)
-    predictor_params = {'batch_size': 10,
-                        'output_classes': 3}
 
     process = Process()
-    process.begin(validation, validation, Classifiers.get_keras_callbacks(output_folder))
-    process.checkpoint_step(inputs=inputs, model=(extractor, extractor_params), folder=features_folder)
+    process.begin(validation, validation, 2, Classifiers.get_keras_callbacks(output_folder))
     process.end(inputs=inputs, model=(predictor, predictor_params), output_folder=output_folder, name=name)
 
     # Open result folder

@@ -1,8 +1,6 @@
-from os import makedirs
-from os.path import join, exists
 from tempfile import gettempdir
 from keras.wrappers.scikit_learn import BaseWrapper
-from toolbox.IO.writers import StatisticsWriter, VisualizationWriter, ResultWriter, DataProjectorWriter
+from toolbox.IO.writers import StatisticsWriter, VisualizationWriter, ResultWriter
 from toolbox.core.classification import Classifier
 
 
@@ -11,16 +9,6 @@ class Process:
     def begin(self, inner_cv, outer_cv, n_jobs=-1, callbacks=[], scoring=None):
         self.classifier = Classifier(callbacks=callbacks, inner_cv=inner_cv, outer_cv=outer_cv,
                                      n_jobs=n_jobs, scoring=scoring)
-
-    def checkpoint_step(self, inputs, model, folder, projection_folder=None, projection_name=None):
-        self.classifier.set_model(model)
-        self.classifier.features_checkpoint(inputs, folder)
-        # Write data to visualize it
-        if projection_folder is not None and projection_name is not None:
-            projection_folder = join(projection_folder, projection_name)
-            if not exists(projection_folder):
-                makedirs(projection_folder)
-            DataProjectorWriter.project_data(inputs, projection_folder)
 
     def train_step(self, inputs, model):
         self.classifier.set_model(model)
