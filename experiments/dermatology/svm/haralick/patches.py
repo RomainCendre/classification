@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
     # Launch process
     process = Process()
-    process.begin(inner_cv=validation, outer_cv=validation, n_jobs=5)
+    process.begin(inner_cv=validation, outer_cv=validation, n_jobs=2)
 
     # Patch model training
     process.checkpoint_step(inputs=pretrain_inputs, model=Transforms.get_haralick(), folder=features_folder)
@@ -76,14 +76,14 @@ if __name__ == '__main__':
 
     # Final model evaluation
     process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(), folder=features_folder)
-    process.checkpoint_step(inputs=inputs, model=PredictorTransform(model, probabilities=False), folder=features_folder)
-    patch_writer = PatchWriter(inputs)
-    patch_writer.write_patch(patch_colors_folder)
+    process.checkpoint_step(inputs=inputs, model=PredictorTransform(model, probabilities=True), folder=features_folder)
+    # patch_writer = PatchWriter(inputs)
+    # patch_writer.write_patch(patch_colors_folder)
     inputs.patch_method()
-    model = PatchClassifier(hierarchies=[inputs.encode('label', 'Malignant'),
-                                         inputs.encode('label', 'Benign'),
-                                         inputs.encode('label', 'Normal')])
-    process.end(inputs=inputs, model=model, output_folder=output_folder, name=name)
+    # model = PatchClassifier(hierarchies=[inputs.encode('label', 'Malignant'),
+    #                                      inputs.encode('label', 'Benign'),
+    #                                      inputs.encode('label', 'Normal')])
+    process.end(inputs=inputs, model=Classifiers.get_linear_svm(), output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)

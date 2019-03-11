@@ -66,9 +66,13 @@ class PredictorTransform(BaseEstimator, TransformerMixin):
 
 class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
 
-    def __init__(self, mode='db1', mean=False):
-        self.mode = mode
+    def __init__(self, wavelets=None, mode='db', scale=1, mean=False):
         self.mean = mean
+        self.scale = scale
+        if wavelets is None:
+            self.wavelets = pywt.wavelist(mode)[:5]
+        else:
+            self.wavelets = wavelets
 
     def fit(self, x, y=None):
         """
@@ -93,17 +97,23 @@ class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
         features = []
         for index, data in enumerate(x):
             image = array(Image.open(data).convert('L'))
-            cA, (cH, cV, cD) = pywt.dwt2(image, self.mode)
-            directions = [cH, cV, cD]
             coefficients = []
-            for direction in directions:
-                coefficients.append(self.get_coefficients(direction.flatten()))
+            for scale in range(0, self.scale):
+                for wavelet in self.wavelets:
+                    cA, (cH, cV, cD) = pywt.dwt2(image, wavelet)
+                    image = cA
+                    directions = [cH, cV, cD]
+                    for direction in directions:
+                        coefficients.append(self.get_coefficients(direction.flatten()))
 
             features.append(array(coefficients).flatten())
         return array(features)
 
     def get_coefficients(self, x):
-        return gennorm.fit(x)
+        params = gennorm.fit(x)
+        beta = params[0] # Shape
+        alpha = params[2] # Scale
+        return [alpha, beta]
 
 
 class HaralickTransform(BaseEstimator, TransformerMixin):

@@ -1,5 +1,0 @@
-ID_Image,Depth(um),Height,Label,Modality,Path,Width
-0,0.0,1000,Malignant,Microscopy,MALAIRE DTE\v0000000.bmp,1000
-1,0.0,1000,Benign,Microscopy,MALAIRE DTE\v0000001.bmp,1000
-2,0.0,1000,Normal,Microscopy,MALAIRE G\v0000000.bmp,1000
-3,0.0,1000,Draw,Microscopy,MALAIRE G\v0000001.bmp,1000

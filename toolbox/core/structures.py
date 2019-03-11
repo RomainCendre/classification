@@ -1,7 +1,7 @@
 import warnings
 from copy import copy
 
-from numpy import correlate, ones, interp, asarray, zeros, array, ndarray
+from numpy import correlate, ones, interp, asarray, zeros, array, ndarray, mean
 from sklearn import preprocessing
 from sklearn.exceptions import NotFittedError
 from sklearn.utils.multiclass import unique_labels
@@ -242,10 +242,10 @@ class Inputs:
 
     def get_groups(self):
         self.check_load()
-        if 'group' not in self.tags:
+        if 'groups' not in self.tags:
             return None
 
-        groups = self.data.get_data(key=self.tags['group'], filter_by=self.filter_by)
+        groups = self.data.get_data(key=self.tags['groups'], filter_by=self.filter_by)
 
         return self.encode(key='groups', data=groups)
 
@@ -304,18 +304,15 @@ class Inputs:
         inputs.data = DataSet(list(self.data.filter_by(current_filter)))
         return inputs
 
-    def patch_method(self):
+    def patch_method(self, use_mean=True):
         references = list(set(self.get_from_key('Reference')))
         new_data = []
         for reference in references:
             entities = self.to_sub_input({'Reference': [reference]})
-            data = entities.get_datas().tolist()
-            probabilities = zeros(3)
-            for index in range(0, 3):
-                probabilities[index] = data.count(index)
-            probabilities /= len(data)
+            predictions = entities.get_datas().tolist()
+            predictions = array(predictions).flatten()
             data = entities.data.data_set[0]
-            data.update({'Data': probabilities})
+            data.update({'Data': predictions})
             new_data.append(data)
         self.tags.update({'reference': 'Reference',
                           'data': 'Data'})

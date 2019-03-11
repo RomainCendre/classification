@@ -12,7 +12,7 @@ from keras import applications
 from keras import Sequential, Model
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras.utils.generic_utils import has_arg, to_list
-from numpy import arange, geomspace, array, searchsorted, unique, hstack, zeros, concatenate, ones, argmax, sort
+from numpy import arange, geomspace, array, searchsorted, unique, hstack, zeros, concatenate, ones, argmax, sort, mean
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
 from sklearn.pipeline import Pipeline
@@ -47,7 +47,7 @@ class Transforms:
 
     @staticmethod
     def get_image_dwt():
-        pipe = Pipeline([('dwt', DWTDescriptorTransform(mode='db1'))])
+        pipe = Pipeline([('dwt', DWTDescriptorTransform(wavelets=['db2'], scale=4))])
         pipe.name = 'DWT'
         # Define parameters to validate through grid CV
         parameters = {}#{'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']}
@@ -80,8 +80,8 @@ class Transforms:
         return pipe, parameters
 
     @staticmethod
-    def get_haralick():
-        pipe = Pipeline([('haralick', HaralickTransform())])
+    def get_haralick(mean=True):
+        pipe = Pipeline([('haralick', HaralickTransform(mean=mean))])
         pipe.name = 'Haralick'
         # Define parameters to validate through grid CV
         parameters = {}
@@ -614,14 +614,15 @@ class PatchClassifier(BaseEstimator, ClassifierMixin):
         """
         # if not x:
         #     raise Exception('At least one X has to be found.')
+        means = mean(x, axis=1)
         global_score = 0
         self.thresholds = zeros(len(self.hierarchies))
         for index, hierarchy in enumerate(self.hierarchies):
-            potential_thresholds = sort(unique(x[:, hierarchy]))
+            potential_thresholds = sort(unique(means[:, hierarchy]))
             for thresh in potential_thresholds:
                 thresholds = copy(self.thresholds)
                 thresholds[index] = thresh
-                score = self.metric(self.get_predictions(x, thresholds), y)
+                score = self.metric(self.get_predictions(means, thresholds), y)
                 if global_score < score:
                     global_score = score
                     self.thresholds[index] = thresh
@@ -641,7 +642,8 @@ class PatchClassifier(BaseEstimator, ClassifierMixin):
         return self.get_predictions(x, self.thresholds)
 
     def get_predictions(self, x, thresholds):
-        thresh_values = ((ones(x.shape) * thresholds) < x).astype(int)
+        means = mean(x, axis=1)
+        thresh_values = ((ones(means.shape) * thresholds) < means).astype(int)
         priorities = arange(len(thresholds), 0, -1)[self.hierarchies]
         return argmax(thresh_values*priorities, axis=1)
 
