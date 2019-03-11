@@ -17,7 +17,7 @@ if __name__ == '__main__':
     filename = splitext(basename(__file__))[0]
     home_path = expanduser('~')
     validation = StratifiedKFold(n_splits=5, shuffle=True)
-    test = GroupKFold(n_splits=5)
+    test = validation #GroupKFold(n_splits=5)
     # Parameters
     colors = {'patches': dict(Malignant=[255, 0, 0], Benign=[125, 125, 0], Normal=[0, 255, 0]),
               'draw': dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0))}
