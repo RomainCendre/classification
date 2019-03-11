@@ -2,80 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="754eb199-d45c-4d67-bc2e-84932a02ea9c" name="Default" comment="Change experiments structure">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/dermatology/svm/haralick/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/svm/haralick/simple.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/patches.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/patches.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/simple.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/svm/wavelet/patches.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/svm/wavelet/patches.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/svm/wavelet/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/svm/wavelet/simple.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/0/Microscopy/MALAIRE DTE/v0000000.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/0/Microscopy/MALAIRE DTE/v0000001.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/0/Microscopy/MALAIRE G/v0000000.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/0/Microscopy/MALAIRE G/v0000001.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/0/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/0/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/1/Microscopy/MALAIRE DTE/v0000000.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/1/Microscopy/MALAIRE DTE/v0000001.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/1/Microscopy/MALAIRE G/v0000000.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/1/Microscopy/MALAIRE G/v0000001.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/1/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/1/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/2/Microscopy/MALAIRE DTE/v0000000.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/2/Microscopy/MALAIRE DTE/v0000001.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/2/Microscopy/MALAIRE G/v0000000.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/2/Microscopy/MALAIRE G/v0000001.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/2/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test1/Patients/2/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/0/Microscopy/MALAIRE DTE/v0000000.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/0/Microscopy/MALAIRE DTE/v0000001.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/0/Microscopy/MALAIRE G/v0000000.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/0/Microscopy/MALAIRE G/v0000001.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/0/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/0/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/1/Microscopy/MALAIRE DTE/v0000000.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/1/Microscopy/MALAIRE DTE/v0000001.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/1/Microscopy/MALAIRE G/v0000000.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/1/Microscopy/MALAIRE G/v0000001.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/1/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/1/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/2/Microscopy/MALAIRE DTE/v0000000.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/2/Microscopy/MALAIRE DTE/v0000001.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/2/Microscopy/MALAIRE G/v0000000.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/2/Microscopy/MALAIRE G/v0000001.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/2/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/DB_Test2/Patients/2/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000025_0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000025_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000025_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000025_3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000026_0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000026_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000026_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000026_3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000026_4.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000027_0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000027_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000027_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000027_3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Benign/3_v0000028_0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000025_0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000025_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000025_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000025_3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000026_0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000026_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000026_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000026_3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000026_4.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000027_0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000027_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000027_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000027_3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Malignant/3_v0000028_0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/structures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/transforms.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/transforms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../thumbnailMaker/.idea/thumbnailMaker.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../thumbnailMaker/.idea/thumbnailMaker.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../thumbnailMaker/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../thumbnailMaker/main.py" afterDir="false" />
     </list>
@@ -140,10 +68,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/wavelet/simple.py">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/haralick/simple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="731">
-              <caret line="52" column="96" lean-forward="true" selection-start-line="52" selection-start-column="96" selection-end-line="54" selection-end-column="112" />
+            <state relative-caret-position="210">
+              <caret line="16" column="58" lean-forward="true" selection-start-line="16" selection-start-column="58" selection-end-line="17" selection-end-column="45" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -154,52 +82,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/simple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="228" lean-forward="true" selection-start-line="228" selection-end-line="228" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/patches.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="91" lean-forward="true" selection-start-line="91" selection-end-line="91" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/haralick/simple.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="45" column="36" selection-start-line="45" selection-start-column="36" selection-end-line="45" selection-end-column="36" />
-              <folding>
-                <element signature="e#0#34#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="136">
+              <caret line="19" column="45" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/haralick/patches.py">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/wavelet/simple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="89" lean-forward="true" selection-start-line="89" selection-end-line="89" />
+            <state relative-caret-position="142">
+              <caret line="19" column="45" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/wavelet/patches.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="64" column="4" lean-forward="true" selection-start-line="64" selection-start-column="6" selection-end-line="66" selection-end-column="77" />
-              <folding>
-                <element signature="e#0#25#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -266,11 +161,11 @@
         <option value="$PROJECT_DIR$/toolbox/core/models.py" />
         <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/svm/wavelet/patches.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/svm/wavelet/simple.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/simple.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/patches.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/svm/haralick/simple.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/svm/haralick/patches.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/svm/haralick/simple.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/simple.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/svm/wavelet/simple.py" />
       </list>
     </option>
   </component>
@@ -566,14 +461,7 @@
       <workItem from="1551351880947" duration="5889000" />
       <workItem from="1551466690104" duration="697000" />
       <workItem from="1552287969578" duration="962000" />
-      <workItem from="1552310731927" duration="899000" />
-    </task>
-    <task id="LOCAL-00197" summary="Update dermatology patch extraction.">
-      <created>1549630241521</created>
-      <option name="number" value="00197" />
-      <option name="presentableId" value="LOCAL-00197" />
-      <option name="project" value="LOCAL" />
-      <updated>1549630241521</updated>
+      <workItem from="1552310731927" duration="1127000" />
     </task>
     <task id="LOCAL-00198" summary="Update of patch process.">
       <created>1549632264286</created>
@@ -911,11 +799,18 @@
       <option name="project" value="LOCAL" />
       <updated>1551362661975</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Gretsi experiences update.">
+      <created>1552312785905</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1552312785906</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13728000" />
+    <option name="totallyTimeSpent" value="13956000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1017,7 +912,8 @@
     <MESSAGE value="Add some data for test of CSV loading." />
     <MESSAGE value="Updating new management way for caching transforms." />
     <MESSAGE value="Update Patient data test." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update Patient data test." />
+    <MESSAGE value="Gretsi experiences update." />
+    <option name="LAST_COMMIT_MESSAGE" value="Gretsi experiences update." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1200,10 +1096,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/wavelet/simple.py">
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/patches.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="731">
-          <caret line="52" column="96" lean-forward="true" selection-start-line="52" selection-start-column="96" selection-end-line="54" selection-end-column="112" />
+        <state relative-caret-position="680">
+          <caret line="91" lean-forward="true" selection-start-line="91" selection-end-line="91" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/haralick/patches.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="89" lean-forward="true" selection-start-line="89" selection-end-line="89" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/haralick/simple.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="16" column="58" lean-forward="true" selection-start-line="16" selection-start-column="58" selection-end-line="17" selection-end-column="45" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
@@ -1212,32 +1125,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/simple.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="228" lean-forward="true" selection-start-line="228" selection-end-line="228" />
+        <state relative-caret-position="136">
+          <caret line="19" column="45" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/patches.py">
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/wavelet/simple.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="91" lean-forward="true" selection-start-line="91" selection-end-line="91" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/haralick/simple.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="45" column="36" selection-start-line="45" selection-start-column="36" selection-end-line="45" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/haralick/patches.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="89" lean-forward="true" selection-start-line="89" selection-end-line="89" />
+        <state relative-caret-position="142">
+          <caret line="19" column="45" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
