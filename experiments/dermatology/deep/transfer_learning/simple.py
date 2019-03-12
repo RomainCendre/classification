@@ -11,6 +11,9 @@ from toolbox.tools.limitations import Parameters
 def launch_computation(inputs, inner_cv, outer_cv, folder, name, layers_parameters):
     # Browse combinations
     for parameters in ParameterGrid(layers_parameters):
+        print('Current layers : trainable {trainable}, added {added}'.format(trainable=parameters['trainable_layer'],
+                                                                             added=parameters['added_layer']))
+
         # Features folder
         temp_folder = join(output_folder, 'Features')
         if not exists(temp_folder):

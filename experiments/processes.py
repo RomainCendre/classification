@@ -4,6 +4,7 @@ from tempfile import gettempdir
 from keras.wrappers.scikit_learn import BaseWrapper
 from toolbox.IO.writers import StatisticsWriter, VisualizationWriter, ResultWriter, DataProjectorWriter
 from toolbox.core.classification import Classifier
+from keras import backend as K
 
 
 class Process:
@@ -39,4 +40,10 @@ class Process:
         # Step 3 - Visualization of CAM
         if isinstance(model, BaseWrapper):
             model, best_params = self.classifier.fit(inputs)
+            trainable_count = int(
+                sum([K.count_params(p) for p in set(model.trainable_weights)]))
+            non_trainable_count = int(
+                sum([K.count_params(p) for p in set(model.non_trainable_weights)]))
+
+            print('Trainable params: {:,}'.format(trainable_count))
             VisualizationWriter(model=model.model).write_activations_maps(output_folder=output_folder, inputs=inputs)

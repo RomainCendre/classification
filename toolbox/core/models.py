@@ -141,9 +141,11 @@ class Classifiers:
         return predictor, predictor_params
 
     @staticmethod
-    def get_dense(output_classes, nb_layers=1, activation='softmax', optimizer='adam', metrics=['accuracy']):
+    def get_dense(output_classes, pre_model=None, nb_layers=1, activation='softmax', optimizer='adam', metrics=['accuracy']):
         # Now we customize the output consider our application field
         model = Sequential()
+        if model is not None:
+            model.add(pre_model)
 
         if nb_layers > 2:
             model.add(Dense(1024, activation='relu', name='predictions_dense_1'))
@@ -263,17 +265,8 @@ class Classifiers:
             base_model.layers[-trainable_layers:-1] = True
 
         # Now we customize the output consider our application field
-        prediction_layers = Classifiers.get_dense(output_classes, nb_layers=added_layers, activation='softmax', optimizer='adam', metrics=['accuracy'])
-
-        if output_classes > 2:
-            loss = 'categorical_crossentropy'
-        else:
-            loss = 'binary_crossentropy'
-
-        # And defined model based on our input and next output
-        model = Model(inputs=base_model.input, outputs=prediction_layers)
-        model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
-
+        model = Classifiers.get_dense(output_classes, pre_model=base_model, nb_layers=added_layers,
+                                      activation='softmax', optimizer=optimizer, metrics=metrics)
         return model
 
 
@@ -318,7 +311,7 @@ class BuiltInModels:
         model = KerasBatchClassifier(build_fn=Classifiers.get_fine_tuning)
         parameters = {'architecture': 'InceptionV3',
                       'optimizer': 'adam',
-                      'metrics': ['accuracy']}
+                      'metrics': [['accuracy']]}
         parameters.update({'output_classes': output_classes,
                            'trainable_layers': trainable_layers,
                            'added_layers': added_layers})
