@@ -202,8 +202,7 @@ class Classifiers:
         pipe.name = 'LinearSVM'
         # Define parameters to validate through grid CV
         parameters.update({
-            'clf__C': geomspace(0.01, 1000, 6).tolist(),
-            'clf__gamma': geomspace(0.01, 1000, 6).tolist()
+            'clf__C': geomspace(0.01, 1000, 6).tolist()
         })
         return pipe, parameters
 
@@ -256,13 +255,15 @@ class Classifiers:
         return model
 
     @staticmethod
-    def get_transfer_learning(output_classes, architecture='InceptionV3', optimizer='adam', metrics=['accuracy']):
+    def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0, architecture='InceptionV3', optimizer='adam', metrics=['accuracy']):
 
         # We get the deep extractor part as include_top is false
         base_model = Transforms.get_application(architecture)
+        if not trainable_layers <= 0:
+            base_model.layers[-trainable_layers:-1] = True
 
         # Now we customize the output consider our application field
-        prediction_layers = Dense(output_classes, activation='softmax', name='predictions')(base_model.output)
+        prediction_layers = Classifiers.get_dense(output_classes, nb_layers=added_layers, activation='softmax', optimizer='adam', metrics=['accuracy'])
 
         if output_classes > 2:
             loss = 'categorical_crossentropy'
@@ -279,7 +280,7 @@ class Classifiers:
 class BuiltInModels:
 
     @staticmethod
-    def get_ahmed_process():
+    def get_ahmed():
         pipe = Pipeline([('wavelet', DWTTransform()),
                          ('cluster', KMeans()),
                          ('clf', SVC(probability=True)),
@@ -294,14 +295,14 @@ class BuiltInModels:
         return pipe, parameters
 
     @staticmethod
-    def get_dummy_process():
+    def get_dummy():
         pipe = Pipeline([('clf', DummyClassifier())])
         # Define parameters to validate through grid CV
         parameters = {}
         return pipe, parameters
 
     @staticmethod
-    def get_haralick_process():
+    def get_haralick():
         pipe = Pipeline([('haralick', HaralickTransform()),
                          ('scale', StandardScaler()),
                          ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
@@ -313,20 +314,15 @@ class BuiltInModels:
         return pipe, parameters
 
     @staticmethod
-    def get_lda_process():
-        pipe = Pipeline([('pca', PCA()),
-                         ('lda', LinearDiscriminantAnalysis()),  # , PLSCanonical, CCA ?
-                         ('clf', SVC(probability=True)),
-                         ])
-        # Define parameters to validate through grid CV
-        parameters = {
-            'pca__n_components': [0.99],
-            'lda__n_components': range(2, 12, 2),
-            'clf__C': [1, 10, 100, 1000],
-            'clf__gamma': [0.001, 0.0001],
-            'clf__kernel': ['rbf']
-        }
-        return pipe, parameters
+    def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0):
+        model = KerasBatchClassifier(build_fn=Classifiers.get_fine_tuning)
+        parameters = {'architecture': 'InceptionV3',
+                      'optimizer': 'adam',
+                      'metrics': ['accuracy']}
+        parameters.update({'output_classes': output_classes,
+                           'trainable_layers': trainable_layers,
+                           'added_layers': added_layers})
+        return model, parameters
 
     @staticmethod
     def get_linear_svm_process():
