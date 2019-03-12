@@ -262,7 +262,8 @@ class Classifiers:
         # We get the deep extractor part as include_top is false
         base_model = Transforms.get_application(architecture)
         if not trainable_layers <= 0:
-            base_model.layers[-trainable_layers:-1] = True
+            for layer in base_model.layers[-trainable_layers:]:
+                layer.trainable = True
 
         # Now we customize the output consider our application field
         model = Classifiers.get_dense(output_classes, pre_model=base_model, nb_layers=added_layers,
@@ -311,7 +312,9 @@ class BuiltInModels:
         model = KerasBatchClassifier(build_fn=Classifiers.get_fine_tuning)
         parameters = {'architecture': 'InceptionV3',
                       'optimizer': 'adam',
-                      'metrics': [['accuracy']]}
+                      'metrics': [['accuracy']],
+                      'epochs': 1,
+                      'batch_size': 2}
         parameters.update({'output_classes': output_classes,
                            'trainable_layers': trainable_layers,
                            'added_layers': added_layers})
@@ -406,22 +409,23 @@ class KerasBatchClassifier(KerasClassifier):
     def fit(self, X, y, callbacks=[], X_validation=None, y_validation=None, **kwargs):
         self.init_model(y)
 
-        # Get arguments for fit
-        fit_args = deepcopy(self.filter_sk_params(Sequential.fit_generator))
-        fit_args.update(kwargs)
+        # Get arguments for predict
+        params_fit = deepcopy(self.sk_params)
+        params_fit.update(kwargs)
+        params_fit = self.__filter_params(params_fit, Sequential.fit_generator)
 
         # Get generator
-        train = self.__create_generator(X=X, y=y)
+        train = self.__create_generator(X=X, y=y, params=kwargs)
         validation = None
         if X_validation is not None:
-            validation = self.__create_generator(X=X_validation, y=y_validation)
+            validation = self.__create_generator(X=X_validation, y=y_validation, params=kwargs)
 
         if not self.model._is_compiled:
             tr_x, tr_y = train[0]
             self.model.fit(tr_x, tr_y)
 
         self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
-                                                **fit_args)
+                                                **params_fit)
 
         return self.history
 
@@ -435,20 +439,22 @@ class KerasBatchClassifier(KerasClassifier):
 
     def predict_proba(self, X, **kwargs):
         self.init_model()
-        # Get arguments for generator
-        fit_args = deepcopy(self.filter_sk_params(ResourcesGenerator.__init__))
-        fit_args.update(self.__filter_params(kwargs, ResourcesGenerator.flow_from_paths))
-        fit_args.update({'shuffle': False})
-        fit_args.update({'batch_size': 1})
+
+        # Define some local arguments
+        copy_kwargs = deepcopy(kwargs)
+        copy_kwargs.update({'shuffle': False})
+        copy_kwargs.update({'batch_size': 1})
 
         # Create generator
-        valid = self.__create_generator(X=X, params=fit_args)
+        valid = self.__create_generator(X=X, params=copy_kwargs)
 
         # Get arguments for predict
-        fit_args = deepcopy(self.filter_sk_params(Sequential.predict_generator))
-        fit_args.update(self.__filter_params(kwargs, Sequential.predict_generator))
+        params_pred = deepcopy(self.sk_params)
+        params_pred.update(copy_kwargs)
+        params_pred = self.__filter_params(params_pred, Sequential.predict_generator)
 
-        probs = self.model.predict_generator(generator=valid, **fit_args)
+        # Predict!
+        probs = self.model.predict_generator(generator=valid, **params_pred)
 
         # check if binary classification
         if probs.shape[1] == 1:
@@ -478,11 +484,20 @@ class KerasBatchClassifier(KerasClassifier):
                          'the `model.compile()` method.')
 
     def __create_generator(self, X, y=None, params={}):
-        generator = ResourcesGenerator(**self.__filter_params(params, ResourcesGenerator.__init__))
+        # Init generator
+        params_init = deepcopy(self.sk_params)
+        params_init.update(params)
+        params_init = self.__filter_params(params_init, ResourcesGenerator.__init__)
+        generator = ResourcesGenerator(**params_init)
+
+        # Create iterator
+        params_flow = deepcopy(self.sk_params)
+        params_flow.update(params)
+        params_flow = self.__filter_params(params_flow, ResourcesGenerator.flow_from_paths)
         if y is not None:
-            return generator.flow_from_paths(X, y, **self.__filter_params(params, ResourcesGenerator.flow_from_paths))
+            return generator.flow_from_paths(X, y, **params_flow)
         else:
-            return generator.flow_from_paths(X, **self.__filter_params(params, ResourcesGenerator.flow_from_paths))
+            return generator.flow_from_paths(X, **params_flow)
 
     def __filter_params(self, params, fn, override=None):
         """Filters `sk_params` and returns those in `fn`'s arguments.

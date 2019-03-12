@@ -1,10 +1,14 @@
 from os import makedirs, startfile
 from sklearn.model_selection import StratifiedKFold, ParameterGrid
 from os.path import exists, expanduser, normpath, basename, splitext, join
+
+from sklearn.preprocessing import LabelEncoder
+
 from experiments.processes import Process
 from toolbox.core.models import BuiltInModels
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
+from toolbox.core.transforms import OrderedEncoder
 from toolbox.tools.limitations import Parameters
 
 
@@ -13,14 +17,16 @@ def launch_computation(inputs, inner_cv, outer_cv, folder, name, layers_paramete
     for parameters in ParameterGrid(layers_parameters):
         print('Current layers : trainable {trainable}, added {added}'.format(trainable=parameters['trainable_layer'],
                                                                              added=parameters['added_layer']))
+        suffix = '_t{trainable}_a{added}'.format(trainable=parameters['trainable_layer'],
+                                                 added=parameters['added_layer'])
 
         # Features folder
-        temp_folder = join(output_folder, 'Features')
+        temp_folder = join(folder, 'Features{suffix}'.format(suffix=suffix))
         if not exists(temp_folder):
             makedirs(temp_folder)
 
         # Projection folder
-        projection_folder = join(output_folder, 'Projection')
+        projection_folder = join(folder, 'Projection{suffix}'.format(suffix=suffix))
         if not exists(projection_folder):
             makedirs(projection_folder)
 
@@ -30,7 +36,7 @@ def launch_computation(inputs, inner_cv, outer_cv, folder, name, layers_paramete
                                                                        trainable_layers=parameters[
                                                                            'trainable_layer'],
                                                                        added_layers=parameters['added_layer']),
-                    output_folder=folder, name=name)
+                    output_folder=folder, name='{name}_{suffix}'.format(name=name, suffix=suffix))
 
 
 if __name__ == '__main__':
@@ -40,6 +46,10 @@ if __name__ == '__main__':
     home_path = expanduser('~')
     name_patch = 'Patch'
     validation = StratifiedKFold(n_splits=5)
+
+    # Parameters
+    colors = {'patches': dict(Malignant=[255, 0, 0], Benign=[125, 125, 0], Normal=[0, 255, 0]),
+              'draw': dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0))}
 
     # Output dir
     output_folder = normpath(
@@ -54,9 +64,11 @@ if __name__ == '__main__':
     # Input patch
     input_folder = normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))
     filter_by = {'Label': ['Malignant', 'Benign', 'Normal']}
-    inputs = Inputs(folders=[input_folder], instance=dermatology.Reader(), filter_by=filter_by,
+    inputs = Inputs(folders=[input_folder], instance=dermatology.Reader(), style=colors,
                     loader=dermatology.Reader.scan_folder_for_images,
-                    tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'})
+                    tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'},
+                    encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
+                              'groups': LabelEncoder()})
     inputs.load()
 
     layers_parameters = {'trainable_layer': [0, 1, 2],
