@@ -51,9 +51,13 @@ class Classifier:
         if isinstance(model, tuple):
             self.__model = model[0]
             self.__params = model[1]
+            self.__fit_params = {}
+            if len(model) == 3:
+                self.__fit_params = model[2]
         else:
             self.__model = model
             self.__params = {}
+            self.__fit_params = {}
         self.__format_params()
 
     def evaluate(self, inputs, name='Default'):
@@ -92,7 +96,8 @@ class Classifier:
             if self.__check_params_multiple():
                 grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
                                            n_jobs=self.n_jobs, scoring=self.__scoring, verbose=1, iid=False)
-                grid_search.fit(self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train))
+                grid_search.fit(self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train),
+                                fit_params=self.__fit_params)
                 best_params = grid_search.best_params_
             else:
                 best_params = self.__params
@@ -101,7 +106,7 @@ class Classifier:
             model.set_params(**best_params)
             if isinstance(model, KerasBatchClassifier):
                 model.fit(self.sub(datas, train), y=self.sub(labels, train), callbacks=self.__callbacks,
-                          X_validation=self.sub(datas, test), y_validation=self.sub(labels, test))
+                          X_validation=self.sub(datas, test), y_validation=self.sub(labels, test), kwargs=self.__fit_params)
             else:
                 model.fit(self.sub(datas, train), y=self.sub(labels, train))
 
@@ -145,8 +150,8 @@ class Classifier:
         # Estimate best combination
         if self.__check_params_multiple():
             grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
-                                       n_jobs=self.n_jobs ,refit=False, scoring=self.__scoring, verbose=1, iid=False)
-            grid_search.fit(datas, y=labels, groups=groups)
+                                       n_jobs=self.n_jobs, refit=False, scoring=self.__scoring, verbose=1, iid=False)
+            grid_search.fit(datas, y=labels, groups=groups, fit_params=self.__fit_params)
             best_params = grid_search.best_params_
         else:
             best_params = self.__params
@@ -155,7 +160,7 @@ class Classifier:
         model.set_params(**best_params)
         if isinstance(model, KerasBatchClassifier):
             model.fit(datas, y=labels, callbacks=self.__callbacks,
-                      X_validation=datas, y_validation=labels)
+                      X_validation=datas, y_validation=labels, kwargs=self.__fit_params)
         else:
             model.fit(datas, y=labels)
 

@@ -147,14 +147,15 @@ class Classifiers:
         if model is not None:
             model.add(pre_model)
 
-        if nb_layers > 2:
+        if nb_layers > 1:
             model.add(Dense(1024, activation='relu', name='predictions_dense_1'))
             model.add(Dropout(0.5, name='predictions_dropout_1'))
+        if nb_layers > 2:
             model.add(Dense(1024, activation='relu', name='predictions_dense_2'))
             model.add(Dropout(0.5, name='predictions_dropout_2'))
-        elif nb_layers == 2:
-            model.add(Dense(1024, activation='relu', name='predictions_dense_1'))
-            model.add(Dropout(0.5, name='predictions_dropout_1'))
+        if nb_layers > 3:
+            model.add(Dense(512, activation='relu', name='predictions_dense_3'))
+            model.add(Dropout(0.5, name='predictions_dropout_3'))
 
         # Now we customize the output consider our application field
         model.add(Dense(output_classes, activation=activation, name='predictions_final'))
@@ -310,15 +311,24 @@ class BuiltInModels:
     @staticmethod
     def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0):
         model = KerasBatchClassifier(build_fn=Classifiers.get_fine_tuning)
-        parameters = {'architecture': 'InceptionV3',
+        parameters = {# Build paramters
+                      'architecture': 'InceptionV3',
                       'optimizer': 'adam',
                       'metrics': [['accuracy']],
-                      'epochs': 1,
-                      'batch_size': 2}
+                      # Parameters for fit
+                      'epochs': 100,
+                      'batch_size': 6,
+                      }
         parameters.update({'output_classes': output_classes,
                            'trainable_layers': trainable_layers,
                            'added_layers': added_layers})
-        return model, parameters
+        fit_parameters = {# Transformations
+                            'rotation_range': 180,
+                            'horizontal_flip': True,
+                            'vertical_flip': True,
+                            }
+
+        return model, parameters, fit_parameters
 
     @staticmethod
     def get_linear_svm_process():

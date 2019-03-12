@@ -72,7 +72,7 @@ if __name__ == '__main__':
     inputs.load()
 
     layers_parameters = {'trainable_layer': [0, 1, 2],
-                         'added_layer': [1, 2, 3]}
+                         'added_layer': [1, 2, 3, 4]}
     launch_computation(inputs=inputs, inner_cv=validation, outer_cv=validation, folder=output_folder,
                        name=name_patch, layers_parameters=layers_parameters)
 
