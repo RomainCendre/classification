@@ -51,6 +51,8 @@ if __name__ == '__main__':
     colors = {'patches': dict(Malignant=[255, 0, 0], Benign=[125, 125, 0], Normal=[0, 255, 0]),
               'draw': dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0))}
 
+    layers_parameters = {'trainable_layer': [0, 1, 2],
+                         'added_layer': [1, 2, 3, 4]}
     # Output dir
     output_folder = normpath(
         '{home}/Results/Dermatology/Deep/Transfer_learning/{filename}'.format(home=home_path, filename=filename))
@@ -58,7 +60,7 @@ if __name__ == '__main__':
         makedirs(output_folder)
 
     # Configure GPU consumption
-    Parameters.set_gpu(percent_gpu=0.5)
+    Parameters.set_gpu(percent_gpu=1)
 
     ################# PATCH
     # Input patch
@@ -71,27 +73,22 @@ if __name__ == '__main__':
                               'groups': LabelEncoder()})
     inputs.load()
 
-    layers_parameters = {'trainable_layer': [0, 1, 2],
-                         'added_layer': [1, 2, 3, 4]}
-    launch_computation(inputs=inputs, inner_cv=validation, outer_cv=validation, folder=output_folder,
-                       name=name_patch, layers_parameters=layers_parameters)
+    # launch_computation(inputs=inputs, inner_cv=validation, outer_cv=validation, folder=output_folder,
+    #                    name=name_patch, layers_parameters=layers_parameters)
 
     ################# FULL
     name_full = 'Full'
     # Input full
-    # filter_by = {'Modality': 'Microscopy',
-    #              'Label': ['Malignant', 'Benign', 'Normal']}
-    # input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
-    #                  normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
-    # inputs = Inputs(folders=input_folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
-    #                 tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by)
-    # inputs.load()
-    #
-    # # Launch process
-    # process.checkpoint_step(inputs=inputs, model=Transforms.get_keras_extractor(), folder=temp_folder,
-    #                         projection_folder=projection_folder, projection_name=name_full)
-    # process.end(inputs=inputs, model=Classifiers.get_keras_classifier(output_classes=3),
-    #             output_folder=output_folder, name=name_full)
+    filter_by = {'Modality': 'Microscopy',
+                 'Label': ['Malignant', 'Benign', 'Normal']}
+    input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
+                     normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
+    inputs = Inputs(folders=input_folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
+                    tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by)
+    inputs.load()
+
+    launch_computation(inputs=inputs, inner_cv=validation, outer_cv=validation, folder=output_folder,
+                       name=name_full, layers_parameters=layers_parameters)
 
     # Open result folder
     startfile(output_folder)
