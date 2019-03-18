@@ -2,9 +2,133 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="754eb199-d45c-4d67-bc2e-84932a02ea9c" name="Default" comment="Change experiments structure">
+      <change afterPath="$PROJECT_DIR$/experiments/dermatology/simple/methods.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/0/Microscopy/MALAIRE DTE/v0000000.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/0/Microscopy/MALAIRE DTE/v0000001.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/0/Microscopy/MALAIRE G/v0000000.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/0/Microscopy/MALAIRE G/v0000001.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/0/images.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/0/patient.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/1/Microscopy/MALAIRE DTE/v0000000.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/1/Microscopy/MALAIRE DTE/v0000001.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/1/Microscopy/MALAIRE G/v0000000.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/1/Microscopy/MALAIRE G/v0000001.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/1/images.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/1/patient.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/2/Microscopy/MALAIRE DTE/v0000000.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/2/Microscopy/MALAIRE DTE/v0000001.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/2/Microscopy/MALAIRE G/v0000000.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/2/Microscopy/MALAIRE G/v0000001.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/2/images.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test1/Patients/2/patient.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/0/Microscopy/MALAIRE DTE/v0000000.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/0/Microscopy/MALAIRE DTE/v0000001.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/0/Microscopy/MALAIRE G/v0000000.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/0/Microscopy/MALAIRE G/v0000001.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/0/images.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/0/patient.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/1/Microscopy/MALAIRE DTE/v0000000.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/1/Microscopy/MALAIRE DTE/v0000001.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/1/Microscopy/MALAIRE G/v0000000.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/1/Microscopy/MALAIRE G/v0000001.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/1/images.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/1/patient.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/2/Microscopy/MALAIRE DTE/v0000000.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/2/Microscopy/MALAIRE DTE/v0000001.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/2/Microscopy/MALAIRE G/v0000000.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/2/Microscopy/MALAIRE G/v0000001.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/2/images.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/DB_Test2/Patients/2/patient.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000025_0.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000025_1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000025_2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000025_3.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000026_0.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000026_1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000026_2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000026_3.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000026_4.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000027_0.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000027_1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000027_2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000027_3.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Benign/3_v0000028_0.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000025_0.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000025_1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000025_2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000025_3.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000026_0.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000026_1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000026_2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000026_3.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000026_4.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000027_0.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000027_1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000027_2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000027_3.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Malignant/3_v0000028_0.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000025_0.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000025_1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000025_2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000025_3.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000026_0.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000026_1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000026_2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000026_3.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000026_4.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000027_0.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000027_1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000027_2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000027_3.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Thumbnails/Normal/3_v0000028_0.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/10_D.V.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/1_K.F.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/2_V.M.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/3_O.N.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/4_S.B.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/5_B.A.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/6_T.W.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/7_D.J.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/8_P.J.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/9_A.S.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/IO/datasets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/toolbox/core/layers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/deep/transfer_learning/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/deep/transfer_learning/simple.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/deep/transfer_learning/patches.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/svm/haralick/patches.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/patchs/haralick.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/svm/haralick/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/simple/haralick.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/patches.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/patchs/tl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/simple/tl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/svm/wavelet/patches.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/patchs/wavelets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/svm/wavelet/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/simple/wavelets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000025_0.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000025_1.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000025_2.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000025_3.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000026_0.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000026_1.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000026_2.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000026_3.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000026_4.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000027_0.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000027_1.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000027_2.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000027_3.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/dermatology/Thumbnails/Normal/3_v0000028_0.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/spectroscopy/Patients.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/spectroscopy/Patients/10_D.V.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/spectroscopy/Patients/1_K.F.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/spectroscopy/Patients/2_V.M.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/spectroscopy/Patients/3_O.N.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/spectroscopy/Patients/4_S.B.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/spectroscopy/Patients/5_B.A.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/spectroscopy/Patients/6_T.W.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/spectroscopy/Patients/7_D.J.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/spectroscopy/Patients/8_P.J.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/data/spectroscopy/Patients/9_A.S.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/toolbox/core/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/structures.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../thumbnailMaker/.idea/thumbnailMaker.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../thumbnailMaker/.idea/thumbnailMaker.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../thumbnailMaker/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../thumbnailMaker/main.py" afterDir="false" />
     </list>
@@ -38,6 +162,7 @@
     <SUITE FILE_PATH="coverage/classification$dermatology_patch.coverage" NAME="dermatology_patch Coverage Results" MODIFIED="1548930729626" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiences" />
     <SUITE FILE_PATH="coverage/classification$process_simple.coverage" NAME="process_simple Coverage Results" MODIFIED="1548151206116" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/classification$dermatology_simple.coverage" NAME="dermatology_simple Coverage Results" MODIFIED="1542016661100" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/process" />
+    <SUITE FILE_PATH="coverage/classification$methods.coverage" NAME="methods Coverage Results" MODIFIED="1552918745508" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/simple" />
     <SUITE FILE_PATH="coverage/classification$patches.coverage" NAME="patches Coverage Results" MODIFIED="1550757199629" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/haralick" />
     <SUITE FILE_PATH="coverage/classification$dermatology.coverage" NAME="dermatology Coverage Results" MODIFIED="1548695230863" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/IO" />
     <SUITE FILE_PATH="coverage/classification$input.coverage" NAME="input Coverage Results" MODIFIED="1541001692655" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/core" />
@@ -68,11 +193,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/deep/transfer_learning/simple.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/methods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="449">
-              <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
+            <state relative-caret-position="497">
+              <caret line="57" column="42" lean-forward="true" selection-start-line="57" selection-start-column="42" selection-end-line="57" selection-end-column="42" />
+              <folding>
+                <element signature="e#0#16#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/wavelets.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="416">
+              <caret line="68" column="75" lean-forward="true" selection-start-line="68" selection-start-column="49" selection-end-line="68" selection-end-column="75" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -80,37 +217,35 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/models.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/tl.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="655" lean-forward="true" selection-start-line="655" selection-end-line="655" />
+            <state relative-caret-position="365">
+              <caret line="126" column="26" lean-forward="true" selection-start-line="126" selection-start-column="26" selection-end-line="135" selection-end-column="35" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/haralick.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="678">
-              <caret line="103" selection-start-line="103" selection-end-line="103" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/processes.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="46" lean-forward="true" selection-start-line="46" selection-end-line="46" />
+            <state relative-caret-position="416">
+              <caret line="66" column="17" lean-forward="true" selection-start-line="66" selection-start-column="17" selection-end-line="71" selection-end-column="111" />
               <folding>
-                <element signature="e#0#23#0" expanded="true" />
+                <element signature="e#0#34#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="ROOT_SYNC" value="DONT_SYNC" />
@@ -128,14 +263,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/experiences/dermatology_patch.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/pretrain/full_size.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/scratch/full_size.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/scratch/patches.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/transfer_learning/full_size.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/generators.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/transfer_learning_bottleneck/full_size.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/transfer_learning_bottleneck/patches.py" />
         <option value="$PROJECT_DIR$/toolbox/tools/tensorboard.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/pretrain/patches.py" />
         <option value="$PROJECT_DIR$/tests/test_dermatology_pretrain.py" />
@@ -150,7 +277,6 @@
         <option value="$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py" />
         <option value="$PROJECT_DIR$/tests/test_transfer_learning.py" />
         <option value="$PROJECT_DIR$/tests/test_patch.py" />
-        <option value="$PROJECT_DIR$/tests/test_haralick.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/haralick/patches.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/wavelet/patches.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/haralick/simple.py" />
@@ -168,8 +294,6 @@
         <option value="$PROJECT_DIR$/toolbox/IO/writers.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/toolbox/core/transforms.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/structures.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/svm/wavelet/patches.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/patches.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/svm/haralick/patches.py" />
@@ -177,14 +301,25 @@
         <option value="$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/simple.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/svm/wavelet/simple.py" />
         <option value="$PROJECT_DIR$/experiments/processes.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/deep/transfer_learning/simple.py" />
         <option value="$PROJECT_DIR$/toolbox/core/models.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/layers.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/simple/wavelets.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/inputs.py" />
+        <option value="$PROJECT_DIR$/toolbox/inputs.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/simple/tl.py" />
+        <option value="$PROJECT_DIR$/tests/test_haralick.py" />
+        <option value="$PROJECT_DIR$/toolbox/IO/datasets.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/simple/haralick.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/structures.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/simple/methods.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-2450" />
-    <option name="y" value="-179" />
+    <option name="x" value="-2444" />
+    <option name="y" value="-370" />
     <option name="width" value="1920" />
     <option name="height" value="775" />
   </component>
@@ -194,6 +329,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -225,6 +361,14 @@
               <item name="experiments" type="462c0819:PsiDirectoryNode" />
               <item name="dermatology" type="462c0819:PsiDirectoryNode" />
               <item name="deep" type="462c0819:PsiDirectoryNode" />
+              <item name="fine_tuning" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
+              <item name="classification" type="462c0819:PsiDirectoryNode" />
+              <item name="experiments" type="462c0819:PsiDirectoryNode" />
+              <item name="dermatology" type="462c0819:PsiDirectoryNode" />
+              <item name="deep" type="462c0819:PsiDirectoryNode" />
               <item name="pretrain" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -240,33 +384,12 @@
               <item name="classification" type="462c0819:PsiDirectoryNode" />
               <item name="experiments" type="462c0819:PsiDirectoryNode" />
               <item name="dermatology" type="462c0819:PsiDirectoryNode" />
-              <item name="deep" type="462c0819:PsiDirectoryNode" />
-              <item name="transfer_learning" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-              <item name="dermatology" type="462c0819:PsiDirectoryNode" />
-              <item name="svm" type="462c0819:PsiDirectoryNode" />
+              <item name="simple" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
               <item name="classification" type="462c0819:PsiDirectoryNode" />
               <item name="tests" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="tests" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="tests" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="dermatology" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
@@ -315,12 +438,19 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox\IO" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\simple" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\patchs" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -334,7 +464,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.simple">
+  <component name="RunManager" selected="Python.methods">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="thumbnailMaker" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -357,6 +487,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="methods" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="classification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/experiments/dermatology/simple" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/dermatology/simple/methods.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="simple" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -371,28 +523,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/dermatology/deep/transfer_learning/simple.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="test_otorhinolaryngology" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="classification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tests/test_otorhinolaryngology.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -446,19 +576,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.test_otorhinolaryngology" />
       <item itemvalue="Python.test_patch" />
       <item itemvalue="Python.test_wavelet" />
       <item itemvalue="Python.simple" />
       <item itemvalue="Python.main" />
+      <item itemvalue="Python.methods" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.methods" />
         <item itemvalue="Python.simple" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.test_patch" />
         <item itemvalue="Python.test_wavelet" />
-        <item itemvalue="Python.test_otorhinolaryngology" />
       </list>
     </recent_temporary>
   </component>
@@ -482,35 +612,9 @@
       <workItem from="1551466690104" duration="697000" />
       <workItem from="1552287969578" duration="962000" />
       <workItem from="1552310731927" duration="4263000" />
-      <workItem from="1552376696302" duration="11826000" />
-    </task>
-    <task id="LOCAL-00202" summary="Add wavelet base classification.">
-      <created>1549907051717</created>
-      <option name="number" value="00202" />
-      <option name="presentableId" value="LOCAL-00202" />
-      <option name="project" value="LOCAL" />
-      <updated>1549907051719</updated>
-    </task>
-    <task id="LOCAL-00203" summary="Update simple process.">
-      <created>1549916853731</created>
-      <option name="number" value="00203" />
-      <option name="presentableId" value="LOCAL-00203" />
-      <option name="project" value="LOCAL" />
-      <updated>1549916853732</updated>
-    </task>
-    <task id="LOCAL-00204" summary="Fix simple processes.">
-      <created>1549919995861</created>
-      <option name="number" value="00204" />
-      <option name="presentableId" value="LOCAL-00204" />
-      <option name="project" value="LOCAL" />
-      <updated>1549919995861</updated>
-    </task>
-    <task id="LOCAL-00205" summary="Update simple dermatology test">
-      <created>1550236489328</created>
-      <option name="number" value="00205" />
-      <option name="presentableId" value="LOCAL-00205" />
-      <option name="project" value="LOCAL" />
-      <updated>1550236489328</updated>
+      <workItem from="1552376696302" duration="13853000" />
+      <workItem from="1552898813118" duration="1963000" />
+      <workItem from="1552902772075" duration="9792000" />
     </task>
     <task id="LOCAL-00206" summary="Update process.">
       <created>1550238129611</created>
@@ -827,11 +931,39 @@
       <option name="project" value="LOCAL" />
       <updated>1552389631346</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Update BatchKerasClassifier">
+      <created>1552400129084</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1552400129084</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Updating fine tuning process.">
+      <created>1552404509382</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1552404509382</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Update of fine tune procedures and models.">
+      <created>1552899075674</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1552899075674</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Rename folder name.">
+      <created>1552899618918</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1552899618918</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28918000" />
+    <option name="totallyTimeSpent" value="42700000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -846,14 +978,14 @@
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4917541" visible="true" weight="0.121878125" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4917541" visible="true" weight="0.123876125" />
       <window_info id="Structure" order="1" sideWeight="0.50074965" side_tool="true" weight="0.32967034" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info id="Repositories" order="3" sideWeight="0.49925038" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4965035" weight="0.32828283" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.6933067" visible="true" weight="0.46579477" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.5539461" weight="0.305835" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.496004" visible="true" weight="0.3279678" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.6928072" weight="0.21227364" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.55294704" visible="true" weight="0.305835" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4975025" weight="0.32897383" />
@@ -863,8 +995,8 @@
       <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="11" sideWeight="0.4955045" weight="0.23239437" />
       <window_info anchor="bottom" id="Terminal" order="12" />
-      <window_info anchor="bottom" id="Event Log" order="13" sideWeight="0.30669332" side_tool="true" visible="true" weight="0.46579477" />
-      <window_info anchor="bottom" id="Thumbnails" order="14" sideWeight="0.4995005" weight="0.32929292" />
+      <window_info anchor="bottom" id="Event Log" order="13" sideWeight="0.44705296" side_tool="true" visible="true" weight="0.305835" />
+      <window_info anchor="bottom" id="Thumbnails" order="14" sideWeight="0.499001" weight="0.32897383" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -938,7 +1070,11 @@
     <MESSAGE value="Adding tag." />
     <MESSAGE value="Update fine tuning process." />
     <MESSAGE value="Updating fine tuning procedure." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updating fine tuning procedure." />
+    <MESSAGE value="Update BatchKerasClassifier" />
+    <MESSAGE value="Updating fine tuning process." />
+    <MESSAGE value="Update of fine tune procedures and models." />
+    <MESSAGE value="Rename folder name." />
+    <option name="LAST_COMMIT_MESSAGE" value="Rename folder name." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -969,19 +1105,14 @@
           <option name="timeStamp" value="406" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/toolbox/core/models.py</url>
-          <line>543</line>
-          <option name="timeStamp" value="407" />
+          <url>file://$PROJECT_DIR$/experiments/dermatology/simple/methods.py</url>
+          <line>59</line>
+          <option name="timeStamp" value="409" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/toolbox/core/classification.py</url>
-          <line>138</line>
-          <option name="timeStamp" value="408" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/toolbox/core/models.py</url>
-          <line>166</line>
-          <option name="timeStamp" value="412" />
+          <url>file://$PROJECT_DIR$/experiments/dermatology/simple/methods.py</url>
+          <line>57</line>
+          <option name="timeStamp" value="410" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1003,16 +1134,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/test_wavelet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="36" selection-start-line="36" selection-end-line="36" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/environment/environment.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
@@ -1033,16 +1154,6 @@
           <caret line="110" column="10" selection-start-line="110" selection-start-column="10" selection-end-line="110" selection-end-column="10" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/test_patch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="41" column="38" selection-start-line="41" selection-start-column="38" selection-end-line="41" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1084,14 +1195,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="347" lean-forward="true" selection-start-line="347" selection-end-line="347" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/wavelet/patches.py">
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/wavelets.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
           <caret line="64" column="4" lean-forward="true" selection-start-line="64" selection-start-column="6" selection-end-line="66" selection-end-column="77" />
@@ -1101,14 +1205,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/patches.py">
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/tl.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="680">
           <caret line="91" lean-forward="true" selection-start-line="91" selection-end-line="91" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/haralick/patches.py">
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/haralick.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="680">
           <caret line="89" lean-forward="true" selection-start-line="89" selection-end-line="89" />
@@ -1118,44 +1222,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/haralick/simple.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="16" column="58" lean-forward="true" selection-start-line="16" selection-start-column="58" selection-end-line="17" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/wavelet/simple.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="29" column="22" lean-forward="true" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/svm/transfer_learning/simple.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="19" column="45" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/keras/engine/network.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
           <caret line="187" selection-start-line="187" selection-end-line="187" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="678">
-          <caret line="103" selection-start-line="103" selection-end-line="103" />
         </state>
       </provider>
     </entry>
@@ -1197,30 +1267,159 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/processes.py">
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/deep/fine_tuning/simple.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="46" lean-forward="true" selection-start-line="46" selection-end-line="46" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/deep/transfer_learning/simple.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="449">
-          <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
+        <state relative-caret-position="1411">
+          <caret line="94" selection-start-line="94" selection-end-line="94" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4641">
+          <caret line="281" selection-start-line="281" selection-end-line="281" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/processes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="46" selection-start-line="46" selection-end-line="46" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/keras/layers/pooling.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="53">
+          <caret line="586" selection-start-line="586" selection-end-line="608" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_transfer_learning.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-153">
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_wavelet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_haralick.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="12" column="46" selection-start-line="12" selection-start-column="46" selection-end-line="13" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_patch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="35" selection-start-line="35" selection-end-line="39" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_otorhinolaryngology.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/layers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="14" selection-start-line="14" selection-end-line="15" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="655" lean-forward="true" selection-start-line="655" selection-end-line="655" />
+        <state relative-caret-position="663">
+          <caret line="482" lean-forward="true" selection-start-line="482" selection-end-line="482" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1411">
+          <caret line="155" column="14" selection-start-line="155" selection-start-column="6" selection-end-line="155" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/IO/datasets.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/haralick.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="66" column="17" lean-forward="true" selection-start-line="66" selection-start-column="17" selection-end-line="71" selection-end-column="111" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/tl.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="126" column="26" lean-forward="true" selection-start-line="126" selection-start-column="26" selection-end-line="135" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/wavelets.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="68" column="75" lean-forward="true" selection-start-line="68" selection-start-column="49" selection-end-line="68" selection-end-column="75" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/methods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="497">
+          <caret line="57" column="42" lean-forward="true" selection-start-line="57" selection-start-column="42" selection-end-line="57" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

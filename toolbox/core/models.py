@@ -6,14 +6,12 @@ from sklearn.metrics import accuracy_score
 from time import strftime, gmtime, time
 import keras
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
-from keras.engine import Layer
 from keras.layers import Dense, K, Conv2D, GlobalMaxPooling2D, Dropout
 from keras import applications
 from keras import Sequential, Model
 from keras.wrappers.scikit_learn import KerasClassifier
 from keras.utils.generic_utils import has_arg, to_list
 from numpy import arange, geomspace, array, searchsorted, unique, hstack, zeros, concatenate, ones, argmax, sort, mean
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.dummy import DummyClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
@@ -24,6 +22,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.preprocessing import StandardScaler
 import types
 from toolbox.core.generators import ResourcesGenerator
+from toolbox.core.layers import RandomLayer
 from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform, DWTDescriptorTransform
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
@@ -141,12 +140,9 @@ class Classifiers:
         return predictor, predictor_params
 
     @staticmethod
-    def get_dense(output_classes, pre_model=None, nb_layers=1, activation='softmax', optimizer='adam', metrics=['accuracy']):
+    def get_dense(output_classes, pretrain_model=None, nb_layers=1, activation='softmax', optimizer='adam', metrics=['accuracy']):
         # Now we customize the output consider our application field
         model = Sequential()
-        if model is not None:
-            model.add(pre_model)
-
         if nb_layers > 1:
             model.add(Dense(1024, activation='relu', name='predictions_dense_1'))
             model.add(Dropout(0.5, name='predictions_dropout_1'))
@@ -262,13 +258,40 @@ class Classifiers:
 
         # We get the deep extractor part as include_top is false
         base_model = Transforms.get_application(architecture)
-        if not trainable_layers <= 0:
-            for layer in base_model.layers[-trainable_layers:]:
-                layer.trainable = True
 
+        # We disable all layers trainable property
+        for layer in base_model.layers:
+            layer.trainable = False
+
+        # Decide wich layers are trainables
+        train_index = len(base_model.layers)-trainable_layers
+
+        # Now switch it to trainable
+        for layer in base_model.layers[train_index:]:
+            layer.trainable = True
+
+        x = base_model.output
         # Now we customize the output consider our application field
-        model = Classifiers.get_dense(output_classes, pre_model=base_model, nb_layers=added_layers,
-                                      activation='softmax', optimizer=optimizer, metrics=metrics)
+        if added_layers > 1:
+            x = Dense(1024, activation='relu', name='predictions_dense_1')(x)
+            x = Dropout(0.5, name='predictions_dropout_1')(x)
+        if added_layers > 2:
+            x = Dense(1024, activation='relu', name='predictions_dense_2')(x)
+            x = Dropout(0.5, name='predictions_dropout_2')(x)
+        if added_layers > 3:
+            x = Dense(512, activation='relu', name='predictions_dense_3')(x)
+            x = Dropout(0.5, name='predictions_dropout_3')(x)
+
+        x = Dense(output_classes, activation='softmax', name='predictions_final')(x)
+
+        if output_classes > 2:
+            loss = 'categorical_crossentropy'
+        else:
+            loss = 'binary_crossentropy'
+
+        model = Model(inputs=base_model.inputs, outputs=x)
+        model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
+
         return model
 
 
@@ -312,7 +335,7 @@ class BuiltInModels:
     def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0):
         model = KerasBatchClassifier(build_fn=Classifiers.get_fine_tuning)
         parameters = {# Build paramters
-                      'architecture': 'InceptionV3',
+                      'architecture': 'VGG16',
                       'optimizer': 'adam',
                       'metrics': [['accuracy']],
                       # Parameters for fit
@@ -585,27 +608,6 @@ class ClassifierPatch(BaseEstimator, ClassifierMixin):
                 res.update({name: value})
         res.update(override)
         return res
-
-
-class RandomLayer(Layer):
-
-    def __init__(self, output_dim, **kwargs):
-        self.output_dim = output_dim
-        super().__init__(**kwargs)
-
-    def build(self, input_shape):
-        super().build(input_shape)  # Be sure to call this at the end
-
-    def call(self, x):
-        return K.random_uniform_variable(shape=(1, self.output_dim), low=0, high=1)
-
-    def compute_output_shape(self, input_shape):
-        return (input_shape[0], self.output_dim)
-
-    def get_config(self):
-        base_config = super().get_config()
-        base_config['output_dim'] = self.output_dim
-        return base_config
 
 
 class PatchClassifier(BaseEstimator, ClassifierMixin):

@@ -152,10 +152,17 @@ class Spectrum(Data):
         self.data['Wavelength'] = wavelength
 
 
+# Manage data for preferences
+class Settings(Data):
+
+    def get_color(self, key):
+        return self.data.get(key, None)
+
+
 # Manage data for input on machine learning pipes
 class Inputs:
 
-    def __init__(self, folders, instance, loader, tags, encoders={}, style={}, filter_by={}):
+    def __init__(self, folders, instance, loader, tags, encoders={}, filter_by={}):
         self.data = DataSet()
         self.folders = folders
         self.load_state = False
@@ -163,7 +170,6 @@ class Inputs:
         self.loader = loader
         self.tags = tags
         self.encoders = encoders
-        self.style = style
         self.filter_by = filter_by
 
     def change_data(self, folders,  filter_by={}, encoders={}, tags={}, loader=None, keep=False):
@@ -266,9 +272,6 @@ class Inputs:
             return None
 
         return self.data.get_data(key=self.tags['reference'], filter_by=self.filter_by)
-
-    def get_style(self, key, label):
-        return self.style[key][label]
 
     def get_unique_labels(self):
         self.check_load()
