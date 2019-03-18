@@ -41,8 +41,8 @@ class Dataset:
                      'Label': ['Malignant', 'Benign', 'Normal']}
         input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                          normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
-        inputs = Inputs(folders=input_folders, instance=dermatology.Reader(),
-                        filter_by=filter_by, loader=dermatology.Reader.scan_folder_for_patches(folder, size),
+        inputs = Inputs(folders=input_folders, instance=dermatology.Reader(folder),
+                        filter_by=filter_by, loader=dermatology.Reader.scan_folder_for_patches,
                         tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference', 'groups': 'ID'},
                         encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
                                   'groups': LabelEncoder()})
@@ -67,6 +67,19 @@ class Dataset:
         input_folders = [normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
                          normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
         inputs = Inputs(folders=input_folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
+                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by)
+        inputs.load()
+        return inputs
+
+    @staticmethod
+    def test_patches_images(folder, size):
+        here_path = dirname(__file__)
+        filter_by = {'Modality': 'Microscopy',
+                     'Label': ['Malignant', 'Benign', 'Normal']}
+        input_folders = [normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
+                         normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
+        inputs = Inputs(folders=input_folders, instance=dermatology.Reader(folder),
+                        loader=dermatology.Reader.scan_folder_for_patches(),
                         tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by)
         inputs.load()
         return inputs
