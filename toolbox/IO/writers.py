@@ -98,9 +98,10 @@ class StatisticsWriter:
 
 class ResultWriter:
 
-    def __init__(self, inputs, results):
+    def __init__(self, inputs, results, settings):
         self.inputs = inputs
         self.results = results
+        self.settings = settings
 
     def write_results(self, dir_name, name, pos_label=[], use_std=True):
         self.write_report(use_std=use_std, path=join(dir_name, "{name}_report.html".format(name=name)))
@@ -156,7 +157,7 @@ class ResultWriter:
         probabilities = self.results.get_data(key='Probability')
         lines = ['-', '-.', ':']
         linecycler = cycle(lines)
-
+        colors = self.settings.get_color('draw')
         if single_axe:
             figure, axe = pyplot.subplots(ncols=1, figsize=(21, 7), sharex=True, sharey=True)
             axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r', label='Luck', alpha=.8)
@@ -167,7 +168,7 @@ class ResultWriter:
                                                 probabilities[:, positive_index],
                                                 pos_label=positive_index)
 
-                axe.plot(fpr, tpr, next(linecycler), lw=2, alpha=.8, color=self.inputs.get_style('draw', positive_class),
+                axe.plot(fpr, tpr, next(linecycler), lw=2, alpha=.8, color=colors[positive_class],
                          label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr)))
                 axe.set(adjustable='box',
                         aspect='equal',

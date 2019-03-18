@@ -67,7 +67,9 @@ class Dataset:
         input_folders = [normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
                          normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
         inputs = Inputs(folders=input_folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
-                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by)
+                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by,
+                        encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
+                                  'groups': LabelEncoder()})
         inputs.load()
         return inputs
 
@@ -80,6 +82,8 @@ class Dataset:
                          normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
         inputs = Inputs(folders=input_folders, instance=dermatology.Reader(folder),
                         loader=dermatology.Reader.scan_folder_for_patches(),
-                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by)
+                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by,
+                        encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
+                                  'groups': LabelEncoder()})
         inputs.load()
         return inputs

@@ -15,6 +15,8 @@ if __name__ == "__main__":
     home_path = expanduser('~')
     validation = StratifiedKFold(n_splits=5, shuffle=True)
     test = validation  # GroupKFold(n_splits=5)
+    settings = Settings({'patches': dict(Malignant=[255, 0, 0], Benign=[125, 125, 0], Normal=[0, 255, 0]),
+                         'draw': dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0))})
 
     # Output folders
     output_folder = normpath('{home}/Results/Dermatology/SVM/{filename}/'.format(home=home_path, filename=filename))
@@ -36,9 +38,6 @@ if __name__ == "__main__":
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
 
-    # Parameters
-    settings = Settings({'patches': dict(Malignant=[255, 0, 0], Benign=[125, 125, 0], Normal=[0, 255, 0]),
-                         'draw': dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0))})
     # Inputs
     input = Dataset.patches_images(folder=patch_folder, size=250)
 
@@ -54,7 +53,7 @@ if __name__ == "__main__":
 
     # Launch process
     process = Process()
-    process.begin(inner_cv=validation, outer_cv=test, n_jobs=2)
+    process.begin(inner_cv=validation, outer_cv=test, n_jobs=2, settings=settings)
 
     for method in methods:
         working_input = deepcopy(input)

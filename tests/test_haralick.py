@@ -3,9 +3,9 @@ from os import makedirs, startfile
 from os.path import normpath, exists, dirname, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
 from experiments.processes import Process
+from toolbox.IO.datasets import Dataset
 from toolbox.core.models import Classifiers, Transforms
-from toolbox.core.structures import Inputs
-from toolbox.IO import dermatology
+from toolbox.core.structures import Settings
 
 if __name__ == "__main__":
 
@@ -15,6 +15,8 @@ if __name__ == "__main__":
     temp_path = gettempdir()
     name = filename
     validation = StratifiedKFold(n_splits=2, shuffle=True)
+    settings = Settings({'patches': dict(Malignant=[255, 0, 0], Benign=[125, 125, 0], Normal=[0, 255, 0]),
+                         'draw': dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0))})
 
     # Output dir
     output_folder = normpath('{temp}/dermatology/{filename}'.format(temp=temp_path, filename=filename))
@@ -27,17 +29,11 @@ if __name__ == "__main__":
         makedirs(features_folder)
 
     # Input data
-    filter_by = {'Modality': 'Microscopy',
-                 'Label': ['Malignant', 'Benign', 'Normal']}
-    input_folders = [normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
-                     normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
-    inputs = Inputs(folders=input_folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
-                    tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by)
-    inputs.load()
+    inputs = Dataset.test_full_images()
 
     # Initiate model and params
     process = Process()
-    process.begin(inner_cv=validation, outer_cv=validation)
+    process.begin(inner_cv=validation, outer_cv=validation, settings=settings)
     process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(), folder=features_folder)
     process.end(inputs=inputs, model=Classifiers.get_dummy_simple(), output_folder=output_folder, name=name)
 

@@ -9,7 +9,8 @@ from keras import backend as K
 
 class Process:
 
-    def begin(self, inner_cv, outer_cv, n_jobs=-1, callbacks=[], scoring=None):
+    def begin(self, inner_cv, outer_cv, n_jobs=-1, callbacks=[], settings=None, scoring=None):
+        self.settings = settings
         self.classifier = Classifier(callbacks=callbacks, inner_cv=inner_cv, outer_cv=outer_cv,
                                      n_jobs=n_jobs, scoring=scoring)
 
@@ -35,7 +36,7 @@ class Process:
         # Step 2 - Evaluate model
         self.classifier.set_model(model)
         results = self.classifier.evaluate(inputs, name)
-        ResultWriter(inputs, results).write_results(dir_name=output_folder, name=name)
+        ResultWriter(inputs, results, self.settings).write_results(dir_name=output_folder, name=name)
 
         # Step 3 - Visualization of CAM
         if isinstance(model, BaseWrapper):
