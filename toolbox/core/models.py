@@ -23,7 +23,8 @@ from sklearn.preprocessing import StandardScaler
 import types
 from toolbox.core.generators import ResourcesGenerator
 from toolbox.core.layers import RandomLayer
-from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform, DWTDescriptorTransform
+from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform, DWTDescriptorTransform, \
+    PNormTransform
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
 
@@ -183,7 +184,7 @@ class Classifiers:
         return pipe, parameters
 
     @staticmethod
-    def get_linear_svm(reduce=None, scaling=True):
+    def get_linear_svm(reduce=None, norm=False, scaling=True):
         steps = []
         parameters = {}
 
@@ -191,6 +192,10 @@ class Classifiers:
         if reduce is not None:
             steps.append(('pca', PCA()))
             parameters.update({'pca__n_components': [reduce]})
+
+        if norm:
+            steps.append(('norm', PNormTransform()))
+            parameters.update({'norm__p': [1, 2, 3, 4]})
 
         # Add scaling step
         if scaling:
