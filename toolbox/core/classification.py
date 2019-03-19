@@ -4,6 +4,9 @@ from os.path import join, basename, splitext
 from copy import deepcopy
 from numpy import arange,  unique, asarray, mean, array_equal, save, load
 from sklearn.model_selection import GridSearchCV
+from sklearn.pipeline import Pipeline
+from sklearn.svm import SVC
+
 from toolbox.core.generators import ResourcesGenerator
 from toolbox.core.models import KerasBatchClassifier
 from toolbox.core.structures import Results, Result
@@ -133,7 +136,7 @@ class Classifier:
                 result.update({"BestParams": best_params})
 
                 # Number of features
-                result.update({"FeaturesNumber": Classifier.__number_of_featurs(model)})
+                result.update({"FeaturesNumber": Classifier.__number_of_features(model)})
 
                 # Append element and go on next one
                 results.append(result)
@@ -280,9 +283,13 @@ class Classifier:
                     self.__params[key] = value[0]
 
     @staticmethod
-    def __number_of_featurs(model):
-        if isinstance(model, GridSearchCV):
-            model = model.steps[-1]
+    def __number_of_features(model):
+        if isinstance(model, Pipeline):
+            model = model.steps[-1][1]
+
+        if isinstance(model, SVC):
+            return model.coef_.shape[1]
+
         return 0
 
     @staticmethod

@@ -2,6 +2,7 @@ from copy import deepcopy, copy
 from os import makedirs
 from os.path import normpath
 
+from sklearn.feature_selection import RFE
 from sklearn.metrics import accuracy_score
 from time import strftime, gmtime, time
 import keras
@@ -196,6 +197,7 @@ class Classifiers:
         if norm:
             steps.append(('norm', PNormTransform()))
             parameters.update({'norm__p': [1, 2, 3, 4]})
+            steps.append(('rfe', RFE(SVC(kernel='linear', class_weight='balanced', probability=True), 100)))
 
         # Add scaling step
         if scaling:

@@ -34,7 +34,7 @@ if __name__ == "__main__":
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation, settings=settings)
     process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(), folder=features_folder)
-    process.end(inputs=inputs, model=Classifiers.get_linear_svm(), output_folder=output_folder, name=name)
+    process.end(inputs=inputs, model=Classifiers.get_dummy_simple(), output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)
