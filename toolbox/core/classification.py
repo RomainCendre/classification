@@ -129,6 +129,12 @@ class Classifier:
                 if probabilities is not None:
                     result.update({"Probability": probabilities[index]})
 
+                # Save params
+                result.update({"BestParams": best_params})
+
+                # Number of features
+                result.update({"FeaturesNumber": Classifier.__number_of_featurs(model)})
+
                 # Append element and go on next one
                 results.append(result)
 
@@ -272,6 +278,12 @@ class Classifier:
             for key, value in self.__params.items():
                 if isinstance(value, list):
                     self.__params[key] = value[0]
+
+    @staticmethod
+    def __number_of_featurs(model):
+        if isinstance(model, GridSearchCV):
+            model = model.steps[-1]
+        return 0
 
     @staticmethod
     def __predict_classes(probabilities):

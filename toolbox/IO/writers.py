@@ -208,6 +208,7 @@ class ResultWriter:
         dict_report = self.__get_report_values(use_std=use_std)
         headers = ['Labels', 'Precision', 'Recall', 'F1-score', 'Support']
         report = 'h1. ' + self.results.name + '\n\n'
+        report += 'h2. Scores\n\n'
         report += '|_. ' + '|_. '.join(headers) + '|\n'
 
         # Label
@@ -225,9 +226,24 @@ class ResultWriter:
         report += '|' + 'weighted avg'.capitalize()
         for key in avg_report.keys():
             report += '|{value}'.format(value=avg_report[key])
-        report += '|\n'
+        report += '|\n\n'
+
+        report += 'h2. Parameters\n\n'
+        report += '|_. Folds|_. HyperParameters|_. Number Features|\n'
+        for fold, value in enumerate(self.__parameters()):
+            report += '|Fold {fold}|{params}|{nb_feat}|\n'.format(fold=fold+1, params=value[0], nb_feat=value[1])
 
         return report
+
+    def __parameters(self):
+        unique_folds = self.results.get_unique_values('Fold')
+        params = []
+        for fold in unique_folds:
+            filter_by = {'Fold': [fold]}
+            best_params = str(self.results.get_data(key='BestParams', filter_by=filter_by)[0])
+            features_number = str(self.results.get_data(key='FeaturesNumber', filter_by=filter_by)[0])
+            params.append((best_params, features_number))
+        return params
 
     def __get_report_values(self, use_std=True):
         report = self.__report_values_fold()

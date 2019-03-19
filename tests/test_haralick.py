@@ -15,8 +15,7 @@ if __name__ == "__main__":
     temp_path = gettempdir()
     name = filename
     validation = StratifiedKFold(n_splits=2, shuffle=True)
-    settings = Settings({'patches': dict(Malignant=[255, 0, 0], Benign=[125, 125, 0], Normal=[0, 255, 0]),
-                         'draw': dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0))})
+    settings = Settings({'labels_colors': dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0))})
 
     # Output dir
     output_folder = normpath('{temp}/dermatology/{filename}'.format(temp=temp_path, filename=filename))
@@ -35,7 +34,7 @@ if __name__ == "__main__":
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation, settings=settings)
     process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(), folder=features_folder)
-    process.end(inputs=inputs, model=Classifiers.get_dummy_simple(), output_folder=output_folder, name=name)
+    process.end(inputs=inputs, model=Classifiers.get_linear_svm(), output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)
