@@ -157,7 +157,7 @@ class ResultWriter:
         probabilities = self.results.get_data(key='Probability')
         lines = ['-', '-.', ':']
         linecycler = cycle(lines)
-        colors = self.settings.get_color('draw')
+        colors = self.settings.get_color('labels_colors')
         if single_axe:
             figure, axe = pyplot.subplots(ncols=1, figsize=(21, 7), sharex=True, sharey=True)
             axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r', label='Luck', alpha=.8)

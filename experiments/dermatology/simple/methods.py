@@ -14,8 +14,8 @@ if __name__ == "__main__":
     home_path = expanduser('~')
     validation = StratifiedKFold(n_splits=5, shuffle=True)
     test = validation  # GroupKFold(n_splits=5)
-    settings = Settings({'patches': dict(Malignant=[255, 0, 0], Benign=[125, 125, 0], Normal=[0, 255, 0]),
-                         'draw': dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0))})
+    settings = Settings({'labels_colors': dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0))})
+
     # Output folders
     output_folder = normpath('{home}/Results/Dermatology/SVM/{filename}/'.format(home=home_path, filename=filename))
     if not exists(output_folder):
