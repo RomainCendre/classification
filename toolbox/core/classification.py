@@ -97,7 +97,7 @@ class Classifier:
                 grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
                                            n_jobs=self.n_jobs, scoring=self.__scoring, verbose=1, iid=False)
                 grid_search.fit(self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train),
-                                fit_params=self.__fit_params)
+                                **self.__fit_params)
                 best_params = grid_search.best_params_
             else:
                 best_params = self.__params
@@ -106,7 +106,7 @@ class Classifier:
             model.set_params(**best_params)
             if isinstance(model, KerasBatchClassifier):
                 model.fit(self.sub(datas, train), y=self.sub(labels, train), callbacks=self.__callbacks,
-                          X_validation=self.sub(datas, test), y_validation=self.sub(labels, test), kwargs=self.__fit_params)
+                          X_validation=self.sub(datas, test), y_validation=self.sub(labels, test), **self.__fit_params)
             else:
                 model.fit(self.sub(datas, train), y=self.sub(labels, train))
 
@@ -160,7 +160,7 @@ class Classifier:
         model.set_params(**best_params)
         if isinstance(model, KerasBatchClassifier):
             model.fit(datas, y=labels, callbacks=self.__callbacks,
-                      X_validation=datas, y_validation=labels, kwargs=self.__fit_params)
+                      X_validation=datas, y_validation=labels, **self.__fit_params)
         else:
             model.fit(datas, y=labels)
 
