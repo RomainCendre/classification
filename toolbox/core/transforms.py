@@ -10,29 +10,6 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import mahotas
 
 
-class PNormTransform(BaseEstimator, TransformerMixin):
-    """Class that p-norm normalization
-
-     This class is made for sklearn and build upon scipy.
-
-     Attributes:
-         p (:obj:'int'): An integer that give the normalization coefficient.
-
-     """
-    def __init__(self, p=1, axis=1):
-        self.p = p
-        self.axis = axis
-
-    def fit(self, x):
-        return self
-
-    def fit_transform(self, x):
-        return self.transform(x)
-
-    def transform(self, x):
-        return norm(x, ord=self.p, axis=self.axis)
-
-
 class OrderedEncoder(BaseEstimator, TransformerMixin):
 
     def fit(self, y):
@@ -253,6 +230,29 @@ class PLSTransform(PLSRegression):
              copy (:obj): Not used.
         """
         return super(PLSRegression, self).transform(x)
+
+
+class PNormTransform(BaseEstimator, TransformerMixin):
+    """Class that p-norm normalization
+
+     This class is made for sklearn and build upon scipy.
+
+     Attributes:
+         p (:obj:'int'): An integer that give the normalization coefficient.
+
+     """
+    def __init__(self, p=1, axis=1):
+        self.p = p
+        self.axis = axis
+
+    def fit(self, X, y=None):
+        return self
+
+    def fit_transform(self, X, y=None, **fit_params):
+        return self.transform(X)
+
+    def transform(self, X):
+        return norm(X, ord=self.p, axis=self.axis)
 
 
 class LDATransform(LinearDiscriminantAnalysis):
