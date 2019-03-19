@@ -307,15 +307,16 @@ class Inputs:
         inputs.data = DataSet(list(self.data.filter_by(current_filter)))
         return inputs
 
-    def patch_method(self, use_mean=True):
+    def patch_method(self, flatten=True):
         references = list(set(self.get_from_key('Reference')))
         new_data = []
         for reference in references:
             entities = self.to_sub_input({'Reference': [reference]})
-            predictions = entities.get_datas().tolist()
-            predictions = array(predictions).flatten()
+            features = entities.get_datas().tolist()
+            if flatten:
+                features = array(features).flatten()
             data = entities.data.data_set[0]
-            data.update({'Data': predictions})
+            data.update({'Data': features})
             new_data.append(data)
         self.tags.update({'reference': 'Reference',
                           'data': 'Data'})

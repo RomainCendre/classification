@@ -1,12 +1,36 @@
 import pywt
 from PIL import Image
 from numpy import array
+from numpy.linalg import norm
 from pywt import dwt
 from scipy.stats import gennorm
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cross_decomposition import PLSRegression
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import mahotas
+
+
+class PNormTransform(BaseEstimator, TransformerMixin):
+    """Class that p-norm normalization
+
+     This class is made for sklearn and build upon scipy.
+
+     Attributes:
+         p (:obj:'int'): An integer that give the normalization coefficient.
+
+     """
+    def __init__(self, p=1, axis=1):
+        self.p = p
+        self.axis = axis
+
+    def fit(self, x):
+        return self
+
+    def fit_transform(self, x):
+        return self.transform(x)
+
+    def transform(self, x):
+        return norm(x, ord=self.p, axis=self.axis)
 
 
 class OrderedEncoder(BaseEstimator, TransformerMixin):

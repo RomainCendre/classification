@@ -60,10 +60,10 @@ if __name__ == "__main__":
     for method in methods:
         working_inputs = deepcopy(input)
         name = '{method}'.format(method=method[0])
-
+        # Pretrain
         process.checkpoint_step(inputs=pretrain_input, model=method[1], folder=features_folder)
         predictor, params = process.train_step(inputs=pretrain_input, model=Classifiers.get_linear_svm())
-
+        # Now predict
         process.checkpoint_step(inputs=working_inputs, model=method[1], folder=features_folder,
                                 projection_folder=projection_folder, projection_name=name)
         process.checkpoint_step(inputs=working_inputs, model=PredictorTransform(predictor, probabilities=True),
