@@ -151,7 +151,7 @@ class Classifier:
         if self.__check_params_multiple():
             grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
                                        n_jobs=self.n_jobs, refit=False, scoring=self.__scoring, verbose=1, iid=False)
-            grid_search.fit(datas, y=labels, groups=groups, fit_params=self.__fit_params)
+            grid_search.fit(datas, y=labels, groups=groups, **self.__fit_params)
             best_params = grid_search.best_params_
         else:
             best_params = self.__params
