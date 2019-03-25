@@ -1,4 +1,4 @@
-﻿identifier,label,pathologie,operateur,provenance,fichier,
+﻿identifier,patient,pathologie,operateur,provenance,fichier,
 1,K.F,Cancer,V1,Bouche,1_K.F.csv,
 2,V.M,Cancer,V1,Gorge,2_V.M.csv,
 3,O.N,Precancer,V1,Bouche,3_O.N.csv,

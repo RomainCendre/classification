@@ -1,7 +1,7 @@
 import pandas
 from os.path import join, splitext
 from numpy.ma import array
-from toolbox.core.structures import Spectrum, DataSet
+from toolbox.core.structures import Spectra
 
 
 class Reader:
@@ -34,14 +34,13 @@ class Reader:
         spectra = []
         # Build spectrum
         for x in range(Reader.COLUMN_FIRST, csv.shape[1]):
-            meta = {'label': csv[Reader.ROW_LABEL, x],
-                    'spectrum_id': x - Reader.COLUMN_FIRST}
-            spectrum = Spectrum(data=csv[Reader.ROW_WAVELENGTH:csv.shape[0], x].astype("float"),
-                                wavelength=csv[Reader.ROW_WAVELENGTH:csv.shape[0],
-                                               Reader.COLUMN_WAVELENGTH].astype("float"),
-                                meta=meta)
+            spectrum = {'label': csv[Reader.ROW_LABEL, x],
+                        'spectrum_id': x - Reader.COLUMN_FIRST}
+            spectrum.update({'data': csv[Reader.ROW_WAVELENGTH:csv.shape[0], x].astype("float"),
+                             'wavelength': csv[Reader.ROW_WAVELENGTH:csv.shape[0], Reader.COLUMN_WAVELENGTH].astype(
+                                 "float")})
             spectra.append(spectrum)
-        return spectra
+        return pandas.DataFrame(spectra)
 
     def read_table(self, table_path):
         """Read a specific file that map meta data and spectrum files
@@ -54,21 +53,22 @@ class Reader:
         """
         # Read csv
         base_folder = splitext(table_path)[0]
-        table = pandas.read_csv(table_path, dtype=str).fillna('')
+        meta_patient = pandas.read_csv(table_path, dtype=str).fillna('')
+        meta_patient['Reference'] = meta_patient.apply(lambda row: '{id}_{patient}'.format(id=row['identifier'],
+                                                                                           patient=row['patient']),
+                                                       axis=1)
         spectra = []
-        for ind, row in table.iterrows():
+        for ind, row in meta_patient.iterrows():
             current_file = row['fichier']
             if not current_file:
                 continue
-            # Get patient meta data
-            meta = {'patient_name': row['fichier'],
-                    'patient_label': row['pathologie'],
-                    'operator': row['operateur'],
-                    'location': row['provenance']}
 
             patient_datas = Reader.read_file(join(base_folder, current_file))
-            [data.data.update(meta) for data in patient_datas]
-            [data.data.update({'Reference': '{patient}-{id}'.format(patient=meta['patient_name'], id=data.data['spectrum_id'])})
-             for data in patient_datas]
-            spectra.extend(patient_datas)
-        return DataSet(spectra)
+            patient_datas['Reference'] = row['Reference']
+            patient_datas = patient_datas.merge(meta_patient, on='Reference')
+
+            patient_datas['Reference_spectrum'] = patient_datas.apply(
+                lambda row: '{reference}_{spectrum}'.format(reference=row['Reference'],
+                                                            spectrum=row['spectrum_id']), axis=1)
+            spectra.append(patient_datas)
+        return pandas.concat(spectra)

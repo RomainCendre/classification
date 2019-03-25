@@ -15,7 +15,7 @@ if __name__ == "__main__":
     temp_path = gettempdir()
     name = filename
     validation = StratifiedKFold(n_splits=2, shuffle=True)
-    settings = Settings({'labels_colors': dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0))})
+    settings = Settings({'labels_colors': dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0), Luck=(0, 0, 1))})
 
     # Output dir
     output_folder = normpath('{temp}/dermatology/{filename}'.format(temp=temp_path, filename=filename))

@@ -1,11 +1,14 @@
 from tempfile import gettempdir
 from os import makedirs, startfile
-from os.path import normpath, exists, join, dirname, splitext, basename
+from os.path import normpath, exists, dirname, splitext, basename
 from sklearn.model_selection import StratifiedKFold
+from sklearn.preprocessing import LabelEncoder
+
 from experiments.processes import Process
+from toolbox.IO.datasets import Dataset
 from toolbox.core.models import Classifiers
-from toolbox.core.structures import Inputs
-from toolbox.IO import otorhinolaryngology
+from toolbox.core.structures import Settings
+from toolbox.core.transforms import OrderedEncoder
 
 if __name__ == "__main__":
 
@@ -15,6 +18,7 @@ if __name__ == "__main__":
     temp_path = gettempdir()
     name = filename
     validation = StratifiedKFold(n_splits=2, shuffle=True)
+    settings = Settings({'labels_colors': dict(Cancer=(1, 0, 0), Precancer=(0.5, 0.5, 0), Sain=(0, 1, 0), Luck=(0, 0, 1))})
 
     # Output dir
     output_folder = normpath('{temp}/spectroscopy/{filename}'.format(temp=temp_path, filename=filename))
@@ -22,16 +26,17 @@ if __name__ == "__main__":
         makedirs(output_folder)
 
     # Input data
-    filters_by = {'Results_SvsC': {'label': ['Sain', 'Cancer']}}
-    input_folder = normpath('{here}/data/spectroscopy'.format(here=here_path))
-    inputs = Inputs(folders=[join(input_folder, 'Patients.csv')], instance=otorhinolaryngology.Reader(), loader=otorhinolaryngology.Reader.read_table,
-                    tags={'data': 'Data', 'label': 'label', 'group': 'patient_name', 'references': 'Reference'})
-    inputs.load()
+    inputs = Dataset.test_spectras()
+    filters = {'Results_SvsC': {'label': ['Sain', 'Cancer']}}
 
     # Get experiments
-    for item_name, item_filter in filters_by.items():
+    for item_name, item_filters in filters.items():
+        # Change filters
+        inputs.filters = item_filters
+        inputs.encoders = {'label': OrderedEncoder().fit(item_filters['label']),
+                           'groups': LabelEncoder()}
         process = Process()
-        process.begin(validation, validation)
+        process.begin(inner_cv=validation, outer_cv=validation, settings=settings)
         process.end(inputs=inputs, model=Classifiers.get_dummy_simple(), output_folder=output_folder, name=item_name)
 
     # Open result folder

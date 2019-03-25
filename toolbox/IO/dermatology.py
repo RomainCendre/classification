@@ -1,4 +1,3 @@
-from copy import deepcopy
 from glob import glob
 import pandas as pd
 import pyocr

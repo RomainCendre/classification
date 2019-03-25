@@ -1,4 +1,6 @@
+from collections import Iterable
 from copy import copy
+from itertools import chain
 
 import pandas as pd
 from numpy import correlate, ones, interp, array, ndarray
@@ -44,7 +46,7 @@ class Data:
         if self.data is None:
             raise Exception('Data not loaded !')
 
-    def get_from_key(self, key, filters=None):
+    def get_from_key(self, key, filters=None, flatten=False):
         cur_filters = copy(self.filters)
         if filters is not None:
             cur_filters.update(filters)
@@ -55,12 +57,16 @@ class Data:
 
         query = self.to_query(cur_filters)
         if query:
-            return array(self.data.query(query)[key].to_list())
+            datas = self.data.query(query)[key].to_list()
         else:
-            return array(self.data[key].to_list())
+            datas = self.data[key].to_list()
+
+        if any(isinstance(el, Iterable) for el in datas) and flatten:
+            datas = list(chain.from_iterable(datas))
+        return array(datas)
 
     def get_unique_from_key(self, key, filters=None):
-        return unique_labels(self.get_from_key(key, filters).flatten())
+        return unique_labels(self.get_from_key(key, filters, flatten=True))
 
     def is_valid_keys(self, keys):
         return set(keys).issubset(set(self.data.columns))
@@ -201,12 +207,7 @@ class Inputs(Data):
         self.tags.update({'data': key})
 
 
-class Spectrum(Inputs):
-
-    def __init__(self, data, wavelength, meta={}):
-        meta.update({'Data': data,
-                     'Wavelength': wavelength})
-        super().__init__(meta)
+class Spectra(Inputs):
 
     def apply_average_filter(self, size):
         """This method allow user to apply an average filter of 'size'.

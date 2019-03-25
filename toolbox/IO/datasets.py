@@ -1,6 +1,6 @@
 from os.path import normpath, expanduser, dirname
 from sklearn.preprocessing import LabelEncoder
-from toolbox.IO import dermatology
+from toolbox.IO import dermatology, otorhinolaryngology
 from toolbox.core.structures import Inputs
 from toolbox.core.transforms import OrderedEncoder
 
@@ -48,6 +48,12 @@ class Dataset:
         return Dataset.__patches_images(input_folders, folder, size)
 
     @staticmethod
+    def test_spectras():
+        here_path = dirname(__file__)
+        input_folders = [normpath('{here}/data/spectroscopy/Patients.csv'.format(here=here_path))]
+        return Dataset.__spectras(input_folders)
+
+    @staticmethod
     def __thumbnails(folders):
         inputs = Inputs(folders=folders, instance=dermatology.Reader(),
                         loader=dermatology.Reader.scan_folder_for_images,
@@ -75,5 +81,13 @@ class Dataset:
                         tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Patch_Reference'}, filters=filters,
                         encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
                                   'groups': LabelEncoder()})
+        inputs.load()
+        return inputs
+
+    @staticmethod
+    def __spectras(folders):
+        inputs = Inputs(folders=folders, instance=otorhinolaryngology.Reader(),
+                        loader=otorhinolaryngology.Reader.read_table,
+                        tags={'data': 'data', 'label': 'label', 'group': 'Reference', 'reference': 'Reference_spectrum'})
         inputs.load()
         return inputs

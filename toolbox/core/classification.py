@@ -122,7 +122,7 @@ class Classifier:
             # Now store all computed data
             result = dict()
             result.update({"Fold": fold})
-            result.update({"Label": self.sub(labels, train)})
+            result.update({"Label": self.sub(labels, test)})
             if reference is not None:
                 result.update({"Reference": reference})
 

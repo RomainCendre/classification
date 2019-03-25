@@ -161,7 +161,7 @@ class ResultWriter:
         colors = self.settings.get_color('labels_colors')
         if single_axe:
             figure, axe = pyplot.subplots(ncols=1, figsize=(21, 7), sharex=True, sharey=True)
-            axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r', label='Luck', alpha=.8)
+            axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color=colors['Luck'], label='Luck', alpha=.8)
             for index, positive_index in enumerate(positives_indices):
                 # Get AUC results for current positive class
                 positive_class = self.inputs.decode('label', positive_index)
@@ -191,7 +191,7 @@ class ResultWriter:
                                                 pos_label=positive_index)
 
                 axe.plot(fpr, tpr, label=r'ROC %s (AUC = %0.2f)' % (self.results.name, auc(fpr, tpr)), lw=2, alpha=.8)
-                axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r', label='Luck', alpha=.8)
+                axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r', label=colors['Luck'], alpha=.8)
                 axe.set(adjustable='box',
                         aspect='equal',
                         xlabel='False Positive Rate (1-Specificity)',
@@ -271,12 +271,12 @@ class ResultWriter:
 
     def __report_values_fold(self, fold=None):
         if fold is None:
-            labels = self.results.get_from_key(key='Label').flatten()
-            predictions = self.results.get_from_key(key='Prediction').flatten()
+            labels = self.results.get_from_key(key='Label', flatten=True)
+            predictions = self.results.get_from_key(key='Prediction', flatten=True)
         else:
             filter_by = {'Fold': [fold]}
-            labels = self.results.get_from_key(key='Label', filters=filter_by).flatten()
-            predictions = self.results.get_from_key(key='Prediction', filters=filter_by).flatten()
+            labels = self.results.get_from_key(key='Label', filters=filter_by, flatten=True)
+            predictions = self.results.get_from_key(key='Prediction', filters=filter_by, flatten=True)
         return classification_report(self.inputs.decode('label', labels),
                                      self.inputs.decode('label', predictions), output_dict=True)
 
