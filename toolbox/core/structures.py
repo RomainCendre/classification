@@ -7,7 +7,7 @@ from sklearn.exceptions import NotFittedError
 from sklearn.utils.multiclass import unique_labels
 
 
-class SimpleData:
+class Settings:
 
     def __init__(self, data=None):
         if data is None:
@@ -23,9 +23,6 @@ class SimpleData:
 
     def update(self, data):
         self.data.update(data)
-
-
-class Settings(SimpleData):
 
     def get_color(self, key):
         return self.data.get(key, None)
