@@ -71,4 +71,4 @@ class Reader:
                 lambda row: '{reference}_{spectrum}'.format(reference=row['Reference'],
                                                             spectrum=row['spectrum_id']), axis=1)
             spectra.append(patient_datas)
-        return pandas.concat(spectra)
+        return pandas.concat(spectra, ignore_index=True)

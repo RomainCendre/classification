@@ -34,7 +34,7 @@ class Reader:
             except OSError:
                 print('Patient {}'.format(subdir))
 
-        return pd.concat(datas)
+        return pd.concat(datas, ignore_index=True)
 
     def scan_folder_for_images(self, folder_path):
         # Subdirectories

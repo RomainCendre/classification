@@ -1,10 +1,16 @@
 from os import makedirs, startfile
+
+from numpy.ma import arange
 from sklearn.model_selection import StratifiedKFold
-from os.path import exists, expanduser, normpath, basename, splitext, join
-from experiments.processes import Processes
-from toolbox.core.models import SimpleModels
-from toolbox.core.structures import Inputs
-from toolbox.IO import otorhinolaryngology
+from os.path import exists, expanduser, normpath, basename, splitext
+
+from sklearn.preprocessing import LabelEncoder
+
+from experiments.processes import Process
+from toolbox.IO.datasets import Dataset
+from toolbox.core.models import BuiltInModels
+from toolbox.core.structures import Settings
+from toolbox.core.transforms import OrderedEncoder
 
 if __name__ == "__main__":
 
@@ -12,35 +18,36 @@ if __name__ == "__main__":
     filename = splitext(basename(__file__))[0]
     home_path = expanduser("~")
     name = filename
-    validation = StratifiedKFold(n_splits=5, shuffle=True)
+    validation = StratifiedKFold(n_splits=5)
+    settings = Settings({'labels_colors': dict(Cancer=(1, 0, 0), Precancer=(0.5, 0.5, 0), Sain=(0, 1, 0), Luck=(0, 0, 1))})
 
     # Output dir
-    output_folder = normpath('{home}/Results/Otorhino/{filename}'.format(home=home_path, filename=filename))
+    output_folder = normpath('{home}/Results/ORL/{filename}'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
 
-    # Load data
-    input_folder = normpath('{home}/Data/Neck/'.format(home=home_path))
-
     # Filters
     data_filters = {
-        'Results_All': {},
+        'Results_All': {'label': ['Sain', 'Precancer', 'Cancer']},
         'Results_SvsC': {'label': ['Sain', 'Cancer']},
         'Results_SvsP': {'label': ['Sain', 'Precancer']},
         'Results_PvsC': {'label': ['Precancer', 'Cancer']},
     }
 
-    # Get experiments
-    model, params = SimpleModels.get_pls_process()
+    # Input data
+    spectra = Dataset.spectras()
+    spectra.apply_average_filter(size=5)
+    spectra.apply_scaling()
+    spectra.change_wavelength(wavelength=arange(start=445, stop=962, step=1))
 
-    for item_name, item_filter in data_filters.items():
-        inputs = Inputs(folders=[join(input_folder, 'Patients.csv'), join(input_folder, 'Temoins.csv')],
-                        loader=otorhinolaryngology.Reader.read_table, filter_by=item_filter,
-                        tags={'data_tag': 'Data', 'label_tag': 'label',
-                              'group_tag': 'patient_name', 'reference_tag': ['patient_name', 'spectrum_id']})
-        inputs.load()
-        Processes.otorhinolaryngology(inputs=inputs, output_folder=output_folder, model=model,
-                                      params=params, name=item_name)
+    for item_name, item_filters in data_filters.items():
+        # Change filters
+        spectra.filters = item_filters
+        spectra.encoders = {'label': OrderedEncoder().fit(item_filters['label']),
+                           'groups': LabelEncoder()}
+        process = Process()
+        process.begin(inner_cv=validation, outer_cv=validation, settings=settings)
+        process.end(inputs=spectra, model=BuiltInModels.get_pls_process(), output_folder=output_folder, name=item_name)
 
     # Open result folder
     startfile(output_folder)

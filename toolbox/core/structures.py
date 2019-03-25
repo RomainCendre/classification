@@ -4,6 +4,7 @@ from itertools import chain
 
 import pandas as pd
 from numpy import correlate, ones, interp, array, ndarray
+from numpy.ma import arange
 from sklearn import preprocessing
 from sklearn.exceptions import NotFittedError
 from sklearn.utils.multiclass import unique_labels
@@ -190,7 +191,8 @@ class Inputs(Data):
             return
 
         # Load data and set loading property to True
-        self.data = pd.concat([self.loader(self.instance, folder) for folder in self.folders])
+        self.data = pd.concat([self.loader(self.instance, folder) for folder in self.folders], ignore_index=True)
+        # self.data.reset_index()
         self.load_state = True
 
     def sub_inputs(self, filters=None):
@@ -216,7 +218,7 @@ class Spectra(Inputs):
             size: The size of average window.
 
         """
-        self.data['Data'] = correlate(self.data['Data'], ones(size) / size, mode='same')
+        self.data['data'] = self.data['data'].apply(lambda x: correlate(x, ones(size) / size, mode='same'))
 
     def apply_scaling(self, method='default'):
         """This method allow to normalize spectra.
@@ -225,13 +227,13 @@ class Spectra(Inputs):
                 method(:obj:'str') : The kind of method of scaling ('default', 'max', 'minmax' or 'robust')
             """
         if method == 'max':
-            self.data['Data'] = preprocessing.maxabs_scale(self.data['Data'])
+            self.data['data'] = self.data['data'].apply(lambda x: preprocessing.maxabs_scale(x))
         elif method == 'minmax':
-            self.data['Data'] = preprocessing.minmax_scale(self.data['Data'])
+            self.data['data'] = self.data['data'].apply(lambda x: preprocessing.minmax_scale(x))
         elif method == 'robust':
-            self.data['Data'] = preprocessing.robust_scale(self.data['Data'])
+            self.data['data'] = self.data['data'].apply(lambda x: preprocessing.robust_scale(x))
         else:
-            self.data['Data'] = preprocessing.scale(self.data['Data'])
+            self.data['data'] = self.data['data'].apply(lambda x: preprocessing.scale(x))
 
     def change_wavelength(self, wavelength):
         """This method allow to change wavelength scale and interpolate along new one.
@@ -240,8 +242,8 @@ class Spectra(Inputs):
             wavelength(:obj:'array' of :obj:'float'): The new wavelength to fit.
 
         """
-        self.data['Data'] = interp(wavelength, self.data['Wavelength'], self.data['Data'])
-        self.data['Wavelength'] = wavelength
+        self.data['data'] = self.data.apply(lambda x: interp(wavelength, x['wavelength'], x['data']), axis=1)
+        self.data['wavelength'] = self.data['wavelength'].apply(lambda x: wavelength)
 
 
 class Outputs(Data):
