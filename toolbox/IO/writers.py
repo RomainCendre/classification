@@ -11,7 +11,7 @@ from matplotlib import pyplot, cm
 from os.path import join, exists
 from keras import backend as K
 from matplotlib.image import imsave
-from numpy import std, repeat, newaxis, uint8, arange, savetxt, array, copy
+from numpy import std, repeat, newaxis, uint8, arange, savetxt, array, copy, concatenate
 from sklearn.metrics import auc, roc_curve, classification_report
 from vis.utils.utils import load_img
 from vis.visualization import visualize_cam, overlay
@@ -114,9 +114,9 @@ class ResultWriter:
             print('Missing tag for misclassification report.')
             return
 
-        labels = self.inputs.decode('label', self.results.get_data(key='Label'))
-        predictions = self.inputs.decode('label', self.results.get_data(key='Prediction'))
-        references = self.results.get_data(key='Reference')
+        labels = self.inputs.decode('label', concatenate(self.results.get_from_key(key='Label'), axis=0))
+        predictions = self.inputs.decode('label', concatenate(self.results.get_from_key(key='Prediction'), axis=0))
+        references = concatenate(self.results.get_from_key(key='Reference'), axis=0)
         misclassified = [index for index, (i, j) in enumerate(zip(labels, predictions)) if i != j]
         data = {'paths': references[misclassified],
                 'labels': labels[misclassified],
@@ -149,14 +149,15 @@ class ResultWriter:
             return
 
         if not positives_classes:
-            positives_indices = self.results.get_unique_values('Label')
+            positives_indices = self.results.get_unique_from_key('Label')
         else:
             positives_indices = self.inputs.encode_label(positives_classes)
 
-        labels = self.results.get_data(key='Label')
-        probabilities = self.results.get_data(key='Probability')
-        lines = ['-', '-.', ':']
-        linecycler = cycle(lines)
+        labels = self.results.get_from_key(key='Label')
+        labels = concatenate(labels, axis=0)
+        probabilities = self.results.get_from_key(key='Probability')
+        probabilities = concatenate(probabilities, axis=0)
+        linecycler = cycle(['-', '-.', ':'])
         colors = self.settings.get_color('labels_colors')
         if single_axe:
             figure, axe = pyplot.subplots(ncols=1, figsize=(21, 7), sharex=True, sharey=True)
@@ -212,7 +213,7 @@ class ResultWriter:
         report += '|_. ' + '|_. '.join(headers) + '|\n'
 
         # Label
-        ulabels = self.results.get_unique_values('Label')
+        ulabels = self.results.get_unique_from_key('Label')
         ulabels = self.inputs.decode('label', ulabels)
         for ind, label in enumerate(ulabels):
             label_report = dict_report[label]
@@ -236,12 +237,12 @@ class ResultWriter:
         return report
 
     def __parameters(self):
-        unique_folds = self.results.get_unique_values('Fold')
+        unique_folds = self.results.get_unique_from_key('Fold')
         params = []
         for fold in unique_folds:
             filter_by = {'Fold': [fold]}
-            best_params = str(self.results.get_data(key='BestParams', filter_by=filter_by)[0])
-            features_number = str(self.results.get_data(key='FeaturesNumber', filter_by=filter_by)[0])
+            best_params = str(self.results.get_from_key(key='BestParams', filters=filter_by)[0])
+            features_number = str(self.results.get_from_key(key='FeaturesNumber', filters=filter_by)[0])
             params.append((best_params, features_number))
         return params
 
@@ -254,7 +255,7 @@ class ResultWriter:
                     report[label][metrics] = '{mean:0.2f}'.format(mean=report[label][metrics])
         else:
             scores = []
-            unique_folds = self.results.get_unique_values('Fold')
+            unique_folds = self.results.get_unique_from_key('Fold')
             for fold in unique_folds:
                 scores.append(self.__report_values_fold(fold=fold))
 
@@ -270,12 +271,12 @@ class ResultWriter:
 
     def __report_values_fold(self, fold=None):
         if fold is None:
-            labels = self.results.get_data(key='Label')
-            predictions = self.results.get_data(key='Prediction')
+            labels = self.results.get_from_key(key='Label').flatten()
+            predictions = self.results.get_from_key(key='Prediction').flatten()
         else:
             filter_by = {'Fold': [fold]}
-            labels = self.results.get_data(key='Label', filter_by=filter_by)
-            predictions = self.results.get_data(key='Prediction', filter_by=filter_by)
+            labels = self.results.get_from_key(key='Label', filters=filter_by).flatten()
+            predictions = self.results.get_from_key(key='Prediction', filters=filter_by).flatten()
         return classification_report(self.inputs.decode('label', labels),
                                      self.inputs.decode('label', predictions), output_dict=True)
 

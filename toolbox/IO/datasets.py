@@ -57,10 +57,10 @@ class Dataset:
 
     @staticmethod
     def __full_images(folders):
-        filter_by = {'Modality': 'Microscopy',
-                     'Label': ['Malignant', 'Benign', 'Normal']}
+        filters = {'Modality': 'Microscopy',
+                   'Label': ['Malignant', 'Benign', 'Normal']}
         inputs = Inputs(folders=folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
-                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filter_by=filter_by,
+                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'}, filters=filters,
                         encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
                                   'groups': LabelEncoder()})
         inputs.load()
@@ -68,13 +68,12 @@ class Dataset:
 
     @staticmethod
     def __patches_images(folders, extraction_folder, size):
-        filter_by = {'Modality': 'Microscopy',
-                     'Label': ['Malignant', 'Benign', 'Normal']}
+        filters = {'Modality': 'Microscopy',
+                   'Label': ['Malignant', 'Benign', 'Normal']}
         inputs = Inputs(folders=folders, instance=dermatology.Reader(extraction_folder),
                         loader=dermatology.Reader.scan_folder_for_patches,
-                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Patch_Reference'}, filter_by=filter_by,
+                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Patch_Reference'}, filters=filters,
                         encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
                                   'groups': LabelEncoder()})
         inputs.load()
         return inputs
-

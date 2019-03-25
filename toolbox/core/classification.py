@@ -9,7 +9,7 @@ from sklearn.svm import SVC
 
 from toolbox.core.generators import ResourcesGenerator
 from toolbox.core.models import KerasBatchClassifier
-from toolbox.core.structures import Results, Result
+from toolbox.core.structures import Outputs
 
 
 class Classifier:
@@ -120,28 +120,27 @@ class Classifier:
                 probabilities = model.predict_proba(datas[test])
 
             # Now store all computed data
-            for index, test_index in enumerate(test):
-                result = Result()
-                result.update({"Fold": fold})
-                result.update({"Label": labels[test_index]})
-                if reference is not None:
-                    result.update({"Reference": reference[test_index]})
+            result = dict()
+            result.update({"Fold": fold})
+            result.update({"Label": self.sub(labels, train)})
+            if reference is not None:
+                result.update({"Reference": reference})
 
-                # Get probabilities and predictions
-                result.update({"Prediction": predictions[index]})
-                if probabilities is not None:
-                    result.update({"Probability": probabilities[index]})
+            # Get probabilities and predictions
+            result.update({"Prediction": predictions})
+            if probabilities is not None:
+                result.update({"Probability": probabilities})
 
-                # Save params
-                result.update({"BestParams": best_params})
+            # Save params
+            result.update({"BestParams": best_params})
 
-                # Number of features
-                result.update({"FeaturesNumber": Classifier.__number_of_features(model)})
+            # Number of features
+            result.update({"FeaturesNumber": Classifier.__number_of_features(model)})
 
-                # Append element and go on next one
-                results.append(result)
+            # Append element and go on next one
+            results.append(result)
 
-        return Results(results, name)
+        return Outputs(results, name)
 
     def fit(self, inputs):
         # Extract needed data
@@ -174,48 +173,6 @@ class Classifier:
             model.fit(datas, y=labels)
 
         return model, best_params
-
-    def evaluate_patch(self, inputs, benign, malignant, name='Default', patch_size=250):
-        # Extract needed data
-        datas = inputs.get_datas()
-        labels = inputs.get_labels()
-        groups = inputs.get_groups()
-        reference = inputs.get_reference()
-
-        # Check valid labels, at least several classes
-        if not self.__check_labels(labels):
-            raise ValueError('Not enough unique labels where found, at least 2.')
-
-        # Prepare data
-        generator = ResourcesGenerator(preprocessing_function=self.__params.get('preprocessing_function', None))
-        test = generator.flow_from_paths(datas, batch_size=1, shuffle=False)
-
-        # Encode labels to go from string to int
-        results = []
-        for index in arange(len(test)):
-            x, y = test[index]
-
-            result = Result()
-            result.update({"Fold": 1})
-            result.update({"Label": labels[index]})
-            if reference is not None:
-                result.update({"Reference": reference[index]})
-
-            prediction = []
-            probability = []
-            for i in range(0, 4):
-                for j in range(0, 4):
-                    x_patch = x[:, i * patch_size:(i + 1) * patch_size, j * patch_size:(j + 1) * patch_size, :]
-                    probability.append(self.__model.model.predict_proba(x_patch)[0])
-                    prediction.append(Classifier.__predict_classes(probabilities=self.__model.model.predict(x_patch)))
-
-            # Kept predictions
-            probability = asarray(probability)
-            result.update({"Probability": mean(probability, axis=0)})
-            result.update({"Prediction": malignant if prediction.count(malignant) > 0 else benign})
-            results.append(result)
-
-        return Results(results, name)
 
     def features_checkpoint(self, inputs, folder):
 

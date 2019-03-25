@@ -1,6 +1,6 @@
 from copy import deepcopy
 from glob import glob
-import pandas
+import pandas as pd
 import pyocr
 import shutil
 from os import listdir, makedirs, path
@@ -8,7 +8,6 @@ from os.path import isdir, join, normpath, isfile, basename, splitext
 from PIL import Image
 from numpy.ma import array
 from pyocr import builders
-from toolbox.core.structures import Data, DataSet
 
 
 class Reader:
@@ -23,23 +22,20 @@ class Reader:
         # Browse subdirectories
         datas = []
         for subdir in subdirs:
-            patient_datas = []
             try:
-                meta = Reader.__read_patient_file(join(folder_path, subdir))
+                # Read patient and images data
+                meta_patient = Reader.__read_patient_file(join(folder_path, subdir))
                 patient_datas = Reader.__read_images_file(folder_path, subdir)
-
-                # Update all meta data
-                [data.data.update(meta) for data in patient_datas]
-
-                # Add unique id
-                [data.data.update({'Reference': '{patient}_{image}'.format(patient=data.data['ID'], image=data.data['ID_Image'])})
-                 for data in patient_datas]
-
+                # Merge both
+                patient_datas['ID'] = meta_patient['ID'][0]
+                patient_datas = patient_datas.merge(meta_patient)
+                patient_datas['Reference'] = patient_datas.apply(
+                    lambda row: '{patient}_{image}'.format(patient=row['ID'], image=row['ID_Image']), axis=1)
+                datas.append(patient_datas)
             except OSError:
                 print('Patient {}'.format(subdir))
-            datas.extend(patient_datas)
 
-        return DataSet(datas)
+        return pd.concat(datas)
 
     def scan_folder_for_images(self, folder_path):
         # Subdirectories
@@ -52,33 +48,27 @@ class Reader:
             sub_files = glob(join(sub_folder, '*.bmp'))
 
             for sub_file in sub_files:
-                data_set.append(Data(data={'Full_path': sub_file,
-                                           'Label': subdir,
-                                           'Reference': '{label}-{file}'.format(label=subdir, file=splitext(basename(sub_file))[0])}))
-        return DataSet(data_set)
+                reference = '{label}-{file}'.format(label=subdir, file=splitext(basename(sub_file))[0])
+                data_set.append({'Full_path': sub_file,
+                                 'Label': subdir,
+                                 'Reference': reference})
+        return pd.DataFrame(data_set)
 
     def scan_folder_for_patches(self, folder_path, patch_size=250):
         # Browse data
         data_set = self.scan_folder(folder_path)
+        data_set = data_set[data_set.Modality == 'Microscopy']
 
         # Get into patches
-        patch_data_set = []
+        patches_data = []
+        DataManager.print_progress_bar(0, len(data_set), prefix='Progress:')
+        for index, data in data_set.iterrows():
+            DataManager.print_progress_bar(index, len(data_set), prefix='Progress:')
+            patches = Reader.__get_patches(data['Full_path'], data['Reference'], patch_size, self.temp_folder)
+            patches = patches.merge(data_set, on='Reference')
+            patches_data.append(patches)
 
-        DataManager.print_progress_bar(0, len(data_set.data_set), prefix='Progress:')
-        for index, data in enumerate(data_set.data_set):
-            if not data.data['Modality'] == 'Microscopy':
-                continue
-            DataManager.print_progress_bar(index, len(data_set.data_set), prefix='Progress:')
-            patches = Reader.__get_patches(data.data['Full_path'], data.data['Reference'], patch_size, self.temp_folder)
-            for index, patch in enumerate(patches):
-                patch_data = deepcopy(data)
-                patch_data.update({'Patch_Path': patch['Path']})
-                patch_data.update({'Patch_Reference': '{ref}_{index}'.format(ref=data.data['Reference'], index=patch['Index'])})
-                patch_data.update({'Patch_Position_X': patch['Pos_X']})
-                patch_data.update({'Patch_Position_Y': patch['Pos_Y']})
-                patch_data_set.append(patch_data)
-
-        return DataSet(patch_data_set)
+        return pd.concat(patches_data)
 
     @staticmethod
     def __get_patches(filename, reference, patch_size, temp_folder):
@@ -89,45 +79,39 @@ class Reader:
             for c in range(0, X.shape[1] - patch_size + 1, patch_size):
                 # Create patch informations
                 patch = dict()
-                patch.update({'Path': normpath('{reference}_{size}_{id}.png'.format(reference=join(temp_folder, reference),
-                                                                                    size=patch_size, id=patch_index))})
-                patch.update({'Pos_X': r})
-                patch.update({'Pos_Y': c})
-                patch.update({'Index': patch_index})
+                patch.update(
+                    {'Patch_Path': normpath('{reference}_{size}_{id}.png'.format(reference=join(temp_folder, reference),
+                                                                           size=patch_size, id=patch_index))})
+                patch.update({'Patch_Index': patch_index})
+                patch.update({'Patch_Position_X': r})
+                patch.update({'Patch_Position_Y': c})
+                patch.update({'Patch_Reference': '{ref}_{index}'.format(ref=reference, index=patch_index)})
+                patch.update({'Reference': reference})
                 patch_index += 1
                 patches.append(patch)
 
                 # Check if need to write patch
-                if not isfile(patch['Path']):
-                    Image.fromarray(X[r:r + patch_size, c:c + patch_size]).save(patch['Path'])
+                if not isfile(patch['Patch_Path']):
+                    Image.fromarray(X[r:r + patch_size, c:c + patch_size]).save(patch['Patch_Path'])
 
-        return patches
+        return pd.DataFrame(patches)
 
     @staticmethod
     def __read_images_file(parent_folder, subdir):
         # Patient file
         images_file = join(parent_folder, subdir, 'images.csv')
 
-        # Read csv
-        csv = pandas.read_csv(images_file, dtype=str)
-
-        # Build spectrum
-        images = []
-        for ind, row in csv.iterrows():
-            data = row.to_dict()
-            data.update({'Full_path': join(parent_folder, subdir, data['Modality'], data['Path'])})
-            image = Data(data=data)
-            images.append(image)
+        # Read csv and add tag for path
+        images = pd.read_csv(images_file, dtype=str)
+        images['Full_path'] = images.apply(lambda row: join(parent_folder, subdir, row['Modality'], row['Path']),
+                                           axis=1)
         return images
 
     @staticmethod
     def __read_patient_file(folder_path):
         # Patient file
         patient_file = join(folder_path, 'patient.csv')
-
-        # Read csv
-        csv = pandas.read_csv(patient_file, dtype=str).iloc[0]
-        return csv.to_dict()
+        return pd.read_csv(patient_file, dtype=str)
 
 
 class ConfocalBuilder(builders.TextBuilder):
@@ -189,7 +173,7 @@ class DataManager:
 
     def compute_microscopy(self, source_id, destination):
         # Read microscopy file for each patient
-        rcm_data = pandas.read_csv(self.rcm_file, dtype=str)
+        rcm_data = pd.read_csv(self.rcm_file, dtype=str)
         # Folder where are send new data
         destination_folder = path.join(destination, 'Microscopy')
         if not path.exists(destination_folder):
@@ -199,7 +183,7 @@ class DataManager:
         microscopy_labels = rcm_data[rcm_data['ID_RCM'] == source_id]
         microscopy_folder = path.join(self.microscopy_folder, source_id)
         for ind, row_label in microscopy_labels.iterrows():
-            if pandas.isna(row_label['Folder']):
+            if pd.isna(row_label['Folder']):
                 microscopy_subfolder = microscopy_folder
                 destination_subfolder = destination_folder
             else:
@@ -210,7 +194,7 @@ class DataManager:
 
             # Browse different labels...
             for label in self.labels:
-                if pandas.isna(row_label[label]):
+                if pd.isna(row_label[label]):
                     continue
                 images_refs = DataManager.ref_to_images(row_label[label])
 
@@ -254,7 +238,7 @@ class DataManager:
 
         id_modality = ['ID_Dermoscopy', 'ID_RCM']
         # Read csv
-        table = pandas.read_csv(self.table_file, dtype=str)
+        table = pd.read_csv(self.table_file, dtype=str)
         table = table.drop(excluded_meta, axis=1)
         nb_patients = table.shape[0]
 
@@ -274,7 +258,8 @@ class DataManager:
                 makedirs(out_patient_folder)
 
             # Write patient meta
-            pandas.DataFrame([row.drop(id_modality, errors='ignore').to_dict()]).to_csv(path.join(out_patient_folder, 'patient.csv'), index=False)
+            pd.DataFrame([row.drop(id_modality, errors='ignore').to_dict()]).to_csv(
+                path.join(out_patient_folder, 'patient.csv'), index=False)
 
             images = []
 
@@ -289,7 +274,7 @@ class DataManager:
                 images.extend(self.compute_microscopy(row['ID_RCM'], out_patient_folder))
 
             # Write images list
-            dataframe = pandas.DataFrame(images)
+            dataframe = pd.DataFrame(images)
             dataframe.index.name = 'ID_Image'
             dataframe.to_csv(path.join(out_patient_folder, 'images.csv'))
 
