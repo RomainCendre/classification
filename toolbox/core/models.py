@@ -387,13 +387,12 @@ class BuiltInModels:
     @staticmethod
     def get_pls_process():
         pipe = Pipeline([('pls', PLSTransform()),
-                         ('clf', SVC(kernel='rbf', class_weight='balanced', probability=True)),
+                         ('clf', SVC(kernel='linear', class_weight='balanced', probability=True)),
                          ])
         # Define parameters to validate through grid CV
         parameters = {
-            'pls__n_components': range(2, 12, 2),
-            'clf__C': geomspace(0.01, 1000, 6),
-            'clf__gamma': geomspace(0.01, 1000, 6)
+            'pls__n_components': list(range(2, 12, 2)),
+            'clf__C': geomspace(0.01, 1000, 6)
         }
         return pipe, parameters
 

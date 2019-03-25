@@ -34,7 +34,7 @@ class Reader:
             except OSError:
                 print('Patient {}'.format(subdir))
 
-        return pd.concat(datas, ignore_index=True)
+        return pd.concat(datas, sort=False, ignore_index=True)
 
     def scan_folder_for_images(self, folder_path):
         # Subdirectories
@@ -67,7 +67,7 @@ class Reader:
             patches = patches.merge(data_set, on='Reference')
             patches_data.append(patches)
 
-        return pd.concat(patches_data)
+        return pd.concat(patches_data, sort=False)
 
     @staticmethod
     def __get_patches(filename, reference, patch_size, temp_folder):

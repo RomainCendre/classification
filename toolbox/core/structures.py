@@ -191,7 +191,7 @@ class Inputs(Data):
             return
 
         # Load data and set loading property to True
-        self.data = pd.concat([self.loader(self.instance, folder) for folder in self.folders], ignore_index=True)
+        self.data = pd.concat([self.loader(self.instance, folder) for folder in self.folders], sort=False, ignore_index=True)
         # self.data.reset_index()
         self.load_state = True
 
