@@ -62,6 +62,7 @@ class Transforms:
                             'preprocessing_function':
                                 Classifiers.get_preprocessing_application(architecture=architecture)}
         extractor = KerasBatchClassifier(Transforms.get_application, **extractor_params)
+        extractor.name = 'Keras{pool}'.format(pool=pooling)
         return extractor
 
     @staticmethod
@@ -83,7 +84,10 @@ class Transforms:
     @staticmethod
     def get_haralick(mean=True):
         pipe = Pipeline([('haralick', HaralickTransform(mean=mean))])
-        pipe.name = 'Haralick'
+        if mean:
+            pipe.name = 'HaralickMean'
+        else:
+            pipe.name = 'Haralick'
         # Define parameters to validate through grid CV
         parameters = {}
         return pipe, parameters

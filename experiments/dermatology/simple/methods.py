@@ -1,4 +1,5 @@
 import itertools
+from copy import deepcopy
 from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold, GroupKFold
@@ -46,8 +47,6 @@ if __name__ == "__main__":
 
     # Methods
     methods = [('Haralick', Transforms.get_haralick(mean=False)),
-               ('HaralickMean', Transforms.get_haralick(mean=True)),
-               ('Wavelet', Transforms.get_image_dwt()),
                ('KerasAverage', Transforms.get_keras_extractor(pooling='avg')),
                ('KerasMaximum', Transforms.get_keras_extractor(pooling='max'))]
 
@@ -62,17 +61,18 @@ if __name__ == "__main__":
     combinations = list(itertools.product(filters, inputs, methods, models))
     for combination in combinations:
         filter, input, method, model = combination
-
-        # Change filters
-        input[1].set_filters(filter[1])
-        input[1].set_encoders({'label': OrderedEncoder().fit(filter[1]['Label']),
-                               'groups': LabelEncoder()})
-
         name = '{filter}_{input}_{method}_{model}'.format(filter=filter[0], input=input[0],
                                                           method=method[0], model=model[0])
-        process.checkpoint_step(inputs=input[1], model=method[1], folder=features_folder,
+
+        # Change filters
+        input = deepcopy(input[1])
+        input.set_filters(filter[1])
+        input.set_encoders({'label': OrderedEncoder().fit(filter[1]['Label']),
+                            'groups': LabelEncoder()})
+
+        process.checkpoint_step(inputs=input, model=method[1], folder=features_folder,
                                 projection_folder=projection_folder, projection_name=name)
-        process.end(inputs=input[1], model=model[1], output_folder=output_folder, name=name)
+        process.end(inputs=input, model=model[1], output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)
