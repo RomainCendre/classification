@@ -2,7 +2,7 @@ import glob
 import warnings
 from os.path import join
 from copy import deepcopy
-from numpy import unique, array_equal, save, load
+from numpy import unique, array_equal, save, load, array
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
@@ -202,7 +202,6 @@ class Classifier:
                 features = self.__model.transform(datas, **self.__params)
             else:
                 features = self.__model.predict_proba(datas, **self.__params)
-            features = [feature for feature in features]
 
             # Now save features as files
             print('Writting data at {folder}'.format(folder=folder))
@@ -212,7 +211,8 @@ class Classifier:
             print('Loading data at {folder}'.format(folder=folder))
             for expected_file in expected_files:
                 features.append(load(expected_file))
-
+            features = array(features)
+        # Update input
         inputs.update_data(prefix, features, references)
 
     @staticmethod

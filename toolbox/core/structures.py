@@ -219,7 +219,18 @@ class Inputs(Data):
         self.check_load()
         if 'reference' not in self.tags:
             return None
-        self.data = self.data.merge(pd.DataFrame({key: datas, self.tags['reference']: references}))
+        # As list for update of Dataframe
+        references = [ref for ref in references]
+        datas = [d for d in datas]
+        # Now update, if already exist just update values
+        if key in self.data.columns:
+            self.data = self.data.set_index(self.tags['reference'])
+            temp = pd.DataFrame({key: datas, self.tags['reference']: references}).set_index(self.tags['reference'])
+            self.data.update(temp)
+            self.data = self.data.reset_index()
+        else:
+            temp = pd.DataFrame({key: datas, self.tags['reference']: references})
+            self.data = self.data.merge(temp)
         self.tags.update({'data': key})
 
 
