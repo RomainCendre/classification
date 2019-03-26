@@ -1,13 +1,11 @@
 import glob
 import warnings
-from os.path import join, basename, splitext
+from os.path import join
 from copy import deepcopy
-from numpy import arange,  unique, asarray, mean, array_equal, save, load
+from numpy import unique, array_equal, save, load
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
-
-from toolbox.core.generators import ResourcesGenerator
 from toolbox.core.models import KerasBatchClassifier
 from toolbox.core.structures import Outputs
 

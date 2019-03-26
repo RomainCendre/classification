@@ -379,8 +379,8 @@ class BuiltInModels:
         # Define parameters to validate through grid CV
         parameters = {
             'pca__n_components': [0.95, 0.975, 0.99],
-            'clf__C': geomspace(0.01, 1000, 6),
-            'clf__gamma': geomspace(0.01, 1000, 6)
+            'clf__C': geomspace(0.01, 1000, 6).tolist(),
+            'clf__gamma': geomspace(0.01, 1000, 6).tolist()
         }
         return pipe, parameters
 
@@ -392,7 +392,7 @@ class BuiltInModels:
         # Define parameters to validate through grid CV
         parameters = {
             'pls__n_components': list(range(2, 12, 2)),
-            'clf__C': geomspace(0.01, 1000, 6)
+            'clf__C': geomspace(0.01, 1000, 6).tolist()
         }
         return pipe, parameters
 
