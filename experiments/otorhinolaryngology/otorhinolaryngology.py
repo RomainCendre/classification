@@ -26,12 +26,10 @@ if __name__ == "__main__":
         makedirs(output_folder)
 
     # Filters
-    data_filters = {
-        'Results_All': {'label': ['Sain', 'Precancer', 'Cancer']},
-        'Results_SvsC': {'label': ['Sain', 'Cancer']},
-        'Results_SvsP': {'label': ['Sain', 'Precancer']},
-        'Results_PvsC': {'label': ['Precancer', 'Cancer']},
-    }
+    filters = [('Results_All', {'label': ['Sain', 'Precancer', 'Cancer']}),
+               ('Results_SvsC', {'label': ['Sain', 'Cancer']}),
+               ('Results_SvsP', {'label': ['Sain', 'Precancer']}),
+               ('Results_PvsC', {'label': ['Precancer', 'Cancer']})]
 
     # Input data
     spectra = Dataset.spectras()
@@ -39,11 +37,11 @@ if __name__ == "__main__":
     spectra.apply_scaling()
     spectra.change_wavelength(wavelength=arange(start=445, stop=962, step=1))
 
-    for item_name, item_filters in data_filters.items():
+    for item_name, item_filters in filters:
         # Change filters
-        spectra.filters = item_filters
-        spectra.encoders = {'label': OrderedEncoder().fit(item_filters['label']),
-                           'groups': LabelEncoder()}
+        spectra.set_filters(item_filters)
+        spectra.set_encoders({'label': OrderedEncoder().fit(item_filters['label']),
+                              'groups': LabelEncoder()})
         process = Process()
         process.begin(inner_cv=validation, outer_cv=validation, settings=settings)
         process.end(inputs=spectra, model=BuiltInModels.get_pls_process(), output_folder=output_folder, name=item_name)

@@ -80,6 +80,9 @@ class Data:
     def is_valid_keys(self, keys):
         return set(keys).issubset(set(self.data.columns))
 
+    def set_filters(self, filters):
+        self.filters = filters
+
     def to_query(self, filter_by):
         filters = []
         for key, values in filter_by.items():
@@ -202,6 +205,9 @@ class Inputs(Data):
         self.data = pd.concat([self.loader(self.instance, folder) for folder in self.folders], sort=False, ignore_index=True)
         # self.data.reset_index()
         self.load_state = True
+
+    def set_encoders(self, encoders):
+        self.encoders = encoders
 
     def sub_inputs(self, filters=None):
         cur_filters = copy(self.filters)
