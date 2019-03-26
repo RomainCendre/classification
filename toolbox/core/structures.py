@@ -1,10 +1,8 @@
+import pandas as pd
 from collections import Iterable
 from copy import copy
 from itertools import chain
-
-import pandas as pd
 from numpy import correlate, ones, interp, array, ndarray
-from numpy.ma import arange
 from sklearn import preprocessing
 from sklearn.exceptions import NotFittedError
 from sklearn.utils.multiclass import unique_labels
@@ -18,6 +16,13 @@ class Settings:
         else:
             self.data = data
 
+    def get_color(self, key):
+        default_color = (0, 0, 0)
+        colors = self.data.get('colors', None)
+        if colors is None:
+            return default_color
+        return colors.get(key, default_color)
+
     def is_in_data(self, check):
         for key, value in check.items():
             if key not in self.data or self.data[key] not in value:
@@ -26,9 +31,6 @@ class Settings:
 
     def update(self, data):
         self.data.update(data)
-
-    def get_color(self, key):
-        return self.data.get(key, None)
 
 
 class Data:

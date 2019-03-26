@@ -5,9 +5,8 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import LabelEncoder
 
 from experiments.processes import Process
-from toolbox.IO.datasets import Dataset
+from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.core.models import Classifiers
-from toolbox.core.structures import Settings
 from toolbox.core.transforms import OrderedEncoder
 
 if __name__ == "__main__":
@@ -18,7 +17,7 @@ if __name__ == "__main__":
     temp_path = gettempdir()
     name = filename
     validation = StratifiedKFold(n_splits=2, shuffle=True)
-    settings = Settings({'labels_colors': dict(Cancer=(1, 0, 0), Precancer=(0.5, 0.5, 0), Sain=(0, 1, 0), Luck=(0, 0, 1))})
+    settings = DefinedSettings.get_default_orl()
 
     # Output dir
     output_folder = normpath('{temp}/spectroscopy/{filename}'.format(temp=temp_path, filename=filename))

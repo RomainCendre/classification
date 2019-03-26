@@ -7,9 +7,8 @@ from os.path import exists, expanduser, normpath, basename, splitext
 from sklearn.preprocessing import LabelEncoder
 
 from experiments.processes import Process
-from toolbox.IO.datasets import Dataset
+from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.core.models import BuiltInModels
-from toolbox.core.structures import Settings
 from toolbox.core.transforms import OrderedEncoder
 
 if __name__ == "__main__":
@@ -19,7 +18,7 @@ if __name__ == "__main__":
     home_path = expanduser("~")
     name = filename
     validation = StratifiedKFold(n_splits=5)
-    settings = Settings({'labels_colors': dict(Cancer=(1, 0, 0), Precancer=(0.5, 0.5, 0), Sain=(0, 1, 0), Luck=(0, 0, 1))})
+    settings = DefinedSettings.get_default_orl()
 
     # Output dir
     output_folder = normpath('{home}/Results/ORL/{filename}'.format(home=home_path, filename=filename))

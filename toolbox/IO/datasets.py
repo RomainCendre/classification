@@ -1,17 +1,11 @@
 from os.path import normpath, expanduser, dirname, join
 from sklearn.preprocessing import LabelEncoder
 from toolbox.IO import dermatology, otorhinolaryngology
-from toolbox.core.structures import Inputs, Spectra
+from toolbox.core.structures import Inputs, Spectra, Settings
 from toolbox.core.transforms import OrderedEncoder
 
 
 class Dataset:
-
-    @staticmethod
-    def thumbnails():
-        home_path = expanduser('~')
-        input_folders = [normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))]
-        return Dataset.__thumbnails(input_folders)
 
     @staticmethod
     def full_images():
@@ -35,9 +29,9 @@ class Dataset:
         return Dataset.__spectras(input_folders)
 
     @staticmethod
-    def test_thumbnails():
-        here_path = dirname(__file__)
-        input_folders = [normpath('{here}/data/dermatology/Thumbnails/'.format(here=here_path))]
+    def thumbnails():
+        home_path = expanduser('~')
+        input_folders = [normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))]
         return Dataset.__thumbnails(input_folders)
 
     @staticmethod
@@ -59,6 +53,12 @@ class Dataset:
         here_path = dirname(__file__)
         input_folders = [normpath('{here}/data/spectroscopy/Patients.csv'.format(here=here_path))]
         return Dataset.__spectras(input_folders)
+
+    @staticmethod
+    def test_thumbnails():
+        here_path = dirname(__file__)
+        input_folders = [normpath('{here}/data/dermatology/Thumbnails/'.format(here=here_path))]
+        return Dataset.__thumbnails(input_folders)
 
     @staticmethod
     def __thumbnails(folders):
@@ -99,3 +99,16 @@ class Dataset:
                                'reference': 'Reference_spectrum'})
         inputs.load()
         return inputs
+
+
+class DefinedSettings:
+
+    @staticmethod
+    def get_default_orl():
+        colors = dict(Cancer=(1, 0, 0), Precancer=(0.5, 0.5, 0), Sain=(0, 1, 0), Luck=(0, 0, 1))
+        return Settings({'colors': colors})
+
+    @staticmethod
+    def get_default_dermatology():
+        colors = dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0), Luck=(0, 0, 1))
+        return Settings({'colors': colors})
