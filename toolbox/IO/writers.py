@@ -157,8 +157,6 @@ class ResultWriter:
         labels = concatenate(labels, axis=0)
         probabilities = self.results.get_from_key(key='Probability')
         probabilities = concatenate(probabilities, axis=0)
-        linecycler = cycle(['-', '-.', ':'])
-        # colors = self.settings.get_color('labels_colors')
         if single_axe:
             figure, axe = pyplot.subplots(ncols=1, figsize=(21, 7), sharex=True, sharey=True)
             axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color=self.settings.get_color('Luck'), label='Luck', alpha=.8)
@@ -169,8 +167,9 @@ class ResultWriter:
                                                 probabilities[:, positive_index],
                                                 pos_label=positive_index)
 
-                axe.plot(fpr, tpr, next(linecycler), lw=2, alpha=.8, color=self.settings.get_color(positive_class),
-                         label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr)))
+                axe.plot(fpr, tpr, lw=2, alpha=.8, color=self.settings.get_color(positive_class),
+                         label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr)),
+                         **self.settings.get_line(positive_class))
                 axe.set(adjustable='box',
                         aspect='equal',
                         xlabel='False Positive Rate (1-Specificity)',
@@ -191,7 +190,8 @@ class ResultWriter:
                                                 pos_label=positive_index)
 
                 axe.plot(fpr, tpr, label=r'ROC %s (AUC = %0.2f)' % (self.results.name, auc(fpr, tpr)), lw=2, alpha=.8)
-                axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r', label=self.settings.get_color('Luck'), alpha=.8)
+                axe.plot([0, 1], [0, 1], lw=2, color='r', label=self.settings.get_color('Luck'), alpha=.8,
+                         **self.settings.get_line(positive_class))
                 axe.set(adjustable='box',
                         aspect='equal',
                         xlabel='False Positive Rate (1-Specificity)',

@@ -23,6 +23,12 @@ class Settings:
             return default_color
         return colors.get(key, default_color)
 
+    def get_line(self, key):
+        lines = self.data.get('lines', None)
+        if lines is None:
+            return None
+        return lines.get(key, None)
+
     def is_in_data(self, check):
         for key, value in check.items():
             if key not in self.data or self.data[key] not in value:

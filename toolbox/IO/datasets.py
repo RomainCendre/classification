@@ -106,9 +106,17 @@ class DefinedSettings:
     @staticmethod
     def get_default_orl():
         colors = dict(Cancer=(1, 0, 0), Precancer=(0.5, 0.5, 0), Sain=(0, 1, 0), Luck=(0, 0, 1))
-        return Settings({'colors': colors})
+        lines = {'Cancer': {'linestyle': '-'},
+                 'Precancer': {'linestyle': '-.'},
+                 'Sain': {'linestyle': ':'},
+                 'Luck': {'linestyle': '--'}}
+        return Settings({'colors': colors, 'lines': lines})
 
     @staticmethod
     def get_default_dermatology():
         colors = dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0), Luck=(0, 0, 1))
-        return Settings({'colors': colors})
+        lines = {'Malignant': {'linestyle': '-'},
+                 'Benign': {'linestyle': '-.'},
+                 'Normal': {'linestyle': ':'},
+                 'Luck': {'linestyle': '--'}}
+        return Settings({'colors': colors, 'lines': lines})
