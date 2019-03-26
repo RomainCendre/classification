@@ -202,6 +202,7 @@ class Classifier:
                 features = self.__model.transform(datas, **self.__params)
             else:
                 features = self.__model.predict_proba(datas, **self.__params)
+            features = [feature for feature in features]
 
             # Now save features as files
             print('Writting data at {folder}'.format(folder=folder))
