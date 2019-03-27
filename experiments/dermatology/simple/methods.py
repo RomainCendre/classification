@@ -33,10 +33,10 @@ if __name__ == "__main__":
         makedirs(projection_folder)
 
     # Filters
-    filters = [('Results_All', {'Label': ['Normal', 'Benign', 'Malignant']}),
-               ('Results_NvsM', {'Label': ['Normal', 'Malignant']}),
-               ('Results_NvsB', {'Label': ['Normal', 'Benign']}),
-               ('Results_BvsM', {'Label': ['Benign', 'Malignant']})]
+    filters = [('All', {'Label': ['Normal', 'Benign', 'Malignant']}),
+               ('NvsM', {'Label': ['Normal', 'Malignant']}),
+               ('NvsB', {'Label': ['Normal', 'Benign']}),
+               ('BvsM', {'Label': ['Benign', 'Malignant']})]
 
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)

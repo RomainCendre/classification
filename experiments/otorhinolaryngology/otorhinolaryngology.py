@@ -26,10 +26,10 @@ if __name__ == "__main__":
         makedirs(output_folder)
 
     # Filters
-    filters = [('Results_All', {'label': ['Sain', 'Precancer', 'Cancer']}),
-               ('Results_SvsC', {'label': ['Sain', 'Cancer']}),
-               ('Results_SvsP', {'label': ['Sain', 'Precancer']}),
-               ('Results_PvsC', {'label': ['Precancer', 'Cancer']})]
+    filters = [('All', {'label': ['Sain', 'Precancer', 'Cancer']}),
+               ('SvsC', {'label': ['Sain', 'Cancer']}),
+               ('SvsP', {'label': ['Sain', 'Precancer']}),
+               ('PvsC', {'label': ['Precancer', 'Cancer']})]
 
     # Input data
     spectra = Dataset.spectras()
