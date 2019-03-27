@@ -16,12 +16,12 @@ class Process:
         self.inputs = []
         self.results = []
 
-    def checkpoint_step(self, inputs, model, folder, projection_folder=None, projection_name=None):
+    def checkpoint_step(self, inputs, model, folder, projection_folder=None,):
         self.classifier.set_model(model)
         self.classifier.features_checkpoint(inputs, folder)
         # Write data to visualize it
-        if projection_folder is not None and projection_name is not None:
-            projection_folder = join(projection_folder, projection_name)
+        if projection_folder is not None:
+            projection_folder = join(projection_folder, inputs.name)
             if not exists(projection_folder):
                 makedirs(projection_folder)
             DataProjectorWriter.project_data(inputs, projection_folder)

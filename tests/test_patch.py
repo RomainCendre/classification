@@ -3,7 +3,6 @@ from os import makedirs, startfile
 from os.path import normpath, exists, dirname, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import LabelEncoder
-
 from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.core.models import Classifiers, Transforms

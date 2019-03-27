@@ -4,7 +4,6 @@ from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold, GroupKFold
 from sklearn.preprocessing import LabelEncoder
-
 from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.core.models import Transforms, Classifiers
@@ -41,9 +40,9 @@ if __name__ == "__main__":
 
     # Filters
     filters = [('All', {'Label': ['Normal', 'Benign', 'Malignant']}),
-               ('NvsM', {'Label': ['Normal', 'Malignant']}),
-               ('NvsB', {'Label': ['Normal', 'Benign']}),
-               ('BvsM', {'Label': ['Benign', 'Malignant']})]
+               ('NvsM', {'Label': ['Normal', 'Malignant']})]
+               # ('NvsB', {'Label': ['Normal', 'Benign']}),
+               # ('BvsM', {'Label': ['Benign', 'Malignant']})]
 
     # Inputs
     inputs = Dataset.patches_images(folder=patch_folder, size=250)
@@ -68,19 +67,18 @@ if __name__ == "__main__":
         working_input.set_filters(filter[1])
         working_input.set_encoders({'label': OrderedEncoder().fit(filter[1]['Label']),
                                     'groups': LabelEncoder()})
-        name = '{filter}_{method}'.format(filter=filter[0], method=method[0])
-        process.checkpoint_step(inputs=working_input, model=method[1], folder=features_folder,
-                                projection_folder=projection_folder, projection_name=name)
+        working_input.name = 'Image_{filter}_{method}'.format(filter=filter[0], method=method[0])
+        process.checkpoint_step(inputs=working_input, model=method[1], folder=features_folder, projection_folder=projection_folder)
         working_input.collapse(reference_tag='Reference', data_tag='ImageData', flatten=False)
-        process.evaluate_step(inputs=working_input, model=Classifiers.get_norm_model(), name=name)
+        process.evaluate_step(inputs=working_input, model=Classifiers.get_norm_model())
 
         # Patient classification
-        name = 'Patient_{name}'.format(name=name)
+        working_input.name = 'Patient_{filter}_{method}'.format(filter=filter[0], method=method[0])
         inputs.collapse(reference_tag='ID', data_tag='PatientData', flatten=True)
         inputs.tags.update({'label': 'Binary_Diagnosis'})
         inputs.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
                              'groups': LabelEncoder()})
-        process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model(patch=False), name=name)
+        process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model(patch=False))
 
     process.end(output_folder=output_folder)
 
