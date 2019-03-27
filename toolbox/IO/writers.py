@@ -112,10 +112,9 @@ class ResultWriter:
         self.settings = settings
 
     def write_results(self, dir_name, name, use_std=True):
-        self.write_report(use_std=use_std, path=join(dir_name, "{name}_report.html".format(name=name)))
-        self.write_roc(path=join(dir_name, "{name}_rocs.pdf".format(name=name)), single_axe=False)
-        self.write_roc(path=join(dir_name, "{name}_roc.pdf".format(name=name)), single_axe=True)
-        self.write_misclassified(path=join(dir_name, "{name}_misclassified.csv".format(name=name)))
+        self.write_report(use_std=use_std, path=join(dir_name, '{name}_report.html'.format(name=name)))
+        self.write_roc(path=join(dir_name, '{name}_rocs.pdf'.format(name=name)))
+        self.write_misclassified(path=join(dir_name, '{name}_misclassified.csv'.format(name=name)))
 
     def write_misclassified(self, path=None):
         for result in self.results:
@@ -150,7 +149,7 @@ class ResultWriter:
             with open(path, "w") as text_file:
                 text_file.write("%s" % mk_report.get_document_body())
 
-    def write_roc(self, path, single_axe=False):
+    def write_roc(self, path):
 
         with PdfPages(path) as pdf:
             for result in self.results:
@@ -166,56 +165,36 @@ class ResultWriter:
                 probabilities = result.get_from_key(key='Probability')
                 probabilities = concatenate(probabilities, axis=0)
 
-                if single_axe:
-                    figure, axe = pyplot.subplots(ncols=1, figsize=(21, 7), sharex=True, sharey=True)
-                    axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color=self.settings.get_color('Luck'), label='Luck', alpha=.8)
-                    for index, positive_index in enumerate(positives_indices):
-                        # Get AUC results for current positive class
-                        positive_class = result.decode('label', positive_index)
-                        fpr, tpr, threshold = roc_curve(labels,
-                                                        probabilities[:, positive_index],
-                                                        pos_label=positive_index)
+                figure, axe = pyplot.subplots(ncols=1, figsize=(10, 10))
+                # Plot luck
+                axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color=self.settings.get_color('Luck'), label='Luck', alpha=.8)
+                title = ''
 
-                        axe.plot(fpr, tpr, lw=2, alpha=.8, color=self.settings.get_color(positive_class),
-                                 label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr)),
-                                 **self.settings.get_line(positive_class))
-                        axe.set(adjustable='box',
-                                aspect='equal',
-                                xlabel='False Positive Rate (1-Specificity)',
-                                ylabel='True Positive Rate (Sensitivity)',
-                                title='Receiver operating characteristic')
-                        axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
+                # Browse each label
+                for positive_index in positives_indices:
+                    positive_class = result.decode('label', positive_index)
+                    fpr, tpr, threshold = roc_curve(labels,
+                                                    probabilities[:, positive_index],
+                                                    pos_label=positive_index)
+                    axe.plot(fpr, tpr, lw=2, alpha=.8, color=self.settings.get_color(positive_class),
+                             label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr)),
+                             **self.settings.get_line(positive_class))
 
-                    figure.suptitle(result.name)
-                    pdf.savefig(figure)
-                    pyplot.close()
+                    # Switch depend on the mode of display
+                    title = 'Receiver operating characteristic'
 
-                else:
-                    figure, axes = pyplot.subplots(ncols=len(positives_indices), figsize=(21, 7), sharex=True, sharey=True)
-                    if len(positives_indices) == 1:
-                        axes = [axes]
+                # Now set title and legend
+                axe.set(adjustable='box',
+                        aspect='equal',
+                        xlabel='False Positive Rate (1-Specificity)',
+                        ylabel='True Positive Rate (Sensitivity)',
+                        title=title)
+                axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
 
-                    for index, axe in enumerate(axes):
-                        # Get AUC results for current positive class
-                        positive_index = positives_indices[index]
-                        positive_class = result.decode('label', positive_index)
-                        fpr, tpr, threshold = roc_curve(labels,
-                                                        probabilities[:, positive_index],
-                                                        pos_label=positive_index)
+                figure.suptitle(result.name)
+                pdf.savefig(figure)
+                pyplot.close()
 
-                        axe.plot(fpr, tpr, label=r'ROC %s (AUC = %0.2f)' % (result.name, auc(fpr, tpr)), lw=2, alpha=.8)
-                        axe.plot([0, 1], [0, 1], lw=2, color='r', label=self.settings.get_color('Luck'), alpha=.8,
-                                 **self.settings.get_line(positive_class))
-                        axe.set(adjustable='box',
-                                aspect='equal',
-                                xlabel='False Positive Rate (1-Specificity)',
-                                ylabel='True Positive Rate (Sensitivity)',
-                                title='Receiver operating characteristic - Label {label}'.format(label=positive_class))
-                        axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
-
-                    figure.suptitle(result.name)
-                    pdf.savefig(figure)
-                    pyplot.close()
 
     def report_scores(self, result, use_std=True):
         dict_report = self.__get_report_values(result=result, use_std=use_std)
