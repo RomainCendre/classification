@@ -43,12 +43,14 @@ if __name__ == "__main__":
     process.begin(inner_cv=validation, outer_cv=validation, settings=settings)
     process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(), folder=features_folder)
     inputs.collapse(reference_tag='Reference', data_tag='ImageData', flatten=False)
-    process.end(inputs=inputs, model=Classifiers.get_patch_model(), output_folder=output_folder, name='Images_{name}'.format(name=name))
+    process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model(), name='Images_{name}'.format(name=name))
     inputs.collapse(reference_tag='ID', data_tag='PatientData', flatten=False)
     inputs.tags.update({'label': 'Binary_Diagnosis'})
     inputs.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
                          'groups': LabelEncoder()})
-    process.end(inputs=inputs, model=Classifiers.get_patch_model(patch=False), output_folder=output_folder, name='Patient_{name}'.format(name=name))
+    process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model(patch=False), name='Patient_{name}'.format(name=name))
+
+    process.end(output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)

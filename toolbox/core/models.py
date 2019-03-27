@@ -219,13 +219,13 @@ class Classifiers:
         # Add dimensions reducer
         if patch:
             steps.append(('norm', PNormTransform()))
-            parameters.update({'norm__p': [1, 2, 3, 4]})
+            parameters.update({'norm__p': [2, 3, 4]})
             steps.append(('rfe', RFE(SVC(kernel='linear', class_weight='balanced', probability=True), 100)))
         else:
             steps.append(('norm1', PNormTransform(axis=2)))
-            parameters.update({'norm1__p': [1, 2, 3, 4]})
+            parameters.update({'norm1__p': [2, 3, 4]})
             steps.append(('norm2', PNormTransform()))
-            parameters.update({'norm2__p': [1, 2, 3, 4]})
+            parameters.update({'norm2__p': [2, 3, 4]})
             steps.append(('rfe', RFE(SVC(kernel='linear', class_weight='balanced', probability=True), 100)))
 
         # Add scaling step

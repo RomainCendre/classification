@@ -10,6 +10,7 @@ from PIL import Image
 from matplotlib import pyplot, cm
 from os.path import join, exists
 from keras import backend as K
+from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.image import imsave
 from numpy import std, repeat, newaxis, uint8, arange, savetxt, array, copy, concatenate
 from sklearn.metrics import auc, roc_curve, classification_report
@@ -67,75 +68,81 @@ class DataProjectorWriter:
 
 class StatisticsWriter:
 
-    def __init__(self, inputs):
+    def __init__(self, inputs, titles):
         self.inputs = inputs
+        if not isinstance(self.inputs, list):
+            self.inputs = [self.inputs]
+
+        self.titles = titles
+        if not isinstance(self.titles, list):
+            self.titles = [self.titles]
 
     def write_result(self, keys, dir_name, name):
-        self.write_stats(path=join(dir_name, name + "_stat.pdf"), keys=keys)
+        path = join(dir_name, name + "_stat.pdf")
+        with PdfPages(path) as pdf:
+            for inputs, title in zip(self.inputs, self.titles):
+                figure, axes = pyplot.subplots(ncols=len(keys), figsize=(21, 7))
+                # Browse each kind of parameter
+                for index, key in enumerate(keys):
+                    elements = inputs.get_from_key(key=key)
+                    if elements is None:
+                        print('Key {key} is missing from data.'.format(key=key))
+                        continue
 
-    def write_stats(self, keys, path=None):
-        nb_chart = len(keys)
-
-        # Browse each kind of parameter
-        for index, key in enumerate(keys):
-            elements = self.inputs.get_from_key(key=key)
-            if elements is None:
-                print('Key {key} is missing from data.'.format(key=key))
-                continue
-
-            counter = Counter(list(elements))
-            pyplot.subplot(ceil(nb_chart/2), 2, index+1)
-            pyplot.pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
-            pyplot.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-            pyplot.title(key)
-
-        if path is None:
-            pyplot.show()
-        else:
-            pyplot.savefig(path, format='pdf')
-        pyplot.clf()
+                    counter = Counter(list(elements))
+                    axes[index].pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
+                    axes[index].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+                    axes[index].set_title(key)
+                figure.suptitle(title)
+                pdf.savefig(figure)
+                pyplot.close()
 
 
 class ResultWriter:
 
-    def __init__(self, inputs, results, settings):
-        self.inputs = inputs
+    def __init__(self, results, titles, settings):
         self.results = results
+        if not isinstance(self.results, list):
+            self.results = [self.results]
+
+        self.titles = titles
+        if not isinstance(self.titles, list):
+            self.titles = [self.titles]
+
         self.settings = settings
 
-    def write_results(self, dir_name, name, pos_label=[], use_std=True):
+    def write_results(self, dir_name, name, use_std=True):
         self.write_report(use_std=use_std, path=join(dir_name, "{name}_report.html".format(name=name)))
-        self.write_roc(pos_label, path=join(dir_name, "{name}_rocs.pdf".format(name=name)), single_axe=False)
-        self.write_roc(pos_label, path=join(dir_name, "{name}_roc.pdf".format(name=name)), single_axe=True)
+        self.write_roc(path=join(dir_name, "{name}_rocs.pdf".format(name=name)), single_axe=False)
+        self.write_roc(path=join(dir_name, "{name}_roc.pdf".format(name=name)), single_axe=True)
         self.write_misclassified(path=join(dir_name, "{name}_misclassified.csv".format(name=name)))
 
     def write_misclassified(self, path=None):
-        if not self.results.is_valid_keys(['Label', 'Prediction', 'Reference']):
-            print('Missing tag for misclassification report.')
-            return
+        for result in self.results:
+            if not result.is_valid_keys(['Label', 'Prediction', 'Reference']):
+                print('Missing tag for misclassification report.')
+                return
 
-        labels = self.inputs.decode('label', concatenate(self.results.get_from_key(key='Label'), axis=0))
-        predictions = self.inputs.decode('label', concatenate(self.results.get_from_key(key='Prediction'), axis=0))
-        references = concatenate(self.results.get_from_key(key='Reference'), axis=0)
-        misclassified = [index for index, (i, j) in enumerate(zip(labels, predictions)) if i != j]
-        data = {'paths': references[misclassified],
-                'labels': labels[misclassified],
-                'predictions': predictions[misclassified]}
-        pandas.DataFrame(data).to_csv(path_or_buf=path, index=False)
+            labels = result.decode('label', concatenate(result.get_from_key(key='Label'), axis=0))
+            predictions = result.decode('label', concatenate(result.get_from_key(key='Prediction'), axis=0))
+            references = concatenate(result.get_from_key(key='Reference'), axis=0)
+            misclassified = [index for index, (i, j) in enumerate(zip(labels, predictions)) if i != j]
+            data = {'paths': references[misclassified],
+                    'labels': labels[misclassified],
+                    'predictions': predictions[misclassified]}
+            pandas.DataFrame(data).to_csv(path_or_buf=path, index=False)
 
     def write_report(self, use_std=True, path=None):
-        if not self.results.is_valid_keys(['Label', 'Prediction']):
-            print('Missing tag for global report.')
-            return
-
-        # Initialize converter of markup
-        markup = markups.TextileMarkup()
-
-        # Get report
         report = ''
-        report += self.report_scores(use_std)
+        for result in self.results:
+            if not result.is_valid_keys(['Label', 'Prediction']):
+                print('Missing tag for global report.')
+                return
+            # Initialize converter of markup
+            report += self.report_scores(result, use_std)+'\n\n'
 
         # Write to html way
+        markup = markups.TextileMarkup()
         mk_report = markup.convert(report)
         if path is None:
             print(report)
@@ -143,78 +150,83 @@ class ResultWriter:
             with open(path, "w") as text_file:
                 text_file.write("%s" % mk_report.get_document_body())
 
-    def write_roc(self, positives_classes=[], single_axe=False, path=None):
-        if not self.results.is_valid_keys(['Label', 'Prediction', 'Probability']):
-            print('Missing tag for Roc Curves report.')
-            return
+    def write_roc(self, path, single_axe=False):
 
-        if not positives_classes:
-            positives_indices = self.results.get_unique_from_key('Label')
-        else:
-            positives_indices = self.inputs.encode_label(positives_classes)
+        with PdfPages(path) as pdf:
+            for result in self.results:
+                if not result.is_valid_keys(['Label', 'Prediction', 'Probability']):
+                    print('Missing tag for Roc Curves report.')
+                    return
 
-        labels = self.results.get_from_key(key='Label')
-        labels = concatenate(labels, axis=0)
-        probabilities = self.results.get_from_key(key='Probability')
-        probabilities = concatenate(probabilities, axis=0)
-        if single_axe:
-            figure, axe = pyplot.subplots(ncols=1, figsize=(21, 7), sharex=True, sharey=True)
-            axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color=self.settings.get_color('Luck'), label='Luck', alpha=.8)
-            for index, positive_index in enumerate(positives_indices):
-                # Get AUC results for current positive class
-                positive_class = self.inputs.decode('label', positive_index)
-                fpr, tpr, threshold = roc_curve(labels,
-                                                probabilities[:, positive_index],
-                                                pos_label=positive_index)
+                positives_indices = result.get_unique_from_key('Label')
+                # Labels
+                labels = result.get_from_key(key='Label')
+                labels = concatenate(labels, axis=0)
+                # Probabilities for drawing
+                probabilities = result.get_from_key(key='Probability')
+                probabilities = concatenate(probabilities, axis=0)
 
-                axe.plot(fpr, tpr, lw=2, alpha=.8, color=self.settings.get_color(positive_class),
-                         label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr)),
-                         **self.settings.get_line(positive_class))
-                axe.set(adjustable='box',
-                        aspect='equal',
-                        xlabel='False Positive Rate (1-Specificity)',
-                        ylabel='True Positive Rate (Sensitivity)',
-                        title='Receiver operating characteristic')
-                axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
-        else:
-            figure, axes = pyplot.subplots(ncols=len(positives_indices), figsize=(21, 7), sharex=True, sharey=True)
-            if len(positives_classes) == 1:
-                axes = [axes]
+                if single_axe:
+                    figure, axe = pyplot.subplots(ncols=1, figsize=(21, 7), sharex=True, sharey=True)
+                    axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color=self.settings.get_color('Luck'), label='Luck', alpha=.8)
+                    for index, positive_index in enumerate(positives_indices):
+                        # Get AUC results for current positive class
+                        positive_class = result.decode('label', positive_index)
+                        fpr, tpr, threshold = roc_curve(labels,
+                                                        probabilities[:, positive_index],
+                                                        pos_label=positive_index)
 
-            for index, axe in enumerate(axes):
-                # Get AUC results for current positive class
-                positive_index = positives_indices[index]
-                positive_class = self.inputs.decode('label', positive_index)
-                fpr, tpr, threshold = roc_curve(labels,
-                                                probabilities[:, positive_index],
-                                                pos_label=positive_index)
+                        axe.plot(fpr, tpr, lw=2, alpha=.8, color=self.settings.get_color(positive_class),
+                                 label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr)),
+                                 **self.settings.get_line(positive_class))
+                        axe.set(adjustable='box',
+                                aspect='equal',
+                                xlabel='False Positive Rate (1-Specificity)',
+                                ylabel='True Positive Rate (Sensitivity)',
+                                title='Receiver operating characteristic')
+                        axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
 
-                axe.plot(fpr, tpr, label=r'ROC %s (AUC = %0.2f)' % (self.results.name, auc(fpr, tpr)), lw=2, alpha=.8)
-                axe.plot([0, 1], [0, 1], lw=2, color='r', label=self.settings.get_color('Luck'), alpha=.8,
-                         **self.settings.get_line(positive_class))
-                axe.set(adjustable='box',
-                        aspect='equal',
-                        xlabel='False Positive Rate (1-Specificity)',
-                        ylabel='True Positive Rate (Sensitivity)',
-                        title='Receiver operating characteristic - Label {label}'.format(label=positive_class))
-                axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
+                    figure.suptitle(result.name)
+                    pdf.savefig(figure)
+                    pyplot.close()
 
-        if path is None:
-            pyplot.show()
-        else:
-            pyplot.savefig(path, format='pdf')
-        pyplot.clf()
+                else:
+                    figure, axes = pyplot.subplots(ncols=len(positives_indices), figsize=(21, 7), sharex=True, sharey=True)
+                    if len(positives_indices) == 1:
+                        axes = [axes]
 
-    def report_scores(self, use_std=True):
-        dict_report = self.__get_report_values(use_std=use_std)
+                    for index, axe in enumerate(axes):
+                        # Get AUC results for current positive class
+                        positive_index = positives_indices[index]
+                        positive_class = result.decode('label', positive_index)
+                        fpr, tpr, threshold = roc_curve(labels,
+                                                        probabilities[:, positive_index],
+                                                        pos_label=positive_index)
+
+                        axe.plot(fpr, tpr, label=r'ROC %s (AUC = %0.2f)' % (result.name, auc(fpr, tpr)), lw=2, alpha=.8)
+                        axe.plot([0, 1], [0, 1], lw=2, color='r', label=self.settings.get_color('Luck'), alpha=.8,
+                                 **self.settings.get_line(positive_class))
+                        axe.set(adjustable='box',
+                                aspect='equal',
+                                xlabel='False Positive Rate (1-Specificity)',
+                                ylabel='True Positive Rate (Sensitivity)',
+                                title='Receiver operating characteristic - Label {label}'.format(label=positive_class))
+                        axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
+
+                    figure.suptitle(result.name)
+                    pdf.savefig(figure)
+                    pyplot.close()
+
+    def report_scores(self, result, use_std=True):
+        dict_report = self.__get_report_values(result=result, use_std=use_std)
         headers = ['Labels', 'Precision', 'Recall', 'F1-score', 'Support']
-        report = 'h1. ' + self.results.name + '\n\n'
+        report = 'h1. ' + result.name + '\n\n'
         report += 'h2. Scores\n\n'
         report += '|_. ' + '|_. '.join(headers) + '|\n'
 
         # Label
-        ulabels = self.results.get_unique_from_key('Label')
-        ulabels = self.inputs.decode('label', ulabels)
+        ulabels = result.get_unique_from_key('Label')
+        ulabels = result.decode('label', ulabels)
         for ind, label in enumerate(ulabels):
             label_report = dict_report[label]
             report += '|' + label.capitalize()
@@ -231,23 +243,23 @@ class ResultWriter:
 
         report += 'h2. Parameters\n\n'
         report += '|_. Folds|_. HyperParameters|_. Number Features|\n'
-        for fold, value in enumerate(self.__parameters()):
+        for fold, value in enumerate(self.__parameters(result=result)):
             report += '|Fold {fold}|{params}|{nb_feat}|\n'.format(fold=fold+1, params=value[0], nb_feat=value[1])
 
         return report
 
-    def __parameters(self):
-        unique_folds = self.results.get_unique_from_key('Fold')
+    def __parameters(self, result):
+        unique_folds = result.get_unique_from_key('Fold')
         params = []
         for fold in unique_folds:
             filter_by = {'Fold': [fold]}
-            best_params = str(self.results.get_from_key(key='BestParams', filters=filter_by)[0])
-            features_number = str(self.results.get_from_key(key='FeaturesNumber', filters=filter_by)[0])
+            best_params = str(result.get_from_key(key='BestParams', filters=filter_by)[0])
+            features_number = str(result.get_from_key(key='FeaturesNumber', filters=filter_by)[0])
             params.append((best_params, features_number))
         return params
 
-    def __get_report_values(self, use_std=True):
-        report = self.__report_values_fold()
+    def __get_report_values(self, result, use_std=True):
+        report = self.__report_values_fold(result)
 
         if use_std is False:
             for label, val in report.items():
@@ -255,9 +267,9 @@ class ResultWriter:
                     report[label][metrics] = '{mean:0.2f}'.format(mean=report[label][metrics])
         else:
             scores = []
-            unique_folds = self.results.get_unique_from_key('Fold')
+            unique_folds = result.get_unique_from_key('Fold')
             for fold in unique_folds:
-                scores.append(self.__report_values_fold(fold=fold))
+                scores.append(self.__report_values_fold(result=result, fold=fold))
 
             # Browse reference dict
             for label, val in report.items():
@@ -269,16 +281,16 @@ class ResultWriter:
         # Return report
         return report
 
-    def __report_values_fold(self, fold=None):
+    def __report_values_fold(self, result, fold=None):
         if fold is None:
-            labels = self.results.get_from_key(key='Label', flatten=True)
-            predictions = self.results.get_from_key(key='Prediction', flatten=True)
+            labels = result.get_from_key(key='Label', flatten=True)
+            predictions = result.get_from_key(key='Prediction', flatten=True)
         else:
             filter_by = {'Fold': [fold]}
-            labels = self.results.get_from_key(key='Label', filters=filter_by, flatten=True)
-            predictions = self.results.get_from_key(key='Prediction', filters=filter_by, flatten=True)
-        return classification_report(self.inputs.decode('label', labels),
-                                     self.inputs.decode('label', predictions), output_dict=True)
+            labels = result.get_from_key(key='Label', filters=filter_by, flatten=True)
+            predictions = result.get_from_key(key='Prediction', filters=filter_by, flatten=True)
+        return classification_report(result.decode('label', labels),
+                                     result.decode('label', predictions), output_dict=True)
 
 
 class VisualizationWriter:

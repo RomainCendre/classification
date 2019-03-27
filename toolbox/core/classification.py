@@ -138,7 +138,7 @@ class Classifier:
             # Append element and go on next one
             results.append(result)
 
-        return Outputs(results, name)
+        return Outputs(results, inputs.encoders, name)
 
     def fit(self, inputs):
         # Extract needed data

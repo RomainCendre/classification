@@ -280,7 +280,7 @@ class Outputs(Data):
 
     """
 
-    def __init__(self, results, name=''):
+    def __init__(self, results, encoders={}, name=''):
         """Make an initialisation of SpectrumReader object.
 
         Take a string that represent delimiter
@@ -293,3 +293,44 @@ class Outputs(Data):
 
         super().__init__(results)
         self.name = name
+        self.encoders = encoders
+
+    def decode(self, key, indices):
+        is_list = isinstance(indices, ndarray)
+        if not is_list:
+            indices = array([indices])
+
+        encoder = self.encoders.get(key, None)
+        if encoder is None:
+            result = indices
+        else:
+            try:
+                result = encoder.inverse_transform(indices)
+            except NotFittedError as e:
+                encoder.fit(indices)
+                result = encoder.inverse_transform(indices)
+
+        if not is_list:
+            result = result[0]
+
+        return result
+
+    def encode(self, key, data):
+        is_list = isinstance(data, ndarray)
+        if not is_list:
+            data = array([data])
+
+        encoder = self.encoders.get(key, None)
+        if encoder is None:
+            result = data
+        else:
+            try:
+                result = encoder.transform(data)
+            except NotFittedError as e:
+                encoder.fit(data)
+                result = encoder.transform(data)
+
+        if not is_list:
+            result = result[0]
+
+        return result

@@ -57,7 +57,9 @@ if __name__ == "__main__":
     process = Process()
     process.begin(inner_cv=validation, outer_cv=test, n_jobs=2, settings=settings)
 
+    # Parameters combinations
     combinations = list(itertools.product(filters, methods))
+
     for combination in combinations:
         filter, method = combination
         working_input = deepcopy(inputs)
@@ -70,7 +72,7 @@ if __name__ == "__main__":
         process.checkpoint_step(inputs=working_input, model=method[1], folder=features_folder,
                                 projection_folder=projection_folder, projection_name=name)
         working_input.collapse(reference_tag='Reference', data_tag='ImageData', flatten=False)
-        process.end(inputs=working_input, model=Classifiers.get_norm_model(), output_folder=output_folder, name=name)
+        process.evaluate_step(inputs=working_input, model=Classifiers.get_norm_model(), name=name)
 
         # Patient classification
         name = 'Patient_{name}'.format(name=name)
@@ -78,7 +80,9 @@ if __name__ == "__main__":
         inputs.tags.update({'label': 'Binary_Diagnosis'})
         inputs.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
                              'groups': LabelEncoder()})
-        process.end(inputs=inputs, model=Classifiers.get_norm_model(patch=False), output_folder=output_folder, name=name)
+        process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model(patch=False), name=name)
+
+    process.end(output_folder=output_folder)
 
     # Open result folder
     startfile(output_folder)
