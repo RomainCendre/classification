@@ -5,8 +5,7 @@
       <change beforePath="$PROJECT_DIR$/../annotationTool/sources/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/../annotationTool/sources/core.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../annotationTool/sources/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/../annotationTool/sources/gui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/classification.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/structures.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../thumbnailMaker/.idea/thumbnailMaker.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../thumbnailMaker/.idea/thumbnailMaker.iml" afterDir="false" />
     </list>
     <list id="0d7b2755-a28e-4ac4-9579-9f208c9d1537" name="Revert &quot;Change experiments structure&quot;" comment="Revert &quot;Change experiments structure&quot;&#10;&#10;This reverts commit 91ebc9f3" />
@@ -72,43 +71,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="522">
-              <caret line="256" lean-forward="true" selection-start-line="256" selection-end-line="256" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="522">
-              <caret line="295" lean-forward="true" selection-start-line="295" selection-end-line="295" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/processes.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/methods.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="460">
-              <caret line="73" selection-start-line="73" selection-end-line="73" />
+              <caret line="78" lean-forward="true" selection-start-line="78" selection-end-line="78" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -190,7 +156,6 @@
         <option value="$PROJECT_DIR$/experiments/dermatology/patchs/decisions.py" />
         <option value="$PROJECT_DIR$/experiments/processes.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/patchs/features_with_norm_level.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/patchs/decisions_level.py" />
         <option value="$PROJECT_DIR$/toolbox/core/transforms.py" />
         <option value="$PROJECT_DIR$/../annotationTool/main.py" />
@@ -199,18 +164,19 @@
         <option value="$PROJECT_DIR$/tests/test_patch.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/models.py" />
         <option value="$PROJECT_DIR$/tests/test_otorhinolaryngology.py" />
         <option value="$PROJECT_DIR$/tests/test_haralick.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/writers.py" />
         <option value="$PROJECT_DIR$/../Test/main.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/datasets.py" />
         <option value="$PROJECT_DIR$/experiments/otorhinolaryngology/otorhinolaryngology.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/simple/methods.py" />
         <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
         <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
         <option value="$PROJECT_DIR$/toolbox/core/structures.py" />
         <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/models.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/simple/methods.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py" />
       </list>
     </option>
   </component>
@@ -232,6 +198,24 @@
             <path>
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
               <item name="classification" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
+              <item name="classification" type="462c0819:PsiDirectoryNode" />
+              <item name="experiments" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
+              <item name="classification" type="462c0819:PsiDirectoryNode" />
+              <item name="experiments" type="462c0819:PsiDirectoryNode" />
+              <item name="dermatology" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
+              <item name="classification" type="462c0819:PsiDirectoryNode" />
+              <item name="experiments" type="462c0819:PsiDirectoryNode" />
+              <item name="dermatology" type="462c0819:PsiDirectoryNode" />
+              <item name="patchs" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
@@ -418,21 +402,7 @@
       <workItem from="1553089403684" duration="7967000" />
       <workItem from="1553157473583" duration="48285000" />
       <workItem from="1553499773552" duration="35574000" />
-      <workItem from="1553591407041" duration="14452000" />
-    </task>
-    <task id="LOCAL-00230" summary="Adding deep learning way classification.">
-      <created>1551113817069</created>
-      <option name="number" value="00230" />
-      <option name="presentableId" value="LOCAL-00230" />
-      <option name="project" value="LOCAL" />
-      <updated>1551113817069</updated>
-    </task>
-    <task id="LOCAL-00231" summary="Fix loading bug.">
-      <created>1551114500578</created>
-      <option name="number" value="00231" />
-      <option name="presentableId" value="LOCAL-00231" />
-      <option name="project" value="LOCAL" />
-      <updated>1551114500578</updated>
+      <workItem from="1553591407041" duration="16668000" />
     </task>
     <task id="LOCAL-00232" summary="Update processes.">
       <created>1551168767274</created>
@@ -763,11 +733,25 @@
       <option name="project" value="LOCAL" />
       <updated>1553611333792</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="Fixing bug on features save and structure update of data.">
+      <created>1553614522446</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1553614522446</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Fix bug for simple method process.">
+      <created>1553616602635</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1553616602635</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="173276000" />
+    <option name="totallyTimeSpent" value="175492000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -863,8 +847,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update of fine tune procedures and models." />
-    <MESSAGE value="Rename folder name." />
     <MESSAGE value="Updating all simple procedure in one readable file, adding dataset to another for ease of use, and finally split layers for CNN in specific file." />
     <MESSAGE value="Updating patch decisions and feature classification." />
     <MESSAGE value="Updating dataset from patches." />
@@ -888,7 +870,9 @@
     <MESSAGE value="Update Settings management." />
     <MESSAGE value="Update procedure for simple dermatology." />
     <MESSAGE value="Fixing bu on intermediate data and environment files." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixing bu on intermediate data and environment files." />
+    <MESSAGE value="Fixing bug on features save and structure update of data." />
+    <MESSAGE value="Fix bug for simple method process." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix bug for simple method process." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1352,16 +1336,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="17" column="109" selection-start-line="17" selection-start-column="109" selection-end-line="17" selection-end-column="109" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../Test/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
@@ -1406,16 +1380,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-70">
-          <caret line="187" column="8" selection-start-line="187" selection-start-column="8" selection-end-line="187" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/IO/writers.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
@@ -1440,13 +1404,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/methods.py">
+    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="73" selection-start-line="73" selection-end-line="73" />
+        <state relative-caret-position="522">
+          <caret line="256" lean-forward="true" selection-start-line="256" selection-end-line="256" />
           <folding>
-            <element signature="e#0#16#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="677" selection-start-line="677" selection-end-line="677" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="295" lean-forward="true" selection-start-line="295" selection-end-line="295" />
         </state>
       </provider>
     </entry>
@@ -1460,19 +1441,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/methods.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="522">
-          <caret line="295" lean-forward="true" selection-start-line="295" selection-end-line="295" />
+          <caret line="78" lean-forward="true" selection-start-line="78" selection-end-line="78" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="522">
-          <caret line="256" lean-forward="true" selection-start-line="256" selection-end-line="256" />
+          <caret line="78" lean-forward="true" selection-start-line="78" selection-end-line="78" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#16#0" expanded="true" />
           </folding>
         </state>
       </provider>
