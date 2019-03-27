@@ -63,9 +63,9 @@ if __name__ == "__main__":
         filter, input, method, model = combination
         name = '{filter}_{input}_{method}_{model}'.format(filter=filter[0], input=input[0],
                                                           method=method[0], model=model[0])
-
-        # Change filters
         input = deepcopy(input[1])
+
+        # Image classification
         input.set_filters(filter[1])
         input.set_encoders({'label': OrderedEncoder().fit(filter[1]['Label']),
                             'groups': LabelEncoder()})
@@ -73,6 +73,13 @@ if __name__ == "__main__":
         process.checkpoint_step(inputs=input, model=method[1], folder=features_folder,
                                 projection_folder=projection_folder, projection_name=name)
         process.end(inputs=input, model=model[1], output_folder=output_folder, name=name)
+
+        # Patient classification
+        input.tags.update({'label': 'Binary_Diagnosis'})
+        input.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
+                            'groups': LabelEncoder()})
+        process.end(inputs=inputs, model=Classifiers.get_patch_model(patch=False), output_folder=output_folder,
+                    name='Patient_{name}'.format(name=name))
 
     # Open result folder
     startfile(output_folder)

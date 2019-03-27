@@ -71,7 +71,7 @@ if __name__ == "__main__":
         name = '{filter}_{method}'.format(filter=filter[0], method=method[0])
         process.checkpoint_step(inputs=working_input, model=method[1], folder=features_folder,
                                 projection_folder=projection_folder, projection_name=name)
-        working_input.collapse(reference_tag='Reference', data_tag='Data', flatten=False)
+        working_input.collapse(reference_tag='Reference', data_tag='ImageData', flatten=False)
         process.end(inputs=working_input, model=model, output_folder=output_folder, name=name)
 
     # Open result folder

@@ -189,7 +189,7 @@ class Classifiers:
         return pipe, parameters
 
     @staticmethod
-    def get_linear_svm(reduce=None, norm=False, scaling=True):
+    def get_linear_svm(reduce=None, scaling=True):
         steps = []
         parameters = {}
 
@@ -198,9 +198,34 @@ class Classifiers:
             steps.append(('pca', PCA()))
             parameters.update({'pca__n_components': [reduce]})
 
-        if norm:
+        # Add scaling step
+        if scaling:
+            steps.append(('scale', StandardScaler()))
+
+        steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
+        pipe = Pipeline(steps)
+        pipe.name = 'LinearSVM'
+        # Define parameters to validate through grid CV
+        parameters.update({
+            'clf__C': geomspace(0.01, 1000, 6).tolist()
+        })
+        return pipe, parameters
+
+    @staticmethod
+    def get_patch_model(patch=True, scaling=True):
+        steps = []
+        parameters = {}
+
+        # Add dimensions reducer
+        if patch:
             steps.append(('norm', PNormTransform()))
             parameters.update({'norm__p': [1, 2, 3, 4]})
+            steps.append(('rfe', RFE(SVC(kernel='linear', class_weight='balanced', probability=True), 100)))
+        else:
+            steps.append(('norm1', PNormTransform(axis=2)))
+            parameters.update({'norm1__p': [1, 2, 3, 4]})
+            steps.append(('norm2', PNormTransform()))
+            parameters.update({'norm2__p': [1, 2, 3, 4]})
             steps.append(('rfe', RFE(SVC(kernel='linear', class_weight='balanced', probability=True), 100)))
 
         # Add scaling step
