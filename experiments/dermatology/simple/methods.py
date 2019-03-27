@@ -41,10 +41,6 @@ if __name__ == "__main__":
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
 
-    # Inputs
-    inputs = [('Thumbnails', Dataset.thumbnails()),
-              ('FullImages', Dataset.full_images())]
-
     # Methods
     methods = [('Haralick', Transforms.get_haralick(mean=False)),
                ('KerasAverage', Transforms.get_keras_extractor(pooling='avg')),
@@ -58,27 +54,45 @@ if __name__ == "__main__":
     process = Process()
     process.begin(inner_cv=validation, outer_cv=test, n_jobs=2, settings=settings)
 
-    combinations = list(itertools.product(filters, inputs, methods, models))
+    # Parameters combinations
+    combinations = list(itertools.product(filters, methods, models))
+
+    # Thumbnails
     for combination in combinations:
-        filter, input, method, model = combination
-        name = '{filter}_{input}_{method}_{model}'.format(filter=filter[0], input=input[0],
-                                                          method=method[0], model=model[0])
-        input = deepcopy(input[1])
+        filter, method, model = combination
+        inputs = Dataset.thumbnails()
+        name = 'Thumbnails_{filter}_{method}_{model}'.format(filter=filter[0], method=method[0], model=model[0])
 
         # Image classification
-        input.set_filters(filter[1])
-        input.set_encoders({'label': OrderedEncoder().fit(filter[1]['Label']),
+        inputs.set_filters(filter[1])
+        inputs.set_encoders({'label': OrderedEncoder().fit(filter[1]['Label']),
                             'groups': LabelEncoder()})
 
-        process.checkpoint_step(inputs=input, model=method[1], folder=features_folder,
+        process.checkpoint_step(inputs=inputs, model=method[1], folder=features_folder,
                                 projection_folder=projection_folder, projection_name=name)
-        process.end(inputs=input, model=model[1], output_folder=output_folder, name=name)
+        process.end(inputs=inputs, model=model[1], output_folder=output_folder, name=name)
+
+    # Full images
+    for combination in combinations:
+        filter, method, model = combination
+        inputs = Dataset.full_images()
+        name = 'Full_{method}_{model}'.format(filter=filter[0], method=method[0], model=model[0])
+
+        # Image classification
+        inputs.set_filters(filter[1])
+        inputs.set_encoders({'label': OrderedEncoder().fit(filter[1]['Label']),
+                            'groups': LabelEncoder()})
+
+        process.checkpoint_step(inputs=inputs, model=method[1], folder=features_folder,
+                                projection_folder=projection_folder, projection_name=name)
+        process.end(inputs=inputs, model=model[1], output_folder=output_folder, name=name)
 
         # Patient classification
-        input.tags.update({'label': 'Binary_Diagnosis'})
-        input.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
-                            'groups': LabelEncoder()})
-        process.end(inputs=inputs, model=Classifiers.get_patch_model(patch=False), output_folder=output_folder,
+        inputs.collapse(reference_tag='ID', data_tag='PatientData', flatten=True)
+        inputs.tags.update({'label': 'Binary_Diagnosis'})
+        inputs.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
+                             'groups': LabelEncoder()})
+        process.end(inputs=inputs, model=model[1], output_folder=output_folder,
                     name='Patient_{name}'.format(name=name))
 
     # Open result folder
