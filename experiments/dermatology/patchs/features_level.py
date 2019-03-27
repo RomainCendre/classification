@@ -12,6 +12,9 @@ from toolbox.core.transforms import OrderedEncoder
 from toolbox.tools.limitations import Parameters
 
 if __name__ == "__main__":
+    # Configure GPU consumption
+    Parameters.set_gpu(percent_gpu=0.5)
+
     # Parameters
     filename = splitext(basename(__file__))[0]
     home_path = expanduser('~')
@@ -41,9 +44,6 @@ if __name__ == "__main__":
                ('Results_NvsM', {'Label': ['Normal', 'Malignant']}),
                ('Results_NvsB', {'Label': ['Normal', 'Benign']}),
                ('Results_BvsM', {'Label': ['Benign', 'Malignant']})]
-
-    # Configure GPU consumption
-    Parameters.set_gpu(percent_gpu=0.5)
 
     # Inputs
     input = Dataset.patches_images(folder=patch_folder, size=250)
