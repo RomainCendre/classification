@@ -68,19 +68,15 @@ class DataProjectorWriter:
 
 class StatisticsWriter:
 
-    def __init__(self, inputs, titles):
+    def __init__(self, inputs):
         self.inputs = inputs
         if not isinstance(self.inputs, list):
             self.inputs = [self.inputs]
 
-        self.titles = titles
-        if not isinstance(self.titles, list):
-            self.titles = [self.titles]
-
     def write_result(self, keys, dir_name, name):
         path = join(dir_name, name + "_stat.pdf")
         with PdfPages(path) as pdf:
-            for inputs, title in zip(self.inputs, self.titles):
+            for inputs in self.inputs:
                 figure, axes = pyplot.subplots(ncols=len(keys), figsize=(21, 7))
                 # Browse each kind of parameter
                 for index, key in enumerate(keys):
@@ -93,21 +89,17 @@ class StatisticsWriter:
                     axes[index].pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
                     axes[index].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
                     axes[index].set_title(key)
-                figure.suptitle(title)
+                figure.suptitle(inputs.name)
                 pdf.savefig(figure)
                 pyplot.close()
 
 
 class ResultWriter:
 
-    def __init__(self, results, titles, settings):
+    def __init__(self, results, settings):
         self.results = results
         if not isinstance(self.results, list):
             self.results = [self.results]
-
-        self.titles = titles
-        if not isinstance(self.titles, list):
-            self.titles = [self.titles]
 
         self.settings = settings
 
@@ -194,7 +186,6 @@ class ResultWriter:
                 figure.suptitle(result.name)
                 pdf.savefig(figure)
                 pyplot.close()
-
 
     def report_scores(self, result, use_std=True):
         dict_report = self.__get_report_values(result=result, use_std=use_std)

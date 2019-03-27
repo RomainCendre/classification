@@ -95,11 +95,12 @@ class Data:
 
 class Inputs(Data):
 
-    def __init__(self, folders, instance, loader, tags, encoders={}, filters={}):
+    def __init__(self, folders, instance, loader, tags, encoders={}, filters={}, name=''):
         super().__init__(None, filters)
         self.folders = folders
         self.instance = instance
         self.loader = loader
+        self.name = name
         self.tags = tags
         self.encoders = encoders
 

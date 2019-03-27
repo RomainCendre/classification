@@ -41,14 +41,20 @@ if __name__ == "__main__":
     # Initiate model and params
     process = Process()
     process.begin(inner_cv=validation, outer_cv=validation, settings=settings)
+
+    # Start image classification
     process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(), folder=features_folder)
     inputs.collapse(reference_tag='Reference', data_tag='ImageData', flatten=False)
-    process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model(), name='Images_{name}'.format(name=name))
+    inputs.name = 'Images'
+    process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model())
+
+    # Start patient classification
     inputs.collapse(reference_tag='ID', data_tag='PatientData', flatten=False)
     inputs.tags.update({'label': 'Binary_Diagnosis'})
     inputs.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
                          'groups': LabelEncoder()})
-    process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model(patch=False), name='Patient_{name}'.format(name=name))
+    inputs.name = 'Patient'
+    process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model(patch=False))
 
     process.end(output_folder=output_folder, name=name)
 

@@ -15,7 +15,6 @@ class Process:
                                      n_jobs=n_jobs, scoring=scoring)
         self.inputs = []
         self.results = []
-        self.titles = []
 
     def checkpoint_step(self, inputs, model, folder, projection_folder=None, projection_name=None):
         self.classifier.set_model(model)
@@ -31,18 +30,17 @@ class Process:
         self.classifier.set_model(model)
         return self.classifier.fit(inputs)
 
-    def evaluate_step(self, inputs, model, name='Default'):
+    def evaluate_step(self, inputs, model):
         # Evaluate model
         self.classifier.set_model(model)
-        self.titles.append(name)
         self.inputs.append(inputs)
-        self.results.append(self.classifier.evaluate(inputs, name))
+        self.results.append(self.classifier.evaluate(inputs))
 
     def end(self, output_folder=gettempdir(), name='Default'):
         # Step 1 - Write statistics on current data
         keys = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
-        StatisticsWriter(self.inputs, self.titles).write_result(keys=keys, dir_name=output_folder, name=name)
-        ResultWriter(self.results, self.titles, self.settings).write_results(dir_name=output_folder, name=name)
+        StatisticsWriter(self.inputs).write_result(keys=keys, dir_name=output_folder, name=name)
+        ResultWriter(self.results, self.settings).write_results(dir_name=output_folder, name=name)
 
         # Step 3 - Visualization of CAM
         # if isinstance(model, BaseWrapper):

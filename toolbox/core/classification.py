@@ -61,7 +61,7 @@ class Classifier:
             self.__fit_params = {}
         self.__format_params()
 
-    def evaluate(self, inputs, name='Default'):
+    def evaluate(self, inputs):
         """
 
         Args:
@@ -138,7 +138,7 @@ class Classifier:
             # Append element and go on next one
             results.append(result)
 
-        return Outputs(results, inputs.encoders, name)
+        return Outputs(results, inputs.encoders, inputs.name)
 
     def fit(self, inputs):
         # Extract needed data
