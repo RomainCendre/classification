@@ -46,15 +46,12 @@ if __name__ == "__main__":
                ('BvsM', {'Label': ['Benign', 'Malignant']})]
 
     # Inputs
-    input = Dataset.patches_images(folder=patch_folder, size=250)
+    inputs = Dataset.patches_images(folder=patch_folder, size=250)
 
     # Methods
     methods = [('Haralick', Transforms.get_haralick(mean=False)),
                ('KerasAverage', Transforms.get_keras_extractor(pooling='avg')),
                ('KerasMaximum', Transforms.get_keras_extractor(pooling='max'))]
-
-    # Models
-    model = Classifiers.get_linear_svm(norm=True)
 
     # Launch process
     process = Process()
@@ -63,8 +60,9 @@ if __name__ == "__main__":
     combinations = list(itertools.product(filters, methods))
     for combination in combinations:
         filter, method = combination
+        working_input = deepcopy(inputs)
 
-        working_input = deepcopy(input)
+        # Image classification
         working_input.set_filters(filter[1])
         working_input.set_encoders({'label': OrderedEncoder().fit(filter[1]['Label']),
                                     'groups': LabelEncoder()})
@@ -72,7 +70,15 @@ if __name__ == "__main__":
         process.checkpoint_step(inputs=working_input, model=method[1], folder=features_folder,
                                 projection_folder=projection_folder, projection_name=name)
         working_input.collapse(reference_tag='Reference', data_tag='ImageData', flatten=False)
-        process.end(inputs=working_input, model=model, output_folder=output_folder, name=name)
+        process.end(inputs=working_input, model=Classifiers.get_norm_model(), output_folder=output_folder, name=name)
+
+        # Patient classification
+        name = 'Patient_{name}'.format(name=name)
+        inputs.collapse(reference_tag='ID', data_tag='PatientData', flatten=True)
+        inputs.tags.update({'label': 'Binary_Diagnosis'})
+        inputs.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
+                             'groups': LabelEncoder()})
+        process.end(inputs=inputs, model=Classifiers.get_norm_model(patch=False), output_folder=output_folder, name=name)
 
     # Open result folder
     startfile(output_folder)

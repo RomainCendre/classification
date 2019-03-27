@@ -212,7 +212,7 @@ class Classifiers:
         return pipe, parameters
 
     @staticmethod
-    def get_patch_model(patch=True, scaling=True):
+    def get_norm_model(patch=True, scaling=True):
         steps = []
         parameters = {}
 
