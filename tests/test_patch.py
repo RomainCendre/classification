@@ -5,7 +5,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import LabelEncoder
 from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
-from toolbox.core.models import Classifiers, Transforms
+from toolbox.core.builtin_models import Classifiers, Transforms
 from toolbox.core.transforms import OrderedEncoder
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ from sklearn.preprocessing import LabelEncoder
 
 from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
-from toolbox.core.models import Classifiers
+from toolbox.core.builtin_models import Classifiers
 from toolbox.core.transforms import OrderedEncoder
 
 if __name__ == "__main__":

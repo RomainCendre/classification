@@ -1,12 +1,11 @@
 from tempfile import gettempdir
 from os import makedirs, startfile
 from os.path import normpath, exists, dirname, splitext, basename, join
-
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import StratifiedKFold
 from experiments.processes import Process
 from toolbox.core.classification import KerasBatchClassifier
-from toolbox.core.models import Classifiers, Transforms
+from toolbox.core.builtin_models import Classifiers, Transforms
 from toolbox.core.structures import Inputs
 from toolbox.IO import dermatology
 from toolbox.tools.limitations import Parameters

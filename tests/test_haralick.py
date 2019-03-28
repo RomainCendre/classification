@@ -4,7 +4,7 @@ from os.path import normpath, exists, dirname, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
 from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
-from toolbox.core.models import Classifiers, Transforms
+from toolbox.core.builtin_models import Classifiers, Transforms
 
 if __name__ == "__main__":
 

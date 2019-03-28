@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 
 from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
-from toolbox.core.models import Transforms, Classifiers
+from toolbox.core.builtin_models import Transforms, Classifiers
 from toolbox.core.transforms import OrderedEncoder
 from toolbox.tools.limitations import Parameters
 
