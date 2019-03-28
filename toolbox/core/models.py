@@ -2,7 +2,7 @@ from copy import deepcopy, copy
 from os import makedirs
 from os.path import normpath
 
-from sklearn.feature_selection import RFE
+from sklearn.feature_selection import RFE, SelectKBest, chi2
 from sklearn.metrics import accuracy_score
 from time import strftime, gmtime, time
 import keras
@@ -212,7 +212,7 @@ class Classifiers:
         return pipe, parameters
 
     @staticmethod
-    def get_norm_model(patch=True, scaling=True):
+    def get_norm_model(patch=True):
         steps = []
         parameters = {}
 
@@ -220,18 +220,14 @@ class Classifiers:
         if patch:
             steps.append(('norm', PNormTransform()))
             parameters.update({'norm__p': [2, 3, 4]})
-            steps.append(('rfe', RFE(SVC(kernel='linear', class_weight='balanced', probability=True), 100)))
         else:
             steps.append(('norm1', PNormTransform(axis=2)))
             parameters.update({'norm1__p': [2, 3, 4]})
             steps.append(('norm2', PNormTransform()))
             parameters.update({'norm2__p': [2, 3, 4]})
-            steps.append(('rfe', RFE(SVC(kernel='linear', class_weight='balanced', probability=True), 100)))
-
         # Add scaling step
-        if scaling:
-            steps.append(('scale', StandardScaler()))
-
+        steps.append(('scale', StandardScaler()))
+        steps.append(('select', SelectKBest(chi2, k=100)))
         steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
         pipe = Pipeline(steps)
         pipe.name = 'LinearSVM'

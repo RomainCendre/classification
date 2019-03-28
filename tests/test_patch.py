@@ -32,7 +32,7 @@ if __name__ == "__main__":
         makedirs(features_folder)
 
     # Input data
-    inputs = Dataset.test_patches_images(patch_folder, 250)
+    inputs = Dataset.test_patches_images(patch_folder, size=250, overlap=0.25)
     inputs.set_filters({'Label': ['Normal', 'Benign', 'Malignant']})
     inputs.set_encoders({'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
                          'groups': LabelEncoder()})

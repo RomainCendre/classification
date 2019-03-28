@@ -40,12 +40,12 @@ if __name__ == "__main__":
 
     # Filters
     filters = [('All', {'Label': ['Normal', 'Benign', 'Malignant']}),
-               ('NvsM', {'Label': ['Normal', 'Malignant']})]
-               # ('NvsB', {'Label': ['Normal', 'Benign']}),
-               # ('BvsM', {'Label': ['Benign', 'Malignant']})]
+               ('NvsM', {'Label': ['Normal', 'Malignant']}),
+               ('NvsB', {'Label': ['Normal', 'Benign']}),
+               ('BvsM', {'Label': ['Benign', 'Malignant']})]
 
     # Inputs
-    inputs = Dataset.patches_images(folder=patch_folder, size=250)
+    inputs = Dataset.patches_images(folder=patch_folder, size=250, overlap=0.25)
 
     # Methods
     methods = [('Haralick', Transforms.get_haralick(mean=False)),

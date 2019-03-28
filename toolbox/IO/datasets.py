@@ -15,11 +15,11 @@ class Dataset:
         return Dataset.__full_images(input_folders)
 
     @staticmethod
-    def patches_images(folder, size):
+    def patches_images(folder, size, overlap):
         home_path = expanduser('~')
         input_folders = [normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                          normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
-        return Dataset.__patches_images(input_folders, folder, size)
+        return Dataset.__patches_images(input_folders, folder, size, overlap)
 
     @staticmethod
     def spectras():
@@ -42,11 +42,11 @@ class Dataset:
         return Dataset.__full_images(input_folders)
 
     @staticmethod
-    def test_patches_images(folder, size):
+    def test_patches_images(folder, size, overlap):
         here_path = dirname(__file__)
         input_folders = [normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
                          normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
-        return Dataset.__patches_images(input_folders, folder, size)
+        return Dataset.__patches_images(input_folders, folder, size, overlap)
 
     @staticmethod
     def test_spectras():
@@ -78,8 +78,11 @@ class Dataset:
         return inputs
 
     @staticmethod
-    def __patches_images(folders, extraction_folder, size):
-        inputs = Inputs(folders=folders, instance=dermatology.Reader(extraction_folder),
+    def __patches_images(folders, extraction_folder, size, overlap):
+        parameters = {'Temp': extraction_folder,
+                      'Size': size,
+                      'Overlap': overlap}
+        inputs = Inputs(folders=folders, instance=dermatology.Reader(patch_parameters=parameters),
                         loader=dermatology.Reader.scan_folder_for_patches,
                         tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Patch_Reference'},
                         encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
