@@ -73,7 +73,7 @@ class Reader:
     @staticmethod
     def __patchify(filename, reference, window_size, overlap, temp_folder):
         image = np.ascontiguousarray(np.array(Image.open(filename).convert('L')))
-        stride = round(window_size - (window_size * overlap))  # Overlap of images
+        stride = int(window_size - (window_size * overlap))  # Overlap of images
         image_shape = np.array(image.shape)
         window_shape = np.asanyarray((window_size, window_size))
         stride_shape = np.asanyarray((stride, stride))
