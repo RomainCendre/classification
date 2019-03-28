@@ -22,7 +22,7 @@ if __name__ == "__main__":
     settings = DefinedSettings.get_default_dermatology()
 
     # Output folders
-    output_folder = normpath('{home}/Results/Dermatology/features_norm_level/{filename}/'.format(home=home_path, filename=filename))
+    output_folder = normpath('{home}/Results/Dermatology/features_norm_level/'.format(home=home_path))
     if not exists(output_folder):
         makedirs(output_folder)
 
@@ -53,8 +53,9 @@ if __name__ == "__main__":
                ('KerasMaximum', Transforms.get_keras_extractor(pooling='max'))]
 
     # Launch process
-    process = Process()
-    process.begin(inner_cv=validation, outer_cv=test, n_jobs=2, settings=settings)
+    keys = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
+    process = Process(output_folder=output_folder, name=filename, settings=settings, stats_keys=keys)
+    process.begin(inner_cv=validation, outer_cv=test, n_jobs=2)
 
     # Parameters combinations
     combinations = list(itertools.product(filters, methods))
@@ -80,7 +81,7 @@ if __name__ == "__main__":
                              'groups': LabelEncoder()})
         process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model(patch=False))
 
-    process.end(output_folder=output_folder)
+    process.end()
 
     # Open result folder
     startfile(output_folder)

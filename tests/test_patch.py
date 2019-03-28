@@ -38,8 +38,9 @@ if __name__ == "__main__":
                          'groups': LabelEncoder()})
 
     # Initiate model and params
-    process = Process()
-    process.begin(inner_cv=validation, outer_cv=validation, settings=settings)
+    keys = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
+    process = Process(output_folder=output_folder, name=name, settings=settings, stats_keys=keys)
+    process.begin(inner_cv=validation, outer_cv=validation)
 
     # Start image classification
     process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(), folder=features_folder)
@@ -55,7 +56,7 @@ if __name__ == "__main__":
     inputs.name = 'Patient'
     process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model(patch=False))
 
-    process.end(output_folder=output_folder, name=name)
+    process.end()
 
     # Open result folder
     startfile(output_folder)

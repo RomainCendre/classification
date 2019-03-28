@@ -68,30 +68,29 @@ class DataProjectorWriter:
 
 class StatisticsWriter:
 
-    def __init__(self, inputs):
-        self.inputs = inputs
-        if not isinstance(self.inputs, list):
-            self.inputs = [self.inputs]
+    def __init__(self, keys, dir_name, name):
+        self.keys = keys
+        self.pdf = PdfPages(join(dir_name, name + "_stat.pdf"))
 
-    def write_result(self, keys, dir_name, name):
-        path = join(dir_name, name + "_stat.pdf")
-        with PdfPages(path) as pdf:
-            for inputs in self.inputs:
-                figure, axes = pyplot.subplots(ncols=len(keys), figsize=(21, 7))
-                # Browse each kind of parameter
-                for index, key in enumerate(keys):
-                    elements = inputs.get_from_key(key=key)
-                    if elements is None:
-                        print('Key {key} is missing from data.'.format(key=key))
-                        continue
+    def end(self):
+        self.pdf.close()
 
-                    counter = Counter(list(elements))
-                    axes[index].pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
-                    axes[index].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-                    axes[index].set_title(key)
-                figure.suptitle(inputs.name)
-                pdf.savefig(figure)
-                pyplot.close()
+    def write(self, inputs):
+        figure, axes = pyplot.subplots(ncols=len(self.keys), figsize=(21, 7))
+        # Browse each kind of parameter
+        for index, key in enumerate(self.keys):
+            elements = inputs.get_from_key(key=key)
+            if elements is None:
+                print('Key {key} is missing from data.'.format(key=key))
+                continue
+
+            counter = Counter(list(elements))
+            axes[index].pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
+            axes[index].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+            axes[index].set_title(key)
+        figure.suptitle(inputs.name)
+        self.pdf.savefig(figure)
+        pyplot.close()
 
 
 class ResultWriter:
