@@ -208,7 +208,7 @@ class Classifier:
                 features.append(load(expected_file))
             features = array(features)
         # Update input
-        inputs.update_data(prefix, features, references)
+        inputs.update(prefix, features, references)
 
     @staticmethod
     def __check_labels(labels, labels_fold=None):

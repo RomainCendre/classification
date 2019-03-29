@@ -39,10 +39,12 @@ if __name__ == "__main__":
         makedirs(projection_folder)
 
     # Filters
-    filters = [('All', {'Label': ['Normal', 'Benign', 'Malignant']}),
-               ('NvsM', {'Label': ['Normal', 'Malignant']}),
-               ('NvsB', {'Label': ['Normal', 'Benign']}),
-               ('BvsM', {'Label': ['Benign', 'Malignant']})]
+    filters = [('All', {'Label': ['Normal', 'Benign', 'Malignant']}, {}),
+               ('NvsM', {'Label': ['Normal', 'Malignant']}, {}),
+               ('NvsB', {'Label': ['Normal', 'Benign']}, {}),
+               ('BvsM', {'Label': ['Benign', 'Malignant']}, {}),
+               ('NvsP', {'Label': ['Normal', 'Pathology']}, {'Label': (['Benign', 'Malignant'], 'Pathology')}),
+               ('MvsR', {'Label': ['Malignant', 'Rest']}, {'Label': (['Normal', 'Benign'], 'Rest')})]
 
     # Inputs
     inputs = [('NoOverlap', Dataset.patches_images(folder=patch_folder, size=250, overlap=0)),
@@ -65,7 +67,7 @@ if __name__ == "__main__":
         input, filter, method = combination
         image_name = 'Image_{input}_{filter}_{method}'.format(input=input, filter=filter[0], method=method[0])
         patient_name = 'Patient_{input}_{filter}_{method}'.format(input=input, filter=filter[0], method=method[0])
-        input = deepcopy(input[1])
+        input = input[1].copy_and_change(filter[2])
         filter = filter[1]
         method = method[1]
 

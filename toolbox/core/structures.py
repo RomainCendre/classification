@@ -1,6 +1,6 @@
 import pandas as pd
 from collections import Iterable
-from copy import copy
+from copy import copy, deepcopy
 from itertools import chain
 from numpy import correlate, ones, interp, array, ndarray
 from sklearn import preprocessing
@@ -216,7 +216,13 @@ class Inputs(Data):
             cur_filters.update(filters)
         return self.data.query(super().to_query(cur_filters))
 
-    def update_data(self, key, datas, references):
+    def copy_and_change(self, substitute):
+        inputs = deepcopy(self)
+        for key, value in substitute:
+            inputs.data[key] = inputs.data[key].apply(lambda x: value[1] if x in value[0] else x)
+        return inputs
+
+    def update(self, key, datas, references):
         self.check_load()
         if 'reference' not in self.tags:
             return None

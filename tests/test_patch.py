@@ -33,8 +33,9 @@ if __name__ == "__main__":
 
     # Input data
     inputs = Dataset.test_patches_images(patch_folder, size=250, overlap=0.25)
-    inputs.set_filters({'Label': ['Normal', 'Benign', 'Malignant']})
-    inputs.set_encoders({'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
+    inputs.substitute('Label', ['Benign', 'Malignant'], 'Pathology')
+    inputs.set_filters({'Label': ['Normal', 'Pathology']})
+    inputs.set_encoders({'label': OrderedEncoder().fit(['Normal', 'Pathology']),
                          'groups': LabelEncoder()})
 
     # Initiate model and params
