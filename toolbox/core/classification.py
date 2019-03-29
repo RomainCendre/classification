@@ -48,16 +48,17 @@ class Classifier:
         return np_array[indices]
 
     def set_model(self, model):
-
         if isinstance(model, tuple):
             self.__model = model[0]
             self.__params = model[1]
+            if not isinstance(self.__params, list):
+                self.__params = [self.__params]
             self.__fit_params = {}
             if len(model) == 3:
                 self.__fit_params = model[2]
         else:
             self.__model = model
-            self.__params = {}
+            self.__params = []
             self.__fit_params = {}
         self.__format_params()
 
@@ -94,14 +95,11 @@ class Classifier:
             model = deepcopy(self.__model)
 
             # Estimate best combination
-            if self.__check_params_multiple():
-                grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
-                                           n_jobs=self.n_jobs, scoring=self.__scoring, verbose=1, iid=False)
-                grid_search.fit(self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train),
-                                **self.__fit_params)
-                best_params = grid_search.best_params_
-            else:
-                best_params = self.__params
+            grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
+                                       n_jobs=self.n_jobs, scoring=self.__scoring, verbose=1, iid=False)
+            grid_search.fit(self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train),
+                            **self.__fit_params)
+            best_params = grid_search.best_params_
 
             # Fit the model, with the bests parameters
             model.set_params(**best_params)
@@ -154,13 +152,10 @@ class Classifier:
         model = deepcopy(self.__model)
 
         # Estimate best combination
-        if self.__check_params_multiple():
-            grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
-                                       n_jobs=self.n_jobs, refit=False, scoring=self.__scoring, verbose=1, iid=False)
-            grid_search.fit(datas, y=labels, groups=groups, **self.__fit_params)
-            best_params = grid_search.best_params_
-        else:
-            best_params = self.__params
+        grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
+                                   n_jobs=self.n_jobs, refit=False, scoring=self.__scoring, verbose=1, iid=False)
+        grid_search.fit(datas, y=labels, groups=groups, **self.__fit_params)
+        best_params = grid_search.best_params_
 
         # Fit the model, with the bests parameters
         model.set_params(**best_params)
@@ -199,9 +194,9 @@ class Classifier:
             # Now browse data
             print('Extraction features with {prefix}'.format(prefix=prefix))
             if hasattr(self.__model, 'transform'):
-                features = self.__model.transform(datas, **self.__params)
+                features = self.__model.transform(datas)
             else:
-                features = self.__model.predict_proba(datas, **self.__params)
+                features = self.__model.predict_proba(datas)
 
             # Now save features as files
             print('Writting data at {folder}'.format(folder=folder))
@@ -221,22 +216,11 @@ class Classifier:
             return len(unique(labels)) > 1
         return len(unique(labels)) > 1 and array_equal(unique(labels), unique(labels_fold))
 
-    def __check_params_multiple(self):
-        for key, value in self.__params.items():
-            if isinstance(value, list) and len(value) > 1:
-                return True
-        return False
-
-    def __format_params(self):
-        if self.__check_params_multiple():  # Here we proceed as multiple combination
-            for key, value in self.__params.items():
+    def __format_params(self):  # Here we proceed as multiple combination
+        for param in self.__params:
+            for key, value in param.items():
                 if not isinstance(value, list):
-                    self.__params[key] = [value]
-
-        else:  # Here we proceed as single combination
-            for key, value in self.__params.items():
-                if isinstance(value, list):
-                    self.__params[key] = value[0]
+                    param[key] = [value]
 
     @staticmethod
     def __number_of_features(model):

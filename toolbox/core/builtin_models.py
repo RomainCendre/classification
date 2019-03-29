@@ -1,6 +1,8 @@
 from os import makedirs
 from os.path import normpath
-from sklearn.feature_selection import chi2
+
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.feature_selection import chi2, f_classif
 from time import strftime, gmtime, time
 import keras
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
@@ -16,7 +18,7 @@ from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from toolbox.core.layers import RandomLayer
-from toolbox.core.models import KerasBatchClassifier, SelectAtMostKBest
+from toolbox.core.models import KerasBatchClassifier, SelectAtMostKBest, PCAAtMost
 from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform, DWTDescriptorTransform, \
     PNormTransform
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
@@ -218,17 +220,32 @@ class Classifiers:
             parameters.update({'norm1__p': [2, 3, 4]})
             steps.append(('norm2', PNormTransform()))
             parameters.update({'norm2__p': [2, 3, 4]})
+
+        # Add reduction step
+        steps.append(('reduction', None))
+        features = [40, 100]
+        pca = PCAAtMost()
+        lda = LinearDiscriminantAnalysis()
+        pca_p = {'reduction': [pca, lda],
+                 'reduction__n_components': features}
+        kbest_p = {'reduction': SelectAtMostKBest(f_classif),
+                   'reduction__k': [40, 100]}
+
         # Add scaling step
-        steps.append(('select', SelectAtMostKBest(chi2, k=100)))
         steps.append(('scale', StandardScaler()))
+
+        # Add classifier simple
         steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
+        parameters.update({'clf__C': geomspace(0.01, 1000, 6).tolist()})
+
+        pca_p.update(parameters)
+        kbest_p.update(parameters)
+        m_parameters = [pca_p, kbest_p]
+
         pipe = Pipeline(steps)
-        pipe.name = 'LinearSVM'
+        pipe.name = 'NormAndSVM'
         # Define parameters to validate through grid CV
-        parameters.update({
-            'clf__C': geomspace(0.01, 1000, 6).tolist()
-        })
-        return pipe, parameters
+        return pipe, m_parameters
 
     @staticmethod
     def get_memory_usage(batch_size, model, unit=(1024.0 ** 3)):

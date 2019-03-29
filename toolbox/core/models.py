@@ -6,6 +6,7 @@ from keras.utils.generic_utils import has_arg
 from keras.wrappers.scikit_learn import KerasClassifier
 from numpy import hstack
 from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.decomposition import PCA
 from sklearn.feature_selection import SelectKBest
 from sklearn.metrics import accuracy_score
 from sklearn.utils.multiclass import unique_labels
@@ -19,6 +20,15 @@ class SelectAtMostKBest(SelectKBest):
         if not (self.k == "all" or 0 <= self.k <= X.shape[1]):
             # set k to "all" (skip feature selection), if less than k features are available
             self.k = "all"
+
+
+class PCAAtMost(PCA):
+
+    def fit_transform(self, X, y=None):
+        n_samples, n_features = X.shape
+        if not (0 <= self.n_components <= min(n_samples, n_features)):
+            # set k to "all" (skip feature selection), if less than k features are available
+            self.n_components = min(n_samples, n_features)
 
 
 class KerasBatchClassifier(KerasClassifier):

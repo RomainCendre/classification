@@ -45,7 +45,8 @@ if __name__ == "__main__":
                ('BvsM', {'Label': ['Benign', 'Malignant']})]
 
     # Inputs
-    inputs = Dataset.patches_images(folder=patch_folder, size=250, overlap=0.25)
+    inputs = [('NoOverlap', Dataset.patches_images(folder=patch_folder, size=250, overlap=0)),
+              ('Overlap25', Dataset.patches_images(folder=patch_folder, size=250, overlap=0.25))]
 
     # Methods
     methods = [('Haralick', Transforms.get_haralick(mean=False)),
@@ -58,28 +59,32 @@ if __name__ == "__main__":
     process.begin(inner_cv=validation, outer_cv=test, n_jobs=2)
 
     # Parameters combinations
-    combinations = list(itertools.product(filters, methods))
+    combinations = list(itertools.product(inputs, filters, methods))
 
     for combination in combinations:
-        filter, method = combination
-        working_input = deepcopy(inputs)
+        input, filter, method = combination
+        image_name = 'Image_{input}_{filter}_{method}'.format(input=input, filter=filter[0], method=method[0])
+        patient_name = 'Patient_{input}_{filter}_{method}'.format(input=input, filter=filter[0], method=method[0])
+        input = deepcopy(input[1])
+        filter = filter[1]
+        method = method[1]
 
         # Image classification
-        working_input.set_filters(filter[1])
-        working_input.set_encoders({'label': OrderedEncoder().fit(filter[1]['Label']),
-                                    'groups': LabelEncoder()})
-        working_input.name = 'Image_{filter}_{method}'.format(filter=filter[0], method=method[0])
-        process.checkpoint_step(inputs=working_input, model=method[1], folder=features_folder, projection_folder=projection_folder)
-        working_input.collapse(reference_tag='Reference', data_tag='ImageData', flatten=False)
-        process.evaluate_step(inputs=working_input, model=Classifiers.get_norm_model())
+        input.name = image_name
+        input.set_filters(filter)
+        input.set_encoders({'label': OrderedEncoder().fit(filter['Label']),
+                            'groups': LabelEncoder()})
+        process.checkpoint_step(inputs=input, model=method, folder=features_folder)
+        input.collapse(reference_tag='Reference', data_tag='ImageData', flatten=False)
+        process.evaluate_step(inputs=input, model=Classifiers.get_norm_model())
 
         # Patient classification
-        working_input.name = 'Patient_{filter}_{method}'.format(filter=filter[0], method=method[0])
-        inputs.collapse(reference_tag='ID', data_tag='PatientData', flatten=True)
-        inputs.tags.update({'label': 'Binary_Diagnosis'})
-        inputs.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
-                             'groups': LabelEncoder()})
-        process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model(patch=False))
+        input.name = patient_name
+        input.collapse(reference_tag='ID', data_tag='PatientData', flatten=True)
+        input.tags.update({'label': 'Binary_Diagnosis'})
+        input.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
+                            'groups': LabelEncoder()})
+        process.evaluate_step(inputs=input, model=Classifiers.get_norm_model(patch=False))
 
     process.end()
 
