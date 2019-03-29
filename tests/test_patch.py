@@ -43,7 +43,7 @@ if __name__ == "__main__":
     process.begin(inner_cv=validation, outer_cv=validation)
 
     # Start image classification
-    process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(), folder=features_folder)
+    process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(mean=False), folder=features_folder)
     inputs.collapse(reference_tag='Reference', data_tag='ImageData', flatten=False)
     inputs.name = 'Images'
     process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model())

@@ -18,7 +18,7 @@ from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from toolbox.core.layers import RandomLayer
-from toolbox.core.models import KerasBatchClassifier, SelectAtMostKBest, PCAAtMost
+from toolbox.core.models import KerasBatchClassifier, SelectAtMostKBest, PCAAtMost, LDAAtMost
 from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform, DWTDescriptorTransform, \
     PNormTransform
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
@@ -225,7 +225,7 @@ class Classifiers:
         steps.append(('reduction', None))
         features = [40, 100]
         pca = PCAAtMost()
-        lda = LinearDiscriminantAnalysis()
+        lda = LDAAtMost()
         pca_p = {'reduction': [pca, lda],
                  'reduction__n_components': features}
         kbest_p = {'reduction': SelectAtMostKBest(f_classif),
