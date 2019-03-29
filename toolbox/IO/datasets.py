@@ -83,7 +83,7 @@ class Dataset:
                       'Size': size,
                       'Overlap': overlap}
         inputs = Inputs(folders=folders, instance=dermatology.Reader(patch_parameters=parameters),
-                        loader=dermatology.Reader.scan_folder_for_patches,
+                        loader=dermatology.Reader.scan_for_confocal_patches,
                         tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Patch_Reference'},
                         encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
                                   'groups': LabelEncoder()})

@@ -53,7 +53,7 @@ class Reader:
                                  'Reference': reference})
         return pd.DataFrame(data_set)
 
-    def scan_folder_for_patches(self, folder_path):
+    def scan_for_confocal_patches(self, folder_path):
         # Browse data
         data_set = self.scan_folder(folder_path)
         data_set = data_set[data_set.Modality == 'Microscopy']
@@ -61,7 +61,7 @@ class Reader:
         # Get into patches
         patches_data = []
         DataManager.print_progress_bar(0, len(data_set), prefix='Progress:')
-        for index, data in data_set.iterrows():
+        for index, (df_index, data) in zip(np.arange(len(data_set.index)), data_set.iterrows()):
             DataManager.print_progress_bar(index, len(data_set), prefix='Progress:')
             patches = Reader.__patchify(data['Full_path'], data['Reference'], self.patch_parameters['Size'],
                                         self.patch_parameters['Overlap'], self.patch_parameters['Temp'])
