@@ -17,12 +17,12 @@ if __name__ == "__main__":
     # Parameters
     filename = splitext(basename(__file__))[0]
     home_path = expanduser('~')
-    validation = StratifiedKFold(n_splits=5, shuffle=True)
+    validation = StratifiedKFold(n_splits=5)
     test = validation  # GroupKFold(n_splits=5)
     settings = DefinedSettings.get_default_dermatology()
 
     # Output folders
-    output_folder = normpath('{home}/Results/Dermatology/features_norm_level/'.format(home=home_path))
+    output_folder = normpath('{home}/Results/Dermatology/{filename}/'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
 
@@ -61,25 +61,23 @@ if __name__ == "__main__":
     # Parameters combinations
     combinations = list(itertools.product(inputs, methods))
 
-    for filter in filters:
+    for filter_name, filter_datas, filter_groups in filters:
 
-        process = Process(output_folder=output_folder, name=filter[0], settings=settings, stats_keys=keys)
+        process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=keys)
         process.begin(inner_cv=validation, outer_cv=test, n_jobs=4)
-        predictions = filter[2]
-        filter = filter[1]
 
         for combination in combinations:
             try:
                 input, method = combination
-                image_name = 'Image_{input}_{method}'.format(input=input, method=method[0])
-                patient_name = 'Patient_{input}_{method}'.format(input=input, method=method[0])
-                input = input[1].copy_and_change(predictions)
+                image_name = 'Image_{input}_{method}'.format(input=input[0], method=method[0])
+                patient_name = 'Patient_{input}_{method}'.format(input=input[0], method=method[0])
+                input = input[1].copy_and_change(filter_groups)
                 method = method[1]
 
                 # Image classification
                 input.name = image_name
-                input.set_filters(filter)
-                input.set_encoders({'label': OrderedEncoder().fit(filter['Label']),
+                input.set_filters(filter_datas)
+                input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
                                     'groups': LabelEncoder()})
                 process.checkpoint_step(inputs=input, model=method, folder=features_folder)
                 input.collapse(reference_tag='Reference')
