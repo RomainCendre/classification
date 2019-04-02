@@ -212,35 +212,70 @@ class Classifiers:
         parameters = {}
 
         # Add dimensions reducer
+        p_values = [2] #[2, 3, 4]
         if patch:
             steps.append(('norm', PNormTransform()))
-            parameters.update({'norm__p': [2, 3, 4]})
+            parameters.update({'norm__p': p_values})
         else:
             steps.append(('norm1', PNormTransform(axis=2)))
-            parameters.update({'norm1__p': [2, 3, 4]})
+            parameters.update({'norm1__p': p_values})
             steps.append(('norm2', PNormTransform()))
-            parameters.update({'norm2__p': [2, 3, 4]})
+            parameters.update({'norm2__p': p_values})
 
         # Add reduction step
         steps.append(('reduction', None))
-        features = [40, 100]
+        features = [20]
         pca = PCAAtMost()
         lda = LDAAtMost()
         pca_p = {'reduction': [pca, lda],
                  'reduction__n_components': features}
-        kbest_p = {'reduction': SelectAtMostKBest(f_classif),
-                   'reduction__k': [40, 100]}
 
         # Add scaling step
         steps.append(('scale', StandardScaler()))
 
         # Add classifier simple
         steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
-        parameters.update({'clf__C': geomspace(0.01, 1000, 6).tolist()})
+        parameters.update({'clf__C': geomspace(1, 1000, 3).tolist()})
 
         pca_p.update(parameters)
+        m_parameters = [pca_p]
+
+        pipe = Pipeline(steps)
+        pipe.name = 'NormAndSVM'
+        # Define parameters to validate through grid CV
+        return pipe, m_parameters
+
+    @staticmethod
+    def get_norm_and_select_model(patch=True):
+        steps = []
+        parameters = {}
+
+        # Add dimensions reducer
+        p_values = [2] #[2, 3, 4]
+        if patch:
+            steps.append(('norm', PNormTransform()))
+            parameters.update({'norm__p': p_values})
+        else:
+            steps.append(('norm1', PNormTransform(axis=2)))
+            parameters.update({'norm1__p': p_values})
+            steps.append(('norm2', PNormTransform()))
+            parameters.update({'norm2__p': p_values})
+
+        # Add reduction step
+        steps.append(('reduction', None))
+        features = [20]
+        kbest_p = {'reduction': SelectAtMostKBest(f_classif),
+                   'reduction__k': features}
+
+        # Add scaling step
+        steps.append(('scale', StandardScaler()))
+
+        # Add classifier simple
+        steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
+        parameters.update({'clf__C': geomspace(1, 1000, 3).tolist()})
+
         kbest_p.update(parameters)
-        m_parameters = [pca_p, kbest_p]
+        m_parameters = [kbest_p]
 
         pipe = Pipeline(steps)
         pipe.name = 'NormAndSVM'

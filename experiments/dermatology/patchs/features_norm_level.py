@@ -57,38 +57,44 @@ if __name__ == "__main__":
 
     # Launch process
     keys = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
-    process = Process(output_folder=output_folder, name=filename, settings=settings, stats_keys=keys)
-    process.begin(inner_cv=validation, outer_cv=test, n_jobs=2)
 
     # Parameters combinations
-    combinations = list(itertools.product(inputs, filters, methods))
+    combinations = list(itertools.product(inputs, methods))
 
-    for combination in combinations:
-        input, filter, method = combination
-        image_name = 'Image_{input}_{filter}_{method}'.format(input=input, filter=filter[0], method=method[0])
-        patient_name = 'Patient_{input}_{filter}_{method}'.format(input=input, filter=filter[0], method=method[0])
-        input = input[1].copy_and_change(filter[2])
+    for filter in filters:
+
+        process = Process(output_folder=output_folder, name=filter[0], settings=settings, stats_keys=keys)
+        process.begin(inner_cv=validation, outer_cv=test, n_jobs=4)
+        predictions = filter[2]
         filter = filter[1]
-        method = method[1]
 
-        # Image classification
-        input.name = image_name
-        input.set_filters(filter)
-        input.set_encoders({'label': OrderedEncoder().fit(filter['Label']),
-                            'groups': LabelEncoder()})
-        process.checkpoint_step(inputs=input, model=method, folder=features_folder)
-        input.collapse(reference_tag='Reference', data_tag='ImageData', flatten=False)
-        process.evaluate_step(inputs=input, model=Classifiers.get_norm_model())
+        for combination in combinations:
+            try:
+                input, method = combination
+                image_name = 'Image_{input}_{method}'.format(input=input, method=method[0])
+                patient_name = 'Patient_{input}_{method}'.format(input=input, method=method[0])
+                input = input[1].copy_and_change(predictions)
+                method = method[1]
 
-        # Patient classification
-        input.name = patient_name
-        input.collapse(reference_tag='ID', data_tag='PatientData', flatten=True)
-        input.tags.update({'label': 'Binary_Diagnosis'})
-        input.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
-                            'groups': LabelEncoder()})
-        process.evaluate_step(inputs=input, model=Classifiers.get_norm_model(patch=False))
+                # Image classification
+                input.name = image_name
+                input.set_filters(filter)
+                input.set_encoders({'label': OrderedEncoder().fit(filter['Label']),
+                                    'groups': LabelEncoder()})
+                process.checkpoint_step(inputs=input, model=method, folder=features_folder)
+                input.collapse(reference_tag='Reference')
+                process.evaluate_step(inputs=input, model=Classifiers.get_norm_and_select_model())
 
-    process.end()
+                # Patient classification
+                input.name = patient_name
+                input.collapse(reference_tag='ID')
+                input.tags.update({'label': 'Binary_Diagnosis'})
+                input.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
+                                    'groups': LabelEncoder()})
+                process.evaluate_step(inputs=input, model=Classifiers.get_norm_and_select_model(patch=False))
+            except:
+                print('Error occured.')
+        process.end()
 
     # Open result folder
     startfile(output_folder)

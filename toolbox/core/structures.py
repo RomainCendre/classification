@@ -104,20 +104,44 @@ class Inputs(Data):
         self.tags = tags
         self.encoders = encoders
 
-    def collapse(self, reference_tag, data_tag, flatten=True):
-        references = list(set(self.get_from_key(reference_tag)))
-        datas = []
-        for reference in references:
-            entities = self.sub_inputs({reference_tag: reference})
-            features = entities[self.tags['data']].tolist()
-            if flatten:
-                features = array(features).flatten()
-            data = entities.iloc[0].to_dict() #.agg(self.test).to_dict()
-            data[data_tag] = features
-            datas.append(data)
-        self.data = pd.DataFrame(datas)
+    def collapse(self, reference_tag, data_tag=None):
+        if data_tag is None:
+            data_tag = self.tags['data']
+
+        query = self.to_query(self.filters)
+        if query:
+            data = self.data.query(query)
+        else:
+            data = self.data
+
+        rows = []
+        for name, group in data.groupby(reference_tag):
+            # Get features by group
+            # features = group[data_tag].tolist()
+            raw_row = group.to_dict('list')
+            row = {}
+            for key, values in raw_row.items():
+                try:
+                    test = list(set(values))
+                    if len(test) == 1:
+                        row.update({key: values[0]})
+                except:
+                    row.update({key: array(values)})
+
+            rows.append(row)
+        self.data = pd.DataFrame(rows)
         self.tags.update({'reference': reference_tag,
                           'data': data_tag})
+
+    def aggregate(self, x):
+        try:
+            uniq = x.unique()
+            if len(uniq) == 1:
+                return uniq[0]
+            else:
+                return list(uniq)
+        except:
+            return list(x)
 
     def decode(self, key, indices):
         is_list = isinstance(indices, ndarray)

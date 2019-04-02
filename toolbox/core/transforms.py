@@ -117,6 +117,18 @@ class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
         return [alpha, beta]
 
 
+class FlattenTransform(BaseEstimator, TransformerMixin):
+
+    def __init__(self, axis=False):
+        self.axis = axis
+
+    def fit(self, x, y=None):
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        return x.flatten()
+
+
 class HaralickTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, mean=False):
@@ -252,6 +264,11 @@ class PNormTransform(BaseEstimator, TransformerMixin):
         return self.transform(X)
 
     def transform(self, X):
+        if X.dtype == object:
+            normalized = []
+            for x in X:
+                normalized.append(norm(x, ord=self.p, axis=self.axis-1))
+            return array(normalized)
         return norm(X, ord=self.p, axis=self.axis)
 
 

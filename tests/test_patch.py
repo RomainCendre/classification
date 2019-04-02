@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     # Input data
     inputs = Dataset.test_patches_images(patch_folder, size=250, overlap=0.25)
-    inputs.substitute('Label', ['Benign', 'Malignant'], 'Pathology')
+    inputs = inputs.copy_and_change({'Label': (['Benign', 'Malignant'], 'Pathology')})
     inputs.set_filters({'Label': ['Normal', 'Pathology']})
     inputs.set_encoders({'label': OrderedEncoder().fit(['Normal', 'Pathology']),
                          'groups': LabelEncoder()})
