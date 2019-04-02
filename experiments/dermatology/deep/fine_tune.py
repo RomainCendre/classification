@@ -13,7 +13,6 @@ from toolbox.IO import dermatology
 from toolbox.core.transforms import OrderedEncoder
 from toolbox.tools.limitations import Parameters
 
-
 if __name__ == '__main__':
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
@@ -64,12 +63,12 @@ if __name__ == '__main__':
                 input[1].name = 'Image_{input}_{params}'.format(input=input[0], params=params)
                 input[1].set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
                                        'groups': LabelEncoder()})
-                process.evaluate_step(inputs=input,
+                process.evaluate_step(inputs=input[1],
                                       model=BuiltInModels.get_fine_tuning(output_classes=3,
-                                                                       trainable_layers=params['trainable_layer'],
-                                                                       added_layers=params['added_layer']))
-            except:
-                print('Error occured.')
+                                                                          trainable_layers=params['trainable_layer'],
+                                                                          added_layers=params['added_layer']))
+            except Exception as ex:
+                print(ex)
         process.end()
 
     # Open result folder
