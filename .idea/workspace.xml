@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="754eb199-d45c-4d67-bc2e-84932a02ea9c" name="Default" comment="Update that manage features norm-p processus.">
+    <list default="true" id="754eb199-d45c-4d67-bc2e-84932a02ea9c" name="Default" comment="Adding non norm to feature level.">
       <change beforePath="$PROJECT_DIR$/../annotationTool/sources/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/../annotationTool/sources/core.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../annotationTool/sources/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/../annotationTool/sources/gui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/patchs/features_norm_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/patchs/features_norm_level.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../thumbnailMaker/.idea/thumbnailMaker.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../thumbnailMaker/.idea/thumbnailMaker.iml" afterDir="false" />
     </list>
     <list id="0d7b2755-a28e-4ac4-9579-9f208c9d1537" name="Revert &quot;Change experiments structure&quot;" comment="Revert &quot;Change experiments structure&quot;&#10;&#10;This reverts commit 91ebc9f3" />
@@ -80,23 +78,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="67" column="21" selection-start-line="67" selection-start-column="8" selection-end-line="67" selection-end-column="21" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_norm_level.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="129" column="56" selection-start-line="129" selection-start-column="56" selection-end-line="129" selection-end-column="56" />
+            <state relative-caret-position="17">
+              <caret line="118" column="42" lean-forward="true" selection-start-line="118" selection-start-column="42" selection-end-line="118" selection-end-column="42" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -511,14 +497,7 @@
       <workItem from="1553591407041" duration="77232000" />
       <workItem from="1554100306183" duration="1190000" />
       <workItem from="1554213327438" duration="8346000" />
-      <workItem from="1554283186958" duration="7895000" />
-    </task>
-    <task id="LOCAL-00020" summary="Fix classification bug with fit parameters.">
-      <created>1552984721258</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1552984721258</updated>
+      <workItem from="1554283186958" duration="8671000" />
     </task>
     <task id="LOCAL-00021" summary="Updating patch classification procedure and test.">
       <created>1552990447654</created>
@@ -856,11 +835,18 @@
       <option name="project" value="LOCAL" />
       <updated>1554290932861</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="Adding non norm to feature level.">
+      <created>1554292289245</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1554292289245</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="253487000" />
+    <option name="totallyTimeSpent" value="254263000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -956,7 +942,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update patch feature ways." />
     <MESSAGE value="Update results name." />
     <MESSAGE value="Update that add patient classification." />
     <MESSAGE value="Update simple methods." />
@@ -981,7 +966,8 @@
     <MESSAGE value="Missing commit." />
     <MESSAGE value="Adding model concatenation." />
     <MESSAGE value="Fix PCA by using PCAatMost." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix PCA by using PCAatMost." />
+    <MESSAGE value="Adding non norm to feature level." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding non norm to feature level." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1454,13 +1440,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/decisions_level.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
-          <caret column="16" lean-forward="true" selection-start-column="16" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/transforms.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="275">
@@ -1483,7 +1462,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
+        <state relative-caret-position="303">
           <caret line="67" column="21" selection-start-line="67" selection-start-column="8" selection-end-line="67" selection-end-column="21" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
@@ -1491,10 +1470,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/decisions_level.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-102">
+          <caret column="16" lean-forward="true" selection-start-column="16" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_norm_level.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="129" column="56" selection-start-line="129" selection-start-column="56" selection-end-line="129" selection-end-column="56" />
+        <state relative-caret-position="17">
+          <caret line="118" column="42" lean-forward="true" selection-start-line="118" selection-start-column="42" selection-end-line="118" selection-end-column="42" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
