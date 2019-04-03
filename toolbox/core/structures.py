@@ -242,7 +242,7 @@ class Inputs(Data):
 
     def copy_and_change(self, substitute):
         inputs = deepcopy(self)
-        for key, value in substitute:
+        for key, value in substitute.items():
             inputs.data[key] = inputs.data[key].apply(lambda x: value[1] if x in value[0] else x)
         return inputs
 

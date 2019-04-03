@@ -20,7 +20,7 @@ def get_norm_model(patch_level=True):
     parameters = {}
 
     # Add dimensions reducer
-    p_values = [2]  # [2, 3, 4]
+    p_values = [2, 3, 5, 10]
     if patch_level:
         steps.append(('norm', PNormTransform()))
         parameters.update({'norm__p': p_values})
