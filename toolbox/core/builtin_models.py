@@ -184,19 +184,17 @@ class Classifiers:
         return pipe, parameters
 
     @staticmethod
-    def get_linear_svm(reduce=None, scaling=True):
+    def get_linear_svm(reduce=None):
         steps = []
         parameters = {}
 
         # Add dimensions reducer
         if reduce is not None:
             steps.append(('pca', PCA()))
-            parameters.update({'pca__n_components': [reduce]})
+            parameters.update({'pca__n_components': reduce})
 
         # Add scaling step
-        if scaling:
-            steps.append(('scale', StandardScaler()))
-
+        steps.append(('scale', StandardScaler()))
         steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
         pipe = Pipeline(steps)
         pipe.name = 'LinearSVM'

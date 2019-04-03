@@ -79,11 +79,11 @@ class StatisticsWriter:
         figure, axes = pyplot.subplots(ncols=len(self.keys), figsize=(21, 7))
         # Browse each kind of parameter
         for index, key in enumerate(self.keys):
-            elements = inputs.get_from_key(key=key)
-            if elements is None:
+            if not inputs.is_valid_keys(keys=[key]):
                 print('Key {key} is missing from data.'.format(key=key))
                 continue
 
+            elements = inputs.get_from_key(key=key)
             counter = Counter(list(elements))
             axes[index].pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
             axes[index].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.

@@ -35,10 +35,13 @@ class Process:
         return self.classifier.fit(inputs)
 
     def evaluate_step(self, inputs, model):
-        self.__add_input_stat(inputs)
-        # Evaluate model
-        self.classifier.set_model(model)
-        self.results.append(self.classifier.evaluate(inputs))
+        try:
+            self.__add_input_stat(inputs)
+            # Evaluate model
+            self.classifier.set_model(model)
+            self.results.append(self.classifier.evaluate(inputs))
+        except Exception as ex:
+            print(ex)
 
     def end(self):
         ResultWriter(self.results, self.settings).write_results(dir_name=self.folder, name=self.name)

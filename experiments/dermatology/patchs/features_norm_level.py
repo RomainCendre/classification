@@ -32,7 +32,7 @@ def get_norm_model(patch_level=True):
 
     # Add reduction step
     steps.append(('reduction', None))
-    features = [20]
+    features = [20, 50, 100]
     kbest_p = {'reduction': SelectAtMostKBest(f_classif),
                'reduction__k': features}
 
@@ -41,7 +41,7 @@ def get_norm_model(patch_level=True):
 
     # Add classifier simple
     steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
-    parameters.update({'clf__C': geomspace(1, 1000, 3).tolist()})
+    parameters.update({'clf__C': geomspace(0.1, 1000, 5).tolist()})
 
     kbest_p.update(parameters)
     m_parameters = [kbest_p]
@@ -53,6 +53,7 @@ def get_norm_model(patch_level=True):
 
 
 if __name__ == "__main__":
+
     # Configure GPU consumption
     Parameters.set_gpu(percent_gpu=0.5)
 
@@ -110,44 +111,31 @@ if __name__ == "__main__":
         process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
         process.begin(inner_cv=validation, outer_cv=test, n_jobs=4)
 
-        for combination in combinations:
-            try:
-                input, method = combination
-                image_name = 'Image_{input}_{method}'.format(input=input[0], method=method[0])
-                input = input[1].copy_and_change(filter_groups)
-                method = method[1]
+        for input, method in combinations:
+            input[1] = input[1].copy_and_change(filter_groups)
 
-                # Image classification
-                input.name = image_name
-                input.set_filters(filter_datas)
-                input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
-                                    'groups': LabelEncoder()})
-                process.checkpoint_step(inputs=input, model=method, folder=features_folder)
-                input.collapse(reference_tag='Reference')
-                process.evaluate_step(inputs=input, model=get_norm_model(patch_level=True))
-            except:
-                print('Error occured.')
+            # Image classification
+            input.name = 'Image_{input}_{method}'.format(input=input[0], method=method[0])
+            input[1].set_filters(filter_datas)
+            input[1].set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
+                                   'groups': LabelEncoder()})
+            process.checkpoint_step(inputs=input[1], model=method, folder=features_folder)
+            input[1].collapse(reference_tag='Reference')
+            process.evaluate_step(inputs=input[1], model=get_norm_model(patch_level=True))
         process.end()
 
     # Patient classification
     filter_name, filter_datas, filter_groups = filters[0]
     process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
     process.begin(inner_cv=validation, outer_cv=test, n_jobs=4)
-    for combination in combinations:
-        try:
-            input, method = combination
-            patient_name = 'Patient_{input}_{method}'.format(input=input[0], method=method[0])
-            input = input[1].copy_and_change(filter_groups)
-            method = method[1]
-
-            input.name = patient_name
-            input.collapse(reference_tag='ID')
-            input.tags.update({'label': 'Binary_Diagnosis'})
-            input.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
-                                'groups': LabelEncoder()})
-            process.evaluate_step(inputs=input, model=get_norm_model(patch_level=False))
-        except Exception as ex:
-            print(ex)
+    for input, method in combinations:
+        input[1] = input[1].copy_and_change(filter_groups)
+        input[1].name = 'Patient_{input}_{method}'.format(input=input[0], method=method[0])
+        input[1].collapse(reference_tag='ID')
+        input[1].tags.update({'label': 'Binary_Diagnosis'})
+        input[1].set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
+                               'groups': LabelEncoder()})
+        process.evaluate_step(inputs=input[1], model=get_norm_model(patch_level=False))
     process.end()
 
     # Open result folder

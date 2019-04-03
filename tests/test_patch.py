@@ -45,13 +45,14 @@ if __name__ == "__main__":
 
     # Start image classification
     process.checkpoint_step(inputs=inputs, model=Transforms.get_haralick(mean=False), folder=features_folder)
-    inputs.collapse(reference_tag='Reference', data_tag='ImageData', flatten=False)
+    inputs.collapse(reference_tag='Reference')
     inputs.name = 'Images'
     process.evaluate_step(inputs=inputs, model=Classifiers.get_norm_model())
 
     # Start patient classification
-    inputs.collapse(reference_tag='ID', data_tag='PatientData', flatten=False)
+    inputs.collapse(reference_tag='ID')
     inputs.tags.update({'label': 'Binary_Diagnosis'})
+    inputs.set_filters({})
     inputs.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
                          'groups': LabelEncoder()})
     inputs.name = 'Patient'
