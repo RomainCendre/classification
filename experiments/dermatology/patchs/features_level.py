@@ -34,7 +34,6 @@ def get_model(patch_level=True, norm=False):
     else:
         steps.append(('flatten', FlattenTransform()))
 
-
     # Add reduction step
     steps.append(('reduction', None))
     features = [20, 50, 100]
@@ -121,13 +120,14 @@ if __name__ == "__main__":
 
             # Image classification
             copy_input.name = 'Image_{input}_{method}'.format(input=input[0], method=method[0])
+            print('Compute {name}'.format(name=copy_input.name))
             copy_input.set_filters(filter_datas)
             copy_input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
-                                   'groups': LabelEncoder()})
+                                     'groups': LabelEncoder()})
             process.checkpoint_step(inputs=copy_input, model=method, folder=features_folder)
             copy_input.collapse(reference_tag='Reference')
             process.evaluate_step(inputs=copy_input, model=get_model(norm=True, patch_level=True))
-            copy_input.name = copy_input.name+'_WithoutReduction'
+            copy_input.name = copy_input.name + '_WithoutReduction'
             process.evaluate_step(inputs=copy_input, model=get_model(norm=False, patch_level=True))
         process.end()
 
@@ -138,6 +138,7 @@ if __name__ == "__main__":
     for input, method in combinations:
         copy_input = input[1].copy_and_change(filter_groups)
         copy_input.name = 'Patient_{input}_{method}'.format(input=input[0], method=method[0])
+        print('Compute {name}'.format(name=copy_input.name))
         copy_input.collapse(reference_tag='ID')
         copy_input.tags.update({'label': 'Binary_Diagnosis'})
         copy_input.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
