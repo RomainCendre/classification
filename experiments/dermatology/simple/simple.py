@@ -70,7 +70,7 @@ if __name__ == "__main__":
 
         for input, method, model in combinations:
             copy_input = input[1].copy_and_change(filter_groups)
-            copy_input.name = '{input}_{method}'.format(input=input[0], method=method[0])
+            copy_input.name = '{input}_{method}_{model}'.format(input=input[0], method=method[0], model=model[0])
             copy_input.set_filters(filter_datas)
             copy_input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
                                    'groups': LabelEncoder()})

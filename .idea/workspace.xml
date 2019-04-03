@@ -5,13 +5,7 @@
       <change beforePath="$PROJECT_DIR$/../annotationTool/sources/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/../annotationTool/sources/core.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../annotationTool/sources/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/../annotationTool/sources/gui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/deep/fine_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/deep/fine_tune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/patchs/features_norm_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/patchs/features_norm_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/simple/methods.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/simple/simple.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/processes.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/processes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_patch.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_patch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/writers.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/writers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/builtin_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/builtin_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/simple/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/simple/simple.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../thumbnailMaker/.idea/thumbnailMaker.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../thumbnailMaker/.idea/thumbnailMaker.iml" afterDir="false" />
     </list>
     <list id="0d7b2755-a28e-4ac4-9579-9f208c9d1537" name="Revert &quot;Change experiments structure&quot;" comment="Revert &quot;Change experiments structure&quot;&#10;&#10;This reverts commit 91ebc9f3" />
@@ -39,7 +33,7 @@
     <SUITE FILE_PATH="coverage/classification$test_dermatology.coverage" NAME="test_dermatology Coverage Results" MODIFIED="1550242792196" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/classification$test_otorhinolaryngology.coverage" NAME="test_otorhinolaryngology Coverage Results" MODIFIED="1553589036266" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/classification$process_orl_simple.coverage" NAME="process_orl_simple Coverage Results" MODIFIED="1548254493205" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
-    <SUITE FILE_PATH="coverage/classification$features_norm_level.coverage" NAME="features_norm_level Coverage Results" MODIFIED="1554288017822" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/patchs" />
+    <SUITE FILE_PATH="coverage/classification$features_norm_level.coverage" NAME="features_norm_level Coverage Results" MODIFIED="1554290204642" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/patchs" />
     <SUITE FILE_PATH="coverage/classification$otorhinolaryngology__1_.coverage" NAME="otorhinolaryngology (1) Coverage Results" MODIFIED="1547555028091" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/IO" />
     <SUITE FILE_PATH="coverage/classification$simple__1_.coverage" NAME="simple (1) Coverage Results" MODIFIED="1549905899112" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/dwt" />
     <SUITE FILE_PATH="coverage/classification$dermatology_patch.coverage" NAME="dermatology_patch Coverage Results" MODIFIED="1548930729626" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiences" />
@@ -80,8 +74,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/simple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="59" column="72" selection-start-line="59" selection-start-column="72" selection-end-line="59" selection-end-column="72" />
+            <state relative-caret-position="405">
+              <caret line="72" column="111" selection-start-line="72" selection-start-column="111" selection-end-line="72" selection-end-column="111" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -92,8 +86,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_norm_level.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="422">
-              <caret line="132" column="13" selection-start-line="132" selection-start-column="8" selection-end-line="132" selection-end-column="13" />
+            <state relative-caret-position="340">
+              <caret line="132" column="46" selection-start-line="132" selection-start-column="46" selection-end-line="132" selection-end-column="46" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -104,8 +98,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/deep/fine_tune.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="61" column="46" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="46" />
+            <state relative-caret-position="337">
+              <caret line="60" column="37" selection-start-line="60" selection-start-column="37" selection-end-line="60" selection-end-column="37" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -245,9 +239,9 @@
         <option value="$PROJECT_DIR$/tests/test_patch.py" />
         <option value="$PROJECT_DIR$/experiments/processes.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/simple/methods.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/deep/fine_tune.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/patchs/features_norm_level.py" />
         <option value="$PROJECT_DIR$/toolbox/core/builtin_models.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/patchs/features_norm_level.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/deep/fine_tune.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/simple/simple.py" />
       </list>
     </option>
@@ -540,21 +534,7 @@
       <workItem from="1553591407041" duration="77232000" />
       <workItem from="1554100306183" duration="1190000" />
       <workItem from="1554213327438" duration="8346000" />
-      <workItem from="1554283186958" duration="5702000" />
-    </task>
-    <task id="LOCAL-00016" summary="Updating all simple procedure in one readable file, adding dataset to another for ease of use, and finally split layers for CNN in specific file.">
-      <created>1552918919436</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1552918919437</updated>
-    </task>
-    <task id="LOCAL-00017" summary="Updating patch decisions and feature classification.">
-      <created>1552921547689</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1552921547689</updated>
+      <workItem from="1554283186958" duration="6022000" />
     </task>
     <task id="LOCAL-00018" summary="Updating dataset from patches.">
       <created>1552922142629</created>
@@ -885,11 +865,25 @@
       <option name="project" value="LOCAL" />
       <updated>1554280146777</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="Updating all processes.">
+      <created>1554290043784</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1554290043784</updated>
+    </task>
+    <task id="LOCAL-00066" summary="Missing commit.">
+      <created>1554290244488</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1554290244488</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="251294000" />
+    <option name="totallyTimeSpent" value="251614000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -904,13 +898,13 @@
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.7171875" visible="true" weight="0.17932068" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7171875" visible="true" weight="0.17932068" />
       <window_info id="Structure" order="1" sideWeight="0.2828125" side_tool="true" visible="true" weight="0.17932068" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info id="Repositories" order="3" sideWeight="0.49925038" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.494006" weight="0.3279678" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.75524473" visible="true" weight="0.35613683" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.75524473" visible="true" weight="0.35613683" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.6888112" weight="0.28772637" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -985,8 +979,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixing bu on intermediate data and environment files." />
-    <MESSAGE value="Fixing bug on features save and structure update of data." />
     <MESSAGE value="Fix bug for simple method process." />
     <MESSAGE value="Update feature level patch classification." />
     <MESSAGE value="Update patch feature ways." />
@@ -1010,7 +1002,9 @@
     <MESSAGE value="Fix some usage bugs." />
     <MESSAGE value="Update feature norm classification." />
     <MESSAGE value="Fix value replacement function." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix value replacement function." />
+    <MESSAGE value="Updating all processes." />
+    <MESSAGE value="Missing commit." />
+    <option name="LAST_COMMIT_MESSAGE" value="Missing commit." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1487,26 +1481,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/deep/fine_tune.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="61" column="46" selection-start-line="61" selection-start-column="41" selection-end-line="61" selection-end-column="46" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_norm_level.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="132" column="13" selection-start-line="132" selection-start-column="8" selection-end-line="132" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="197">
@@ -1517,10 +1491,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_norm_level.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="132" column="46" selection-start-line="132" selection-start-column="46" selection-end-line="132" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/deep/fine_tune.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="337">
+          <caret line="60" column="37" selection-start-line="60" selection-start-column="37" selection-end-line="60" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/simple.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="59" column="72" selection-start-line="59" selection-start-column="72" selection-end-line="59" selection-end-column="72" />
+        <state relative-caret-position="405">
+          <caret line="72" column="111" selection-start-line="72" selection-start-column="111" selection-end-line="72" selection-end-column="111" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
