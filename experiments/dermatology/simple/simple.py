@@ -69,13 +69,13 @@ if __name__ == "__main__":
         process.begin(inner_cv=validation, outer_cv=test, n_jobs=4)
 
         for input, method, model in combinations:
-            input[1] = input[1].copy_and_change(filter_groups)
-            input[1].name = '{input}_{method}'.format(input=input[0], method=method[0])
-            input[1].set_filters(filter_datas)
-            input[1].set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
+            copy_input = input[1].copy_and_change(filter_groups)
+            copy_input.name = '{input}_{method}'.format(input=input[0], method=method[0])
+            copy_input.set_filters(filter_datas)
+            copy_input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
                                    'groups': LabelEncoder()})
-            process.checkpoint_step(inputs=input[1], model=method[1], folder=features_folder)
-            process.evaluate_step(inputs=input[1], model=model[1])
+            process.checkpoint_step(inputs=copy_input, model=method[1], folder=features_folder)
+            process.evaluate_step(inputs=copy_input, model=model[1])
         process.end()
 
     # Open result folder

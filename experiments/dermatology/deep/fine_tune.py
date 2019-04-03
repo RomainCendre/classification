@@ -53,13 +53,13 @@ if __name__ == '__main__':
         process.begin(inner_cv=validation, outer_cv=test, n_jobs=4)
 
         for input, params in combinations:
-            input[1] = input[1].copy_and_change(filter_groups)
+            copy_input = input[1].copy_and_change(filter_groups)
             # Patient classification
-            input[1].name = 'Image_{input}_{params}'.format(input=input[0], params=params)
-            input[1].set_filters(filter_datas)
-            input[1].set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
-                                   'groups': LabelEncoder()})
-            process.evaluate_step(inputs=input[1],
+            copy_input.name = 'Image_{input}_{params}'.format(input=input[0], params=params)
+            copy_input.set_filters(filter_datas)
+            copy_input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
+                                     'groups': LabelEncoder()})
+            process.evaluate_step(inputs=copy_input,
                                   model=BuiltInModels.get_fine_tuning(output_classes=len(filter_datas['Label']),
                                                                       trainable_layers=params['trainable_layer'],
                                                                       added_layers=params['added_layer']))
