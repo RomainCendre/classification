@@ -190,7 +190,7 @@ class Classifiers:
 
         # Add dimensions reducer
         if reduce is not None:
-            steps.append(('pca', PCA()))
+            steps.append(('pca', PCAAtMost()))
             parameters.update({'pca__n_components': reduce})
 
         # Add scaling step
