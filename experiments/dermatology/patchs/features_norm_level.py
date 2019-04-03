@@ -11,24 +11,29 @@ from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.core.builtin_models import Transforms
 from toolbox.core.models import SelectAtMostKBest
-from toolbox.core.transforms import OrderedEncoder, PNormTransform
+from toolbox.core.transforms import OrderedEncoder, PNormTransform, FlattenTransform
 from toolbox.tools.limitations import Parameters
 
 
-def get_norm_model(patch_level=True):
+def get_model(patch_level=True, norm=False):
     steps = []
     parameters = {}
 
     # Add dimensions reducer
     p_values = [2, 3, 5, 10]
-    if patch_level:
-        steps.append(('norm', PNormTransform()))
-        parameters.update({'norm__p': p_values})
+
+    if norm:
+        if patch_level:
+            steps.append(('norm', PNormTransform()))
+            parameters.update({'norm__p': p_values})
+        else:
+            steps.append(('norm1', PNormTransform(axis=2)))
+            parameters.update({'norm1__p': p_values})
+            steps.append(('norm2', PNormTransform()))
+            parameters.update({'norm2__p': p_values})
     else:
-        steps.append(('norm1', PNormTransform(axis=2)))
-        parameters.update({'norm1__p': p_values})
-        steps.append(('norm2', PNormTransform()))
-        parameters.update({'norm2__p': p_values})
+        steps.append(('flatten', FlattenTransform()))
+
 
     # Add reduction step
     steps.append(('reduction', None))
@@ -115,13 +120,15 @@ if __name__ == "__main__":
             copy_input = input[1].copy_and_change(filter_groups)
 
             # Image classification
-            input.name = 'Image_{input}_{method}'.format(input=input[0], method=method[0])
+            copy_input.name = 'Image_{input}_{method}'.format(input=input[0], method=method[0])
             copy_input.set_filters(filter_datas)
             copy_input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
                                    'groups': LabelEncoder()})
             process.checkpoint_step(inputs=copy_input, model=method, folder=features_folder)
             copy_input.collapse(reference_tag='Reference')
-            process.evaluate_step(inputs=copy_input, model=get_norm_model(patch_level=True))
+            process.evaluate_step(inputs=copy_input, model=get_model(norm=True, patch_level=True))
+            copy_input.name = copy_input.name+'_WithoutReduction'
+            process.evaluate_step(inputs=copy_input, model=get_model(norm=False, patch_level=True))
         process.end()
 
     # Patient classification
@@ -135,7 +142,7 @@ if __name__ == "__main__":
         copy_input.tags.update({'label': 'Binary_Diagnosis'})
         copy_input.set_encoders({'label': OrderedEncoder().fit(['Benign', 'Malignant']),
                                  'groups': LabelEncoder()})
-        process.evaluate_step(inputs=copy_input, model=get_norm_model(patch_level=False))
+        process.evaluate_step(inputs=copy_input, model=get_model(norm=True, patch_level=False))
     process.end()
 
     # Open result folder
