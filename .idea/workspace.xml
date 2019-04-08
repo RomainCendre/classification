@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="754eb199-d45c-4d67-bc2e-84932a02ea9c" name="Default" comment="Adding non norm to feature level.">
-      <change afterPath="$PROJECT_DIR$/experiments/dermatology/patchs/score_level.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../annotationTool/sources/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/../annotationTool/sources/core.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../annotationTool/sources/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/../annotationTool/sources/gui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/deep/fine_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/deep/fine_tune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/patchs/features_norm_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/simple/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/simple/simple.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../thumbnailMaker/.idea/thumbnailMaker.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../thumbnailMaker/.idea/thumbnailMaker.iml" afterDir="false" />
     </list>
     <list id="0d7b2755-a28e-4ac4-9579-9f208c9d1537" name="Revert &quot;Change experiments structure&quot;" comment="Revert &quot;Change experiments structure&quot;&#10;&#10;This reverts commit 91ebc9f3" />
@@ -77,8 +73,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/decisions_level.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-102">
-              <caret column="16" lean-forward="true" selection-start-column="16" selection-end-column="16" />
+            <state>
+              <caret column="16" selection-start-column="16" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -86,7 +82,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
+            <state relative-caret-position="2142">
               <caret line="140" column="8" selection-start-line="140" selection-start-column="8" selection-end-line="140" selection-end-column="8" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
@@ -98,8 +94,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/simple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="388">
-              <caret line="72" column="113" lean-forward="true" selection-start-line="72" selection-start-column="113" selection-end-line="73" selection-end-column="64" />
+            <state relative-caret-position="1054">
+              <caret line="72" column="113" selection-start-line="72" selection-start-column="113" selection-end-line="73" selection-end-column="64" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -110,7 +106,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/deep/fine_tune.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="326">
+            <state relative-caret-position="354">
               <caret line="58" column="64" selection-start-line="58" selection-start-column="64" selection-end-line="58" selection-end-column="64" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
@@ -127,7 +123,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/toolbox/core/transforms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
+            <state relative-caret-position="1870">
               <caret line="119" column="22" selection-start-line="119" selection-start-column="6" selection-end-line="119" selection-end-column="22" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
@@ -244,8 +240,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-2009" />
-    <option name="y" value="-250" />
+    <option name="x" value="-2149" />
+    <option name="y" value="-370" />
     <option name="width" value="1455" />
     <option name="height" value="775" />
   </component>
@@ -255,6 +251,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -339,7 +336,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -531,14 +527,8 @@
       <workItem from="1553591407041" duration="77232000" />
       <workItem from="1554100306183" duration="1190000" />
       <workItem from="1554213327438" duration="8346000" />
-      <workItem from="1554283186958" duration="9537000" />
-    </task>
-    <task id="LOCAL-00022" summary="Updating path but need to be changed.">
-      <created>1552990489355</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1552990489355</updated>
+      <workItem from="1554283186958" duration="12003000" />
+      <workItem from="1554703497982" duration="595000" />
     </task>
     <task id="LOCAL-00023" summary="Update patches procedure adding norm way.">
       <created>1552991583763</created>
@@ -876,11 +866,18 @@
       <option name="project" value="LOCAL" />
       <updated>1554293035559</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="Providing some information.">
+      <created>1554296895947</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1554296895947</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="255129000" />
+    <option name="totallyTimeSpent" value="258190000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -893,16 +890,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.7171875" visible="true" weight="0.17932068" />
-      <window_info id="Structure" order="1" sideWeight="0.2828125" side_tool="true" visible="true" weight="0.17932068" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7161017" visible="true" weight="0.18131869" />
+      <window_info id="Structure" order="1" sideWeight="0.2838983" side_tool="true" visible="true" weight="0.18131869" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info id="Repositories" order="3" sideWeight="0.49925038" weight="0.32967034" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.494006" weight="0.3279678" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.75524473" visible="true" weight="0.35613683" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.6888112" weight="0.28772637" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.75524473" weight="0.35613683" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.6883117" visible="true" weight="0.28772637" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4975025" weight="0.32897383" />
@@ -912,12 +908,12 @@
       <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="11" sideWeight="0.49500498" weight="0.23239437" />
       <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.4995005" weight="0.32997987" />
-      <window_info anchor="bottom" id="Event Log" order="13" sideWeight="0.24475524" side_tool="true" visible="true" weight="0.35613683" />
+      <window_info anchor="bottom" id="Event Log" order="13" sideWeight="0.3116883" side_tool="true" visible="true" weight="0.28772637" />
       <window_info anchor="bottom" id="Thumbnails" order="14" sideWeight="0.499001" weight="0.32897383" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" sideWeight="0.4959596" visible="true" weight="0.1918082" />
+      <window_info active="true" anchor="right" id="SciView" order="3" sideWeight="0.4959596" visible="true" weight="0.1918082" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info anchor="right" x="0" y="0" width="465" height="926" id="Documentation" order="5" sideWeight="0.5040404" side_tool="true" weight="0.25874126" />
     </layout>
@@ -976,7 +972,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update that add patient classification." />
     <MESSAGE value="Update simple methods." />
     <MESSAGE value="Update features norm." />
     <MESSAGE value="New way of managing output files and patients." />
@@ -1001,7 +996,8 @@
     <MESSAGE value="Fix PCA by using PCAatMost." />
     <MESSAGE value="Adding non norm to feature level." />
     <MESSAGE value="Adding test data cases." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding test data cases." />
+    <MESSAGE value="Providing some information." />
+    <option name="LAST_COMMIT_MESSAGE" value="Providing some information." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1457,49 +1453,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/transforms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="119" column="22" selection-start-line="119" selection-start-column="6" selection-end-line="119" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="67" column="21" selection-start-line="67" selection-start-column="8" selection-end-line="67" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/decisions_level.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
-          <caret column="16" lean-forward="true" selection-start-column="16" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/score_level.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/simple.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="72" column="113" lean-forward="true" selection-start-line="72" selection-start-column="113" selection-end-line="73" selection-end-column="64" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
+        <state>
+          <caret column="16" selection-start-column="16" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/features_level.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
+        <state relative-caret-position="2142">
           <caret line="140" column="8" selection-start-line="140" selection-start-column="8" selection-end-line="140" selection-end-column="8" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
@@ -1507,9 +1470,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/simple/simple.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1054">
+          <caret line="72" column="113" selection-start-line="72" selection-start-column="113" selection-end-line="73" selection-end-column="64" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/patchs/score_level.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/transforms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1870">
+          <caret line="119" column="22" selection-start-line="119" selection-start-column="6" selection-end-line="119" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/deep/fine_tune.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
+        <state relative-caret-position="354">
           <caret line="58" column="64" selection-start-line="58" selection-start-column="64" selection-end-line="58" selection-end-column="64" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />

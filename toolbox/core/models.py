@@ -280,20 +280,22 @@ class PatchClassifier(BaseEstimator, ClassifierMixin):
              x (:obj): Not used.
              y (:obj): Not used.
         """
-        # if not x:
-        #     raise Exception('At least one X has to be found.')
-        means = np.mean(x, axis=1)
+        x_probas = np.zeros((len(x), len(self.hierarchies)))
+        patches_number = x.shape[1]
+        for hierarchy in self.hierarchies:
+            x_probas[:, hierarchy] = np.sum(x == hierarchy, axis=1) / patches_number
+
         global_score = 0
         self.thresholds = np.zeros(len(self.hierarchies))
-        for index, hierarchy in enumerate(self.hierarchies):
-            potential_thresholds = np.sort(np.unique(means[:, hierarchy]))
+        for hierarchy in self.hierarchies:
+            potential_thresholds = np.sort(np.unique(x_probas[:, hierarchy]))
             for thresh in potential_thresholds:
                 thresholds = np.copy(self.thresholds)
-                thresholds[index] = thresh
-                score = self.metric(self.get_predictions(means, thresholds), y)
+                thresholds[hierarchy] = thresh
+                score = self.metric(self.get_predictions(x_probas, thresholds), y)
                 if global_score < score:
                     global_score = score
-                    self.thresholds[index] = thresh
+                    self.thresholds[hierarchy] = thresh
         print(self.thresholds)
         return self
 
@@ -310,10 +312,7 @@ class PatchClassifier(BaseEstimator, ClassifierMixin):
         return self.get_predictions(x, self.thresholds)
 
     def get_predictions(self, x, thresholds):
-        means = np.mean(x, axis=1)
-        thresh_values = ((np.ones(means.shape) * thresholds) < means).astype(int)
-        priorities = np.arange(len(thresholds), 0, -1)[self.hierarchies]
-        return np.argmax(thresh_values*priorities, axis=1)
+        return np.argmax((x>thresholds)*self.hierarchies, axis=1)
 
     def predict_proba(self, x, y=None, copy=True):
         return x

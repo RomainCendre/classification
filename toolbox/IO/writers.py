@@ -1,25 +1,21 @@
 from collections import Counter
-from itertools import cycle
-from math import ceil
+from copy import deepcopy
 from os import makedirs
 import markups
 import pandas
 import pickle
 
-from PIL import Image
+from PIL import Image, ImageDraw
 from matplotlib import pyplot, cm
 from os.path import join, exists
 from keras import backend as K
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.image import imsave
-from numpy import std, repeat, newaxis, uint8, arange, savetxt, array, copy, concatenate
+import numpy as np
+from sklearn.decomposition import PCA
 from sklearn.metrics import auc, roc_curve, classification_report
-from vis.utils.utils import load_img
-from vis.visualization import visualize_cam, overlay
 from tensorboard.plugins import projector
 import tensorflow
-from toolbox.core.classification import KerasBatchClassifier
-from toolbox.core.generators import ResourcesGenerator
 
 
 class DataProjectorWriter:
@@ -48,7 +44,7 @@ class DataProjectorWriter:
 
         # Write label as metadata
         metadata_path = join(output_folder, 'metadata.tsv')
-        savetxt(metadata_path, labels, delimiter='\t', fmt='%s')
+        np.savetxt(metadata_path, labels, delimiter='\t', fmt='%s')
 
         config = projector.ProjectorConfig()
         # One can add multiple embeddings.
@@ -113,9 +109,9 @@ class ResultWriter:
                 print('Missing tag for misclassification report.')
                 return
 
-            labels = result.decode('label', concatenate(result.get_from_key(key='Label'), axis=0))
-            predictions = result.decode('label', concatenate(result.get_from_key(key='Prediction'), axis=0))
-            references = concatenate(result.get_from_key(key='Reference'), axis=0)
+            labels = result.decode('label', np.concatenate(result.get_from_key(key='Label'), axis=0))
+            predictions = result.decode('label', np.concatenate(result.get_from_key(key='Prediction'), axis=0))
+            references = np.concatenate(result.get_from_key(key='Reference'), axis=0)
             misclassified = [index for index, (i, j) in enumerate(zip(labels, predictions)) if i != j]
             data = {'paths': references[misclassified],
                     'labels': labels[misclassified],
@@ -151,10 +147,10 @@ class ResultWriter:
                 positives_indices = result.get_unique_from_key('Label')
                 # Labels
                 labels = result.get_from_key(key='Label')
-                labels = concatenate(labels, axis=0)
+                labels = np.concatenate(labels, axis=0)
                 # Probabilities for drawing
                 probabilities = result.get_from_key(key='Probability')
-                probabilities = concatenate(probabilities, axis=0)
+                probabilities = np.concatenate(probabilities, axis=0)
 
                 figure, axe = pyplot.subplots(ncols=1, figsize=(10, 10))
                 # Plot luck
@@ -245,7 +241,7 @@ class ResultWriter:
                 for metrics in val.keys():
                     values = [score[label][metrics] for score in scores if label in score.keys()]
                     report[label][metrics] = '{mean:0.2f}±{std:0.2f}'.format(mean=report[label][metrics],
-                                                                             std=std(values))
+                                                                             std=np.std(values))
 
         # Return report
         return report
@@ -262,84 +258,116 @@ class ResultWriter:
                                      result.decode('label', predictions), output_dict=True)
 
 
-class VisualizationWriter:
+class PCAProjection:
+    def __init__(self, settings, dir_name, name):
+        self.settings = settings
+        self.pdf = PdfPages(join(dir_name, name + "_pca.pdf"))
 
-    def __init__(self, model, preprocess=None):
-        self.model = model
-        self.preprocess = preprocess
+    def end(self):
+        self.pdf.close()
 
-    def __get_activation_map(self, seed_input, predict, image):
-        if image.ndim == 2:
-            image = repeat(image[:, :, newaxis], 3, axis=2)
+    def write_projection(self, inputs):
+        data = inputs.get_datas()
+        labels = inputs.get_labels(encode=False)
+        ulabels = inputs.get_unique_labels(encode=False)
+        pca = PCA(2, whiten=True)  # project to 2 dimensions
+        projected = pca.fit_transform(data)
+        figure = pyplot.figure()
+        for label in ulabels:
+            pyplot.scatter(projected[labels == label, 0], projected[labels == label, 1],
+                           c=np.array(self.settings.get_color(label)), alpha=0.5, label=label, edgecolor='none')
+        pyplot.xlabel('component 1')
+        pyplot.ylabel('component 2')
+        pyplot.legend(loc='lower right')
+        figure.suptitle(inputs.name)
+        self.pdf.savefig(figure)
+        pyplot.close()
 
-        grads = visualize_cam(self.model, len(self.model.layers) - 1, filter_indices=predict, seed_input=seed_input,
-                              backprop_modifier='guided')
 
-        jet_heatmap = uint8(cm.jet(grads)[..., :3] * 255)
-        return overlay(jet_heatmap, image)
-
-    def write_activations_maps(self, inputs, output_folder):
-
-        # Activation dir
-        activation_dir = join(output_folder, 'Activation/')
-        if not exists(activation_dir):
-            makedirs(activation_dir)
-
-        # Check for model type, will be changed in future
-        if not isinstance(self.model, KerasBatchClassifier):
-            return
-
-        # Extract data for fit
-        paths = inputs.get_datas()
-        labels = inputs.get_labels()
-        ulabels = inputs.get_unique_labels()
-
-        # Prepare data
-        generator = ResourcesGenerator(preprocessing_function=self.preprocess)
-        valid_generator = generator.flow_from_paths(paths, labels, batch_size=1, shuffle=False)
-
-        # Folds storage
-        for index in arange(len(valid_generator)):
-            x, y = valid_generator[index]
-
-            for label_index in ulabels:
-                dir_path = join(activation_dir, inputs.decode('label', label_index))
-                if not exists(dir_path):
-                    makedirs(dir_path)
-
-                file_path = join(dir_path, '{number}.png'.format(number=index))
-
-                try:
-                    activation = self.__get_activation_map(seed_input=x, predict=label_index,
-                                                           image=load_img(paths[index]))
-                    imsave(file_path, activation)
-                except:
-                    print('Incompatible model or trouble occurred.')
+# class VisualizationWriter:
+#
+#     def __init__(self, model, preprocess=None):
+#         self.model = model
+#         self.preprocess = preprocess
+#
+#     def __get_activation_map(self, seed_input, predict, image):
+#         if image.ndim == 2:
+#             image = repeat(image[:, :, newaxis], 3, axis=2)
+#
+#         grads = visualize_cam(self.model, len(self.model.layers) - 1, filter_indices=predict, seed_input=seed_input,
+#                               backprop_modifier='guided')
+#
+#         jet_heatmap = uint8(cm.jet(grads)[..., :3] * 255)
+#         return overlay(jet_heatmap, image)
+#
+#     def write_activations_maps(self, inputs, output_folder):
+#
+#         # Activation dir
+#         activation_dir = join(output_folder, 'Activation/')
+#         if not exists(activation_dir):
+#             makedirs(activation_dir)
+#
+#         # Check for model type, will be changed in future
+#         if not isinstance(self.model, KerasBatchClassifier):
+#             return
+#
+#         # Extract data for fit
+#         paths = inputs.get_datas()
+#         labels = inputs.get_labels()
+#         ulabels = inputs.get_unique_labels()
+#
+#         # Prepare data
+#         generator = ResourcesGenerator(preprocessing_function=self.preprocess)
+#         valid_generator = generator.flow_from_paths(paths, labels, batch_size=1, shuffle=False)
+#
+#         # Folds storage
+#         for index in arange(len(valid_generator)):
+#             x, y = valid_generator[index]
+#
+#             for label_index in ulabels:
+#                 dir_path = join(activation_dir, inputs.decode('label', label_index))
+#                 if not exists(dir_path):
+#                     makedirs(dir_path)
+#
+#                 file_path = join(dir_path, '{number}.png'.format(number=index))
+#
+#                 try:
+#                     activation = self.__get_activation_map(seed_input=x, predict=label_index,
+#                                                            image=load_img(paths[index]))
+#                     imsave(file_path, activation)
+#                 except:
+#                     print('Incompatible model or trouble occurred.')
 
 
 class PatchWriter:
 
-    def __init__(self, inputs):
+    def __init__(self, inputs, settings):
         self.inputs = inputs
+        self.settings = settings
 
-    def write_patch(self, folder, patch_size=250):
-        print(folder)
+    def write_patch(self, folder):
+        folder = join(join(folder, 'Patches_decision'), self.inputs.name)
+        if not exists(folder):
+            makedirs(folder)
         references = list(set(self.inputs.get_from_key('Reference')))
 
         for index, reference in enumerate(references):
-            entities = self.inputs.to_sub_input({'Reference': [reference]})
-            path = list(set(entities.get_from_key('Full_path')))
-            label = list(set(entities.get_from_key('Label')))
-            image = array(Image.open(path[0]).convert('L'))
-            image = repeat(image[:, :, newaxis], 3, axis=2)
-            predict_map = copy(image)
-            for entity in entities.data.data_set:
-                X = entity.data['Patch_Position_X']
-                Y = entity.data['Patch_Position_Y']
-                predict = entity.data['PredictorTransform']
-                color = self.inputs.get_style('patches', self.inputs.decode('label', predict.item(0)))
-                predict_map[X:X+patch_size, Y:Y+patch_size, :] = color
-            imsave(join(folder, '{ref}_{lab}'.format(ref=reference, lab=label[0])), overlay(predict_map, image))
+            work_input = self.inputs.sub_inputs({'Reference': [reference]})
+            path = list(set(work_input.get_from_key('Full_path')))
+            label = list(set(work_input.get_from_key('Label')))
+            image = Image.open(path[0]).convert('RGBA')
+            for sub_index, entity in work_input.data.iterrows():
+                start = entity['Patch_Start']
+                end = entity['Patch_End']
+                center = ((end[0]+start[0])/2, (end[1]+start[1])/2)
+                center = tuple(np.subtract(center, 10)), tuple(np.add(center, 10))
+                predict = entity['PredictorTransform']
+                color = self.settings.get_color(self.inputs.decode('label', predict))+(0.5,) #Add alpha
+                color = tuple(np.multiply(color, 255).astype(int))
+                draw = ImageDraw.Draw(image)
+                draw.rectangle(center, fill=color)
+                # draw.rectangle((start, end), outline="white")
+            image.save(join(folder, '{ref}_{lab}.png'.format(ref=reference, lab=label[0])))
 
 
 class ObjectManager:

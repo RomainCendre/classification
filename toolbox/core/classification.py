@@ -182,15 +182,33 @@ class Classifier:
         else:
             prefix = type(self.__model).__name__
 
-        folder_prefix = '{prefix}_'.format(prefix=join(folder, prefix))
-        expected_files = ['{folder_prefix}{reference}.npy'.format(folder_prefix=folder_prefix, reference=reference) for reference in references]
+        if folder is not None:
+            folder_prefix = '{prefix}_'.format(prefix=join(folder, prefix))
+            expected_files = ['{folder_prefix}{reference}.npy'.format(folder_prefix=folder_prefix, reference=reference) for reference in references]
 
-        # Extract files from folder
-        files = glob.glob('{folder_prefix}*.npy'.format(folder_prefix=folder_prefix))
+            # Extract files from folder
+            files = glob.glob('{folder_prefix}*.npy'.format(folder_prefix=folder_prefix))
 
-        features = []
-        # Check if already extracted
-        if not set(expected_files).issubset(files):
+            features = []
+            # Check if already extracted
+            if not set(expected_files).issubset(files):
+                # Now browse data
+                print('Extraction features with {prefix}'.format(prefix=prefix))
+                if hasattr(self.__model, 'transform'):
+                    features = self.__model.transform(datas)
+                else:
+                    features = self.__model.predict_proba(datas)
+
+                # Now save features as files
+                print('Writting data at {folder}'.format(folder=folder))
+                for feature, reference in zip(features, references):
+                    save('{folder_prefix}{reference}.npy'.format(folder_prefix=folder_prefix, reference=reference), feature)
+            else:
+                print('Loading data at {folder}'.format(folder=folder))
+                for expected_file in expected_files:
+                    features.append(load(expected_file))
+                features = array(features)
+        else:
             # Now browse data
             print('Extraction features with {prefix}'.format(prefix=prefix))
             if hasattr(self.__model, 'transform'):
@@ -198,15 +216,6 @@ class Classifier:
             else:
                 features = self.__model.predict_proba(datas)
 
-            # Now save features as files
-            print('Writting data at {folder}'.format(folder=folder))
-            for feature, reference in zip(features, references):
-                save('{folder_prefix}{reference}.npy'.format(folder_prefix=folder_prefix, reference=reference), feature)
-        else:
-            print('Loading data at {folder}'.format(folder=folder))
-            for expected_file in expected_files:
-                features.append(load(expected_file))
-            features = array(features)
         # Update input
         inputs.update(prefix, features, references)
 

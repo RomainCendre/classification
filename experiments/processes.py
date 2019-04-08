@@ -1,7 +1,7 @@
 from os import makedirs
 from os.path import join, exists
 from keras.wrappers.scikit_learn import BaseWrapper
-from toolbox.IO.writers import StatisticsWriter, VisualizationWriter, ResultWriter, DataProjectorWriter
+from toolbox.IO.writers import StatisticsWriter, ResultWriter, DataProjectorWriter
 from toolbox.core.classification import Classifier
 from keras import backend as K
 
@@ -20,7 +20,7 @@ class Process:
         self.classifier = Classifier(callbacks=callbacks, inner_cv=inner_cv, outer_cv=outer_cv,
                                      n_jobs=n_jobs, scoring=scoring)
 
-    def checkpoint_step(self, inputs, model, folder, projection_folder=None,):
+    def checkpoint_step(self, inputs, model, folder=None, projection_folder=None,):
         self.classifier.set_model(model)
         self.classifier.features_checkpoint(inputs, folder)
         # Write data to visualize it

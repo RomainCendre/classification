@@ -4,7 +4,7 @@ import pandas as pd
 import pyocr
 import shutil
 from os import listdir, makedirs, path
-from os.path import isdir, join, normpath, isfile, basename, splitext
+from os.path import isdir, join, normpath, isfile, basename, splitext, exists
 from PIL import Image
 from pyocr import builders
 
@@ -71,7 +71,11 @@ class Reader:
         return pd.concat(patches_data, sort=False)
 
     @staticmethod
-    def __patchify(filename, reference, window_size, overlap, temp_folder):
+    def __patchify(filename, reference, window_size, overlap, patch_folder):
+        patch_folder = join(patch_folder, '{size}_{overlap}'.format(size=window_size, overlap=overlap))
+        if not exists(patch_folder):
+            makedirs(patch_folder)
+
         image = np.ascontiguousarray(np.array(Image.open(filename).convert('L')))
         stride = int(window_size - (window_size * overlap))  # Overlap of images
         image_shape = np.array(image.shape)
@@ -80,18 +84,29 @@ class Reader:
         nbl = (image_shape - window_shape) // stride_shape + 1
         strides = np.r_[image.strides * stride_shape, image.strides]
         dims = np.r_[nbl, window_shape]
-        patches = np.lib.stride_tricks.as_strided(image, strides=strides, shape=dims)
+        patches = np.lib.stride_tricks.as_strided(image, strides=strides, shape=dims, writeable=False)
         patches = patches.reshape(-1, *window_shape)
+
+        locations = np.ascontiguousarray(np.arange(0, image_shape[0]*image_shape[1]).reshape(image_shape))
+        strides = np.r_[locations.strides * stride_shape, locations.strides]
+        dims = np.r_[nbl, window_shape]
+        patches_loc = np.lib.stride_tricks.as_strided(locations, strides=strides, shape=dims, writeable=False)
+        patches_loc = patches_loc.reshape(-1, *window_shape)
+
         metas = []
-        for index, patch in enumerate(patches):
+        for index, (patch, location) in enumerate(zip(patches, patches_loc)):
             # Create patch informations
             meta = dict()
             meta.update(
-                {'Patch_Path': normpath('{ref}_{size}_{overlap}_{id}.png'.format(ref=join(temp_folder, reference),
-                                                                                   overlap=int(overlap * 100),
-                                                                                   size=window_size, id=index))})
+                {'Patch_Path': normpath('{ref}_{id}.png'.format(ref=join(patch_folder, reference), id=index))})
             meta.update({'Patch_Index': index})
-            meta.update({'Patch_Reference': '{ref}_{index}'.format(ref=reference, index=index)})
+            start = location[0, 0]
+            meta.update({'Patch_Start': (start%image_shape[0], start//image_shape[0])})
+
+            end = location[-1, -1]
+            meta.update({'Patch_End': (end%image_shape[0], end//image_shape[0])})
+            meta.update({'Patch_Reference': '{ref}_{index}_{sta}_{end}'.format(ref=reference, index=index,
+                                                                               sta=start, end=end)})
             meta.update({'Reference': reference})
             metas.append(meta)
 

@@ -121,6 +121,9 @@ class Inputs(Data):
             raw_row = group.to_dict('list')
             row = {}
             for key, values in raw_row.items():
+                if key == data_tag:
+                    row.update({key: array(values)})
+                    continue
                 try:
                     test = list(set(values))
                     if len(test) == 1:
@@ -235,10 +238,12 @@ class Inputs(Data):
         self.encoders = encoders
 
     def sub_inputs(self, filters=None):
+        inputs = deepcopy(self)
         cur_filters = copy(self.filters)
         if filters is not None:
             cur_filters.update(filters)
-        return self.data.query(super().to_query(cur_filters))
+        inputs.data = inputs.data.query(super().to_query(cur_filters))
+        return inputs
 
     def copy_and_change(self, substitute):
         inputs = deepcopy(self)

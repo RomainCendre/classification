@@ -23,7 +23,7 @@ if __name__ == "__main__":
     settings = DefinedSettings.get_default_dermatology()
 
     # Output folders
-    output_folder = normpath('{home}/Results/Dermatology/{filename}/'.format(home=home_path, filename=filename))
+    output_folder = normpath('{home}/Results/Dermatology/simple/{filename}/'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
 
@@ -40,9 +40,6 @@ if __name__ == "__main__":
 
     # Filters
     filters = [('All', {'Label': ['Normal', 'Benign', 'Malignant']}, {}),
-               ('NvsM', {'Label': ['Normal', 'Malignant']}, {}),
-               ('NvsB', {'Label': ['Normal', 'Benign']}, {}),
-               ('BvsM', {'Label': ['Benign', 'Malignant']}, {}),
                ('NvsP', {'Label': ['Normal', 'Pathology']}, {'Label': (['Benign', 'Malignant'], 'Pathology')}),
                ('MvsR', {'Label': ['Malignant', 'Rest']}, {'Label': (['Normal', 'Benign'], 'Rest')})]
 
@@ -56,8 +53,8 @@ if __name__ == "__main__":
                ('KerasMaximum', Transforms.get_keras_extractor(pooling='max'))]
 
     # Models
-    models = [('Svm', Classifiers.get_linear_svm()),
-              ('SvmPca', Classifiers.get_linear_svm(reduce=[20, 40, 100]))]
+    models = [('Svm', Classifiers.get_linear_svm())]
+              # ('SvmPca', Classifiers.get_linear_svm(reduce=[20, 40, 100]))]
 
     # Parameters combinations
     combinations = list(itertools.product(inputs, methods, models))
@@ -71,10 +68,9 @@ if __name__ == "__main__":
         for input, method, model in combinations:
             copy_input = input[1].copy_and_change(filter_groups)
             copy_input.name = '{input}_{method}_{model}'.format(input=input[0], method=method[0], model=model[0])
-            print('Compute {name}'.format(name=copy_input.name))
             copy_input.set_filters(filter_datas)
             copy_input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
-                                     'groups': LabelEncoder()})
+                                   'groups': LabelEncoder()})
             process.checkpoint_step(inputs=copy_input, model=method[1], folder=features_folder)
             process.evaluate_step(inputs=copy_input, model=model[1])
         process.end()

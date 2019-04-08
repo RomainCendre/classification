@@ -56,7 +56,6 @@ if __name__ == '__main__':
             copy_input = input[1].copy_and_change(filter_groups)
             # Patient classification
             copy_input.name = 'Image_{input}_{params}'.format(input=input[0], params=params)
-            print('Compute {name}'.format(name=copy_input.name))
             copy_input.set_filters(filter_datas)
             copy_input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
                                      'groups': LabelEncoder()})
