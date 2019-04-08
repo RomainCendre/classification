@@ -346,7 +346,7 @@ class PatchWriter:
         self.settings = settings
 
     def write_patch(self, folder):
-        folder = join(join(folder, 'Patches_decision'), self.inputs.name)
+        folder = join(folder, self.inputs.name)
         if not exists(folder):
             makedirs(folder)
         references = list(set(self.inputs.get_from_key('Reference')))

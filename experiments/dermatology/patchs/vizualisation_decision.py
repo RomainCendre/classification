@@ -55,6 +55,10 @@ if __name__ == "__main__":
     if not exists(projection_folder):
         makedirs(projection_folder)
 
+    patches_folder = join(output_folder, 'Patches_decisions')
+    if not exists(patches_folder):
+        makedirs(patches_folder)
+
     # Statistics expected
     statistics = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
 
@@ -99,7 +103,7 @@ if __name__ == "__main__":
                                      'groups': LabelEncoder()})
             process.checkpoint_step(inputs=copy_input, model=descriptor[1], folder=features_folder)
             process.checkpoint_step(inputs=copy_input, model=PredictorTransform(predictor, probabilities=False))
-            PatchWriter(copy_input, settings).write_patch(folder=join(output_folder, filter_name))
+            PatchWriter(copy_input, settings).write_patch(folder=join(patches_folder, filter_name))
 
             copy_input.collapse(reference_tag='Reference')
             pca_projector.write_projection(copy_input)
