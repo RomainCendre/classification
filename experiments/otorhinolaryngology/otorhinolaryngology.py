@@ -17,7 +17,8 @@ from toolbox.core.transforms import OrderedEncoder, CorrelationArrayTransform
 
 
 def get_spectrum_classifier():
-    pipe = Pipeline([('pca', PCA(0.95)),
+    pipe = Pipeline([('pca', PCA(n_components=0.99)),
+                     ('lda', LinearDiscriminantAnalysis(n_components=20)),
                      ('scale', StandardScaler()),
                      ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
     pipe.name = 'PatchClassifier'
@@ -45,10 +46,10 @@ if __name__ == "__main__":
 
     # Input data
     spectra = Dataset.spectras()
-    spectra.apply_average_filter(size=5)
-    spectra.norm_patient()
-    # spectra.apply_scaling()
     spectra.change_wavelength(wavelength=arange(start=445, stop=962, step=1))
+    spectra.apply_average_filter(size=5)
+    # spectra.norm_patient()
+    # spectra.apply_scaling()
 
     # Statistics expected
     statistics = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']

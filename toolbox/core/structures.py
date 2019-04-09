@@ -2,7 +2,7 @@ import pandas as pd
 from collections import Iterable
 from copy import copy, deepcopy
 from itertools import chain
-from numpy import correlate, ones, interp, array, ndarray, trapz
+import numpy as np
 from sklearn import preprocessing
 from sklearn.exceptions import NotFittedError
 from sklearn.utils.multiclass import unique_labels
@@ -72,7 +72,7 @@ class Data:
 
         if any(isinstance(el, Iterable) for el in datas) and flatten:
             datas = list(chain.from_iterable(datas))
-        return array(datas)
+        return np.array(datas)
 
     def get_unique_from_key(self, key, filters=None):
         return unique_labels(self.get_from_key(key, filters, flatten=True))
@@ -122,14 +122,14 @@ class Inputs(Data):
             row = {}
             for key, values in raw_row.items():
                 if key == data_tag:
-                    row.update({key: array(values)})
+                    row.update({key: np.array(values)})
                     continue
                 try:
                     test = list(set(values))
                     if len(test) == 1:
                         row.update({key: values[0]})
                 except:
-                    row.update({key: array(values)})
+                    row.update({key: np.array(values)})
 
             rows.append(row)
         self.data = pd.DataFrame(rows)
@@ -147,9 +147,9 @@ class Inputs(Data):
             return list(x)
 
     def decode(self, key, indices):
-        is_list = isinstance(indices, ndarray)
+        is_list = isinstance(indices, np.ndarray)
         if not is_list:
-            indices = array([indices])
+            indices = np.array([indices])
 
         encoder = self.encoders.get(key, None)
         if encoder is None:
@@ -167,9 +167,9 @@ class Inputs(Data):
         return result
 
     def encode(self, key, data):
-        is_list = isinstance(data, ndarray)
+        is_list = isinstance(data, np.ndarray)
         if not is_list:
-            data = array([data])
+            data = np.array([data])
 
         encoder = self.encoders.get(key, None)
         if encoder is None:
@@ -279,7 +279,7 @@ class Spectra(Inputs):
             size: The size of average window.
 
         """
-        self.data['data'] = self.data['data'].apply(lambda x: correlate(x, ones(size) / size, mode='same'))
+        self.data['data'] = self.data['data'].apply(lambda x: np.correlate(x, np.ones(size) / size, mode='same'))
 
     def apply_scaling(self, method='default'):
         """This method allow to normalize spectra.
@@ -303,11 +303,11 @@ class Spectra(Inputs):
             wavelength(:obj:'array' of :obj:'float'): The new wavelength to fit.
 
         """
-        self.data['data'] = self.data.apply(lambda x: interp(wavelength, x['wavelength'], x['data']), axis=1)
+        self.data['data'] = self.data.apply(lambda x: np.interp(wavelength, x['wavelength'], x['data']), axis=1)
         self.data['wavelength'] = self.data['wavelength'].apply(lambda x: wavelength)
 
     def integrate(self):
-        self.data['data'] = self.data.apply(lambda x: [0, trapz(x['data'], x['wavelength'])], axis=1)
+        self.data['data'] = self.data.apply(lambda x: [0, np.trapz(x['data'], x['wavelength'])], axis=1)
 
     def norm_patient(self):
         query = self.to_query(self.filters)
@@ -324,7 +324,8 @@ class Spectra(Inputs):
                 data.drop(group.index)
                 continue
             spectra_ref = row_ref.iloc[0]['data']
-            group['data'] = group['data'].apply(lambda x: x/spectra_ref)
+            # group['data'] = group['data'].apply(lambda x: x/spectra_ref)
+            group['data'] = group['data'].apply(lambda x: (x - np.mean(spectra_ref))/np.std(spectra_ref))
 
 
 class Outputs(Data):
@@ -352,9 +353,9 @@ class Outputs(Data):
         self.encoders = encoders
 
     def decode(self, key, indices):
-        is_list = isinstance(indices, ndarray)
+        is_list = isinstance(indices, np.ndarray)
         if not is_list:
-            indices = array([indices])
+            indices = np.array([indices])
 
         encoder = self.encoders.get(key, None)
         if encoder is None:
@@ -372,9 +373,9 @@ class Outputs(Data):
         return result
 
     def encode(self, key, data):
-        is_list = isinstance(data, ndarray)
+        is_list = isinstance(data, np.ndarray)
         if not is_list:
-            data = array([data])
+            data = np.array([data])
 
         encoder = self.encoders.get(key, None)
         if encoder is None:

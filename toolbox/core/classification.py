@@ -237,7 +237,10 @@ class Classifier:
             model = model.steps[-1][1]
 
         if isinstance(model, SVC):
-            return model.coef_.shape[1]
+            if model.kernel == 'rbf':
+                return model._dual_coef_.shape[1]
+            else:
+                return model.coef_.shape[1]
 
         return 0
 
