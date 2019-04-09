@@ -57,19 +57,18 @@ if __name__ == "__main__":
                ('MvsR', {'Label': ['Malignant', 'Rest']}, {'Label': (['Normal', 'Benign'], 'Rest')})]
 
     # Inputs
-    inputs = [('NoOverlap', Dataset.patches_images(size=250, overlap=0)),
-              ('Overlap25', Dataset.patches_images(size=250, overlap=0.25)),
-              ('Overlap50', Dataset.patches_images(size=250, overlap=0.50))]
+    inputs = Dataset.test_multiresolution(coefficients=[1, 0.5, 0.25])
 
     # Methods
     descriptors = [('Haralick', Transforms.get_haralick(mean=False)),
                    ('KerasAverage', Transforms.get_keras_extractor(pooling='avg'))]
 
-    merges = [('Norm2', PNormTransform(p=2)),
+    merges = [('Norm1', PNormTransform(p=1)),
+              ('Norm3', PNormTransform(p=3)),
               ('Norm5', PNormTransform(p=5))]
 
     # Parameters combinations
-    combinations = list(itertools.product(inputs, descriptors, merges))
+    combinations = list(itertools.product(descriptors, merges))
 
     # Image classification
     for filter_name, filter_datas, filter_groups in filters:
@@ -77,11 +76,11 @@ if __name__ == "__main__":
         process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
         process.begin(inner_cv=validation, outer_cv=test, n_jobs=4)
         pca_projector = PCAProjection(settings=settings, dir_name=output_folder, name=filter_name)
-        for input, descriptor, merge in combinations:
-            copy_input = input[1].copy_and_change(filter_groups)
+        for descriptor, merge in combinations:
+            copy_input = inputs.copy_and_change(filter_groups)
 
             # Image classification
-            copy_input.name = 'Image_{input}_{descriptor}_{merge}'.format(input=input[0], descriptor=descriptor[0], merge=merge[0])
+            copy_input.name = 'Image_{descriptor}_{merge}'.format(descriptor=descriptor[0], merge=merge[0])
             print(copy_input.name)
             copy_input.set_filters(filter_datas)
             copy_input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),

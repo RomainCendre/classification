@@ -225,7 +225,7 @@ class Classifiers:
         features = [20]
         pca = PCAAtMost()
         lda = LDAAtMost()
-        pca_p = {'reduction': [pca, lda],
+        pca_p = {'reduction': [pca],#, lda],
                  'reduction__n_components': features}
 
         # Add scaling step

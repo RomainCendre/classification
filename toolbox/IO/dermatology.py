@@ -1,20 +1,17 @@
 from glob import glob
-import numpy as np
 import pandas as pd
 import pyocr
 import shutil
 from os import listdir, makedirs, path
-from os.path import isdir, join, normpath, isfile, basename, splitext, exists
+from os.path import isdir, join, basename, splitext
 from PIL import Image
 from pyocr import builders
 
 
 class Reader:
 
-    def __init__(self, patch_parameters=None):
-        self.patch_parameters = patch_parameters
-
-    def scan_folder(self, folder_path):
+    @staticmethod
+    def scan_folder(folder_path):
         # Subdirectories
         subdirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
 
@@ -36,7 +33,8 @@ class Reader:
 
         return pd.concat(datas, sort=False, ignore_index=True)
 
-    def scan_folder_for_images(self, folder_path):
+    @staticmethod
+    def scan_folder_for_images(folder_path):
         # Subdirectories
         sub_dirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
 
@@ -52,69 +50,6 @@ class Reader:
                                  'Label': subdir,
                                  'Reference': reference})
         return pd.DataFrame(data_set)
-
-    def scan_for_confocal_patches(self, folder_path):
-        # Browse data
-        data_set = self.scan_folder(folder_path)
-        data_set = data_set[data_set.Modality == 'Microscopy']
-
-        # Get into patches
-        patches_data = []
-        DataManager.print_progress_bar(0, len(data_set), prefix='Progress:')
-        for index, (df_index, data) in zip(np.arange(len(data_set.index)), data_set.iterrows()):
-            DataManager.print_progress_bar(index, len(data_set), prefix='Progress:')
-            patches = Reader.__patchify(data['Full_path'], data['Reference'], self.patch_parameters['Size'],
-                                        self.patch_parameters['Overlap'], self.patch_parameters['Temp'])
-            patches = patches.merge(data_set, on='Reference')
-            patches_data.append(patches)
-
-        return pd.concat(patches_data, sort=False)
-
-    @staticmethod
-    def __patchify(filename, reference, window_size, overlap, patch_folder):
-        patch_folder = join(patch_folder, '{size}_{overlap}'.format(size=window_size, overlap=overlap))
-        if not exists(patch_folder):
-            makedirs(patch_folder)
-
-        image = np.ascontiguousarray(np.array(Image.open(filename).convert('L')))
-        stride = int(window_size - (window_size * overlap))  # Overlap of images
-        image_shape = np.array(image.shape)
-        window_shape = np.asanyarray((window_size, window_size))
-        stride_shape = np.asanyarray((stride, stride))
-        nbl = (image_shape - window_shape) // stride_shape + 1
-        strides = np.r_[image.strides * stride_shape, image.strides]
-        dims = np.r_[nbl, window_shape]
-        patches = np.lib.stride_tricks.as_strided(image, strides=strides, shape=dims, writeable=False)
-        patches = patches.reshape(-1, *window_shape)
-
-        locations = np.ascontiguousarray(np.arange(0, image_shape[0]*image_shape[1]).reshape(image_shape))
-        strides = np.r_[locations.strides * stride_shape, locations.strides]
-        dims = np.r_[nbl, window_shape]
-        patches_loc = np.lib.stride_tricks.as_strided(locations, strides=strides, shape=dims, writeable=False)
-        patches_loc = patches_loc.reshape(-1, *window_shape)
-
-        metas = []
-        for index, (patch, location) in enumerate(zip(patches, patches_loc)):
-            # Create patch informations
-            meta = dict()
-            meta.update(
-                {'Patch_Path': normpath('{ref}_{id}.png'.format(ref=join(patch_folder, reference), id=index))})
-            meta.update({'Patch_Index': index})
-            start = location[0, 0]
-            meta.update({'Patch_Start': (start%image_shape[0], start//image_shape[0])})
-
-            end = location[-1, -1]
-            meta.update({'Patch_End': (end%image_shape[0], end//image_shape[0])})
-            meta.update({'Patch_Reference': '{ref}_{index}_{sta}_{end}'.format(ref=reference, index=index,
-                                                                               sta=start, end=end)})
-            meta.update({'Reference': reference})
-            metas.append(meta)
-
-            # Check if need to write patch
-            if not isfile(meta['Patch_Path']):
-                Image.fromarray(patch).save(meta['Patch_Path'])
-
-        return pd.DataFrame(metas)
 
     @staticmethod
     def __read_images_file(parent_folder, subdir):

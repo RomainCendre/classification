@@ -267,9 +267,9 @@ class PNormTransform(BaseEstimator, TransformerMixin):
         if X.dtype == object:
             normalized = []
             for x in X:
-                normalized.append(np.norm(x, ord=self.p, axis=self.axis-1))
+                normalized.append(np.linalg.norm(x, ord=self.p, axis=self.axis-1))
             return np.array(normalized)
-        return np.norm(X, ord=self.p, axis=self.axis)
+        return np.linalg.norm(X, ord=self.p, axis=self.axis)
 
 
 class CorrelationArrayTransform(BaseEstimator, TransformerMixin):
