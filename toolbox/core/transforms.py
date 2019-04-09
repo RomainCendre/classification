@@ -1,13 +1,13 @@
 import pywt
 from PIL import Image
-from numpy import array
-from numpy.linalg import norm
+import numpy as np
 from pywt import dwt
 from scipy.stats import gennorm
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cross_decomposition import PLSRegression
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 import mahotas
+from sklearn.preprocessing import Imputer
 
 
 class OrderedEncoder(BaseEstimator, TransformerMixin):
@@ -24,13 +24,13 @@ class OrderedEncoder(BaseEstimator, TransformerMixin):
         elements = y.tolist()
         if not isinstance(elements, list):
             elements = [elements]
-        return array([self.map_list.index(element) for element in elements])
+        return np.array([self.map_list.index(element) for element in elements])
 
     def inverse_transform(self, y):
         elements = y.tolist()
         if not isinstance(elements, list):
             elements = [elements]
-        return array([self.map_list[element] for element in elements])
+        return np.array([self.map_list[element] for element in elements])
 
 
 class PredictorTransform(BaseEstimator, TransformerMixin):
@@ -60,9 +60,9 @@ class PredictorTransform(BaseEstimator, TransformerMixin):
              copy (:obj): Not used.
         """
         if self.probabilities:
-            return array(self.predictor.predict_proba(x))
+            return np.array(self.predictor.predict_proba(x))
         else:
-            return array(self.predictor.predict(x))
+            return np.array(self.predictor.predict(x))
 
 
 class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
@@ -97,7 +97,7 @@ class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
         """
         features = []
         for index, data in enumerate(x):
-            image = array(Image.open(data).convert('L'))
+            image = np.array(Image.open(data).convert('L'))
             coefficients = []
             for scale in range(0, self.scale):
                 for wavelet in self.wavelets:
@@ -107,8 +107,8 @@ class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
                     for direction in directions:
                         coefficients.append(self.get_coefficients(direction.flatten()))
 
-            features.append(array(coefficients).flatten())
-        return array(features)
+            features.append(np.array(coefficients).flatten())
+        return np.array(features)
 
     def get_coefficients(self, x):
         params = gennorm.fit(x)
@@ -157,13 +157,13 @@ class HaralickTransform(BaseEstimator, TransformerMixin):
 
         haralick = []
         for index, data in enumerate(x):
-            image = array(Image.open(data).convert('L'))
+            image = np.array(Image.open(data).convert('L'))
             features = mahotas.features.haralick(image)
             if self.mean:
                 haralick.append(features.mean(axis=0))
             else:
                 haralick.append(features.flatten())
-        return array(haralick)
+        return np.array(haralick)
 
 
 class DWTTransform(BaseEstimator, TransformerMixin):
@@ -267,9 +267,69 @@ class PNormTransform(BaseEstimator, TransformerMixin):
         if X.dtype == object:
             normalized = []
             for x in X:
-                normalized.append(norm(x, ord=self.p, axis=self.axis-1))
-            return array(normalized)
-        return norm(X, ord=self.p, axis=self.axis)
+                normalized.append(np.norm(x, ord=self.p, axis=self.axis-1))
+            return np.array(normalized)
+        return np.norm(X, ord=self.p, axis=self.axis)
+
+
+class CorrelationArrayTransform(BaseEstimator, TransformerMixin):
+
+    def fit(self, X, y=None):
+        labels = np.unique(y)
+        self.means = np.zeros((len(labels),X.shape[1]))
+        for label in labels:
+            self.means[label, :] = np.mean(X[y==label, :], axis=0)
+        return self
+
+    def transform(self, X):
+        transform = np.zeros((len(X), len(self.means)))
+        for index, mean in enumerate(self.means):
+            transform[:, index] = ((X - mean) ** 2).mean(axis=1)
+        return transform
+
+
+
+class ReduceVIF(BaseEstimator, TransformerMixin):
+    def __init__(self, thresh=5.0, impute=True, impute_strategy='median'):
+        # From looking at documentation, values between 5 and 10 are "okay".
+        # Above 10 is too high and so should be removed.
+        self.thresh = thresh
+
+        # The statsmodel function will fail with NaN values, as such we have to impute them.
+        # By default we impute using the median value.
+        # This imputation could be taken out and added as part of an sklearn Pipeline.
+        if impute:
+            self.imputer = Imputer(strategy=impute_strategy)
+
+    def fit(self, X, y=None):
+        print('ReduceVIF fit')
+        if hasattr(self, 'imputer'):
+            self.imputer.fit(X)
+        return self
+
+    def transform(self, X, y=None):
+        print('ReduceVIF transform')
+        columns = X.columns.tolist()
+        if hasattr(self, 'imputer'):
+            X = pd.DataFrame(self.imputer.transform(X), columns=columns)
+        return ReduceVIF.calculate_vif(X, self.thresh)
+
+    @staticmethod
+    def calculate_vif(X, thresh=5.0):
+        # Taken from https://stats.stackexchange.com/a/253620/53565 and modified
+        dropped = True
+        while dropped:
+            variables = X.columns
+            dropped = False
+            vif = [variance_inflation_factor(X[variables].values, X.columns.get_loc(var)) for var in X.columns]
+
+            max_vif = max(vif)
+            if max_vif > thresh:
+                maxloc = vif.index(max_vif)
+                print(f'Dropping {X.columns[maxloc]} with vif={max_vif}')
+                X = X.drop([X.columns.tolist()[maxloc]], axis=1)
+                dropped = True
+        return X
 
 
 class LDATransform(LinearDiscriminantAnalysis):

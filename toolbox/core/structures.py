@@ -2,7 +2,7 @@ import pandas as pd
 from collections import Iterable
 from copy import copy, deepcopy
 from itertools import chain
-from numpy import correlate, ones, interp, array, ndarray
+from numpy import correlate, ones, interp, array, ndarray, trapz
 from sklearn import preprocessing
 from sklearn.exceptions import NotFittedError
 from sklearn.utils.multiclass import unique_labels
@@ -305,6 +305,26 @@ class Spectra(Inputs):
         """
         self.data['data'] = self.data.apply(lambda x: interp(wavelength, x['wavelength'], x['data']), axis=1)
         self.data['wavelength'] = self.data['wavelength'].apply(lambda x: wavelength)
+
+    def integrate(self):
+        self.data['data'] = self.data.apply(lambda x: [0, trapz(x['data'], x['wavelength'])], axis=1)
+
+    def norm_patient(self):
+        query = self.to_query(self.filters)
+        if query:
+            data = self.data.query(query)
+        else:
+            data = self.data
+
+        for name, group in data.groupby(self.tags['group']):
+            print(name)
+            # Get features by group
+            row_ref = group[group.label == "Sain"]
+            if len(row_ref) == 0:
+                data.drop(group.index)
+                continue
+            spectra_ref = row_ref.iloc[0]['data']
+            group['data'] = group['data'].apply(lambda x: x/spectra_ref)
 
 
 class Outputs(Data):
