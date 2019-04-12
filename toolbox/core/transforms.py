@@ -126,7 +126,7 @@ class FlattenTransform(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, x, y=None, copy=True):
-        return x.flatten()
+        return x.reshape((x.shape[0], -1))
 
 
 class HaralickTransform(BaseEstimator, TransformerMixin):

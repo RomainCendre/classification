@@ -12,7 +12,7 @@ from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.IO.writers import PCAProjection
 from toolbox.core.builtin_models import Transforms
-from toolbox.core.transforms import OrderedEncoder, PNormTransform
+from toolbox.core.transforms import OrderedEncoder, PNormTransform, FlattenTransform
 from toolbox.tools.limitations import Parameters
 
 
@@ -57,15 +57,14 @@ if __name__ == "__main__":
                ('MvsR', {'Label': ['Malignant', 'Rest']}, {'Label': (['Normal', 'Benign'], 'Rest')})]
 
     # Inputs
-    inputs = Dataset.test_multiresolution(coefficients=[1, 0.5, 0.25])
+    inputs = Dataset.multiresolution(coefficients=[1, 0.5, 0.25])
 
     # Methods
     descriptors = [('Haralick', Transforms.get_haralick(mean=False)),
                    ('KerasAverage', Transforms.get_keras_extractor(pooling='avg'))]
 
-    merges = [('Norm1', PNormTransform(p=1)),
-              ('Norm3', PNormTransform(p=3)),
-              ('Norm5', PNormTransform(p=5))]
+    merges = [('Flatten', FlattenTransform()),
+              ('Norm3', PNormTransform(p=3))]
 
     # Parameters combinations
     combinations = list(itertools.product(descriptors, merges))
