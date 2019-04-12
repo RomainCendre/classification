@@ -12,6 +12,7 @@ if __name__ == '__main__':
     app.setWindowIcon(QIcon('./images/icon.png'))
     inputs = Dataset.full_images()
     inputs = inputs.sub_inputs({'Modality': 'Microscopy'})
+    pathologies = ['Healthy', 'Benign', 'Malignant']
     viewer = QPatchExtractor(inputs)
 
     # Show the viewer and run the application.

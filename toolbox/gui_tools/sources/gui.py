@@ -1,6 +1,5 @@
 import os
-from glob import glob
-from os.path import join, isfile, basename, normpath, normcase, splitext, abspath, exists
+from os.path import join, isfile, abspath, exists
 from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QRect, QPropertyAnimation, pyqtProperty
 from PyQt5.QtGui import QImage, QPixmap, QPainterPath, QColor, QFont, QPen
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWindow, QHBoxLayout, QWidget, QLabel, \
@@ -128,11 +127,10 @@ class QPatchExtractor(QMainWindow):
             return patient['Path'].iloc[self.image_index]
 
     def get_patch_name(self, x, y):
-        size = self.out_size.value()
-        start = (int(x-size/2), int(y+size/2))
-        end = (int(x+size/2), int(y+size/2))
+        center = (int(x), int(y))
+        patient = self.get_current_patient()
         name = self.get_current_image(full=False)
-        return '{name}_{start}_{end}.bmp'.format(name=name, start=start, end=end)
+        return join(patient, '{name}_{center}.bmp'.format(name=name, center=center))
 
     def key_pressed(self, key):
         # Action that move image of a patient
