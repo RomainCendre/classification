@@ -9,11 +9,6 @@ from sklearn.svm import SVC
 from toolbox.core.models import KerasBatchClassifier
 from toolbox.core.structures import Outputs
 
-class MultiClassifier:
-
-    def __init__(self, inner_cv, outer_cv, n_jobs=-1, callbacks=[], scoring=None):
-
-
 
 class Classifier:
     """Class that manage a spectrum representation.
