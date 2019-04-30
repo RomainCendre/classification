@@ -120,7 +120,7 @@ class Classifier:
             result.update({"Fold": fold})
             result.update({"Label": self.sub(labels, test)})
             if reference is not None:
-                result.update({"Reference": reference})
+                result.update({"Reference": reference[test]})
 
             # Get probabilities and predictions
             result.update({"Prediction": predictions})
