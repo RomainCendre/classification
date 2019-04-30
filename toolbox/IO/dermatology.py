@@ -86,7 +86,7 @@ class DataManager:
         self.photography_folder = path.join(root_folder, 'Photography')
         self.labels = ['Malignant', 'Benign', 'Normal', 'Doubtful', 'Draw']
 
-    def compute_dermoscopy(self, source_id, destination):
+    def compute_dermoscopy(self, source_id, label, destination):
         destination_folder = path.join(destination, 'Dermoscopy')
         if not path.exists(destination_folder):
             makedirs(destination_folder)
@@ -101,12 +101,12 @@ class DataManager:
             shutil.copy(source_file, destination_file)
             images.append({'Modality': 'Dermoscopy',
                            'Path': path.relpath(destination_file, destination_folder),
+                           'Label': label,
                            'Height': height,
                            'Width': width})
-
         return images
 
-    def compute_photography(self, source_id, destination):
+    def compute_photography(self, source_id, label, destination):
         destination_folder = path.join(destination, 'Photography')
         if not path.exists(destination_folder):
             makedirs(destination_folder)
@@ -121,6 +121,7 @@ class DataManager:
             shutil.copy(source_file, destination_file)
             images.append({'Modality': 'Photography',
                            'Path': path.relpath(destination_file, destination_folder),
+                           'Label': label,
                            'Height': height,
                            'Width': width})
 
@@ -220,9 +221,9 @@ class DataManager:
 
             if 'ID_Dermoscopy' in row.index:
                 # Get photography files
-                images.extend(self.compute_photography(row['ID_Dermoscopy'], out_patient_folder))
+                images.extend(self.compute_photography(row['ID_Dermoscopy'], row['Binary_Diagnosis'], out_patient_folder))
                 # Get dermoscopy files
-                images.extend(self.compute_dermoscopy(row['ID_Dermoscopy'], out_patient_folder))
+                images.extend(self.compute_dermoscopy(row['ID_Dermoscopy'], row['Binary_Diagnosis'], out_patient_folder))
 
             if 'ID_RCM' in row.index:
                 # Get microscopy files
