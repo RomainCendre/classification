@@ -10,7 +10,8 @@ from pyocr import builders
 
 class Reader:
 
-    def scan_folder(self, folder_path):
+    @staticmethod
+    def scan_folder(folder_path):
         # Subdirectories
         subdirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
 
