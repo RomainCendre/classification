@@ -10,8 +10,7 @@ from pyocr import builders
 
 class Reader:
 
-    @staticmethod
-    def scan_folder(folder_path):
+    def scan_folder(self, folder_path):
         # Subdirectories
         subdirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
 
@@ -33,8 +32,7 @@ class Reader:
 
         return pd.concat(datas, sort=False, ignore_index=True)
 
-    @staticmethod
-    def scan_folder_for_images(folder_path):
+    def scan_folder_for_images(self, folder_path):
         # Subdirectories
         sub_dirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
 

@@ -70,9 +70,8 @@ class Dataset:
 
     @staticmethod
     def test_patches_images(size, overlap):
-        here_path = ospath.dirname(__file__)
-        input_folders = [ospath.normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
-                         ospath.normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
+        home_path = ospath.expanduser('~')
+        input_folders = [ospath.normpath('{home}/Desktop/Patients_test'.format(home=home_path))]
 
         patch_folder = ospath.join(gettempdir(), 'Patch')
         return Dataset.__patches_images(input_folders, patch_folder, size, overlap)
@@ -85,8 +84,8 @@ class Dataset:
 
     @staticmethod
     def test_thumbnails():
-        here_path = ospath.dirname(__file__)
-        input_folders = [ospath.normpath('{here}/data/dermatology/Thumbnails/'.format(here=here_path))]
+        home_path = ospath.expanduser('~')
+        input_folders = [ospath.normpath('{here}/Desktop/Thumbnails_test'.format(here=home_path))]
         return Dataset.__thumbnails(input_folders)
 
     @staticmethod
@@ -185,7 +184,7 @@ class Dataset:
 
     def __scan_for_confocal_patches(self, folder_path):
         # Browse data
-        data_set = dermatology.Reader.scan_folder(folder_path)
+        data_set = dermatology.Reader().scan_folder(folder_path)
         data_set = data_set[data_set.Modality == 'Microscopy']
 
         # Get into patches
