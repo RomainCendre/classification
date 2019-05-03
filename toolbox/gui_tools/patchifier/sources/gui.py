@@ -1,3 +1,4 @@
+import glob
 import os
 import pandas as pd
 from os.path import join, isfile, abspath, exists
@@ -23,6 +24,9 @@ class QPatchExtractor(QMainWindow):
         self.update_image()
         self.update_output()
 
+        # Open new df
+        self.open_dataframe()
+
     def close_dataframe(self):
         file = self.get_current_dataframe()
         if not file:
@@ -35,7 +39,7 @@ class QPatchExtractor(QMainWindow):
         if not exists(folder):
             os.makedirs(folder)
 
-        self.dataframe.to_csv(file)
+        self.dataframe.to_csv(file, index=False)
 
     def open_dataframe(self):
         file = self.get_current_dataframe()
@@ -45,7 +49,7 @@ class QPatchExtractor(QMainWindow):
         if exists(file):
             self.dataframe = pd.read_csv(file)
         else:
-            self.dataframe = pd.DataFrame(columns=['test', 'test2'])
+            self.dataframe = pd.DataFrame(columns=['Modality', 'Path', 'Height', 'Width', 'Label', 'Source'])
 
     def change_output(self):
         dialog = QFileDialog(self, 'Output folder')
@@ -57,7 +61,7 @@ class QPatchExtractor(QMainWindow):
 
     def change_image(self, move):
         length = len(self.data.get_group(self.get_current_patient()))
-        self.image_index = (self.image_index+move) % length
+        self.image_index = (self.image_index + move) % length
         self.update_image()
 
     def change_patient(self, move):
@@ -66,7 +70,7 @@ class QPatchExtractor(QMainWindow):
 
         # Change patient
         length = len(self.patients)
-        self.patient_index = (self.patient_index+move) % length
+        self.patient_index = (self.patient_index + move) % length
         self.update_directory()
         self.change_image(0)
 
@@ -77,7 +81,9 @@ class QPatchExtractor(QMainWindow):
         if not self.output:
             self.viewer.mouseRectColorTransition(QColor(Qt.red))
             return
-        self.write_patch(x, y, self.output, self.get_patch_name(x, y))
+        # Acquire image and it to dataframe
+        path = self.get_patch_name(x, y)
+        self.write_patch(x, y)
 
     def define_layer(self):
         # Parent part of windows
@@ -139,7 +145,7 @@ class QPatchExtractor(QMainWindow):
 
         # Compute patch position
         size = self.out_size.value()
-        patch_rect = QRect(x-size/2, y-size/2, size, size)
+        patch_rect = QRect(x - size / 2, y - size / 2, size, size)
 
         # Test if patch rectangle is full
         if not image_rect.intersected(patch_rect) == patch_rect:
@@ -188,6 +194,10 @@ class QPatchExtractor(QMainWindow):
         elif key == Qt.Key_Down:
             self.change_patient(-1)
 
+    def closeEvent(self, event):
+        self.close_dataframe()
+        super().closeEvent()
+
     def update_image(self):
         self.viewer.loadImage(self.get_current_image(), self.get_current_image(full=False))
 
@@ -197,12 +207,20 @@ class QPatchExtractor(QMainWindow):
     def update_output(self):
         self.button_output.setText('Output : {path}'.format(path=self.output))
 
-    def write_patch(self, x, y, out_dir, filename):
+    def write_patch(self, x, y):
         patch = self.extract_patch(x, y)
+        filename = '{count}.bmp'.format(count=len(glob.glob(join(self.get_current_folder(), '*.bmp'))))
+        patch_path = join(self.get_current_folder(), filename)
+        self.dataframe = self.dataframe.append({'Modality': 'Microscopy',
+                                                'Path': patch_path,
+                                                'Height': patch.height(),
+                                                'Width': patch.width(),
+                                                'Label': 'Nop',
+                                                'Source': self.get_current_image()}, ignore_index=True)
+
         if not patch:
             self.viewer.mouseRectColorTransition(QColor(Qt.red))
             return
-        patch_path = join(out_dir, filename)
         patch_dir = abspath(join(patch_path, os.pardir))
         if not exists(patch_dir):
             os.makedirs(patch_dir)
@@ -211,7 +229,6 @@ class QPatchExtractor(QMainWindow):
 
 
 class QtImageViewer(QGraphicsView):
-
     # Viewer signals
     leftMouseButtonPressed = pyqtSignal(float, float)
     rightMouseButtonPressed = pyqtSignal(float, float)
@@ -337,7 +354,7 @@ class QtImageViewer(QGraphicsView):
         self.updateViewer()
 
     def setRectangleSize(self, size):
-        self.mouse_rect.setRect(-(size/2), -(size/2), size, size)
+        self.mouse_rect.setRect(-(size / 2), -(size / 2), size, size)
 
     def mouseMoveEvent(self, event):
         self.mouse_rect.setPos(self.mapToScene(event.pos()))
