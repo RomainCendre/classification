@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 from os.path import join, isfile, abspath, exists
 from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QRect, QPropertyAnimation, pyqtProperty
 from PyQt5.QtGui import QImage, QPixmap, QPainterPath, QColor, QFont, QPen
@@ -16,10 +17,35 @@ class QPatchExtractor(QMainWindow):
         self.patients = list(inputs.data['ID'].unique())
         self.pathologies = pathologies
         self.output = output
+        self.dataframe = None
         self.define_layer()
         self.update_directory()
         self.update_image()
         self.update_output()
+
+    def close_dataframe(self):
+        file = self.get_current_dataframe()
+        if not file:
+            return
+
+        if self.dataframe is None:
+            return
+
+        folder = self.get_current_folder()
+        if not exists(folder):
+            os.makedirs(folder)
+
+        self.dataframe.to_csv(file)
+
+    def open_dataframe(self):
+        file = self.get_current_dataframe()
+        if not file:
+            return
+
+        if exists(file):
+            self.dataframe = pd.read_csv(file)
+        else:
+            self.dataframe = pd.DataFrame(columns=['test', 'test2'])
 
     def change_output(self):
         dialog = QFileDialog(self, 'Output folder')
@@ -35,10 +61,17 @@ class QPatchExtractor(QMainWindow):
         self.update_image()
 
     def change_patient(self, move):
+        # Start by closing previous df
+        self.close_dataframe()
+
+        # Change patient
         length = len(self.patients)
         self.patient_index = (self.patient_index+move) % length
         self.update_directory()
         self.change_image(0)
+
+        # Open new df
+        self.open_dataframe()
 
     def click_event(self, x, y):
         if not self.output:
@@ -114,6 +147,16 @@ class QPatchExtractor(QMainWindow):
 
         # Extract patch
         return raw_image.copy(patch_rect)
+
+    def get_current_folder(self):
+        if self.output:
+            return join(self.output, self.get_current_patient())
+        return ''
+
+    def get_current_dataframe(self):
+        if self.output:
+            return join(self.get_current_folder(), 'patches.csv')
+        return ''
 
     def get_current_patient(self):
         return self.patients[self.patient_index]
