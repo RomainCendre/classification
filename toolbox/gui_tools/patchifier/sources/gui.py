@@ -8,13 +8,14 @@ from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWin
 
 class QPatchExtractor(QMainWindow):
 
-    def __init__(self, inputs):
+    def __init__(self, inputs, pathologies, output=''):
         super(QPatchExtractor, self).__init__()
         self.patient_index = 0
         self.image_index = 0
         self.data = inputs.data.groupby('ID')
         self.patients = list(inputs.data['ID'].unique())
-        self.output = ''
+        self.pathologies = pathologies
+        self.output = output
         self.define_layer()
         self.update_directory()
         self.update_image()
