@@ -10,13 +10,15 @@ from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWin
 
 class QPatchExtractor(QMainWindow):
 
-    def __init__(self, inputs, pathologies, output=''):
+    def __init__(self, inputs, pathologies, settings, output=''):
         super(QPatchExtractor, self).__init__()
         self.patient_index = 0
         self.image_index = 0
+        self.pathology_index = 0
         self.data = inputs.data.groupby('ID')
         self.patients = list(inputs.data['ID'].unique())
         self.pathologies = pathologies
+        self.settings = settings
         self.output = output
         self.dataframe = None
         self.define_layer()
@@ -26,6 +28,7 @@ class QPatchExtractor(QMainWindow):
 
         # Open new df
         self.open_dataframe()
+        self.change_label(0)
 
     def close_dataframe(self):
         file = self.get_current_dataframe()
@@ -49,7 +52,8 @@ class QPatchExtractor(QMainWindow):
         if exists(file):
             self.dataframe = pd.read_csv(file)
         else:
-            self.dataframe = pd.DataFrame(columns=['Modality', 'Path', 'Height', 'Width', 'Label', 'Source'])
+            self.dataframe = pd.DataFrame(columns=['Modality', 'Path', 'Height', 'Width',
+                                                   'Center_X', 'Center_Y', 'Label', 'Source'])
 
     def change_output(self):
         dialog = QFileDialog(self, 'Output folder')
@@ -58,6 +62,12 @@ class QPatchExtractor(QMainWindow):
         if dialog.exec_() == QDialog.Accepted:
             self.output = dialog.selectedFiles()[0]
             self.update_output()
+
+    def change_label(self, index):
+        self.pathology_index = index%len(self.pathologies)
+        pathology = self.pathologies[self.pathology_index]
+        self.setWindowTitle(pathology)
+        self.viewer.change_mouse_color(self.settings.get_color(pathology))
 
     def change_image(self, move):
         length = len(self.data.get_group(self.get_current_patient()))
@@ -193,6 +203,8 @@ class QPatchExtractor(QMainWindow):
             self.change_patient(1)
         elif key == Qt.Key_Down:
             self.change_patient(-1)
+        elif Qt.Key_0 <= key <= Qt.Key_9:
+            self.change_label(key-Qt.Key_0)
 
     def closeEvent(self, event):
         self.close_dataframe()
@@ -209,18 +221,22 @@ class QPatchExtractor(QMainWindow):
 
     def write_patch(self, x, y):
         patch = self.extract_patch(x, y)
+        if not patch:
+            self.viewer.mouseRectColorTransition(QColor(Qt.red))
+            return
+
         filename = '{count}.bmp'.format(count=len(glob.glob(join(self.get_current_folder(), '*.bmp'))))
         patch_path = join(self.get_current_folder(), filename)
         self.dataframe = self.dataframe.append({'Modality': 'Microscopy',
                                                 'Path': patch_path,
                                                 'Height': patch.height(),
                                                 'Width': patch.width(),
-                                                'Label': 'Nop',
+                                                'Center_X': int(x),
+                                                'Center_Y': int(y),
+                                                'Label': self.pathologies[self.pathology_index],
                                                 'Source': self.get_current_image()}, ignore_index=True)
 
-        if not patch:
-            self.viewer.mouseRectColorTransition(QColor(Qt.red))
-            return
+
         patch_dir = abspath(join(patch_path, os.pardir))
         if not exists(patch_dir):
             os.makedirs(patch_dir)
@@ -247,8 +263,9 @@ class QtImageViewer(QGraphicsView):
         self.text.setFont(QFont('Arial', 20))
         self.text.setPos(0, 0)
         self.text.setDefaultTextColor(QColor(255, 0, 0))
+        self.mouse_color = Qt.blue
         self.mouse_rect = QGraphicsRectItem(-25, -25, 50, 50)
-        self.mouse_rect.setPen(QPen(Qt.blue, 6, Qt.DotLine))
+        self.mouse_rect.setPen(QPen(self.mouse_color, 6, Qt.DotLine))
         self.scene.addItem(self.text)
         self.scene.addItem(self.mouse_rect)
         self.setScene(self.scene)
@@ -269,6 +286,10 @@ class QtImageViewer(QGraphicsView):
         # Flags for enabling/disabling mouse interaction.
         self.canZoom = True
         self.canPan = True
+
+    def change_mouse_color(self, color):
+        self.mouse_color = QColor.fromRgbF(color[0], color[1], color[2])
+        self.mouse_rect.setPen(QPen(self.mouse_color, 6, Qt.DotLine))
 
     def keyPressEvent(self, event):
         self.keyPressed.emit(event.key())
@@ -315,7 +336,7 @@ class QtImageViewer(QGraphicsView):
         self.animation = QPropertyAnimation(self, b'pcolor')
         self.animation.setDuration(1000)
         self.animation.setStartValue(color)
-        self.animation.setEndValue(QColor(Qt.blue))
+        self.animation.setEndValue(self.mouse_color)
         self.animation.start()
 
     def setImage(self, image):
