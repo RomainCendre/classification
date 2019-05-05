@@ -10,8 +10,9 @@ from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWin
 
 class QPatchExtractor(QMainWindow):
 
-    def __init__(self, inputs, pathologies, settings, output=''):
+    def __init__(self, inputs, pathologies, settings, output='', editable=True):
         super(QPatchExtractor, self).__init__()
+        self.editable = editable
         self.patient_index = 0
         self.image_index = 0
         self.pathology_index = 0
@@ -67,7 +68,6 @@ class QPatchExtractor(QMainWindow):
         self.pathology_index = index%len(self.pathologies)
         pathology = self.pathologies[self.pathology_index]
         self.setWindowTitle(pathology)
-        self.viewer.change_mouse_color(self.settings.get_color(pathology))
 
     def change_image(self, move):
         length = len(self.data.get_group(self.get_current_patient()))
@@ -95,6 +95,10 @@ class QPatchExtractor(QMainWindow):
         path = self.get_patch_name(x, y)
         self.write_patch(x, y)
 
+    def closeEvent(self, event):
+        self.close_dataframe()
+        super().closeEvent(event)
+
     def define_layer(self):
         # Parent part of windows
         # Build export button
@@ -121,10 +125,12 @@ class QPatchExtractor(QMainWindow):
         # Export part of windows
         # Build export button
         self.button_output = QPushButton('')
+        self.button_output.setEnabled(self.editable)
         self.button_output.released.connect(self.change_output)
 
         # Build export size component
         self.out_size = QSpinBox()
+        self.out_size.setEnabled(self.editable)
         self.out_size.valueChanged.connect(self.viewer.setRectangleSize)
         self.out_size.setRange(0, 1000)
         self.out_size.setSingleStep(10)
@@ -206,10 +212,6 @@ class QPatchExtractor(QMainWindow):
         elif Qt.Key_0 <= key <= Qt.Key_9:
             self.change_label(key-Qt.Key_0)
 
-    def closeEvent(self, event):
-        self.close_dataframe()
-        super().closeEvent()
-
     def update_image(self):
         self.viewer.loadImage(self.get_current_image(), self.get_current_image(full=False))
 
@@ -287,7 +289,7 @@ class QtImageViewer(QGraphicsView):
         self.canZoom = True
         self.canPan = True
 
-    def change_mouse_color(self, color):
+    def change_mouse_default_color(self, color):
         self.mouse_color = QColor.fromRgbF(color[0], color[1], color[2])
         self.mouse_rect.setPen(QPen(self.mouse_color, 6, Qt.DotLine))
 

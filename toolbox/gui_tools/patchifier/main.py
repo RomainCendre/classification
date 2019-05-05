@@ -22,7 +22,7 @@ if __name__ == '__main__':
     pathologies = ['Normal', 'Benign', 'Malignant']
     viewer = QPatchExtractor(inputs, pathologies,
                              settings=DefinedSettings.get_default_dermatology(),
-                             output=patch_folder)
+                             output=patch_folder, editable=False)
 
     # Show the viewer and run the application.
     viewer.show()
