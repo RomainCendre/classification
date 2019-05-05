@@ -265,7 +265,7 @@ class QtImageViewer(QGraphicsView):
         self.text.setFont(QFont('Arial', 20))
         self.text.setPos(0, 0)
         self.text.setDefaultTextColor(QColor(255, 0, 0))
-        self.mouse_color = Qt.blue
+        self.mouse_color = QColor(Qt.blue)
         self.mouse_rect = QGraphicsRectItem(-25, -25, 50, 50)
         self.mouse_rect.setPen(QPen(self.mouse_color, 6, Qt.DotLine))
         self.scene.addItem(self.text)
