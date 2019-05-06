@@ -237,15 +237,16 @@ class QPatchExtractor(QMainWindow):
             return
 
         filename = '{count}.bmp'.format(count=len(glob.glob(join(self.get_current_folder(), '*.bmp'))))
-        patch_path = join(self.get_current_folder(), filename)
+        patch_path = join(self.get_current_folder(), 'patches', filename)
+        # Write image in dataframe
         self.dataframe = self.dataframe.append({'Modality': 'Microscopy',
-                                                'Path': patch_path,
+                                                'Path': os.path.relpath(patch_path, self.get_current_folder()),
                                                 'Height': patch.height(),
                                                 'Width': patch.width(),
                                                 'Center_X': int(x),
                                                 'Center_Y': int(y),
                                                 'Label': self.pathologies[self.pathology_index],
-                                                'Source': self.get_current_image()}, ignore_index=True)
+                                                'Source': self.get_current_image(full=False)}, ignore_index=True)
 
 
         patch_dir = abspath(join(patch_path, os.pardir))
