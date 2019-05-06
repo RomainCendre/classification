@@ -21,36 +21,34 @@ if __name__ == "__main__":
     settings = DefinedSettings.get_default_dermatology()
 
     # Output folders
+    features_folder = join(home_path, 'Features')
+    if not exists(features_folder):
+        makedirs(features_folder)
+
     output_folder = normpath('{home}/Results/Dermatology/SVM/{filename}/'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
 
-    features_folder = join(output_folder, 'Features')
-    if not exists(features_folder):
-        makedirs(features_folder)
-
-    patch_folder = join(output_folder, 'Patch')
-    if not exists(patch_folder):
-        makedirs(patch_folder)
-
-    projection_folder = join(output_folder, 'Projection')
-    if not exists(projection_folder):
-        makedirs(projection_folder)
+    # Statistics expected
+    statistics = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
 
     # Filters
-    filters = [('All', {'Label': ['Normal', 'Benign', 'Malignant']}),
-               ('NvsM', {'Label': ['Normal', 'Malignant']}),
-               ('NvsB', {'Label': ['Normal', 'Benign']}),
-               ('BvsM', {'Label': ['Benign', 'Malignant']})]
+    filters = [('All', {'Label': ['Normal', 'Benign', 'Malignant'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, {}),
+               ('NvsP', {'Label': ['Normal', 'Pathology'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']},
+                {'Label': (['Benign', 'Malignant'], 'Pathology')}),
+               ('MvsR', {'Label': ['Malignant', 'Rest'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']},
+                {'Label': (['Normal', 'Benign'], 'Rest')})]
 
     # Inputs
-    pretrain_input = Dataset.thumbnails()
-    input = Dataset.patches_images(folder=patch_folder, size=250)
+    train_inputs = Dataset.images()
+    train_inputs = train_inputs.sub_inputs({'Type': 'Patch'})
+
+    inputs = [('NoOverlap', Dataset.patches_images(size=250, overlap=0)),
+              ('Overlap25', Dataset.patches_images(size=250, overlap=0.25)),
+              ('Overlap50', Dataset.patches_images(size=250, overlap=0.50))]
 
     # Methods
-    methods = [('Haralick', Transforms.get_haralick(mean=False)),
-               ('KerasAverage', Transforms.get_keras_extractor(pooling='avg')),
-               ('KerasMaximum', Transforms.get_keras_extractor(pooling='max'))]
+    methods = ('KerasAverage', Transforms.get_keras_extractor(pooling='avg'))
 
     # Launch process
     process = Process()

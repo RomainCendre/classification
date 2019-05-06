@@ -23,13 +23,13 @@ if __name__ == "__main__":
     settings = DefinedSettings.get_default_dermatology()
 
     # Output folders
+    features_folder = join(home_path, 'Features')
+    if not exists(features_folder):
+        makedirs(features_folder)
+
     output_folder = normpath('{home}/Results/Dermatology/simple/{filename}/'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
-
-    features_folder = join(output_folder, 'Features')
-    if not exists(features_folder):
-        makedirs(features_folder)
 
     # Statistics expected
     statistics = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
@@ -40,7 +40,7 @@ if __name__ == "__main__":
                ('MvsR', {'Label': ['Malignant', 'Rest'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, {'Label': (['Normal', 'Benign'], 'Rest')})]
 
     # Image filters
-    scales = [('Full', {'Type': 'Full'}), ('Thumbnails', {'Type': 'Patch'})]
+    scales = [('Thumbnails', {'Type': 'Patch'}), ('Full', {'Type': 'Full'})]
 
     # Input patch
     inputs = Dataset.images()
