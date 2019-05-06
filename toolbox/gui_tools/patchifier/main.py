@@ -17,8 +17,8 @@ if __name__ == '__main__':
     # Create the QApplication.
     app = QApplication(sys.argv)
     app.setWindowIcon(QIcon('./images/icon.png'))
-    inputs = Dataset.full_images()
-    inputs = inputs.sub_inputs({'Modality': 'Microscopy'})
+    inputs = Dataset.images()
+    inputs = inputs.sub_inputs({'Modality': 'Microscopy', 'Type': 'Full'})
     pathologies = ['Normal', 'Benign', 'Malignant']
     viewer = QPatchExtractor(inputs, pathologies,
                              settings=DefinedSettings.get_default_dermatology(),
