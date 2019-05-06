@@ -67,9 +67,9 @@ if __name__ == "__main__":
 
             for scale in scales:
                 copy_input = inputs.copy_and_change(filter_groups)
-                copy_input.name = '{input}_{method}_{model}'.format(input=inputs, method=method[0], model=model[0])
+                copy_input.name = '{input}_{method}_{model}'.format(input=scale[0], method=method[0], model=model[0])
 
-                filter_datas.update(scale)
+                filter_datas.update(scale[1])
                 copy_input.set_filters(filter_datas)
                 copy_input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']), 'groups': LabelEncoder()})
                 process.checkpoint_step(inputs=copy_input, model=method[1], folder=features_folder)
