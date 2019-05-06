@@ -5,7 +5,7 @@ from os.path import join, isfile, abspath, exists
 from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QRect, QPropertyAnimation, pyqtProperty
 from PyQt5.QtGui import QImage, QPixmap, QPainterPath, QColor, QFont, QPen
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWindow, QHBoxLayout, QWidget, QLabel, \
-    QGraphicsTextItem, QFileDialog, QPushButton, QDialog, QSpinBox, QGraphicsRectItem
+    QGraphicsTextItem, QFileDialog, QPushButton, QDialog, QSpinBox, QGraphicsRectItem, QProgressBar, QVBoxLayout
 
 
 class QPatchExtractor(QMainWindow):
@@ -81,8 +81,9 @@ class QPatchExtractor(QMainWindow):
         # Change patient
         length = len(self.patients)
         self.patient_index = (self.patient_index + move) % length
+        self.image_bar.setRange(0, len(self.data.get_group(self.get_current_patient())))
         self.update_directory()
-        self.change_image(0)
+        self.reset_image()
 
         # Open new df
         self.open_dataframe()
@@ -92,7 +93,6 @@ class QPatchExtractor(QMainWindow):
             self.viewer.mouseRectColorTransition(QColor(Qt.red))
             return
         # Acquire image and it to dataframe
-        path = self.get_patch_name(x, y)
         self.write_patch(x, y)
 
     def closeEvent(self, event):
@@ -103,19 +103,22 @@ class QPatchExtractor(QMainWindow):
         # Parent part of windows
         # Build export button
         parent_widget = QWidget()
-        parent_layout = QHBoxLayout(parent_widget)
-        # Build previous patient button
-        button = QPushButton('<<')
-        button.released.connect(lambda: self.change_patient(-1))
-        parent_layout.addWidget(button)
+        parent_layout = QVBoxLayout(parent_widget)
         # Build patient preview
-        self.label_patient = QLabel('')
-        self.label_patient.setAlignment(Qt.AlignCenter)
-        parent_layout.addWidget(self.label_patient)
-        # Build next patient button
-        button = QPushButton('>>')
-        button.released.connect(lambda: self.change_patient(1))
-        parent_layout.addWidget(button)
+        self.patient_bar = QProgressBar()
+        self.patient_bar.setAlignment(Qt.AlignCenter)
+        self.patient_bar.setStyleSheet('QProgressBar {border: 2px solid grey;border-radius: 5px;}'
+                                       'QProgressBar::chunk {background-color: #bff88b;width: 20px;}')
+        self.patient_bar.setRange(0, len(self.patients))
+        self.patient_bar.setTextVisible(True)
+        parent_layout.addWidget(self.patient_bar)
+        # Build image progress bar
+        self.image_bar = QProgressBar()
+        self.image_bar.setAlignment(Qt.AlignCenter)
+        self.image_bar.setStyleSheet('QProgressBar {border: 2px solid grey;border-radius: 5px;}'
+                                     'QProgressBar::chunk {background-color: #05B8CC;width: 20px;}')
+        self.image_bar.setTextVisible(True)
+        parent_layout.addWidget(self.image_bar)
 
         self.viewer = QtImageViewer()
         self.viewer.grabKeyboard()
@@ -180,6 +183,9 @@ class QPatchExtractor(QMainWindow):
             return join(self.get_current_folder(), 'patches.csv')
         return ''
 
+    def get_current_pathology(self):
+        return self.data.get_group(self.get_current_patient()).iloc[0].loc['Diagnosis']
+
     def get_current_patient(self):
         return self.patients[self.patient_index]
 
@@ -191,12 +197,6 @@ class QPatchExtractor(QMainWindow):
             return patient['Full_path'].iloc[self.image_index]
         else:
             return patient['Path'].iloc[self.image_index]
-
-    def get_patch_name(self, x, y):
-        center = (int(x), int(y))
-        patient = self.get_current_patient()
-        name = self.get_current_image(full=False)
-        return join(patient, '{name}_{center}.bmp'.format(name=name, center=center))
 
     def key_pressed(self, key):
         # Action that move image of a patient
@@ -212,11 +212,19 @@ class QPatchExtractor(QMainWindow):
         elif Qt.Key_0 <= key <= Qt.Key_9:
             self.change_label(key-Qt.Key_0)
 
+    def reset_image(self):
+        self.image_index = 0
+        self.update_image()
+
     def update_image(self):
-        self.viewer.loadImage(self.get_current_image(), self.get_current_image(full=False))
+        self.image_bar.setValue(self.image_index)
+        self.image_bar.setFormat(self.get_current_image(full=False))
+        self.viewer.loadImage(self.get_current_image())
 
     def update_directory(self):
-        self.label_patient.setText(self.get_current_patient())
+        self.patient_bar.setValue(self.patient_index)
+        self.patient_bar.setFormat('Patient: {patient} - Pathology: {pathology}'.format(patient=self.get_current_patient(),
+                                                                         pathology=self.get_current_pathology()))
 
     def update_output(self):
         self.button_output.setText('Output : {path}'.format(path=self.output))
@@ -308,7 +316,7 @@ class QtImageViewer(QGraphicsView):
             self.scene.removeItem(self._pixmapHandle)
             self._pixmapHandle = None
 
-    def loadImage(self, path, name):
+    def loadImage(self, path):
         """ Load an image from file.
         Without any arguments, loadImageFromFile() will popup a file dialog to choose the image file.
         With a fileName argument, loadImageFromFile(fileName) will attempt to load the specified image file directly.
@@ -316,7 +324,6 @@ class QtImageViewer(QGraphicsView):
         if len(path) and isfile(path):
             image = QImage(path)
             self.setImage(image)
-            self.text.setPlainText(name)
 
     def pixmap(self):
         """ Returns the scene's current image pixmap as a QPixmap, or else None if no image exists.
