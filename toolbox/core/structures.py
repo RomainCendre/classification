@@ -243,6 +243,7 @@ class Inputs(Data):
         if filters is not None:
             cur_filters.update(filters)
         inputs.data = inputs.data.query(super().to_query(cur_filters))
+        inputs.data = inputs.data.reset_index(drop=True)
         return inputs
 
     def copy_and_change(self, substitute):
