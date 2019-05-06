@@ -3,7 +3,7 @@ import pandas as pd
 import pyocr
 import shutil
 from os import listdir, makedirs, path
-from os.path import isdir, join, basename, splitext
+from os.path import isdir, join, basename, splitext, exists
 from PIL import Image
 from pyocr import builders
 
@@ -19,36 +19,22 @@ class Reader:
         for subdir in subdirs:
             try:
                 # Read patient and images data
-                meta_patient = Reader.__read_patient_file(join(folder_path, subdir))
-                patient_datas = Reader.__read_images_file(folder_path, subdir)
+                metas = Reader.__read_patient_file(join(folder_path, subdir))
+                images = Reader.__read_images_file(folder_path, subdir)
+                patches = Reader.__read_patches_file(folder_path, subdir)
                 # Merge both
-                patient_datas['ID'] = meta_patient['ID'][0]
-                patient_datas = patient_datas.merge(meta_patient)
-                patient_datas['Reference'] = patient_datas.apply(
-                    lambda row: '{patient}_{image}'.format(patient=row['ID'], image=row['ID_Image']), axis=1)
-                datas.append(patient_datas)
+                images['ID'] = metas['ID'][0]
+                images = images.merge(metas)
+                images['Reference'] = images.apply(
+                    lambda row: '{patient}_{image}_F'.format(patient=row['ID'], image=row.name), axis=1)
+                if patches is not None:
+                    patches['Reference'] = images.apply(
+                        lambda row: '{patient}_{image}_P'.format(patient=row['ID'], image=row.name), axis=1)
+                datas.append(images)
             except OSError:
                 print('Patient {}'.format(subdir))
 
         return pd.concat(datas, sort=False, ignore_index=True)
-
-    def scan_folder_for_images(self, folder_path):
-        # Subdirectories
-        sub_dirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
-
-        # Browse subdirectories
-        data_set = []
-        for subdir in sub_dirs:
-            sub_folder = join(folder_path, subdir)
-            sub_files = glob(join(sub_folder, '*.bmp'))
-
-            for sub_file in sub_files:
-                reference = '{label}-{file}'.format(label=subdir, file=splitext(basename(sub_file))[0])
-                data_set.append({'Full_path': sub_file,
-                                 'Folder': folder_path,
-                                 'Label': subdir,
-                                 'Reference': reference})
-        return pd.DataFrame(data_set)
 
     @staticmethod
     def __read_images_file(parent_folder, subdir):
@@ -59,7 +45,22 @@ class Reader:
         images = pd.read_csv(images_file, dtype=str)
         images['Full_path'] = images.apply(lambda row: join(parent_folder, subdir, row['Modality'], row['Path']),
                                            axis=1)
+        images['Type'] = 'Full'
         return images
+
+    @staticmethod
+    def __read_patches_file(parent_folder, subdir):
+        # Patient file
+        patch_file = join(parent_folder, subdir, 'patches.csv')
+        if not exists(patch_file):
+            return None
+
+        # Read csv and add tag for path
+        patches = pd.read_csv(patch_file, dtype=str)
+        patches['Full_path'] = patches.apply(lambda row: join(parent_folder, subdir, 'patches', row['Path']),
+                                           axis=1)
+        patches['Type'] = 'Patch'
+        return patches
 
     @staticmethod
     def __read_patient_file(folder_path):
@@ -97,7 +98,8 @@ class DataManager:
             image = Image.open(source_file)
             width, height = image.size
             destination_file = path.join(destination_folder, path.basename(source_file))
-            shutil.copy(source_file, destination_file)
+            raw_image = Image.open(source_file)
+            raw_image.save(destination_file, "BMP")
             images.append({'Modality': 'Dermoscopy',
                            'Path': path.relpath(destination_file, destination_folder),
                            'Label': label,
@@ -117,7 +119,8 @@ class DataManager:
             image = Image.open(source_file)
             width, height = image.size
             destination_file = path.join(destination_folder, path.basename(source_file))
-            shutil.copy(source_file, destination_file)
+            raw_image = Image.open(source_file)
+            raw_image.save(destination_file, "BMP")
             images.append({'Modality': 'Photography',
                            'Path': path.relpath(destination_file, destination_folder),
                            'Label': label,
@@ -206,9 +209,7 @@ class DataManager:
             DataManager.print_progress_bar(index, nb_patients, prefix='Progress:')
 
             # Construct folder reference
-            out_patient_folder = path.join(output_folder, str(index))
-
-            # Create folder if necessary
+            out_patient_folder = path.join(output_folder, row['ID'])
             if not path.exists(out_patient_folder):
                 makedirs(out_patient_folder)
 
@@ -230,8 +231,7 @@ class DataManager:
 
             # Write images list
             dataframe = pd.DataFrame(images)
-            dataframe.index.name = 'ID_Image'
-            dataframe.to_csv(path.join(out_patient_folder, 'images.csv'))
+            dataframe.to_csv(path.join(out_patient_folder, 'images.csv'), index=False)
 
     @staticmethod
     def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):

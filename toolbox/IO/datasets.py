@@ -17,11 +17,11 @@ class Dataset:
         self.multi_coefficients = multi_coefficients
 
     @staticmethod
-    def full_images():
+    def images():
         home_path = ospath.expanduser('~')
-        input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
+        input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path)),
                          ospath.normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
-        return Dataset.__full_images(input_folders)
+        return Dataset.__images(input_folders)
 
     @staticmethod
     def multiresolution(coefficients):
@@ -45,12 +45,6 @@ class Dataset:
         location = ospath.normpath('{home}/Data/Neck/'.format(home=home_path))
         input_folders = [ospath.join(location, 'Patients.csv'), ospath.join(location, 'Temoins.csv')]
         return Dataset.__spectras(input_folders)
-
-    @staticmethod
-    def thumbnails():
-        home_path = ospath.expanduser('~')
-        input_folders = [ospath.normpath('{home}/Data/Skin/Thumbnails'.format(home=home_path))]
-        return Dataset.__thumbnails(input_folders)
 
     @staticmethod
     def test_full_images():
@@ -83,21 +77,7 @@ class Dataset:
         return Dataset.__spectras(input_folders)
 
     @staticmethod
-    def test_thumbnails():
-        home_path = ospath.expanduser('~')
-        input_folders = [ospath.normpath('{here}/Desktop/Thumbnails_test'.format(here=home_path))]
-        return Dataset.__thumbnails(input_folders)
-
-    @staticmethod
-    def __thumbnails(folders):
-        inputs = Inputs(folders=folders, instance=dermatology.Reader(),
-                        loader=dermatology.Reader.scan_folder_for_images,
-                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'})
-        inputs.load()
-        return inputs
-
-    @staticmethod
-    def __full_images(folders):
+    def __images(folders):
         inputs = Inputs(folders=folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
                         tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'},
                         encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
