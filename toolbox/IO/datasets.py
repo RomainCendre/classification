@@ -19,8 +19,7 @@ class Dataset:
     @staticmethod
     def images():
         home_path = ospath.expanduser('~')
-        input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path)),
-                         ospath.normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
+        input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
         return Dataset.__images(input_folders)
 
     @staticmethod

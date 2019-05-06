@@ -28,9 +28,11 @@ class Reader:
                 images['Reference'] = images.apply(
                     lambda row: '{patient}_{image}_F'.format(patient=row['ID'], image=row.name), axis=1)
                 if patches is not None:
+                    patches['ID'] = metas['ID'][0]
+                    patches = patches.merge(metas)
                     patches['Reference'] = images.apply(
                         lambda row: '{patient}_{image}_P'.format(patient=row['ID'], image=row.name), axis=1)
-                datas.append(images)
+                datas.append(pd.concat([images, patches]))
             except OSError:
                 print('Patient {}'.format(subdir))
 
