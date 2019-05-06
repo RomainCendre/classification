@@ -22,39 +22,15 @@ class QPatchExtractor(QMainWindow):
         self.settings = settings
         self.output = output
         self.dataframe = None
+        # Design GUI
         self.define_layer()
         self.update_directory()
         self.update_image()
         self.update_output()
-
-        # Open new df
-        self.open_dataframe()
         self.change_label(0)
-
-    def close_dataframe(self):
-        file = self.get_current_dataframe()
-        if not file:
-            return
-
-        if self.dataframe is None:
-            return
-
-        folder = self.get_current_folder()
-        if not exists(folder):
-            os.makedirs(folder)
-
-        self.dataframe.to_csv(file, index=False)
-
-    def open_dataframe(self):
-        file = self.get_current_dataframe()
-        if not file:
-            return
-
-        if exists(file):
-            self.dataframe = pd.read_csv(file)
-        else:
-            self.dataframe = pd.DataFrame(columns=['Modality', 'Path', 'Height', 'Width',
-                                                   'Center_X', 'Center_Y', 'Label', 'Source'])
+        self.image_bar.setRange(0, len(self.data.get_group(self.get_current_patient())))
+        # Open first df
+        self.open_dataframe()
 
     def change_output(self):
         dialog = QFileDialog(self, 'Output folder')
@@ -94,6 +70,20 @@ class QPatchExtractor(QMainWindow):
             return
         # Acquire image and it to dataframe
         self.write_patch(x, y)
+
+    def close_dataframe(self):
+        file = self.get_current_dataframe()
+        if not file:
+            return
+
+        if self.dataframe is None:
+            return
+
+        folder = self.get_current_folder()
+        if not exists(folder):
+            os.makedirs(folder)
+
+        self.dataframe.to_csv(file, index=False)
 
     def closeEvent(self, event):
         self.close_dataframe()
@@ -211,6 +201,17 @@ class QPatchExtractor(QMainWindow):
             self.change_patient(-1)
         elif Qt.Key_0 <= key <= Qt.Key_9:
             self.change_label(key-Qt.Key_0)
+
+    def open_dataframe(self):
+        file = self.get_current_dataframe()
+        if not file:
+            return
+
+        if exists(file):
+            self.dataframe = pd.read_csv(file)
+        else:
+            self.dataframe = pd.DataFrame(columns=['Modality', 'Path', 'Height', 'Width',
+                                                   'Center_X', 'Center_Y', 'Label', 'Source'])
 
     def reset_image(self):
         self.image_index = 0
