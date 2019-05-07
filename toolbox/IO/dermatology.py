@@ -30,7 +30,7 @@ class Reader:
                 if patches is not None:
                     patches['ID'] = metas['ID'][0]
                     patches = patches.merge(metas)
-                    patches['Reference'] = images.apply(
+                    patches['Reference'] = patches.apply(
                         lambda row: '{patient}_{image}_P'.format(patient=row['ID'], image=row.name), axis=1)
                 datas.append(pd.concat([images, patches]))
             except OSError:

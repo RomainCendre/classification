@@ -30,9 +30,9 @@ if __name__ == "__main__":
 
     # Input patch
     if not test_mode:
-        inputs = Dataset.images()
+        image_inputs = Dataset.images()
     else:
-        inputs = Dataset.test_images()
+        image_inputs = Dataset.test_images()
 
     # Statistics expected
     statistics = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
@@ -66,14 +66,14 @@ if __name__ == "__main__":
         for method, model in combinations:
 
             for scale in scales:
-                copy_input = inputs.copy_and_change(filter_groups)
-                copy_input.name = '{input}_{method}_{model}'.format(input=scale[0], method=method[0], model=model[0])
+                inputs = image_inputs.copy_and_change(filter_groups)
+                inputs.name = '{input}_{method}_{model}'.format(input=scale[0], method=method[0], model=model[0])
 
                 filter_datas.update(scale[1])
-                copy_input.set_filters(filter_datas)
-                copy_input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']), 'groups': LabelEncoder()})
-                process.checkpoint_step(inputs=copy_input, model=method[1])
-                process.evaluate_step(inputs=copy_input, model=model[1])
+                inputs.set_filters(filter_datas)
+                inputs.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']), 'groups': LabelEncoder()})
+                process.checkpoint_step(inputs=inputs, model=method[1])
+                process.evaluate_step(inputs=inputs, model=model[1])
         process.end()
 
     # Open result folder
