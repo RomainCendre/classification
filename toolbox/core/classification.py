@@ -167,7 +167,7 @@ class Classifier:
 
         return model, best_params
 
-    def features_checkpoint(self, inputs, folder):
+    def features_checkpoint(self, inputs):
 
         if self.__model is None:
             return
@@ -182,8 +182,8 @@ class Classifier:
         else:
             prefix = type(self.__model).__name__
 
-        if folder is not None:
-            folder_prefix = '{prefix}_'.format(prefix=join(folder, prefix))
+        if inputs.temporary is not None:
+            folder_prefix = '{prefix}_'.format(prefix=join(inputs.temporary, prefix))
             expected_files = ['{folder_prefix}{reference}.npy'.format(folder_prefix=folder_prefix, reference=reference) for reference in references]
 
             # Extract files from folder
@@ -200,11 +200,11 @@ class Classifier:
                     features = self.__model.predict_proba(datas)
 
                 # Now save features as files
-                print('Writting data at {folder}'.format(folder=folder))
+                print('Writting data at {folder}'.format(folder=inputs.temporary))
                 for feature, reference in zip(features, references):
                     save('{folder_prefix}{reference}.npy'.format(folder_prefix=folder_prefix, reference=reference), feature)
             else:
-                print('Loading data at {folder}'.format(folder=folder))
+                print('Loading data at {folder}'.format(folder=inputs.temporary))
                 for expected_file in expected_files:
                     features.append(load(expected_file))
                 features = array(features)

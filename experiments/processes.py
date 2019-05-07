@@ -20,9 +20,9 @@ class Process:
         self.classifier = Classifier(callbacks=callbacks, inner_cv=inner_cv, outer_cv=outer_cv,
                                      n_jobs=n_jobs, scoring=scoring)
 
-    def checkpoint_step(self, inputs, model, folder=None, projection_folder=None,):
+    def checkpoint_step(self, inputs, model, projection_folder=None):
         self.classifier.set_model(model)
-        self.classifier.features_checkpoint(inputs, folder)
+        self.classifier.features_checkpoint(inputs)
         # Write data to visualize it
         if projection_folder is not None:
             projection_folder = join(projection_folder, inputs.name)

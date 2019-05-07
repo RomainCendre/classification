@@ -23,10 +23,6 @@ if __name__ == "__main__":
         makedirs(output_folder)
 
     # Feature folder
-    patch_folder = join(output_folder, 'Patch')
-    if not exists(patch_folder):
-        makedirs(patch_folder)
-
     features_folder = join(output_folder, 'Features')
     if not exists(features_folder):
         makedirs(features_folder)

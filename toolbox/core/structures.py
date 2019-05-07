@@ -95,14 +95,14 @@ class Data:
 
 class Inputs(Data):
 
-    def __init__(self, folders, instance, loader, tags, encoders={}, filters={}, name=''):
+    def __init__(self, folders, instance, loader, tags, filters={}, name=''):
         super().__init__(None, filters)
         self.folders = folders
         self.instance = instance
         self.loader = loader
         self.name = name
         self.tags = tags
-        self.encoders = encoders
+        self.encoders = None
 
     def collapse(self, reference_tag, data_tag=None):
         if data_tag is None:
@@ -236,6 +236,9 @@ class Inputs(Data):
 
     def set_encoders(self, encoders):
         self.encoders = encoders
+
+    def set_temporary_folder(self, temp_folder):
+        self.temporary = temp_folder
 
     def sub_inputs(self, filters=None):
         inputs = deepcopy(self)

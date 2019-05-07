@@ -1,5 +1,0 @@
-ID_Image,Depth(um),Height,Label,Modality,Path,Width
-0,0.0,1000,Malignant,Microscopy,v0000000.bmp,1000
-1,0.0,1000,Benign,Microscopy,v0000001.bmp,1000
-2,0.0,1000,Normal,Microscopy,v0000002.bmp,1000
-3,0.0,1000,Draw,Microscopy,v0000003.bmp,1000

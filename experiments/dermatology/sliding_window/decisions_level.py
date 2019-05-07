@@ -1,5 +1,4 @@
 import itertools
-from copy import deepcopy
 from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold, GroupKFold
@@ -14,6 +13,7 @@ if __name__ == "__main__":
     Parameters.set_gpu(percent_gpu=0.5)
 
     # Parameters
+    test_mode = True
     filename = splitext(basename(__file__))[0]
     home_path = expanduser('~')
     validation = StratifiedKFold(n_splits=5, shuffle=True)
@@ -29,47 +29,58 @@ if __name__ == "__main__":
     if not exists(output_folder):
         makedirs(output_folder)
 
+    # Inputs
+    if not test_mode:
+        train_inputs = Dataset.images()
+        slidings_inputs = [('NoOverlap', Dataset.sliding_images(size=250, overlap=0)),
+                           ('Overlap50', Dataset.sliding_images(size=250, overlap=0.50))]
+    else:
+        train_inputs = Dataset.test_images()
+        slidings_inputs = [('NoOverlap', Dataset.test_sliding_images(size=250, overlap=0))]
+    train_inputs = train_inputs.sub_inputs({'Type': 'Patch'})
+
     # Statistics expected
     statistics = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
 
+    # Models
+    models = [('Svm', Classifiers.get_linear_svm())]
+
     # Filters
     filters = [('All', {'Label': ['Normal', 'Benign', 'Malignant'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, {}),
-               ('NvsP', {'Label': ['Normal', 'Pathology'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']},
-                {'Label': (['Benign', 'Malignant'], 'Pathology')}),
-               ('MvsR', {'Label': ['Malignant', 'Rest'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']},
-                {'Label': (['Normal', 'Benign'], 'Rest')})]
-
-    # Inputs
-    train_inputs = Dataset.images()
-    train_inputs = train_inputs.sub_inputs({'Type': 'Patch'})
-
-    inputs = [('NoOverlap', Dataset.patches_images(size=250, overlap=0)),
-              ('Overlap25', Dataset.patches_images(size=250, overlap=0.25)),
-              ('Overlap50', Dataset.patches_images(size=250, overlap=0.50))]
+               ('NvsP', {'Label': ['Normal', 'Pathology'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, {'Label': (['Benign', 'Malignant'], 'Pathology')}),
+               ('MvsR', {'Label': ['Malignant', 'Rest'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, {'Label': (['Normal', 'Benign'], 'Rest')})]
 
     # Methods
-    methods = ('KerasAverage', Transforms.get_keras_extractor(pooling='avg'))
-
-    # Launch process
-    process = Process()
-    process.begin(inner_cv=validation, outer_cv=test, n_jobs=2, settings=settings)
+    methods = Transforms.get_keras_extractor(pooling='avg')
 
     # Parameters combinations
-    combinations = list(itertools.product(filters, methods))
+    combinations = list(itertools.product(slidings_inputs, models))
 
-    for combination in combinations:
-        working_inputs = deepcopy(input)
-        name = '{method}'.format(method=method[0])
-        # Pretrain
-        process.checkpoint_step(inputs=pretrain_input, model=method[1], folder=features_folder)
-        predictor, params = process.train_step(inputs=pretrain_input, model=Classifiers.get_linear_svm())
-        # Now predict
-        process.checkpoint_step(inputs=working_inputs, model=method[1], folder=features_folder,
-                                projection_folder=projection_folder, projection_name=name)
-        process.checkpoint_step(inputs=working_inputs, model=PredictorTransform(predictor, probabilities=True),
-                                folder=features_folder)
-        working_inputs.patch_method()
-        process.end(inputs=working_inputs, model=Classifiers.get_linear_svm(), output_folder=output_folder, name=name)
+    # Browse combinations
+    for filter_name, filter_datas, filter_groups in filters:
+
+        # Launch process
+        process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
+        process.begin(inner_cv=validation, outer_cv=test, n_jobs=4)
+
+        for sliding, model in combinations:
+            # Name experiment and filter data
+            name = '{sliding}_{model}'.format(sliding=sliding[0], model=model[0])
+            inputs = sliding[1].copy_and_change(filter_groups)
+
+            # Pretrain
+            process.checkpoint_step(inputs=train_inputs, model=methods)
+            predictor, params = process.train_step(inputs=train_inputs, model=model[1])
+
+            # Now predict
+            process.checkpoint_step(inputs=inputs, model=methods)
+            process.checkpoint_step(inputs=inputs, model=PredictorTransform(predictor, probabilities=True))
+
+            # Collapse informations and make predictions
+            inputs.collapse(reference_tag='Reference')
+            process.evaluate_step(inputs=inputs, model=Classifiers.get_linear_svm())
+
+        process.end()
 
     # Open result folder
     startfile(output_folder)

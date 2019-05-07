@@ -16,6 +16,7 @@ if __name__ == "__main__":
     Parameters.set_gpu(percent_gpu=0.5)
 
     # Parameters
+    test_mode = True
     filename = splitext(basename(__file__))[0]
     home_path = expanduser('~')
     validation = StratifiedKFold(n_splits=5)
@@ -23,13 +24,15 @@ if __name__ == "__main__":
     settings = DefinedSettings.get_default_dermatology()
 
     # Output folders
-    features_folder = join(home_path, 'Features')
-    if not exists(features_folder):
-        makedirs(features_folder)
-
     output_folder = normpath('{home}/Results/Dermatology/simple/{filename}/'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
+
+    # Input patch
+    if not test_mode:
+        inputs = Dataset.images()
+    else:
+        inputs = Dataset.test_images()
 
     # Statistics expected
     statistics = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
@@ -41,9 +44,6 @@ if __name__ == "__main__":
 
     # Image filters
     scales = [('Thumbnails', {'Type': 'Patch'}), ('Full', {'Type': 'Full'})]
-
-    # Input patch
-    inputs = Dataset.images()
 
     # Methods
     methods = [('Wavelet', Transforms.get_image_dwt()),
@@ -72,7 +72,7 @@ if __name__ == "__main__":
                 filter_datas.update(scale[1])
                 copy_input.set_filters(filter_datas)
                 copy_input.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']), 'groups': LabelEncoder()})
-                process.checkpoint_step(inputs=copy_input, model=method[1], folder=features_folder)
+                process.checkpoint_step(inputs=copy_input, model=method[1])
                 process.evaluate_step(inputs=copy_input, model=model[1])
         process.end()
 

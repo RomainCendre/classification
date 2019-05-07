@@ -1,4 +1,5 @@
 from os import path as ospath, makedirs
+from os.path import join, exists
 from tempfile import gettempdir
 import numpy as np
 import pandas as pd
@@ -20,7 +21,10 @@ class Dataset:
     def images():
         home_path = ospath.expanduser('~')
         input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
-        return Dataset.__images(input_folders)
+        features_folder = join(home_path, 'Features')
+        if not exists(features_folder):
+            makedirs(features_folder)
+        return Dataset.__images(input_folders, features_folder)
 
     @staticmethod
     def multiresolution(coefficients):
@@ -28,15 +32,20 @@ class Dataset:
         input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                          ospath.normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
         multi_folder = ospath.join(home_path, 'Multi')
-        return Dataset.__multi_images(input_folders, multi_folder, coefficients)
+        features_folder = join(home_path, 'Features')
+        if not exists(features_folder):
+            makedirs(features_folder)
+        return Dataset.__multi_images(input_folders, features_folder, multi_folder, coefficients)
 
     @staticmethod
-    def patches_images(size, overlap):
+    def sliding_images(size, overlap):
         home_path = ospath.expanduser('~')
-        input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
-                         ospath.normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
         patch_folder = ospath.join(home_path, 'Patch')
-        return Dataset.__patches_images(input_folders, patch_folder, size, overlap)
+        input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
+        features_folder = join(home_path, 'Features')
+        if not exists(features_folder):
+            makedirs(features_folder)
+        return Dataset.__sliding_images(input_folders, features_folder, patch_folder, size, overlap)
 
     @staticmethod
     def spectras():
@@ -46,28 +55,34 @@ class Dataset:
         return Dataset.__spectras(input_folders)
 
     @staticmethod
-    def test_full_images():
+    def test_images():
         here_path = ospath.dirname(__file__)
-        input_folders = [ospath.normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
-                         ospath.normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
-        return Dataset.__full_images(input_folders)
+        input_folders = [ospath.normpath('{here}/data/dermatology/Test'.format(here=here_path))]
+        features_folder = join(gettempdir(), 'Features')
+        if not exists(features_folder):
+            makedirs(features_folder)
+        return Dataset.__images(input_folders, features_folder)
 
     @staticmethod
     def test_multiresolution(coefficients):
         here_path = ospath.dirname(__file__)
         input_folders = [ospath.normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
                          ospath.normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
-
         multi_folder = ospath.join(gettempdir(), 'Multi')
-        return Dataset.__multi_images(input_folders, multi_folder, coefficients)
+        features_folder = join(gettempdir(), 'Features')
+        if not exists(features_folder):
+            makedirs(features_folder)
+        return Dataset.__multi_images(input_folders, features_folder, multi_folder, coefficients)
 
     @staticmethod
-    def test_patches_images(size, overlap):
+    def test_sliding_images(size, overlap):
         home_path = ospath.expanduser('~')
         input_folders = [ospath.normpath('{home}/Desktop/Patients_test'.format(home=home_path))]
-
         patch_folder = ospath.join(gettempdir(), 'Patch')
-        return Dataset.__patches_images(input_folders, patch_folder, size, overlap)
+        features_folder = join(gettempdir(), 'Features')
+        if not exists(features_folder):
+            makedirs(features_folder)
+        return Dataset.__sliding_images(input_folders, features_folder, patch_folder, size, overlap)
 
     @staticmethod
     def test_spectras():
@@ -76,36 +91,33 @@ class Dataset:
         return Dataset.__spectras(input_folders)
 
     @staticmethod
-    def __images(folders):
+    def __images(folders, features_folder):
         inputs = Inputs(folders=folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
-                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'},
-                        encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
-                                  'groups': LabelEncoder()})
+                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'})
         inputs.load()
+        inputs.set_temporary_folder(features_folder)
         return inputs
 
     @staticmethod
-    def __multi_images(folders, extraction_folder, coefficients):
+    def __multi_images(folders, features_folder, extraction_folder, coefficients):
         inputs = Inputs(folders=folders, instance=Dataset(temporary=extraction_folder,
                                                           multi_coefficients=coefficients),
                         loader=Dataset.__scan_for_confocal_multi,
-                        tags={'data': 'Multi_Path', 'label': 'Label', 'reference': 'Multi_Reference'},
-                        encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
-                                  'groups': LabelEncoder()})
+                        tags={'data': 'Multi_Path', 'label': 'Label', 'reference': 'Multi_Reference'})
         inputs.load()
+        inputs.set_temporary_folder(features_folder)
         return inputs
 
     @staticmethod
-    def __patches_images(folders, extraction_folder, size, overlap):
+    def __sliding_images(folders, features_folder, extraction_folder, size, overlap):
         parameters = {'Size': size,
                       'Overlap': overlap}
         inputs = Inputs(folders=folders, instance=Dataset(temporary=extraction_folder,
                                                           patch_parameters=parameters),
-                        loader=Dataset.__scan_for_confocal_patches,
-                        tags={'data': 'Patch_Path', 'label': 'Label', 'reference': 'Patch_Reference'},
-                        encoders={'label': OrderedEncoder().fit(['Normal', 'Benign', 'Malignant']),
-                                  'groups': LabelEncoder()})
+                        loader=Dataset.__scan_confocal_and_patchify,
+                        tags={'data': 'Patch_Path', 'label': 'Label', 'reference': 'Patch_Reference'})
         inputs.load()
+        inputs.set_temporary_folder(features_folder)
         return inputs
 
     @staticmethod
@@ -161,10 +173,11 @@ class Dataset:
 
         return pd.DataFrame(metas)
 
-    def __scan_for_confocal_patches(self, folder_path):
+    def __scan_confocal_and_patchify(self, folder_path):
         # Browse data
         data_set = dermatology.Reader().scan_folder(folder_path)
         data_set = data_set[data_set.Modality == 'Microscopy']
+        data_set = data_set[data_set.Type == 'Full']
 
         # Get into patches
         patches_data = []
