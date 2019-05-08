@@ -89,6 +89,7 @@ if __name__ == "__main__":
             inputs = sliding[1].copy_and_change(filter_groups)
             inputs.set_filters(filter_datas)
             inputs.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']), 'groups': LabelEncoder()})
+            inputs.name = name
 
             # Pretrain
             process.checkpoint_step(inputs=pre_inputs, model=methods)
