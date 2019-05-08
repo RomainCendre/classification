@@ -76,8 +76,8 @@ class Dataset:
 
     @staticmethod
     def test_sliding_images(size, overlap):
-        home_path = ospath.expanduser('~')
-        input_folders = [ospath.normpath('{home}/Desktop/Patients_test'.format(home=home_path))]
+        here_path = ospath.dirname(__file__)
+        input_folders = [ospath.normpath('{here}/data/dermatology/Test'.format(here=here_path))]
         patch_folder = ospath.join(gettempdir(), 'Patch')
         features_folder = join(gettempdir(), 'Features')
         if not exists(features_folder):
@@ -131,7 +131,7 @@ class Dataset:
 
     def __scan_for_confocal_multi(self, folder_path):
         # Browse data
-        data_set = dermatology.Reader.scan_folder(folder_path)
+        data_set = dermatology.Reader.scan_folder(folder_path, False)
         data_set = data_set[data_set.Modality == 'Microscopy']
 
         # Get into patches

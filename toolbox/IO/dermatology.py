@@ -10,7 +10,7 @@ from pyocr import builders
 
 class Reader:
 
-    def scan_folder(self, folder_path):
+    def scan_folder(self, folder_path, if_patches=True):
         # Subdirectories
         subdirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
 
@@ -21,7 +21,10 @@ class Reader:
                 # Read patient and images data
                 metas = Reader.__read_patient_file(join(folder_path, subdir))
                 images = Reader.__read_images_file(folder_path, subdir)
-                patches = Reader.__read_patches_file(folder_path, subdir)
+                if if_patches:
+                    patches = Reader.__read_patches_file(folder_path, subdir)
+                else:
+                    patches = None
                 # Merge both
                 images['ID'] = metas['ID'][0]
                 images = images.merge(metas)
