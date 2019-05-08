@@ -1,12 +1,13 @@
 import itertools
+from numpy import array
 from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold, GroupKFold
 from sklearn.preprocessing import LabelEncoder
-
 from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.core.builtin_models import Transforms, Classifiers
+from toolbox.core.models import PatchClassifier
 from toolbox.core.transforms import PredictorTransform, OrderedEncoder
 from toolbox.tools.limitations import Parameters
 
@@ -23,13 +24,14 @@ if __name__ == "__main__":
     settings = DefinedSettings.get_default_dermatology()
 
     # Output folders
-    features_folder = join(home_path, 'Features')
-    if not exists(features_folder):
-        makedirs(features_folder)
-
     output_folder = normpath('{home}/Results/Dermatology/SVM/{filename}/'.format(home=home_path, filename=filename))
     if not exists(output_folder):
         makedirs(output_folder)
+
+    # View
+    view_folder = join(output_folder, 'View')
+    if not exists(view_folder):
+        makedirs(view_folder)
 
     # Inputs
     if not test_mode:
@@ -83,11 +85,14 @@ if __name__ == "__main__":
 
             # Now predict
             process.checkpoint_step(inputs=inputs, model=methods)
-            process.checkpoint_step(inputs=inputs, model=PredictorTransform(predictor, probabilities=True))
+            process.checkpoint_step(inputs=inputs, model=PredictorTransform(predictor, probabilities=False))
+            #PatchWriter(inputs, settings).write_patch(folder=view_folder)
 
             # Collapse informations and make predictions
             inputs.collapse(reference_tag='Reference')
             process.evaluate_step(inputs=inputs, model=Classifiers.get_linear_svm())
+            hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
+            process.evaluate_step(inputs=inputs, model=PatchClassifier(hierarchies))
 
         process.end()
 

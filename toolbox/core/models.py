@@ -11,7 +11,6 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.feature_selection import SelectKBest
 from sklearn.metrics import accuracy_score
 from sklearn.utils.multiclass import unique_labels
-
 from toolbox.core.generators import ResourcesGenerator
 
 
