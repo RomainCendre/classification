@@ -221,6 +221,7 @@ class Dataset:
             meta.update(
                 {'Patch_Path': ospath.normpath('{ref}_{id}.png'.format(ref=ospath.join(patch_folder, reference), id=index))})
             meta.update({'Patch_Index': index})
+            meta.update({'Patch_Label': -1})
             start = location[0, 0]
             meta.update({'Patch_Start': (start%image_shape[0], start//image_shape[0])})
 
