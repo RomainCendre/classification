@@ -13,7 +13,7 @@ from sklearn.svm import SVC
 
 from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
-from toolbox.core.transforms import OrderedEncoder, CorrelationArrayTransform
+from toolbox.core.transforms import OrderedEncoder
 
 
 def get_spectrum_classifier():
@@ -25,31 +25,16 @@ def get_spectrum_classifier():
     return pipe, {'clf__C': geomspace(0.01, 100, 5).tolist()}
 
 
-if __name__ == "__main__":
+def simple(spectra, output_folder):
 
     # Parameters
-    filename = splitext(basename(__file__))[0]
-    home_path = expanduser("~")
-    name = filename
     validation = StratifiedKFold(n_splits=5)
     settings = DefinedSettings.get_default_orl()
-
-    # Output dir
-    output_folder = normpath('{home}/Results/ORL/{filename}'.format(home=home_path, filename=filename))
-    if not exists(output_folder):
-        makedirs(output_folder)
 
     # Filters
     filters = [('All', {'label': ['Sain', 'Precancer', 'Cancer']}, {}),
                ('NvsP', {'label': ['Sain', 'Pathology']}, {'label': (['Precancer', 'Cancer'], 'Pathology')}),
                ('MvsR', {'label': ['Rest', 'Cancer']}, {'label': (['Sain', 'Precancer'], 'Rest')})]
-
-    # Input data
-    spectra = Dataset.spectras()
-    spectra.change_wavelength(wavelength=arange(start=445, stop=962, step=1))
-    spectra.apply_average_filter(size=5)
-    # spectra.norm_patient()
-    # spectra.apply_scaling()
 
     # Statistics expected
     statistics = ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
@@ -69,3 +54,22 @@ if __name__ == "__main__":
 
     # Open result folder
     startfile(output_folder)
+
+
+if __name__ == "__main__":
+    # Output dir
+    filename = splitext(basename(__file__))[0]
+    home_path = expanduser("~")
+    name = filename
+    output_folder = normpath('{home}/Results/ORL/{filename}'.format(home=home_path, filename=filename))
+    if not exists(output_folder):
+        makedirs(output_folder)
+
+    # Input data
+    spectra = Dataset.spectras()
+    spectra.change_wavelength(wavelength=arange(start=445, stop=962, step=1))
+    spectra.apply_average_filter(size=5)
+    # spectra.norm_patient()
+    # spectra.apply_scaling()
+
+    simple(spectra, output_folder)
