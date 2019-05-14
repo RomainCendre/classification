@@ -1,9 +1,8 @@
 from glob import glob
 import pandas as pd
 import pyocr
-import shutil
 from os import listdir, makedirs, path
-from os.path import isdir, join, basename, splitext, exists
+from os.path import isdir, join, exists
 from PIL import Image
 from pyocr import builders
 

@@ -108,7 +108,7 @@ class DermatologyDataset:
     @staticmethod
     def __images(folders, features_folder):
         inputs = Inputs(folders=folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
-                        tags={'data': 'Full_path', 'label': 'Label', 'reference': 'Reference'})
+                        tags={'data': 'Full_path', 'label': 'Label', 'group': 'ID', 'reference': 'Reference'})
         inputs.load()
         inputs.set_temporary_folder(features_folder)
         return inputs
