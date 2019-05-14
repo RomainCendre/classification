@@ -7,7 +7,7 @@ from experiments.processes import Process
 from toolbox.IO.datasets import DefinedSettings, Dataset
 from toolbox.core.builtin_models import BuiltInModels
 from toolbox.core.transforms import OrderedEncoder
-from toolbox.tools.limitations import Parameters
+from toolbox.core.parameters import Parameters
 
 if __name__ == '__main__':
     # Configure GPU consumption

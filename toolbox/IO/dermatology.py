@@ -35,7 +35,7 @@ class Reader:
                     patches = patches.merge(metas)
                     patches['Reference'] = patches.apply(
                         lambda row: '{patient}_{image}_P'.format(patient=row['ID'], image=row.name), axis=1)
-                datas.append(pd.concat([images, patches]))
+                datas.append(pd.concat([images, patches], sort=False))
             except OSError:
                 print('Patient {}'.format(subdir))
 

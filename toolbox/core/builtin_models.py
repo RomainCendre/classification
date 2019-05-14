@@ -231,7 +231,7 @@ class Classifiers:
         # Add scaling step
         steps.append(('scale', StandardScaler()))
 
-        # Add classifier simple
+        # Add classifier full
         steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
         parameters.update({'clf__C': geomspace(1, 1000, 3).tolist()})
 
@@ -268,7 +268,7 @@ class Classifiers:
         # Add scaling step
         steps.append(('scale', StandardScaler()))
 
-        # Add classifier simple
+        # Add classifier full
         steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
         parameters.update({'clf__C': geomspace(1, 1000, 3).tolist()})
 

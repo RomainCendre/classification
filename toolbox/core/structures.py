@@ -195,11 +195,11 @@ class Inputs(Data):
 
     def get_groups(self):
         self.check_load()
-        if 'groups' not in self.tags:
+        if 'group' not in self.tags:
             return None
 
         # Filter and get groups
-        groups = self.get_from_key(self.tags['groups'])
+        groups = self.get_from_key(self.tags['group'])
         return self.encode(key='groups', data=groups)
 
     def get_labels(self, encode=True):

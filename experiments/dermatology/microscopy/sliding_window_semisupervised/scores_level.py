@@ -3,16 +3,16 @@ from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 
 from numpy import geomspace
-from sklearn.model_selection import StratifiedKFold, GroupKFold
+from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
 
 from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.core.builtin_models import Transforms, Classifiers
 from toolbox.core.transforms import PredictorTransform, OrderedEncoder, FlattenTransform
-from toolbox.tools.limitations import Parameters
+from toolbox.core.parameters import Parameters
 
 
 def get_linear_svm():

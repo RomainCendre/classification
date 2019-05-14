@@ -13,7 +13,7 @@ from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.IO.writers import PCAProjection
 from toolbox.core.builtin_models import Transforms
 from toolbox.core.transforms import OrderedEncoder, PNormTransform, FlattenTransform
-from toolbox.tools.limitations import Parameters
+from toolbox.core.parameters import Parameters
 
 
 def get_linear_svm():

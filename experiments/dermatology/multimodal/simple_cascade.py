@@ -1,14 +1,12 @@
-import itertools
 from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import LabelEncoder
 
-from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.core.builtin_models import Transforms, Classifiers
 from toolbox.core.transforms import OrderedEncoder
-from toolbox.tools.limitations import Parameters
+from toolbox.core.parameters import Parameters
 
 if __name__ == "__main__":
 

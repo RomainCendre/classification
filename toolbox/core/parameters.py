@@ -1,16 +1,44 @@
+import tensorflow as tf
+from keras.backend.tensorflow_backend import set_session
+from keras import backend as K
 from os import path as ospath, makedirs
-from os.path import join, exists
+from os.path import join, exists, expanduser, normpath
 from tempfile import gettempdir
 import numpy as np
 import pandas as pd
 from PIL import Image
-from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import StratifiedKFold, GroupKFold
+
 from toolbox.IO import dermatology, otorhinolaryngology
 from toolbox.core.structures import Inputs, Spectra, Settings
-from toolbox.core.transforms import OrderedEncoder
 
 
-class Dataset:
+class ORLDataset:
+
+    @staticmethod
+    def spectras():
+        home_path = ospath.expanduser('~')
+        location = ospath.normpath('{home}/Data/Neck/'.format(home=home_path))
+        input_folders = [ospath.join(location, 'Patients.csv'), ospath.join(location, 'Temoins.csv')]
+        return ORLDataset.__spectras(input_folders)
+
+    @staticmethod
+    def test_spectras():
+        here_path = ospath.dirname(__file__)
+        input_folders = [ospath.normpath('{here}/data/spectroscopy/Patients.csv'.format(here=here_path))]
+        return ORLDataset.__spectras(input_folders)
+
+    @staticmethod
+    def __spectras(folders):
+        inputs = Spectra(folders=folders, instance=otorhinolaryngology.Reader(),
+                         loader=otorhinolaryngology.Reader.read_table,
+                         tags={'data': 'data', 'label': 'label', 'group': 'Reference',
+                               'reference': 'Reference_spectrum'})
+        inputs.load()
+        return inputs
+
+
+class DermatologyDataset:
 
     def __init__(self, temporary=None, patch_parameters=None, multi_coefficients=None):
         self.temporary = temporary
@@ -24,7 +52,7 @@ class Dataset:
         features_folder = join(home_path, 'Features')
         if not exists(features_folder):
             makedirs(features_folder)
-        return Dataset.__images(input_folders, features_folder)
+        return DermatologyDataset.__images(input_folders, features_folder)
 
     @staticmethod
     def multiresolution(coefficients):
@@ -35,7 +63,7 @@ class Dataset:
         features_folder = join(home_path, 'Features')
         if not exists(features_folder):
             makedirs(features_folder)
-        return Dataset.__multi_images(input_folders, features_folder, multi_folder, coefficients)
+        return DermatologyDataset.__multi_images(input_folders, features_folder, multi_folder, coefficients)
 
     @staticmethod
     def sliding_images(size, overlap):
@@ -45,50 +73,37 @@ class Dataset:
         features_folder = join(home_path, 'Features')
         if not exists(features_folder):
             makedirs(features_folder)
-        return Dataset.__sliding_images(input_folders, features_folder, patch_folder, size, overlap)
-
-    @staticmethod
-    def spectras():
-        home_path = ospath.expanduser('~')
-        location = ospath.normpath('{home}/Data/Neck/'.format(home=home_path))
-        input_folders = [ospath.join(location, 'Patients.csv'), ospath.join(location, 'Temoins.csv')]
-        return Dataset.__spectras(input_folders)
+        return DermatologyDataset.__sliding_images(input_folders, features_folder, patch_folder, size, overlap)
 
     @staticmethod
     def test_images():
         here_path = ospath.dirname(__file__)
-        input_folders = [ospath.normpath('{here}/data/dermatology/Test'.format(here=here_path))]
+        input_folders = [ospath.normpath('{here}/../data_test/dermatology/Test'.format(here=here_path))]
         features_folder = join(gettempdir(), 'Features')
         if not exists(features_folder):
             makedirs(features_folder)
-        return Dataset.__images(input_folders, features_folder)
+        return DermatologyDataset.__images(input_folders, features_folder)
 
     @staticmethod
     def test_multiresolution(coefficients):
         here_path = ospath.dirname(__file__)
-        input_folders = [ospath.normpath('{here}/data/dermatology/DB_Test1/Patients'.format(here=here_path)),
-                         ospath.normpath('{here}/data/dermatology/DB_Test2/Patients'.format(here=here_path))]
+        input_folders = [ospath.normpath('{here}/../data_test/dermatology/Test'.format(here=here_path))]
         multi_folder = ospath.join(gettempdir(), 'Multi')
         features_folder = join(gettempdir(), 'Features')
         if not exists(features_folder):
             makedirs(features_folder)
-        return Dataset.__multi_images(input_folders, features_folder, multi_folder, coefficients)
+        return DermatologyDataset.__multi_images(input_folders, features_folder, multi_folder, coefficients)
 
     @staticmethod
     def test_sliding_images(size, overlap):
         here_path = ospath.dirname(__file__)
-        input_folders = [ospath.normpath('{here}/data/dermatology/Test'.format(here=here_path))]
+        input_folders = [ospath.normpath('{here}/../data_test/dermatology/Test'.format(here=here_path))]
         patch_folder = ospath.join(gettempdir(), 'Patch')
         features_folder = join(gettempdir(), 'Features')
         if not exists(features_folder):
             makedirs(features_folder)
-        return Dataset.__sliding_images(input_folders, features_folder, patch_folder, size, overlap)
+        return DermatologyDataset.__sliding_images(input_folders, features_folder, patch_folder, size, overlap)
 
-    @staticmethod
-    def test_spectras():
-        here_path = ospath.dirname(__file__)
-        input_folders = [ospath.normpath('{here}/data/spectroscopy/Patients.csv'.format(here=here_path))]
-        return Dataset.__spectras(input_folders)
 
     @staticmethod
     def __images(folders, features_folder):
@@ -100,9 +115,9 @@ class Dataset:
 
     @staticmethod
     def __multi_images(folders, features_folder, extraction_folder, coefficients):
-        inputs = Inputs(folders=folders, instance=Dataset(temporary=extraction_folder,
+        inputs = Inputs(folders=folders, instance=DermatologyDataset(temporary=extraction_folder,
                                                           multi_coefficients=coefficients),
-                        loader=Dataset.__scan_for_confocal_multi,
+                        loader=DermatologyDataset.__scan_for_confocal_multi,
                         tags={'data': 'Multi_Path', 'label': 'Label', 'reference': 'Multi_Reference'})
         inputs.load()
         inputs.set_temporary_folder(features_folder)
@@ -112,21 +127,12 @@ class Dataset:
     def __sliding_images(folders, features_folder, extraction_folder, size, overlap):
         parameters = {'Size': size,
                       'Overlap': overlap}
-        inputs = Inputs(folders=folders, instance=Dataset(temporary=extraction_folder,
+        inputs = Inputs(folders=folders, instance=DermatologyDataset(temporary=extraction_folder,
                                                           patch_parameters=parameters),
-                        loader=Dataset.__scan_confocal_and_patchify,
+                        loader=DermatologyDataset.__scan_confocal_and_patchify,
                         tags={'data': 'Patch_Path', 'label': 'Label', 'reference': 'Patch_Reference'})
         inputs.load()
         inputs.set_temporary_folder(features_folder)
-        return inputs
-
-    @staticmethod
-    def __spectras(folders):
-        inputs = Spectra(folders=folders, instance=otorhinolaryngology.Reader(),
-                         loader=otorhinolaryngology.Reader.read_table,
-                         tags={'data': 'data', 'label': 'label', 'group': 'Reference',
-                               'reference': 'Reference_spectrum'})
-        inputs.load()
         return inputs
 
     def __scan_for_confocal_multi(self, folder_path):
@@ -136,10 +142,11 @@ class Dataset:
 
         # Get into patches
         multis_data = []
-        Dataset.__print_progress_bar(0, len(data_set), prefix='Progress:')
+        DermatologyDataset.__print_progress_bar(0, len(data_set), prefix='Progress:')
         for index, (df_index, data) in zip(np.arange(len(data_set.index)), data_set.iterrows()):
-            Dataset.__print_progress_bar(index, len(data_set), prefix='Progress:')
-            multi = Dataset.__multi_resolution(data['Full_path'], data['Reference'], self.multi_coefficients, self.temporary)
+            DermatologyDataset.__print_progress_bar(index, len(data_set), prefix='Progress:')
+            multi = DermatologyDataset.__multi_resolution(data['Full_path'], data['Reference'], self.multi_coefficients,
+                                               self.temporary)
             multi = multi.merge(data_set, on='Reference')
             multis_data.append(multi)
 
@@ -181,10 +188,10 @@ class Dataset:
 
         # Get into patches
         patches_data = []
-        Dataset.__print_progress_bar(0, len(data_set), prefix='Progress:')
+        DermatologyDataset.__print_progress_bar(0, len(data_set), prefix='Progress:')
         for index, (df_index, data) in zip(np.arange(len(data_set.index)), data_set.iterrows()):
-            Dataset.__print_progress_bar(index, len(data_set), prefix='Progress:')
-            patches = Dataset.__patchify(data['Full_path'], data['Reference'], self.patch_parameters['Size'],
+            DermatologyDataset.__print_progress_bar(index, len(data_set), prefix='Progress:')
+            patches = DermatologyDataset.__patchify(data['Full_path'], data['Reference'], self.patch_parameters['Size'],
                                          self.patch_parameters['Overlap'], self.temporary)
             patches = patches.merge(data_set, on='Reference')
             patches_data.append(patches)
@@ -208,7 +215,7 @@ class Dataset:
         patches = np.lib.stride_tricks.as_strided(image, strides=strides, shape=dims, writeable=False)
         patches = patches.reshape(-1, *window_shape)
 
-        locations = np.ascontiguousarray(np.arange(0, image_shape[0]*image_shape[1]).reshape(image_shape))
+        locations = np.ascontiguousarray(np.arange(0, image_shape[0] * image_shape[1]).reshape(image_shape))
         strides = np.r_[locations.strides * stride_shape, locations.strides]
         dims = np.r_[nbl, window_shape]
         patches_loc = np.lib.stride_tricks.as_strided(locations, strides=strides, shape=dims, writeable=False)
@@ -219,14 +226,15 @@ class Dataset:
             # Create patch informations
             meta = dict()
             meta.update(
-                {'Patch_Path': ospath.normpath('{ref}_{id}.png'.format(ref=ospath.join(patch_folder, reference), id=index))})
+                {'Patch_Path': ospath.normpath(
+                    '{ref}_{id}.png'.format(ref=ospath.join(patch_folder, reference), id=index))})
             meta.update({'Patch_Index': index})
             meta.update({'Patch_Label': -1})
             start = location[0, 0]
-            meta.update({'Patch_Start': (start%image_shape[0], start//image_shape[0])})
+            meta.update({'Patch_Start': (start % image_shape[0], start // image_shape[0])})
 
             end = location[-1, -1]
-            meta.update({'Patch_End': (end%image_shape[0], end//image_shape[0])})
+            meta.update({'Patch_End': (end % image_shape[0], end // image_shape[0])})
             meta.update({'Patch_Reference': '{ref}_{index}_{sta}_{end}'.format(ref=reference, index=index,
                                                                                sta=start, end=end)})
             meta.update({'Reference': reference})
@@ -260,7 +268,7 @@ class Dataset:
             print()
 
 
-class DefinedSettings:
+class BuiltInSettings:
 
     @staticmethod
     def get_default_orl():
@@ -285,3 +293,48 @@ class DefinedSettings:
                  'Rest': {'linestyle': '-.'},
                  'Luck': {'linestyle': '--'}}
         return Settings({'colors': colors, 'lines': lines})
+
+
+class LocalParameters:
+
+    @staticmethod
+    def get_dermatology_filters():
+        return [('All', {'Label': ['Normal', 'Benign', 'Malignant'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, {}),
+               ('NvsP', {'Label': ['Normal', 'Pathology'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, {'Label': (['Benign', 'Malignant'], 'Pathology')}),
+               ('MvsR', {'Label': ['Malignant', 'Rest'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, {'Label': (['Normal', 'Benign'], 'Rest')})]
+
+    @staticmethod
+    def get_dermatology_results():
+        home_path = expanduser("~")
+        return normpath('{home}/Results/Dermatology'.format(home=home_path))
+
+    @staticmethod
+    def get_orl_filters():
+        return [('All', {'label': ['Sain', 'Precancer', 'Cancer']}, {}),
+                ('NvsP', {'label': ['Sain', 'Pathology']}, {'label': (['Precancer', 'Cancer'], 'Pathology')}),
+                ('MvsR', {'label': ['Rest', 'Cancer']}, {'label': (['Sain', 'Precancer'], 'Rest')})]
+
+    @staticmethod
+    def get_orl_results():
+        home_path = expanduser("~")
+        return normpath('{home}/Results/ORL'.format(home=home_path))
+
+    @staticmethod
+    def get_statistics_keys():
+        return ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
+
+    @staticmethod
+    def get_validation_test():
+        return StratifiedKFold(n_splits=5), GroupKFold(n_splits=5)
+
+    @staticmethod
+    def set_gpu(percent_gpu=1, allow_growth=True):
+        if not K.backend() == 'tensorflow':
+            return
+
+        # Change GPU usage
+        config = tf.ConfigProto()
+        config.gpu_options.allow_growth = allow_growth
+        config.gpu_options.per_process_gpu_memory_fraction = percent_gpu
+        set_session(tf.Session(config=config))
+

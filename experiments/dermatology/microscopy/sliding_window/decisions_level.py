@@ -2,14 +2,14 @@ import itertools
 from numpy import array
 from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
-from sklearn.model_selection import StratifiedKFold, GroupKFold
+from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import LabelEncoder
 from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.core.builtin_models import Transforms, Classifiers
 from toolbox.core.models import PatchClassifier
 from toolbox.core.transforms import PredictorTransform, OrderedEncoder
-from toolbox.tools.limitations import Parameters
+from toolbox.core.parameters import Parameters
 
 if __name__ == "__main__":
     # Configure GPU consumption
@@ -71,12 +71,13 @@ if __name__ == "__main__":
             # Name experiment and filter data
             name = '{sliding}_{model}'.format(sliding=sliding[0], model=model[0])
 
-            pre_inputs = train_inputs.copy_and_change(filter_groups)
-            pre_inputs.set_filters(filter_datas)
-            pre_inputs.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']), 'groups': LabelEncoder()})
-
             inputs = sliding[1].copy_and_change(filter_groups)
+            pre_inputs = train_inputs.copy_and_change(filter_groups)
+
+            pre_inputs.set_filters(filter_datas)
             inputs.set_filters(filter_datas)
+
+            pre_inputs.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']), 'groups': LabelEncoder()})
             inputs.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']), 'groups': LabelEncoder()})
             inputs.name = name
 

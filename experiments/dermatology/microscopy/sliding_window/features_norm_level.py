@@ -2,7 +2,6 @@ import itertools
 from os import makedirs, startfile
 from os.path import normpath, exists, expanduser, splitext, basename, join
 from numpy import geomspace
-from sklearn.feature_selection import f_classif
 from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
@@ -10,9 +9,8 @@ from sklearn.svm import SVC
 from experiments.processes import Process
 from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.core.builtin_models import Transforms
-from toolbox.core.models import SelectAtMostKBest
 from toolbox.core.transforms import OrderedEncoder, PNormTransform, FlattenTransform
-from toolbox.tools.limitations import Parameters
+from toolbox.core.parameters import Parameters
 
 
 def get_model(patch_level=True, norm=False):
@@ -44,7 +42,7 @@ def get_model(patch_level=True, norm=False):
     # Add scaling step
     steps.append(('scale', StandardScaler()))
 
-    # Add classifier simple
+    # Add classifier full
     steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
     parameters.update({'clf__C': geomspace(0.1, 1000, 5).tolist()})
 

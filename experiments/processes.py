@@ -1,9 +1,7 @@
 from os import makedirs
 from os.path import join, exists
-from keras.wrappers.scikit_learn import BaseWrapper
 from toolbox.IO.writers import StatisticsWriter, ResultWriter, DataProjectorWriter
 from toolbox.core.classification import Classifier
-from keras import backend as K
 
 
 class Process:

@@ -12,7 +12,7 @@ from toolbox.IO.datasets import Dataset, DefinedSettings
 from toolbox.core.builtin_models import Transforms
 from toolbox.core.models import SelectAtMostKBest
 from toolbox.core.transforms import OrderedEncoder, PNormTransform, FlattenTransform
-from toolbox.tools.limitations import Parameters
+from toolbox.core.parameters import Parameters
 
 
 def get_model(patch_level=True, norm=False):
@@ -43,7 +43,7 @@ def get_model(patch_level=True, norm=False):
     # Add scaling step
     steps.append(('scale', StandardScaler()))
 
-    # Add classifier simple
+    # Add classifier full
     steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
     parameters.update({'clf__C': geomspace(0.1, 1000, 5).tolist()})
 
