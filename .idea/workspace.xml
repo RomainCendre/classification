@@ -3,154 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/deep/fine_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/deep/pretrain/patches.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/deep/pretrain/simple.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/deep/scratch/full_size.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/deep/scratch/patches.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale/multiscale_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale/multiscale_features.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/simple/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_norm_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_norm_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/scores_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/scores_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/vizualisation_decision.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/vizualisation_norm.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/decisions_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/decisions_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/features_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/features_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/scores_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/scores_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/multimodal/simple_cascade.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/multimodal/simple_cascade.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/processes.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/processes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/test_experiments.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/Microscopy/Malignant.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/patches.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/patches/0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/patches/1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/patches/2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/patches/3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/patches/4.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/patches/5.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/patches/6.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/patches/7.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/1/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/Microscopy/Malignant.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/patches.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/patches/0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/patches/1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/patches/2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/patches/3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/patches/4.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/patches/5.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/patches/6.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/patches/7.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/2/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/Microscopy/Malignant.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/patches.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/patches/0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/patches/1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/patches/2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/patches/3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/patches/4.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/patches/5.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/patches/6.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/patches/7.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/3/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/Microscopy/Malignant.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/patches.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/patches/0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/patches/1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/patches/2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/patches/3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/patches/4.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/patches/5.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/patches/6.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/patches/7.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/4/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/Microscopy/Malignant.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/patches.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/patches/0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/patches/1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/patches/2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/patches/3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/patches/4.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/patches/5.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/patches/6.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/patches/7.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/5/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/Microscopy/Malignant.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/patches.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/patches/0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/patches/1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/patches/2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/patches/3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/patches/4.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/patches/5.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/patches/6.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/patches/7.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/6/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/Microscopy/Malignant.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/patches.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/patches/0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/patches/1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/patches/2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/patches/3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/patches/4.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/patches/5.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/patches/6.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/patches/7.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/7/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/Microscopy/Malignant.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/images.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/patches.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/patches/0.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/patches/1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/patches/2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/patches/3.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/patches/4.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/patches/5.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/patches/6.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/patches/7.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/dermatology/Test/8/patient.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/10_D.V.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/1_K.F.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/2_V.M.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/3_O.N.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/4_S.B.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/5_B.A.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/6_T.W.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/7_D.J.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/8_P.J.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/data/spectroscopy/Patients/9_A.S.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/datasets.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/dermatology.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/dermatology.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/builtin_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/builtin_models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/structures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/tools/limitations.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -175,37 +29,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/experiments/test_experiments.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="26" column="21" selection-start-line="26" selection-start-column="21" selection-end-line="26" selection-end-column="21" />
-              <folding>
-                <element signature="e#0#30#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
+        <entry file="file://$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="99" column="61" selection-start-line="99" selection-start-column="61" selection-end-line="99" selection-end-column="61" />
+            <state relative-caret-position="849">
+              <caret line="53" column="46" selection-start-line="53" selection-start-column="46" selection-end-line="53" selection-end-column="46" />
               <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="37" column="68" selection-start-line="37" selection-start-column="68" selection-end-line="37" selection-end-column="68" />
-              <folding>
-                <element signature="e#0#21#0" expanded="true" />
+                <element signature="e#0#34#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -214,19 +44,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="28" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
+            <state relative-caret-position="476">
+              <caret line="46" lean-forward="true" selection-start-line="46" selection-end-line="48" selection-end-column="44" />
+              <folding>
+                <element signature="e#0#16#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="53" column="46" selection-start-line="53" selection-start-column="46" selection-end-line="53" selection-end-column="46" />
+            <state relative-caret-position="459">
+              <caret line="39" column="67" selection-start-line="39" selection-start-column="67" selection-end-line="39" selection-end-column="67" />
               <folding>
-                <element signature="e#0#34#0" expanded="true" />
+                <element signature="e#0#16#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -309,10 +142,11 @@
         <option value="$PROJECT_DIR$/experiments/processes.py" />
         <option value="$PROJECT_DIR$/toolbox/core/structures.py" />
         <option value="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" />
         <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/experiments/test_experiments.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" />
       </list>
     </option>
   </component>
@@ -379,58 +213,7 @@
             <path>
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
               <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-              <item name="otorhinolaryngology" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
               <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-              <item name="environment" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-              <item name="gui_tools" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-              <item name="gui_tools" type="462c0819:PsiDirectoryNode" />
-              <item name="patchifier" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-              <item name="gui_tools" type="462c0819:PsiDirectoryNode" />
-              <item name="patchifier" type="462c0819:PsiDirectoryNode" />
-              <item name="sources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-              <item name="IO" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-              <item name="tools" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -619,7 +402,7 @@
       <workItem from="1557749456074" duration="117000" />
       <workItem from="1557749779689" duration="4025000" />
       <workItem from="1557821697502" duration="4147000" />
-      <workItem from="1557825934622" duration="222000" />
+      <workItem from="1557825934622" duration="1437000" />
     </task>
     <task id="LOCAL-00001" summary="Add multiscale feature classification task, and update flatten transform.">
       <created>1555058574514</created>
@@ -887,11 +670,18 @@
       <option name="project" value="LOCAL" />
       <updated>1557749995075</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="Update of project structure.">
+      <created>1557826241465</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1557826241465</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="127980000" />
+    <option name="totallyTimeSpent" value="129195000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -906,7 +696,7 @@
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4987715" visible="true" weight="0.22427572" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4987715" visible="true" weight="0.22427572" />
       <window_info id="Structure" order="1" sideWeight="0.5012285" side_tool="true" weight="0.28255033" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3286119" />
@@ -927,7 +717,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="right" id="SciView" order="3" visible="true" weight="0.43756244" />
+      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.18231769" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
@@ -975,7 +765,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add dataframe management btw each patient." />
     <MESSAGE value="Update dataframe management and adding of references." />
     <MESSAGE value="Adding label choice." />
     <MESSAGE value="Fix close event." />
@@ -1000,7 +789,8 @@
     <MESSAGE value="Update labels for report file." />
     <MESSAGE value="Change main procedure to fit test." />
     <MESSAGE value="Update project structure" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update project structure" />
+    <MESSAGE value="Update of project structure." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update of project structure." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1275,16 +1065,6 @@ print(labels.count('Malignant'))</expression-string>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="58" column="27" selection-start-line="58" selection-start-column="27" selection-end-line="58" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -1327,19 +1107,12 @@ print(labels.count('Malignant'))</expression-string>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py">
+    <entry file="file://$PROJECT_DIR$/experiments/test_experiments.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="28" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="53" column="46" selection-start-line="53" selection-start-column="46" selection-end-line="53" selection-end-column="46" />
+        <state relative-caret-position="442">
+          <caret line="26" column="21" selection-start-line="26" selection-start-column="21" selection-end-line="26" selection-end-column="21" />
           <folding>
-            <element signature="e#0#34#0" expanded="true" />
+            <element signature="e#0#30#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1364,12 +1137,32 @@ print(labels.count('Malignant'))</expression-string>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/test_experiments.py">
+    <entry file="file://$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="21" selection-start-line="26" selection-start-column="21" selection-end-line="26" selection-end-column="21" />
+        <state relative-caret-position="849">
+          <caret line="53" column="46" selection-start-line="53" selection-start-column="46" selection-end-line="53" selection-end-column="46" />
           <folding>
-            <element signature="e#0#30#0" expanded="true" />
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="46" lean-forward="true" selection-start-line="46" selection-end-line="48" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="39" column="67" selection-start-line="39" selection-start-column="67" selection-end-line="39" selection-end-column="67" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
           </folding>
         </state>
       </provider>

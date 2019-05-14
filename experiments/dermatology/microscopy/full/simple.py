@@ -8,7 +8,7 @@ from toolbox.core.parameters import BuiltInSettings, LocalParameters, Dermatolog
 from toolbox.core.transforms import OrderedEncoder
 
 
-def simple(inputs, folder):
+def simple(original_inputs, folder):
 
     # Advanced parameters
     validation, test = LocalParameters.get_validation_test()
@@ -33,7 +33,7 @@ def simple(inputs, folder):
     models = [('Svm', Classifiers.get_linear_svm())]
 
     # Parameters combinations
-    combinations = list(itertools.product(methods, models))
+    combinations = list(itertools.product(methods, models, scales))
 
     # Browse combinations
     for filter_name, filter_datas, filter_groups in filters:
@@ -41,17 +41,16 @@ def simple(inputs, folder):
         process = Process(output_folder=folder, name=filter_name, settings=settings, stats_keys=statistics)
         process.begin(inner_cv=validation, outer_cv=test, n_jobs=4)
 
-        for method, model in combinations:
+        for method, model, scale in combinations:
+            inputs = original_inputs.copy_and_change(filter_groups)
+            inputs.name = '{scale}_{method}_{model}'.format(scale=scale[0], method=method[0], model=model[0])
 
-            for scale in scales:
-                inputs = inputs.copy_and_change(filter_groups)
-                inputs.name = '{input}_{method}_{model}'.format(input=scale[0], method=method[0], model=model[0])
+            filter_datas.update(scale[1])
+            inputs.set_filters(filter_datas)
+            inputs.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']), 'groups': LabelEncoder()})
+            process.checkpoint_step(inputs=inputs, model=method[1])
+            process.evaluate_step(inputs=inputs, model=model[1])
 
-                filter_datas.update(scale[1])
-                inputs.set_filters(filter_datas)
-                inputs.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']), 'groups': LabelEncoder()})
-                process.checkpoint_step(inputs=inputs, model=method[1])
-                process.evaluate_step(inputs=inputs, model=model[1])
         process.end()
 
 
