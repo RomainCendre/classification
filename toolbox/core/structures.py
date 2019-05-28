@@ -104,37 +104,33 @@ class Inputs(Data):
         self.tags = tags
         self.encoders = None
 
-    def collapse(self, reference_tag, data_tag=None):
-        if data_tag is None:
+    def collapse(self, filters, on, filters_collapse, on_collapse, data_tags=None):
+        pd.options.mode.chained_assignment = None
+        if data_tags is None:
             data_tag = self.tags['data']
 
-        query = self.to_query(self.filters)
-        if query:
-            data = self.data.query(query)
-        else:
-            data = self.data
+        # Filters
+        filters.update(self.filters)
+        filters_collapse.update(self.filters)
 
+        # Query
+        query = self.to_query(filters)
+        query_collapse = self.to_query(filters_collapse)
+
+        # Data
+        data = self.data.query(query)
+        data_collapse = self.data.query(query_collapse)
+
+        # Collapse data
         rows = []
-        for name, group in data.groupby(reference_tag):
+        for name, group in data.groupby(on):
             # Get features by group
-            # features = group[data_tag].tolist()
-            raw_row = group.to_dict('list')
-            row = {}
-            for key, values in raw_row.items():
-                if key == data_tag:
-                    row.update({key: np.array(values)})
-                    continue
-                try:
-                    test = list(set(values))
-                    if len(test) == 1:
-                        row.update({key: values[0]})
-                except:
-                    row.update({key: np.array(values)})
-
-            rows.append(row)
+            raw_row = group.iloc[0]
+            group_collapse = data_collapse[data_collapse[on_collapse] == name]
+            raw_row[data_tag] = np.array(group_collapse[data_tag].tolist())
+            rows.append(raw_row)
         self.data = pd.DataFrame(rows)
-        self.tags.update({'reference': reference_tag,
-                          'data': data_tag})
+        self.tags.update({'data': data_tag})
 
     def aggregate(self, x):
         try:
@@ -201,6 +197,15 @@ class Inputs(Data):
         # Filter and get groups
         groups = self.get_from_key(self.tags['group'])
         return self.encode(key='groups', data=groups)
+
+    def get_groups_labels(self):
+        self.check_load()
+        if 'group_label' not in self.tags:
+            return None
+
+        # Filter and get groups
+        groups = self.get_from_key(self.tags['group_label'])
+        return self.encode(key='group_label', data=groups)
 
     def get_labels(self, encode=True):
         self.check_load()
@@ -270,7 +275,7 @@ class Inputs(Data):
             self.data = self.data.reset_index()
         else:
             temp = pd.DataFrame({key: datas, self.tags['reference']: references})
-            self.data = self.data.merge(temp)
+            self.data = self.data.join(temp.set_index(self.tags['reference']), on=self.tags['reference'])
         self.tags.update({'data': key})
 
 

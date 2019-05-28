@@ -19,7 +19,9 @@ class Reader:
             try:
                 # Read patient and images data
                 metas = Reader.__read_patient_file(join(folder_path, subdir))
+                metas = metas.drop(columns='ID_JLP')
                 images = Reader.__read_images_file(folder_path, subdir)
+                images = images.drop(columns='Depth(um)')
                 if if_patches:
                     patches = Reader.__read_patches_file(folder_path, subdir)
                 else:
@@ -29,16 +31,18 @@ class Reader:
                 images = images.merge(metas)
                 images['Reference'] = images.apply(
                     lambda row: '{patient}_{image}_F'.format(patient=row['ID'], image=row.name), axis=1)
+                images['Source'] = images['Reference']
                 if patches is not None:
                     patches['ID'] = metas['ID'][0]
                     patches = patches.merge(metas)
                     patches['Reference'] = patches.apply(
                         lambda row: '{patient}_{image}_P'.format(patient=row['ID'], image=row.name), axis=1)
+                    patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0], axis=1)
                 datas.append(pd.concat([images, patches], sort=False))
             except OSError:
                 print('Patient {}'.format(subdir))
 
-        return pd.concat(datas, sort=False, ignore_index=True)
+        return pd.concat(datas, sort=False, ignore_index=True).drop(columns='Path')
 
     @staticmethod
     def __read_images_file(parent_folder, subdir):
@@ -47,7 +51,7 @@ class Reader:
 
         # Read csv and add tag for path
         images = pd.read_csv(images_file, dtype=str)
-        images['Full_path'] = images.apply(lambda row: join(parent_folder, subdir, row['Modality'], row['Path']),
+        images['Full_Path'] = images.apply(lambda row: join(parent_folder, subdir, row['Modality'], row['Path']),
                                            axis=1)
         images['Type'] = 'Full'
         return images
@@ -61,7 +65,7 @@ class Reader:
 
         # Read csv and add tag for path
         patches = pd.read_csv(patch_file, dtype=str)
-        patches['Full_path'] = patches.apply(lambda row: join(parent_folder, subdir, 'patches', row['Path']),
+        patches['Full_Path'] = patches.apply(lambda row: join(parent_folder, subdir, 'patches', row['Path']),
                                            axis=1)
         patches['Type'] = 'Patch'
         return patches

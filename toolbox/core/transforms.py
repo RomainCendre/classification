@@ -12,6 +12,9 @@ from sklearn.preprocessing import Imputer
 
 class OrderedEncoder(BaseEstimator, TransformerMixin):
 
+    def __init__(self, unknown='Unknown'):
+        self.unknown = unknown
+
     def fit(self, y):
         self.map_list = y
         return self
@@ -20,17 +23,29 @@ class OrderedEncoder(BaseEstimator, TransformerMixin):
         self.fit(y)
         return self.transform(y)
 
-    def transform(self, y):
-        elements = y.tolist()
-        if not isinstance(elements, list):
-            elements = [elements]
-        return np.array([self.map_list.index(element) for element in elements])
-
     def inverse_transform(self, y):
         elements = y.tolist()
         if not isinstance(elements, list):
             elements = [elements]
-        return np.array([self.map_list[element] for element in elements])
+        return np.array([self.__inverse_element(element) for element in elements])
+
+    def transform(self, y):
+        elements = y.tolist()
+        if not isinstance(elements, list):
+            elements = [elements]
+        return np.array([self.__transform_element(element) for element in elements])
+
+    def __inverse_element(self, element):
+        if element == -1:
+            return self.unknown
+        else:
+            return self.map_list[element]
+
+    def __transform_element(self, element):
+        try:
+            return self.map_list.index(element)
+        except:
+            return -1
 
 
 class PredictorTransform(BaseEstimator, TransformerMixin):
@@ -52,6 +67,7 @@ class PredictorTransform(BaseEstimator, TransformerMixin):
              x (:obj): Not used.
              y (:obj): Not used.
         """
+        self.predictor.fit(self, x, y=None)
         return self
 
     def transform(self, x, y=None, copy=True):
@@ -291,7 +307,6 @@ class CorrelationArrayTransform(BaseEstimator, TransformerMixin):
         for index, mean in enumerate(self.means):
             transform[:, index] = ((X - mean) ** 2).mean(axis=1)
         return transform
-
 
 
 class ReduceVIF(BaseEstimator, TransformerMixin):

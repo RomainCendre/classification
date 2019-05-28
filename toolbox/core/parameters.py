@@ -130,7 +130,7 @@ class DermatologyDataset:
         inputs = Inputs(folders=folders, instance=DermatologyDataset(temporary=extraction_folder,
                                                           patch_parameters=parameters),
                         loader=DermatologyDataset.__scan_confocal_and_patchify,
-                        tags={'data': 'Patch_Path', 'label': 'Label', 'reference': 'Patch_Reference'})
+                        tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID', 'group_label': 'Binary_Diagnosis'})
         inputs.load()
         inputs.set_temporary_folder(features_folder)
         return inputs
@@ -182,21 +182,25 @@ class DermatologyDataset:
 
     def __scan_confocal_and_patchify(self, folder_path):
         # Browse data
-        data_set = dermatology.Reader().scan_folder(folder_path)
-        data_set = data_set[data_set.Modality == 'Microscopy']
-        data_set = data_set[data_set.Type == 'Full']
+        dataset = dermatology.Reader().scan_folder(folder_path)
+        dataset = dataset[dataset.Modality == 'Microscopy']
+        images = dataset[dataset.Type == 'Full']
+        patches = dataset[dataset.Type == 'Patch']
 
         # Get into patches
-        patches_data = []
-        DermatologyDataset.__print_progress_bar(0, len(data_set), prefix='Progress:')
-        for index, (df_index, data) in zip(np.arange(len(data_set.index)), data_set.iterrows()):
-            DermatologyDataset.__print_progress_bar(index, len(data_set), prefix='Progress:')
-            patches = DermatologyDataset.__patchify(data['Full_path'], data['Reference'], self.patch_parameters['Size'],
+        windows_data = [patches]
+        DermatologyDataset.__print_progress_bar(0, len(dataset), prefix='Progress:')
+        for index, (df_index, data) in zip(np.arange(len(images.index)), images.iterrows()):
+            DermatologyDataset.__print_progress_bar(index, len(images), prefix='Progress:')
+            windows = DermatologyDataset.__patchify(data['Full_Path'], data['Reference'], self.patch_parameters['Size'],
                                          self.patch_parameters['Overlap'], self.temporary)
-            patches = patches.merge(data_set, on='Reference')
-            patches_data.append(patches)
+            # windows = windows.merge(dataset, on='Reference')
+            windows['Type'] = 'Window'
+            windows = pd.concat([windows, pd.DataFrame(data).T], sort=False)
+            windows = windows.fillna(data)
+            windows_data.append(windows)
 
-        return pd.concat(patches_data, sort=False)
+        return pd.concat(windows_data, sort=False)
 
     @staticmethod
     def __patchify(filename, reference, window_size, overlap, patch_folder):
@@ -225,24 +229,26 @@ class DermatologyDataset:
         for index, (patch, location) in enumerate(zip(patches, patches_loc)):
             # Create patch informations
             meta = dict()
-            meta.update(
-                {'Patch_Path': ospath.normpath(
-                    '{ref}_{id}.png'.format(ref=ospath.join(patch_folder, reference), id=index))})
-            meta.update({'Patch_Index': index})
-            meta.update({'Patch_Label': -1})
+            meta.update({'Full_Path': ospath.normpath('{ref}_{id}.png'.format(ref=ospath.join(patch_folder, reference), id=index))})
+            meta.update({'Patch_Index': int(index)})
+            meta.update({'Label': 'Unknown'})
             start = location[0, 0]
-            meta.update({'Patch_Start': (start % image_shape[0], start // image_shape[0])})
-
+            start = (start % image_shape[0], start // image_shape[0])
             end = location[-1, -1]
-            meta.update({'Patch_End': (end % image_shape[0], end // image_shape[0])})
-            meta.update({'Patch_Reference': '{ref}_{index}_{sta}_{end}'.format(ref=reference, index=index,
-                                                                               sta=start, end=end)})
-            meta.update({'Reference': reference})
+            end = (end % image_shape[0], end // image_shape[0])
+            center = (int((start[0]+end[0])/2), int((start[1]+end[1])/2))
+            meta.update({'Center_X': int(center[0])})
+            meta.update({'Center_Y': int(center[1])})
+            meta.update({'Height': int(window_size)})
+            meta.update({'Width': int(window_size)})
+            meta.update({'Reference': '{ref}_{index}_{x}_{y}'.format(ref=reference, index=index,
+                                                                     x=center[0], y=center[1])})
+            meta.update({'Source': reference})
             metas.append(meta)
 
             # Check if need to write patch
-            if not ospath.isfile(meta['Patch_Path']):
-                Image.fromarray(patch).save(meta['Patch_Path'])
+            if not ospath.isfile(meta['Full_Path']):
+                Image.fromarray(patch).save(meta['Full_Path'])
 
         return pd.DataFrame(metas)
 
@@ -299,9 +305,9 @@ class LocalParameters:
 
     @staticmethod
     def get_dermatology_filters():
-        return [('All', {'Label': ['Normal', 'Benign', 'Malignant'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, {}),
-               ('NvsP', {'Label': ['Normal', 'Pathology'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, {'Label': (['Benign', 'Malignant'], 'Pathology')}),
-               ('MvsR', {'Label': ['Malignant', 'Rest'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, {'Label': (['Normal', 'Benign'], 'Rest')})]
+        return [('All', {'Label': ['Normal', 'Benign', 'Malignant', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, ['Normal', 'Benign', 'Malignant'], {}),
+               ('NvsP', {'Label': ['Normal', 'Pathology', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, ['Normal', 'Pathology'], {'Label': (['Benign', 'Malignant'], 'Pathology')}),
+               ('MvsR', {'Label': ['Rest', 'Malignant', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, ['Rest', 'Malignant'], {'Label': (['Normal', 'Benign'], 'Rest')})]
 
     @staticmethod
     def get_dermatology_results():
@@ -325,7 +331,7 @@ class LocalParameters:
 
     @staticmethod
     def get_validation_test():
-        return StratifiedKFold(n_splits=5), GroupKFold(n_splits=5)
+        return StratifiedKFold(n_splits=5), StratifiedKFold(n_splits=3) #GroupKFold(n_splits=5)
 
     @staticmethod
     def set_gpu(percent_gpu=1, allow_growth=True):

@@ -1,6 +1,6 @@
 from os import makedirs
 from os.path import join, exists
-from toolbox.IO.writers import StatisticsWriter, ResultWriter, DataProjectorWriter
+from toolbox.IO.writers import StatisticsWriter, ResultWriter, DataProjectorWriter, PatchWriter
 from toolbox.core.classification import Classifier
 
 
@@ -14,9 +14,12 @@ class Process:
         self.stat_writer = StatisticsWriter(stats_keys, output_folder, name)
         self.classifier = None
 
-    def begin(self, inner_cv, outer_cv, n_jobs=-1, callbacks=[], scoring=None):
+    def begin(self, inner_cv, outer_cv, n_jobs=-1, callbacks=[], scoring=None, is_semi=False):
         self.classifier = Classifier(callbacks=callbacks, inner_cv=inner_cv, outer_cv=outer_cv,
-                                     n_jobs=n_jobs, scoring=scoring)
+                                     n_jobs=n_jobs, scoring=scoring, is_semi=is_semi)
+
+    def change_inputs(self, inputs):
+        self.classifier.split_patients(inputs)
 
     def checkpoint_step(self, inputs, model, projection_folder=None):
         self.classifier.set_model(model)
@@ -44,6 +47,7 @@ class Process:
     def end(self):
         ResultWriter(self.results, self.settings).write_results(dir_name=self.folder, name=self.name)
         self.stat_writer.end()
+
 
     def __add_input_stat(self, inputs):
         if self.stat_writer is not None:

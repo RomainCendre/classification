@@ -2,6 +2,7 @@ import glob
 import warnings
 from os.path import join
 from copy import deepcopy
+import numpy as np
 from numpy import unique, array_equal, save, load, array
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
@@ -24,7 +25,7 @@ class Classifier:
 
      """
 
-    def __init__(self, inner_cv, outer_cv, n_jobs=-1, callbacks=[], scoring=None):
+    def __init__(self, inner_cv, outer_cv, n_jobs=-1, callbacks=[], scoring=None, is_semi=False):
         """Make an initialisation of SpectraClassifier object.
 
         Take a pipeline object from scikit learn to experiments data and params for parameters
@@ -39,7 +40,20 @@ class Classifier:
         self.__inner_cv = inner_cv
         self.__outer_cv = outer_cv
         self.__scoring = scoring
+        self.is_semi_supervised = is_semi
         self.n_jobs = n_jobs
+        self.patients_folds = None
+
+    def split_patients(self, inputs):
+        # Groups
+        groups = list(inputs.get_groups())
+        unique_groups = list(unique(groups))
+        indices = [groups.index(element) for element in unique_groups]
+        # Labels
+        groups_labels = list(inputs.get_groups_labels())
+        unique_groups_labels = [groups_labels[element] for element in indices]
+        # Make folds
+        self.patients_folds = list(enumerate(self.__outer_cv.split(X=unique_groups, y=unique_groups_labels)))
 
     @staticmethod
     def sub(np_array, indices):
@@ -82,7 +96,7 @@ class Classifier:
 
         # Encode labels to go from string to int
         results = []
-        for fold, (train, test) in enumerate(self.__outer_cv.split(X=datas, y=labels, groups=groups)):
+        for fold, (train, test) in self.patients_folds:
 
             # Check that current fold respect labels
             if not self.__check_labels(labels, self.sub(labels, train)):
@@ -97,30 +111,36 @@ class Classifier:
             # Estimate best combination
             grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
                                        n_jobs=self.n_jobs, scoring=self.__scoring, verbose=1, iid=False)
-            grid_search.fit(self.sub(datas, train), y=self.sub(labels, train), groups=self.sub(groups, train),
+
+            test_indices = np.where(np.isin(groups, test))[0]
+            train_indices = np.where(np.isin(groups, train))[0]
+            if not self.is_semi_supervised:
+                train_indices = train_indices[labels[train_indices] != -1]
+
+            grid_search.fit(self.sub(datas, train_indices), y=self.sub(labels, train_indices), groups=self.sub(groups, train_indices),
                             **self.__fit_params)
             best_params = grid_search.best_params_
 
             # Fit the model, with the bests parameters
             model.set_params(**best_params)
             if isinstance(model, KerasBatchClassifier):
-                model.fit(self.sub(datas, train), y=self.sub(labels, train), callbacks=self.__callbacks,
-                          X_validation=self.sub(datas, test), y_validation=self.sub(labels, test), **self.__fit_params)
+                model.fit(self.sub(datas, train_indices), y=self.sub(labels, train_indices), callbacks=self.__callbacks,
+                          X_validation=self.sub(datas, test_indices), y_validation=self.sub(labels, test_indices), **self.__fit_params)
             else:
-                model.fit(self.sub(datas, train), y=self.sub(labels, train))
+                model.fit(self.sub(datas, train_indices), y=self.sub(labels, train_indices))
 
             # Try to predict test data
-            predictions = model.predict(datas[test])
+            predictions = model.predict(datas[test_indices])
             probabilities = None
             if hasattr(model, 'predict_proba'):
-                probabilities = model.predict_proba(datas[test])
+                probabilities = model.predict_proba(datas[test_indices])
 
             # Now store all computed data
             result = dict()
             result.update({"Fold": fold})
-            result.update({"Label": self.sub(labels, test)})
+            result.update({"Label": self.sub(labels, test_indices)})
             if reference is not None:
-                result.update({"Reference": reference[test]})
+                result.update({"Reference": reference[test_indices]})
 
             # Get probabilities and predictions
             result.update({"Prediction": predictions})
@@ -174,6 +194,8 @@ class Classifier:
 
         # Extract needed data
         datas = inputs.get_datas()
+        labels = inputs.get_labels()
+        groups = inputs.get_groups()
         references = inputs.get_reference()
 
         # Location of folder followed by prefix
@@ -192,12 +214,7 @@ class Classifier:
             features = []
             # Check if already extracted
             if not set(expected_files).issubset(files):
-                # Now browse data
-                print('Extraction features with {prefix}'.format(prefix=prefix))
-                if hasattr(self.__model, 'transform'):
-                    features = self.__model.transform(datas)
-                else:
-                    features = self.__model.predict_proba(datas)
+                features = self.__feature_extraction(prefix, datas, labels, groups)
 
                 # Now save features as files
                 print('Writting data at {folder}'.format(folder=inputs.temporary))
@@ -209,15 +226,52 @@ class Classifier:
                     features.append(load(expected_file))
                 features = array(features)
         else:
-            # Now browse data
-            print('Extraction features with {prefix}'.format(prefix=prefix))
-            if hasattr(self.__model, 'transform'):
-                features = self.__model.transform(datas)
-            else:
-                features = self.__model.predict_proba(datas)
+            features = self.__feature_extraction(prefix, datas, labels, groups)
 
         # Update input
         inputs.update(prefix, features, references)
+
+    def __feature_extraction(self, prefix, datas, labels, groups):
+        # Now browse data
+        print('Extraction features with {prefix}'.format(prefix=prefix))
+        results = len(labels)*[None]
+        for fold, (train, test) in self.patients_folds:
+            # Clone model
+            model = deepcopy(self.__model)
+            test_indices = np.where(np.isin(groups, test))[0]
+
+            # If needed to fit, so fit model
+            if hasattr(model, 'need_fit') and model.need_fit:
+                train_indices = np.where(np.isin(groups, train))[0]
+                if not self.is_semi_supervised:
+                    train_indices = train_indices[labels[train_indices] != -1]
+
+                # Now fit, but find first hyperparameters
+                grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
+                                           n_jobs=self.n_jobs, refit=False, scoring=self.__scoring, verbose=1,
+                                           iid=False)
+                grid_search.fit(self.sub(datas, train_indices), y=self.sub(labels, train_indices), **self.__fit_params)
+                best_params = grid_search.best_params_
+
+                # Fit the model, with the bests parameters
+                model.set_params(**best_params)
+                if isinstance(model, KerasBatchClassifier):
+                    model.fit(self.sub(datas, train_indices), y=self.sub(labels, train_indices), callbacks=self.__callbacks,
+                              X_validation=self.sub(datas, test_indices), y_validation=self.sub(labels, test_indices),
+                              **self.__fit_params)
+                else:
+                    model.fit(self.sub(datas, train_indices), y=self.sub(labels, train_indices))
+
+            # Now transform data
+            if hasattr(self.__model, 'transform'):
+                features = model.transform(datas[test_indices])
+            else:
+                features = model.predict_proba(datas[test_indices])
+
+            for index, data in enumerate(features):
+                results[test_indices[index]] = data
+
+        return array(results)
 
     @staticmethod
     def __check_labels(labels, labels_fold=None):

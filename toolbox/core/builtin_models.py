@@ -13,6 +13,7 @@ from keras.wrappers.scikit_learn import KerasClassifier
 from numpy import geomspace
 from sklearn.dummy import DummyClassifier
 from sklearn.pipeline import Pipeline
+from sklearn.semi_supervised import LabelSpreading
 from sklearn.svm import SVC
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
@@ -20,7 +21,7 @@ from sklearn.preprocessing import StandardScaler
 from toolbox.core.layers import RandomLayer
 from toolbox.core.models import KerasBatchClassifier, SelectAtMostKBest, PCAAtMost, LDAAtMost
 from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform, DWTDescriptorTransform, \
-    PNormTransform
+    PNormTransform, FlattenTransform
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
 
@@ -184,7 +185,7 @@ class Classifiers:
         return pipe, parameters
 
     @staticmethod
-    def get_linear_svm(reduce=None):
+    def get_semi_svm(reduce=None):
         steps = []
         parameters = {}
 
@@ -195,12 +196,33 @@ class Classifiers:
 
         # Add scaling step
         steps.append(('scale', StandardScaler()))
-        steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
+        steps.append(('clf', LabelSpreading(kernel='rbf')))
         pipe = Pipeline(steps)
-        pipe.name = 'LinearSVM'
+        pipe.name = 'LabelSpreading'
         # Define parameters to validate through grid CV
         parameters.update({
-            'clf__C': geomspace(0.01, 1000, 6).tolist()
+            'clf__gamma': [1e-2, 1e-3, 1e-4, 1e-5]
+        })
+        return pipe, parameters
+
+    @staticmethod
+    def get_rbf_svm(reduce=None):
+        steps = []
+        parameters = {}
+
+        # Add dimensions reducer
+        if reduce is not None:
+            steps.append(('pca', PCAAtMost()))
+            parameters.update({'pca__n_components': reduce})
+
+        # Add scaling step
+        steps.append(('scale', StandardScaler()))
+        steps.append(('clf', SVC(kernel='rbf', class_weight='balanced', probability=True)))
+        pipe = Pipeline(steps)
+        pipe.name = 'RbfSVM'
+        # Define parameters to validate through grid CV
+        parameters.update({
+            'clf__gamma': [1e-2, 1e-3, 1e-4, 1e-5]
         })
         return pipe, parameters
 
@@ -242,6 +264,28 @@ class Classifiers:
         pipe.name = 'NormAndSVM'
         # Define parameters to validate through grid CV
         return pipe, m_parameters
+
+    @staticmethod
+    def get_linear_svm(reduce=None):
+        steps = []
+        parameters = {}
+
+        # Add dimensions reducer
+        if reduce is not None:
+            steps.append(('pca', PCAAtMost()))
+            parameters.update({'pca__n_components': reduce})
+
+        # Add scaling step
+        steps.append(('flatten', FlattenTransform()))
+        steps.append(('scale', StandardScaler()))
+        steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
+        pipe = Pipeline(steps)
+        pipe.name = 'LinearSVM'
+        # Define parameters to validate through grid CV
+        parameters.update({
+            'clf__C': geomspace(0.01, 1000, 6).tolist()
+        })
+        return pipe, parameters
 
     @staticmethod
     def get_norm_and_select_model(patch=True):
