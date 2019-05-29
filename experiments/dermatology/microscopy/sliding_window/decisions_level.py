@@ -31,7 +31,7 @@ def decision_level(slidings, folder):
     extractor.need_fit = False
 
     # Predicteur
-    predictor = Classifiers.get_rbf_svm()
+    predictor = Classifiers.get_linear_svm()
     predictor[0].need_fit = True
 
     # Browse combinations

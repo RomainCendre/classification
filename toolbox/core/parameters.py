@@ -68,7 +68,7 @@ class DermatologyDataset:
     @staticmethod
     def sliding_images(size, overlap):
         home_path = ospath.expanduser('~')
-        patch_folder = ospath.join(home_path, 'Patch')
+        patch_folder = ospath.join(home_path, 'Patches')
         input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
         features_folder = join(home_path, 'Features')
         if not exists(features_folder):
@@ -230,7 +230,7 @@ class DermatologyDataset:
             # Create patch informations
             meta = dict()
             meta.update({'Full_Path': ospath.normpath('{ref}_{id}.png'.format(ref=ospath.join(patch_folder, reference), id=index))})
-            meta.update({'Patch_Index': int(index)})
+            meta.update({'Window_Index': int(index)})
             meta.update({'Label': 'Unknown'})
             start = location[0, 0]
             start = (start % image_shape[0], start // image_shape[0])

@@ -4,46 +4,7 @@
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/decisions_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/decisions_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/processes.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/processes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/dermatology.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/dermatology.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/builtin_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/builtin_models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/classification.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toolbox/core/parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/parameters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/structures.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/structures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/transforms.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/transforms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/1/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/1/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/1/images.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/1/images.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/1/patches.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/1/patches.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/2/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/2/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/2/images.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/2/images.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/2/patches.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/2/patches.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/3/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/3/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/3/images.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/3/images.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/3/patches.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/3/patches.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/4/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/4/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/4/images.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/4/images.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/4/patches.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/4/patches.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/5/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/5/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/5/images.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/5/images.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/5/patches.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/5/patches.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/6/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/6/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/6/images.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/6/images.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/6/patches.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/6/patches.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/7/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/7/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/7/images.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/7/images.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/7/patches.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/7/patches.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/8/Microscopy/Normal_1.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/8/Microscopy/Normal_2.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/8/images.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/8/images.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/8/patches.csv" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/data_test/dermatology/Test/8/patches.csv" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +23,7 @@
     <SUITE FILE_PATH="coverage/classification$classification.coverage" NAME="classification Coverage Results" MODIFIED="1558448673939" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/core" />
     <SUITE FILE_PATH="coverage/classification$parameters.coverage" NAME="parameters Coverage Results" MODIFIED="1558359068728" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/core" />
     <SUITE FILE_PATH="coverage/classification$dermatology.coverage" NAME="dermatology Coverage Results" MODIFIED="1558350460473" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/IO" />
-    <SUITE FILE_PATH="coverage/classification$decisions_level.coverage" NAME="decisions_level Coverage Results" MODIFIED="1559052830780" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window" />
+    <SUITE FILE_PATH="coverage/classification$decisions_level.coverage" NAME="decisions_level Coverage Results" MODIFIED="1559132978958" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1557153270631" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier" />
     <SUITE FILE_PATH="coverage/classification$prepare.coverage" NAME="prepare Coverage Results" MODIFIED="1557149841948" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology" />
     <SUITE FILE_PATH="coverage/classification$test.coverage" NAME="test Coverage Results" MODIFIED="1557749559589" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
@@ -71,11 +32,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
-              <caret line="70" selection-start-line="70" selection-end-line="70" />
+            <state relative-caret-position="421">
+              <caret line="30" column="30" lean-forward="true" selection-start-line="30" selection-start-column="30" selection-end-line="30" selection-end-column="30" />
               <folding>
                 <element signature="e#1#24#0" expanded="true" />
               </folding>
@@ -83,20 +44,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/toolbox/IO/writers.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="163" selection-start-line="163" selection-end-line="163" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="39" selection-start-line="39" selection-end-line="39" />
+            <state relative-caret-position="848">
+              <caret line="61" column="13" selection-start-line="61" selection-start-column="8" selection-end-line="61" selection-end-column="13" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -105,13 +57,88 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/processes.py">
+        <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="47" selection-start-line="47" selection-end-line="47" />
+            <state relative-caret-position="236">
+              <caret line="70" column="56" lean-forward="true" selection-start-line="70" selection-start-column="56" selection-end-line="70" selection-end-column="56" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/toolbox/core/transforms.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="222">
+              <caret line="146" selection-start-line="146" selection-end-line="146" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="392">
+              <caret line="68" column="55" lean-forward="true" selection-start-line="68" selection-start-column="20" selection-end-line="68" selection-end-column="57" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="596">
+              <caret line="387" column="36" lean-forward="true" selection-start-line="387" selection-start-column="36" selection-end-line="387" selection-end-column="36" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/experiments/processes.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="230">
+              <caret line="17" column="32" selection-start-line="17" selection-start-column="32" selection-end-line="17" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="355">
+              <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/sklearn/pipeline.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="230">
+              <caret line="380" selection-start-line="380" selection-end-line="380" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/sklearn/utils/metaestimators.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="117" selection-start-line="117" selection-end-line="117" />
             </state>
           </provider>
         </entry>
@@ -127,7 +154,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>image_index</find>
       <find>im_index</find>
       <find>extract_patch</find>
       <find>loadImage</find>
@@ -148,7 +174,6 @@
       <find>projection_folder</find>
       <find>self.preprocessing_function</find>
       <find>get_patch_classifier</find>
-      <find>Patch</find>
       <find>get_spectrum_classifier</find>
       <find>name</find>
       <find>scan_folder</find>
@@ -156,6 +181,9 @@
       <find>predic</find>
       <find>PCA</find>
       <find>svm</find>
+      <find>groups</find>
+      <find>__outer_cv</find>
+      <find>Patch</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -196,15 +224,15 @@
         <option value="$PROJECT_DIR$/experiments/test_experiments.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/structures.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/decisions_level.py" />
-        <option value="$PROJECT_DIR$/experiments/processes.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/transforms.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" />
         <option value="$PROJECT_DIR$/toolbox/core/builtin_models.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/transforms.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/structures.py" />
+        <option value="$PROJECT_DIR$/experiments/processes.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" />
       </list>
     </option>
   </component>
@@ -287,12 +315,6 @@
               <item name="classification" type="462c0819:PsiDirectoryNode" />
               <item name="toolbox" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-              <item name="data_test" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
@@ -492,7 +514,7 @@
       <workItem from="1558356356107" duration="7928000" />
       <workItem from="1558441902858" duration="12634000" />
       <workItem from="1558535096611" duration="1718000" />
-      <workItem from="1558943069806" duration="25236000" />
+      <workItem from="1558943069806" duration="41257000" />
     </task>
     <task id="LOCAL-00001" summary="Add multiscale feature classification task, and update flatten transform.">
       <created>1555058574514</created>
@@ -788,11 +810,25 @@
       <option name="project" value="LOCAL" />
       <updated>1557841140244</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="Big update for sliding window.">
+      <created>1559052999973</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1559052999973</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Updating whole sliding process.">
+      <created>1559133040425</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1559133040425</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="196818000" />
+    <option name="totallyTimeSpent" value="212839000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -805,15 +841,16 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49585634" visible="true" weight="0.23926073" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49585634" visible="true" weight="0.23926073" />
       <window_info id="Structure" order="1" sideWeight="0.50414366" side_tool="true" weight="0.23676324" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3286119" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" weight="0.3279678" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.4995005" weight="0.35311872" />
-      <window_info active="true" anchor="bottom" id="Debug" order="4" visible="true" weight="0.2806841" />
+      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.4995005" visible="true" weight="0.20623742" />
+      <window_info anchor="bottom" id="Debug" order="4" weight="0.2806841" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" />
@@ -827,7 +864,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.28421578" />
+      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.30869132" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
@@ -875,8 +912,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fix color management for mouse rect." />
-    <MESSAGE value="Change GUI according to specialist comments." />
     <MESSAGE value="Fix progress bar for images." />
     <MESSAGE value="Fix way patches are stored." />
     <MESSAGE value="Change way datas are managed to deals with patches." />
@@ -900,7 +935,9 @@
     <MESSAGE value="Update full images process." />
     <MESSAGE value="Add group." />
     <MESSAGE value="Update sliding window way." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update sliding window way." />
+    <MESSAGE value="Big update for sliding window." />
+    <MESSAGE value="Updating whole sliding process." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updating whole sliding process." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -920,6 +957,16 @@
           <line>296</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/toolbox/core/transforms.py</url>
+          <line>146</line>
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/toolbox/core/classification.py</url>
+          <line>289</line>
+          <option name="timeStamp" value="61" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -933,57 +980,53 @@
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
       <expression>
+        <expression-string>self.data.query(query)[key].to_list()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>datas[test_indices]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>Classifier.__feature_extraction_simple(model, datas[test_indices], nb_labels)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>Classifier.predict_proba_ordered(model.predict_proba(datas[test_indices]), model.classes_, array([0, 1, 2]))</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>Classifier.predict_proba_ordered(model.predict_proba(datas[test_indices]), model.classes_, [0, 1, 2])</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>Classifier.predict_proba_ordered(model.predict_proba(datas[test_indices]), self.__model.classes_, [0, 1, 2])</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>x.argmax(axis=1)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>x.argmax()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>self.label_distributions_ /= normalizer</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>self.label_distributions_[103,1]=1</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>self.label_distributions_[103,0]=1</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>model.predict(datas[test_indices])</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>train_indices[labels[train_indices] != -1]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>labels[train_indices[labels[train_indices] != -1]]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>labels[train_indices] != -1</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>labels[train_indices]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>hasattr(t, &quot;fit_transform&quot;)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/toolbox/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1162,13 +1205,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/indexes/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="4374" selection-start-line="4374" selection-end-line="4374" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/sklearn/model_selection/_split.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="233">
@@ -1183,13 +1219,6 @@
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/sklearn/pipeline.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="618" selection-start-line="618" selection-end-line="618" />
         </state>
       </provider>
     </entry>
@@ -1252,37 +1281,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/indexes/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="306" column="8" selection-start-line="306" selection-start-column="8" selection-end-line="306" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="230">
+          <caret line="4964" selection-start-line="4964" selection-end-line="4964" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/frame.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="56">
-          <caret line="129" column="90" selection-start-line="129" selection-start-column="77" selection-end-line="129" selection-end-column="90" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-49">
+          <caret line="3818" column="8" selection-start-line="3818" selection-start-column="8" selection-end-line="3818" selection-end-column="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/sklearn/pipeline.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="127" selection-start-line="127" selection-end-line="127" />
+        <state relative-caret-position="230">
+          <caret line="380" selection-start-line="380" selection-end-line="380" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/sklearn/utils/metaestimators.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="117" selection-start-line="117" selection-end-line="117" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="517">
-          <caret line="278" column="30" selection-start-line="278" selection-start-column="30" selection-end-line="278" selection-end-column="30" />
+        <state relative-caret-position="596">
+          <caret line="387" column="36" lean-forward="true" selection-start-line="387" selection-start-column="36" selection-end-line="387" selection-end-column="36" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
@@ -1291,28 +1321,62 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/transforms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="140" column="22" selection-start-line="140" selection-start-column="6" selection-end-line="140" selection-end-column="22" />
+        <state relative-caret-position="222">
+          <caret line="146" selection-start-line="146" selection-end-line="146" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
+    <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="39" selection-start-line="39" selection-end-line="39" />
+        <state relative-caret-position="392">
+          <caret line="68" column="55" lean-forward="true" selection-start-line="68" selection-start-column="20" selection-end-line="68" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="101" lean-forward="true" selection-start-line="101" selection-end-line="101" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/experiments/processes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="47" selection-start-line="47" selection-end-line="47" />
+        <state relative-caret-position="230">
+          <caret line="17" column="32" selection-start-line="17" selection-start-column="32" selection-end-line="17" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/IO/writers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="173" column="36" selection-start-line="173" selection-start-column="36" selection-end-line="173" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="848">
+          <caret line="61" column="13" selection-start-line="61" selection-start-column="8" selection-end-line="61" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="70" column="56" lean-forward="true" selection-start-line="70" selection-start-column="56" selection-end-line="70" selection-end-column="56" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
@@ -1321,18 +1385,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="70" selection-start-line="70" selection-end-line="70" />
+        <state relative-caret-position="421">
+          <caret line="30" column="30" lean-forward="true" selection-start-line="30" selection-start-column="30" selection-end-line="30" selection-end-column="30" />
           <folding>
             <element signature="e#1#24#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/IO/writers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="163" selection-start-line="163" selection-end-line="163" />
         </state>
       </provider>
     </entry>
