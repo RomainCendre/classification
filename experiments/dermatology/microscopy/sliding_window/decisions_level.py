@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelEncoder
 from experiments.processes import Process
 from toolbox.core.builtin_models import Transforms, Classifiers
 from toolbox.core.models import PatchClassifier
-from toolbox.core.transforms import OrderedEncoder
+from toolbox.core.transforms import OrderedEncoder, ArgMaxTransform
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
 
 
@@ -39,7 +39,7 @@ def decision_level(slidings, folder):
 
         # Launch process
         process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
-        process.begin(inner_cv=validation, outer_cv=test, n_jobs=4)
+        process.begin(inner_cv=validation, n_jobs=4)
 
         for sliding in slidings:
 
@@ -57,7 +57,7 @@ def decision_level(slidings, folder):
             inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'groups': LabelEncoder()})
 
             # Change inputs
-            process.change_inputs(inputs)
+            process.change_inputs(inputs, split_rule=test)
 
             # Extract features on datasets
             process.checkpoint_step(inputs=inputs, model=extractor)
@@ -65,10 +65,27 @@ def decision_level(slidings, folder):
             # Extract prediction on dataset
             process.checkpoint_step(inputs=inputs, model=predictor)
 
-            # Collapse informations and make predictions
+            # SCORE level predictions
+            # Collapse information and make predictions
             inputs.set_filters(filter_datas)
-            inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Window']}, 'Source')
-            process.evaluate_step(inputs=inputs, model=Classifiers.get_linear_svm())
+            scores = inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Window']}, 'Source')
+
+            # Evaluate using svm
+            process.evaluate_step(inputs=scores, model=Classifiers.get_linear_svm())
+            hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
+            process.evaluate_step(inputs=scores, model=PatchClassifier(hierarchies))
+
+            # DECISION level predictions
+            # Extract decision from predictions
+            inputs.set_filters(slide_filters)
+            process.checkpoint_step(inputs=inputs, model=ArgMaxTransform())
+
+            inputs.set_filters(filter_datas)
+            decisions = inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Window']}, 'Source')
+
+            # Evaluate using svm
+            inputs.set_filters(filter_datas)
+            process.evaluate_step(inputs=decisions, model=Classifiers.get_linear_svm())
             hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
             process.evaluate_step(inputs=inputs, model=PatchClassifier(hierarchies))
 
@@ -89,14 +106,12 @@ if __name__ == "__main__":
     if not exists(output_folder):
         makedirs(output_folder)
 
-    # # Input patch
-    # slidings_inputs = [('NoOverlap', DermatologyDataset.sliding_images(size=250, overlap=0)),
-    #                    ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50))]
-
-    windows_inputs = [('NoOverlap', DermatologyDataset.test_sliding_images(size=250, overlap=0))]
+    # Input patch
+    slidings_inputs = [('NoOverlap', DermatologyDataset.sliding_images(size=250, overlap=0)),
+                       ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50))]
 
     # Compute data
-    decision_level(windows_inputs, output_folder)
+    decision_level(slidings_inputs, output_folder)
 
     # Open result folder
     startfile(output_folder)

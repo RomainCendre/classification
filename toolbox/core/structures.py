@@ -129,8 +129,11 @@ class Inputs(Data):
             group_collapse = data_collapse[data_collapse[on_collapse] == name]
             raw_row[data_tag] = np.array(group_collapse[data_tag].tolist())
             rows.append(raw_row)
-        self.data = pd.DataFrame(rows)
-        self.tags.update({'data': data_tag})
+
+        # Now set new data
+        input = copy(self)
+        input.data = pd.DataFrame(rows)
+        return input
 
     def aggregate(self, x):
         try:

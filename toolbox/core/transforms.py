@@ -138,6 +138,15 @@ class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
         return [alpha, beta]
 
 
+class ArgMaxTransform(BaseEstimator, TransformerMixin):
+
+    def fit(self, x, y=None):
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        return x.argmax(axis=1)
+
+
 class FlattenTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, axis=False):

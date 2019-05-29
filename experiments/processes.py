@@ -14,12 +14,12 @@ class Process:
         self.stat_writer = StatisticsWriter(stats_keys, output_folder, name)
         self.classifier = None
 
-    def begin(self, inner_cv, outer_cv, n_jobs=-1, callbacks=[], scoring=None, is_semi=False):
-        self.classifier = Classifier(callbacks=callbacks, inner_cv=inner_cv, outer_cv=outer_cv,
+    def begin(self, inner_cv, n_jobs=-1, callbacks=[], scoring=None, is_semi=False):
+        self.classifier = Classifier(callbacks=callbacks, inner_cv=inner_cv,
                                      n_jobs=n_jobs, scoring=scoring, is_semi=is_semi)
 
-    def change_inputs(self, inputs):
-        self.classifier.split_patients(inputs)
+    def change_inputs(self, inputs, split_rule):
+        self.classifier.split_patients(inputs, split_rule)
 
     def checkpoint_step(self, inputs, model, projection_folder=None):
         self.classifier.set_model(model)

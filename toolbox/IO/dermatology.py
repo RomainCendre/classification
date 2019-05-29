@@ -19,9 +19,9 @@ class Reader:
             try:
                 # Read patient and images data
                 metas = Reader.__read_patient_file(join(folder_path, subdir))
-                metas = metas.drop(columns='ID_JLP')
+                metas = metas.drop(columns='ID_JLP', errors='ignore')
                 images = Reader.__read_images_file(folder_path, subdir)
-                images = images.drop(columns='Depth(um)')
+                images = images.drop(columns='Depth(um)', errors='ignore')
                 if if_patches:
                     patches = Reader.__read_patches_file(folder_path, subdir)
                 else:
