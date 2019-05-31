@@ -90,8 +90,13 @@ class Classifier:
         results = []
         for fold, (train, test) in self.patients_folds:
 
+            test_indices = np.where(np.isin(groups, test))[0]
+            train_indices = np.where(np.isin(groups, train))[0]
+            if not self.is_semi_supervised:
+                train_indices = train_indices[labels[train_indices] != -1]
+
             # Check that current fold respect labels
-            if not self.__check_labels(labels, labels[train]):
+            if not self.__check_labels(labels, labels[train_indices]):
                 warnings.warn('Invalid fold, missing labels for fold {fold}'.format(fold=fold + 1))
                 continue
 
@@ -103,12 +108,6 @@ class Classifier:
             # Estimate best combination
             grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
                                        n_jobs=self.n_jobs, scoring=self.__scoring, verbose=1, iid=False)
-
-            test_indices = np.where(np.isin(groups, test))[0]
-            train_indices = np.where(np.isin(groups, train))[0]
-            if not self.is_semi_supervised:
-                train_indices = train_indices[labels[train_indices] != -1]
-
             grid_search.fit(datas[train_indices], y=labels[train_indices], **self.__fit_params)
             best_params = grid_search.best_params_
 
