@@ -27,7 +27,7 @@ def decision_level(slidings, folder):
         makedirs(view_folder)
 
     # Extracteur
-    extractor = Transforms.get_haralick()# Transforms.get_keras_extractor(pooling='avg')
+    extractor = Transforms.get_keras_extractor(pooling='max')
     extractor[0].need_fit = False
 
     # Predicteur
@@ -106,11 +106,9 @@ if __name__ == "__main__":
     if not exists(output_folder):
         makedirs(output_folder)
 
-    # # Input patch
-    # windows_inputs = [('NoOverlap', DermatologyDataset.sliding_images(size=250, overlap=0)),
-    #                    ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50))]
-
-    windows_inputs = [('NoOverlap', DermatologyDataset.test_sliding_images(size=250, overlap=0))]
+    # Input patch
+    windows_inputs = [('NoOverlap', DermatologyDataset.sliding_images(size=250, overlap=0)),
+                       ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50))]
 
     # Compute data
     decision_level(windows_inputs, output_folder)

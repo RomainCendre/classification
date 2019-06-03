@@ -105,7 +105,6 @@ class DermatologyDataset:
             makedirs(work_folder)
         return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap)
 
-
     @staticmethod
     def __images(folders, features_folder):
         inputs = Inputs(folders=folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
@@ -116,9 +115,11 @@ class DermatologyDataset:
 
     @staticmethod
     def __multi_images(folders, work_folder, coefficients):
-        inputs = Inputs(folders=folders, instance=DermatologyDataset(work_folder=work_folder, multi_coefficients=coefficients),
+        inputs = Inputs(folders=folders,
+                        instance=DermatologyDataset(work_folder=work_folder, multi_coefficients=coefficients),
                         loader=DermatologyDataset.__scan_for_confocal_multi,
-                        tags={'data': 'Multi_Path', 'label': 'Label', 'reference': 'Multi_Reference'})
+                        tags={'data': 'Multi_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
+                              'group_label': 'Binary_Diagnosis'})
         inputs.load()
         inputs.set_temporary_folder(work_folder)
         return inputs
@@ -127,16 +128,18 @@ class DermatologyDataset:
     def __sliding_images(folders, work_folder, size, overlap):
         parameters = {'Size': size,
                       'Overlap': overlap}
-        inputs = Inputs(folders=folders, instance=DermatologyDataset(work_folder=work_folder, patch_parameters=parameters),
+        inputs = Inputs(folders=folders,
+                        instance=DermatologyDataset(work_folder=work_folder, patch_parameters=parameters),
                         loader=DermatologyDataset.__scan_confocal_and_patchify,
-                        tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID', 'group_label': 'Binary_Diagnosis'})
+                        tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
+                              'group_label': 'Binary_Diagnosis'})
         inputs.load()
         inputs.set_temporary_folder(work_folder)
         return inputs
 
     def __scan_for_confocal_multi(self, folder_path):
         # Browse data
-        data_set = dermatology.Reader.scan_folder(folder_path, False)
+        data_set = dermatology.Reader().scan_folder(folder_path, False)
         data_set = data_set[data_set.Modality == 'Microscopy']
 
         # Get into patches
@@ -144,15 +147,17 @@ class DermatologyDataset:
         DermatologyDataset.__print_progress_bar(0, len(data_set), prefix='Progress:')
         for index, (df_index, data) in zip(np.arange(len(data_set.index)), data_set.iterrows()):
             DermatologyDataset.__print_progress_bar(index, len(data_set), prefix='Progress:')
-            multi = DermatologyDataset.__multi_resolution(data['Full_path'], data['Reference'], self.multi_coefficients,
-                                               self.temporary)
-            multi = multi.merge(data_set, on='Reference')
+            multi = DermatologyDataset.__multi_resolution(data['Full_Path'], data['Reference'], self.multi_coefficients,
+                                                          self.work_folder)
+            multi['Type'] = 'Multi'
+            multi = pd.concat([multi, pd.DataFrame(data).T], sort=False)
+            multi = multi.fillna(data)
             multis_data.append(multi)
 
         return pd.concat(multis_data, sort=False)
 
     @staticmethod
-    def __multi_resolution(filename, reference, coefficients, multi_folder):
+    def __multi_resolution(filename, reference, coefficients, work_folder):
         multi_folder = ospath.join(work_folder, 'Multi')
         if not ospath.exists(multi_folder):
             makedirs(multi_folder)
@@ -165,18 +170,19 @@ class DermatologyDataset:
             # Create patch informations
             meta = dict()
             meta.update(
-                {'Multi_Path': ospath.normpath(
+                {'Full_Path': ospath.normpath(
                     '{ref}_{coef}.png'.format(ref=ospath.join(multi_folder, reference), coef=coefficient))})
             meta.update({'Multi_Index': index})
-            meta.update({'Multi_Reference': '{ref}_{index}'.format(ref=reference, index=index)})
-            meta.update({'Reference': reference})
+            meta.update({'Coefficient': coefficient})
+            meta.update({'Reference': '{ref}_{index}_M'.format(ref=reference, index=index)})
+            meta.update({'Source': reference})
             metas.append(meta)
 
             # Check if need to write patch
-            if not ospath.isfile(meta['Multi_Path']):
+            if not ospath.isfile(meta['Full_Path']):
                 new_image = image.copy()
                 new_image.thumbnail(size=new_size, resample=3)
-                new_image.save(meta['Multi_Path'])
+                new_image.save(meta['Full_Path'])
 
         return pd.DataFrame(metas)
 
@@ -193,8 +199,7 @@ class DermatologyDataset:
         for index, (df_index, data) in zip(np.arange(len(images.index)), images.iterrows()):
             DermatologyDataset.__print_progress_bar(index, len(images), prefix='Progress:')
             windows = DermatologyDataset.__patchify(data['Full_Path'], data['Reference'], self.patch_parameters['Size'],
-                                         self.patch_parameters['Overlap'], self.work_folder)
-            # windows = windows.merge(dataset, on='Reference')
+                                                    self.patch_parameters['Overlap'], self.work_folder)
             windows['Type'] = 'Window'
             windows = pd.concat([windows, pd.DataFrame(data).T], sort=False)
             windows = windows.fillna(data)
@@ -230,14 +235,15 @@ class DermatologyDataset:
         for index, (patch, location) in enumerate(zip(patches, patches_loc)):
             # Create patch informations
             meta = dict()
-            meta.update({'Full_Path': ospath.normpath('{ref}_{id}.png'.format(ref=ospath.join(patch_folder, reference), id=index))})
+            meta.update({'Full_Path': ospath.normpath(
+                '{ref}_{id}.png'.format(ref=ospath.join(patch_folder, reference), id=index))})
             meta.update({'Window_Index': int(index)})
             meta.update({'Label': 'Unknown'})
             start = location[0, 0]
             start = (start % image_shape[0], start // image_shape[0])
             end = location[-1, -1]
             end = (end % image_shape[0], end // image_shape[0])
-            center = (int((start[0]+end[0])/2), int((start[1]+end[1])/2))
+            center = (int((start[0] + end[0]) / 2), int((start[1] + end[1]) / 2))
             meta.update({'Center_X': int(center[0])})
             meta.update({'Center_Y': int(center[1])})
             meta.update({'Height': int(window_size)})
@@ -306,9 +312,12 @@ class LocalParameters:
 
     @staticmethod
     def get_dermatology_filters():
-        return [('All', {'Label': ['Normal', 'Benign', 'Malignant', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, ['Normal', 'Benign', 'Malignant'], {}),
-               ('NvsP', {'Label': ['Normal', 'Pathology', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, ['Normal', 'Pathology'], {'Label': (['Benign', 'Malignant'], 'Pathology')}),
-               ('MvsR', {'Label': ['Rest', 'Malignant', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']}, ['Rest', 'Malignant'], {'Label': (['Normal', 'Benign'], 'Rest')})]
+        return [('All', {'Label': ['Normal', 'Benign', 'Malignant', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']},
+                 ['Normal', 'Benign', 'Malignant'], {}),
+                ('NvsP', {'Label': ['Normal', 'Pathology', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']},
+                 ['Normal', 'Pathology'], {'Label': (['Benign', 'Malignant'], 'Pathology')}),
+                ('MvsR', {'Label': ['Rest', 'Malignant', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']},
+                 ['Rest', 'Malignant'], {'Label': (['Normal', 'Benign'], 'Rest')})]
 
     @staticmethod
     def get_dermatology_results():
@@ -332,7 +341,7 @@ class LocalParameters:
 
     @staticmethod
     def get_validation_test():
-        return StratifiedKFold(n_splits=5), StratifiedKFold(n_splits=3) #GroupKFold(n_splits=5)
+        return StratifiedKFold(n_splits=5), StratifiedKFold(n_splits=3)  # GroupKFold(n_splits=5)
 
     @staticmethod
     def set_gpu(percent_gpu=1, allow_growth=True):
@@ -344,4 +353,3 @@ class LocalParameters:
         config.gpu_options.allow_growth = allow_growth
         config.gpu_options.per_process_gpu_memory_fraction = percent_gpu
         set_session(tf.Session(config=config))
-
