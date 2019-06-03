@@ -1,3 +1,4 @@
+import h5py
 import tensorflow as tf
 from keras.backend.tensorflow_backend import set_session
 from keras import backend as K
@@ -40,8 +41,8 @@ class ORLDataset:
 
 class DermatologyDataset:
 
-    def __init__(self, temporary=None, patch_parameters=None, multi_coefficients=None):
-        self.temporary = temporary
+    def __init__(self, work_folder=None, patch_parameters=None, multi_coefficients=None):
+        self.work_folder = work_folder
         self.patch_parameters = patch_parameters
         self.multi_coefficients = multi_coefficients
 
@@ -59,21 +60,21 @@ class DermatologyDataset:
         home_path = ospath.expanduser('~')
         input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
                          ospath.normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
-        multi_folder = ospath.join(home_path, 'Multi')
-        features_folder = join(home_path, 'Features')
-        if not exists(features_folder):
-            makedirs(features_folder)
-        return DermatologyDataset.__multi_images(input_folders, features_folder, multi_folder, coefficients)
+
+        work_folder = ospath.join(home_path, '.research')
+        if not exists(work_folder):
+            makedirs(work_folder)
+        return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients)
 
     @staticmethod
     def sliding_images(size, overlap):
         home_path = ospath.expanduser('~')
-        patch_folder = ospath.join(home_path, 'Patches')
         input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
-        features_folder = join(home_path, 'Features')
-        if not exists(features_folder):
-            makedirs(features_folder)
-        return DermatologyDataset.__sliding_images(input_folders, features_folder, patch_folder, size, overlap)
+
+        work_folder = ospath.join(home_path, '.research')
+        if not exists(work_folder):
+            makedirs(work_folder)
+        return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap)
 
     @staticmethod
     def test_images():
@@ -88,21 +89,21 @@ class DermatologyDataset:
     def test_multiresolution(coefficients):
         here_path = ospath.dirname(__file__)
         input_folders = [ospath.normpath('{here}/../data_test/dermatology/Test'.format(here=here_path))]
-        multi_folder = ospath.join(gettempdir(), 'Multi')
-        features_folder = join(gettempdir(), 'Features')
-        if not exists(features_folder):
-            makedirs(features_folder)
-        return DermatologyDataset.__multi_images(input_folders, features_folder, multi_folder, coefficients)
+
+        work_folder = ospath.join(gettempdir(), '.research')
+        if not exists(work_folder):
+            makedirs(work_folder)
+        return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients)
 
     @staticmethod
     def test_sliding_images(size, overlap):
         here_path = ospath.dirname(__file__)
         input_folders = [ospath.normpath('{here}/../data_test/dermatology/Test'.format(here=here_path))]
-        patch_folder = ospath.join(gettempdir(), 'Patch')
-        features_folder = join(gettempdir(), 'Features')
-        if not exists(features_folder):
-            makedirs(features_folder)
-        return DermatologyDataset.__sliding_images(input_folders, features_folder, patch_folder, size, overlap)
+
+        work_folder = ospath.join(gettempdir(), '.research')
+        if not exists(work_folder):
+            makedirs(work_folder)
+        return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap)
 
 
     @staticmethod
@@ -114,25 +115,23 @@ class DermatologyDataset:
         return inputs
 
     @staticmethod
-    def __multi_images(folders, features_folder, extraction_folder, coefficients):
-        inputs = Inputs(folders=folders, instance=DermatologyDataset(temporary=extraction_folder,
-                                                          multi_coefficients=coefficients),
+    def __multi_images(folders, work_folder, coefficients):
+        inputs = Inputs(folders=folders, instance=DermatologyDataset(work_folder=work_folder, multi_coefficients=coefficients),
                         loader=DermatologyDataset.__scan_for_confocal_multi,
                         tags={'data': 'Multi_Path', 'label': 'Label', 'reference': 'Multi_Reference'})
         inputs.load()
-        inputs.set_temporary_folder(features_folder)
+        inputs.set_temporary_folder(work_folder)
         return inputs
 
     @staticmethod
-    def __sliding_images(folders, features_folder, extraction_folder, size, overlap):
+    def __sliding_images(folders, work_folder, size, overlap):
         parameters = {'Size': size,
                       'Overlap': overlap}
-        inputs = Inputs(folders=folders, instance=DermatologyDataset(temporary=extraction_folder,
-                                                          patch_parameters=parameters),
+        inputs = Inputs(folders=folders, instance=DermatologyDataset(work_folder=work_folder, patch_parameters=parameters),
                         loader=DermatologyDataset.__scan_confocal_and_patchify,
                         tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID', 'group_label': 'Binary_Diagnosis'})
         inputs.load()
-        inputs.set_temporary_folder(features_folder)
+        inputs.set_temporary_folder(work_folder)
         return inputs
 
     def __scan_for_confocal_multi(self, folder_path):
@@ -193,7 +192,7 @@ class DermatologyDataset:
         for index, (df_index, data) in zip(np.arange(len(images.index)), images.iterrows()):
             DermatologyDataset.__print_progress_bar(index, len(images), prefix='Progress:')
             windows = DermatologyDataset.__patchify(data['Full_Path'], data['Reference'], self.patch_parameters['Size'],
-                                         self.patch_parameters['Overlap'], self.temporary)
+                                         self.patch_parameters['Overlap'], self.work_folder)
             # windows = windows.merge(dataset, on='Reference')
             windows['Type'] = 'Window'
             windows = pd.concat([windows, pd.DataFrame(data).T], sort=False)
@@ -203,10 +202,13 @@ class DermatologyDataset:
         return pd.concat(windows_data, sort=False)
 
     @staticmethod
-    def __patchify(filename, reference, window_size, overlap, patch_folder):
-        patch_folder = ospath.join(patch_folder, '{size}_{overlap}'.format(size=window_size, overlap=overlap))
+    def __patchify(filename, reference, window_size, overlap, work_folder):
+        patch_folder = ospath.join(work_folder, '{size}_{overlap}'.format(size=window_size, overlap=overlap))
         if not ospath.exists(patch_folder):
             makedirs(patch_folder)
+        # # Create HDF5 file and group
+        # patch_file = h5py.File(work_folder+'patches.hdf5', 'a')
+        # patch_file.require_group('{size}_{overlap}'.format(size=window_size, overlap=overlap))
 
         image = np.ascontiguousarray(np.array(Image.open(filename).convert('L')))
         stride = int(window_size - (window_size * overlap))  # Overlap of images

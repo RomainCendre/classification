@@ -2,6 +2,8 @@ import glob
 import warnings
 from os.path import join
 from copy import deepcopy
+
+import h5py
 import numpy as np
 from numpy import unique, array_equal, save, load, array
 from sklearn.model_selection import GridSearchCV
@@ -196,26 +198,28 @@ class Classifier:
             prefix = type(self.__model).__name__
 
         if inputs.temporary is not None:
-            folder_prefix = '{prefix}_'.format(prefix=join(inputs.temporary, prefix))
-            expected_files = ['{folder_prefix}{reference}.npy'.format(folder_prefix=folder_prefix, reference=reference) for reference in references]
+            # Create HDF5 file
+            file_path = '{folder_prefix}.hdf5'.format(folder_prefix=join(inputs.temporary, prefix))
+            features_file = h5py.File(file_path, 'a')
+            # Now process HDF5 file
+            try:
+                features = []
+                # Check if already extracted
+                if not set(references).issubset(features_file.keys()):
+                    features = self.__feature_extraction(prefix, datas, labels, unique_labels, groups)
 
-            # Extract files from folder
-            files = glob.glob('{folder_prefix}*.npy'.format(folder_prefix=folder_prefix))
-
-            features = []
-            # Check if already extracted
-            if not set(expected_files).issubset(files):
-                features = self.__feature_extraction(prefix, datas, labels, unique_labels, groups)
-
-                # Now save features as files
-                print('Writting data at {folder}'.format(folder=inputs.temporary))
-                for feature, reference in zip(features, references):
-                    save('{folder_prefix}{reference}.npy'.format(folder_prefix=folder_prefix, reference=reference), feature)
-            else:
-                print('Loading data at {folder}'.format(folder=inputs.temporary))
-                for expected_file in expected_files:
-                    features.append(load(expected_file))
-                features = array(features)
+                    # Now save features as files
+                    print('Writing data at {file}'.format(file=file_path))
+                    for feature, reference in zip(features, references):
+                        if reference not in features_file.keys():
+                            features_file.create_dataset(reference, data=feature)
+                else:
+                    print('Loading data at {file}'.format(file=file_path))
+                    for reference in references:
+                        features.append(features_file[reference][()])
+                    features = array(features)
+            finally:
+                features_file.close()
         else:
             features = self.__feature_extraction(prefix, datas, labels, unique_labels, groups)
 
@@ -245,7 +249,7 @@ class Classifier:
             if not self.is_semi_supervised:
                 train_indices = train_indices[labels[train_indices] != -1]
 
-            # Now fit, but find first hyperparameters
+            # Now fit, but find first hyper parameters
             grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
                                        n_jobs=self.n_jobs, refit=False, scoring=self.__scoring, verbose=1, iid=False)
             grid_search.fit(datas[train_indices], y=labels[train_indices], **self.__fit_params)
@@ -310,15 +314,15 @@ class Classifier:
             return (probabilities > 0.5).astype('int32')
 
     @staticmethod
-    def predict_proba_ordered(probs, classes_, all_classes):
+    def predict_proba_ordered(probabilities, classes_, all_classes):
         """
         probs: list of probabilities, output of predict_proba
         classes_: clf.classes_
         all_classes: all possible classes (superset of classes_)
         """
-        all_classes = all_classes[all_classes>=0]
-        proba_ordered = np.zeros((probs.shape[0], all_classes.size), dtype=np.float)
+        all_classes = all_classes[all_classes >= 0]
+        proba_ordered = np.zeros((probabilities.shape[0], all_classes.size), dtype=np.float)
         sorter = np.argsort(all_classes)  # http://stackoverflow.com/a/32191125/395857
         idx = sorter[np.searchsorted(all_classes, classes_, sorter=sorter)]
-        proba_ordered[:, idx] = probs
+        proba_ordered[:, idx] = probabilities
         return proba_ordered
