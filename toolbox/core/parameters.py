@@ -8,7 +8,7 @@ from tempfile import gettempdir
 import numpy as np
 import pandas as pd
 from PIL import Image
-from sklearn.model_selection import StratifiedKFold, GroupKFold
+from sklearn.model_selection import StratifiedKFold
 
 from toolbox.IO import dermatology, otorhinolaryngology
 from toolbox.core.structures import Inputs, Spectra, Settings
@@ -153,6 +153,7 @@ class DermatologyDataset:
 
     @staticmethod
     def __multi_resolution(filename, reference, coefficients, multi_folder):
+        multi_folder = ospath.join(work_folder, 'Multi')
         if not ospath.exists(multi_folder):
             makedirs(multi_folder)
 
@@ -203,12 +204,10 @@ class DermatologyDataset:
 
     @staticmethod
     def __patchify(filename, reference, window_size, overlap, work_folder):
+        work_folder = ospath.join(work_folder, 'Patches')
         patch_folder = ospath.join(work_folder, '{size}_{overlap}'.format(size=window_size, overlap=overlap))
         if not ospath.exists(patch_folder):
             makedirs(patch_folder)
-        # # Create HDF5 file and group
-        # patch_file = h5py.File(work_folder+'patches.hdf5', 'a')
-        # patch_file.require_group('{size}_{overlap}'.format(size=window_size, overlap=overlap))
 
         image = np.ascontiguousarray(np.array(Image.open(filename).convert('L')))
         stride = int(window_size - (window_size * overlap))  # Overlap of images
