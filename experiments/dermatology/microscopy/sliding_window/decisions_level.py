@@ -28,7 +28,7 @@ def decision_level(slidings, folder):
 
     # Extracteur
     extractor = Transforms.get_keras_extractor(pooling='max')
-    extractor[0].need_fit = False
+    extractor.need_fit = False
 
     # Predicteur
     predictor = Classifiers.get_linear_svm()
@@ -45,8 +45,6 @@ def decision_level(slidings, folder):
 
             # Name experiment and filter data
             name = '{sliding}'.format(sliding=sliding[0])
-
-            # Filter on datasets, applying groups of labels
             inputs = sliding[1].copy_and_change(filter_groups)
 
             # Filter datasets
@@ -111,7 +109,7 @@ if __name__ == "__main__":
 
     # Input patch
     windows_inputs = [('NoOverlap', DermatologyDataset.sliding_images(size=250, overlap=0)),
-                       ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50))]
+                      ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50))]
 
     # Compute data
     decision_level(windows_inputs, output_folder)
