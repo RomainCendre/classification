@@ -108,7 +108,8 @@ class DermatologyDataset:
     @staticmethod
     def __images(folders, features_folder):
         inputs = Inputs(folders=folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
-                        tags={'data': 'Full_path', 'label': 'Label', 'group': 'ID', 'reference': 'Reference'})
+                        tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
+                              'group_label': 'Binary_Diagnosis'})
         inputs.load()
         inputs.set_temporary_folder(features_folder)
         return inputs
@@ -118,7 +119,7 @@ class DermatologyDataset:
         inputs = Inputs(folders=folders,
                         instance=DermatologyDataset(work_folder=work_folder, multi_coefficients=coefficients),
                         loader=DermatologyDataset.__scan_for_confocal_multi,
-                        tags={'data': 'Multi_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
+                        tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
                               'group_label': 'Binary_Diagnosis'})
         inputs.load()
         inputs.set_temporary_folder(work_folder)
