@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_norm_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/patient_level.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,8 +36,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="64" column="37" lean-forward="true" selection-start-line="64" selection-start-column="37" selection-end-line="66" selection-end-column="44" />
+            <state relative-caret-position="136">
+              <caret line="50" column="12" lean-forward="true" selection-start-line="50" selection-start-column="12" selection-end-line="52" selection-end-column="45" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -48,10 +46,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="111" column="12" selection-start-line="111" selection-start-column="12" selection-end-line="111" selection-end-column="12" />
+            <state relative-caret-position="414">
+              <caret line="68" column="38" selection-start-line="68" selection-start-column="38" selection-end-line="68" selection-end-column="38" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -138,7 +136,6 @@
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/simple/simple.py" />
         <option value="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" />
         <option value="$PROJECT_DIR$/experiments/test_experiments.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/decisions_level.py" />
         <option value="$PROJECT_DIR$/toolbox/core/builtin_models.py" />
@@ -154,6 +151,7 @@
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/patient_level.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" />
       </list>
     </option>
   </component>
@@ -443,14 +441,7 @@
       <workItem from="1558535096611" duration="1718000" />
       <workItem from="1558943069806" duration="41892000" />
       <workItem from="1559291473449" duration="7886000" />
-      <workItem from="1559547640127" duration="16008000" />
-    </task>
-    <task id="LOCAL-00002" summary="Merge tool in main project for ease of use.">
-      <created>1555067745653</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1555067745653</updated>
+      <workItem from="1559547640127" duration="17279000" />
     </task>
     <task id="LOCAL-00003" summary="Update patching tool.">
       <created>1555082356046</created>
@@ -788,11 +779,18 @@
       <option name="project" value="LOCAL" />
       <updated>1559636408364</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="Update feature level evaluation and prepare patient one.">
+      <created>1559639023611</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1559639023611</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="237368000" />
+    <option name="totallyTimeSpent" value="238639000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -807,7 +805,7 @@
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49585634" visible="true" weight="0.24525474" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49585634" visible="true" weight="0.24525474" />
       <window_info id="Structure" order="1" sideWeight="0.50414366" side_tool="true" weight="0.23676324" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3286119" />
@@ -828,7 +826,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="right" id="SciView" order="3" visible="true" weight="0.4020979" />
+      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.2972028" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
@@ -876,7 +874,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fix simple process." />
     <MESSAGE value="Some change on simple and patch decision process." />
     <MESSAGE value="Rename patch method to avoid confusions." />
     <MESSAGE value="Reindex ressources of subdata." />
@@ -901,7 +898,8 @@
     <MESSAGE value="Updating sub images generating folder." />
     <MESSAGE value="Updating multiresolution experiment." />
     <MESSAGE value="Update evaluations names." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update evaluations names." />
+    <MESSAGE value="Update feature level evaluation and prepare patient one." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update feature level evaluation and prepare patient one." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -925,6 +923,16 @@
           <url>file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/h5py/_hl/dataset.py</url>
           <line>312</line>
           <option name="timeStamp" value="56" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py</url>
+          <line>114</line>
+          <option name="timeStamp" value="74" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py</url>
+          <line>117</line>
+          <option name="timeStamp" value="75" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1103,16 +1111,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="20" selection-end-column="55" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/reshape/concat.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="233">
@@ -1279,13 +1277,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="240" selection-start-line="240" selection-end-line="240" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="309">
@@ -1300,26 +1291,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1730">
-          <caret line="207" selection-start-line="207" selection-end-line="207" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/processes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="477">
-          <caret line="53" column="28" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1346,10 +1317,27 @@
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/patient_level.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py">
+    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="64" column="37" lean-forward="true" selection-start-line="64" selection-start-column="37" selection-end-line="66" selection-end-column="44" />
+        <state relative-caret-position="225">
+          <caret line="82" selection-start-line="82" selection-end-line="82" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="429">
+          <caret line="120" column="10" selection-start-line="120" selection-start-column="10" selection-end-line="120" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/processes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="42" selection-start-line="42" selection-end-line="42" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
@@ -1358,8 +1346,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="111" column="12" selection-start-line="111" selection-start-column="12" selection-end-line="111" selection-end-column="12" />
+        <state relative-caret-position="200">
+          <caret line="118" selection-start-line="118" selection-end-line="118" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="50" column="12" lean-forward="true" selection-start-line="50" selection-start-column="12" selection-end-line="52" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="68" column="38" selection-start-line="68" selection-start-column="38" selection-end-line="68" selection-end-column="38" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
