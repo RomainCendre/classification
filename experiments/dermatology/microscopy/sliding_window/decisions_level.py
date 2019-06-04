@@ -48,7 +48,6 @@ def decision_level(slidings, folder):
 
             # Filter on datasets, applying groups of labels
             inputs = sliding[1].copy_and_change(filter_groups)
-            inputs.name = name
 
             # Filter datasets
             slide_filters = {'Type': ['Patch', 'Window']}
@@ -71,7 +70,9 @@ def decision_level(slidings, folder):
             scores = inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Window']}, 'Source')
 
             # Evaluate using svm
+            inputs.name = '{name}_score_svm'.format(name=name)
             process.evaluate_step(inputs=scores, model=Classifiers.get_linear_svm())
+            inputs.name = '{name}_score_classifier'.format(name=name)
             hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
             process.evaluate_step(inputs=scores, model=PatchClassifier(hierarchies))
 
@@ -84,8 +85,10 @@ def decision_level(slidings, folder):
             decisions = inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Window']}, 'Source')
 
             # Evaluate using svm
+            inputs.name = '{name}_decision_svm'.format(name=name)
             inputs.set_filters(filter_datas)
             process.evaluate_step(inputs=decisions, model=Classifiers.get_linear_svm())
+            inputs.name = '{name}_decision_classifier'.format(name=name)
             hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
             process.evaluate_step(inputs=inputs, model=PatchClassifier(hierarchies))
 

@@ -44,7 +44,6 @@ def decision_level(multiresolution_inputs, folder):
 
         # Filter on datasets, applying groups of labels
         inputs = multiresolution_inputs.copy_and_change(filter_groups)
-        inputs.name = 'Multi_resolution'
 
         # Filter datasets
         slide_filters = {'Type': ['Multi']}
@@ -67,7 +66,9 @@ def decision_level(multiresolution_inputs, folder):
         scores = inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Multi']}, 'Source')
 
         # Evaluate using svm
+        inputs.name = 'Multi_resolution_score_svm'
         process.evaluate_step(inputs=scores, model=Classifiers.get_linear_svm())
+        inputs.name = 'Multi_resolution_score_classifier'
         hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
         process.evaluate_step(inputs=scores, model=PatchClassifier(hierarchies))
 
@@ -80,8 +81,10 @@ def decision_level(multiresolution_inputs, folder):
         decisions = inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Multi']}, 'Source')
 
         # Evaluate using svm
+        inputs.name = 'Multi_resolution_decision_svm'
         inputs.set_filters(filter_datas)
         process.evaluate_step(inputs=decisions, model=Classifiers.get_linear_svm())
+        inputs.name = 'Multi_resolution_decision_classifier'
         hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
         process.evaluate_step(inputs=inputs, model=PatchClassifier(hierarchies))
 
