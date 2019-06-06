@@ -1,5 +1,5 @@
-import itertools
-from os import makedirs, startfile
+import webbrowser
+from os import makedirs
 from os.path import exists, splitext, basename, join
 from numpy import geomspace
 from sklearn.feature_selection import f_classif
@@ -148,4 +148,4 @@ if __name__ == "__main__":
     features_level(windows_inputs, output_folder)
 
     # Open result folder
-    startfile(output_folder)
+    webbrowser.open('file:///{folder}'.format(folder=output_folder))

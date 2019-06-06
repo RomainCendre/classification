@@ -1,4 +1,5 @@
-from os import makedirs, startfile
+import webbrowser
+from os import makedirs
 from os.path import exists, splitext, basename, join
 
 from numpy.ma import array
@@ -114,4 +115,4 @@ if __name__ == "__main__":
     decision_level(multiresolution_input, output_folder)
 
     # Open result folder
-    startfile(output_folder)
+    webbrowser.open('file:///{folder}'.format(folder=output_folder))

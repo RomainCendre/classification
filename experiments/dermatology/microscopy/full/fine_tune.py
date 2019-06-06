@@ -1,5 +1,6 @@
 import itertools
-from os import makedirs, startfile
+import webbrowser
+from os import makedirs
 from sklearn.model_selection import ParameterGrid
 from os.path import exists, basename, splitext, join
 from sklearn.preprocessing import LabelEncoder
@@ -97,4 +98,4 @@ if __name__ == "__main__":
     fine_tune(image_inputs, output_folder)
 
     # Open result folder
-    startfile(output_folder)
+    webbrowser.open('file:///{folder}'.format(folder=output_folder))

@@ -1,5 +1,7 @@
+import webbrowser
+
 from numpy import array
-from os import makedirs, startfile
+from os import makedirs
 from os.path import exists, splitext, basename, join
 from sklearn.preprocessing import LabelEncoder
 from experiments.processes import Process
@@ -116,4 +118,4 @@ if __name__ == "__main__":
     decision_level(windows_inputs, output_folder)
 
     # Open result folder
-    startfile(output_folder)
+    webbrowser.open('file:///{folder}'.format(folder=output_folder))
