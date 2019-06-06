@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.job" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale/decisions_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale/decisions_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/builtin_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/builtin_models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/config_cluster.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/config_cluster.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,7 +24,7 @@
     <SUITE FILE_PATH="coverage/classification$classification.coverage" NAME="classification Coverage Results" MODIFIED="1558448673939" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/core" />
     <SUITE FILE_PATH="coverage/classification$parameters.coverage" NAME="parameters Coverage Results" MODIFIED="1558359068728" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/core" />
     <SUITE FILE_PATH="coverage/classification$dermatology.coverage" NAME="dermatology Coverage Results" MODIFIED="1558350460473" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/IO" />
-    <SUITE FILE_PATH="coverage/classification$decisions_level.coverage" NAME="decisions_level Coverage Results" MODIFIED="1559632757939" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window" />
+    <SUITE FILE_PATH="coverage/classification$decisions_level.coverage" NAME="decisions_level Coverage Results" MODIFIED="1559831328763" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1557153270631" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier" />
     <SUITE FILE_PATH="coverage/classification$decisions_level__2_.coverage" NAME="decisions_level (2) Coverage Results" MODIFIED="1559574107377" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale" />
     <SUITE FILE_PATH="coverage/classification$prepare.coverage" NAME="prepare Coverage Results" MODIFIED="1557149841948" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology" />
@@ -42,11 +37,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="541">
-              <caret line="42" column="56" selection-start-line="42" selection-start-column="56" selection-end-line="42" selection-end-column="56" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-1507">
+              <caret line="3" column="23" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -54,31 +46,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="683">
-              <caret line="93" column="56" selection-start-line="93" selection-start-column="56" selection-end-line="93" selection-end-column="56" />
+            <state>
               <folding>
-                <element signature="e#0#16#0" expanded="true" />
+                <element signature="e#0#17#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="40" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
-            </state>
-          </provider>
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/patient_level.py">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/decisions_level.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="782">
-              <caret line="410" column="20" selection-start-line="410" selection-start-column="20" selection-end-line="410" selection-end-column="20" />
+            <state relative-caret-position="437">
+              <caret line="95" lean-forward="true" selection-start-line="95" selection-end-line="96" selection-end-column="97" />
               <folding>
-                <element signature="e#0#23#0" expanded="true" />
+                <element signature="e#0#16#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -87,10 +74,37 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale/decisions_level.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="14" column="16" lean-forward="true" selection-start-line="14" selection-start-column="16" selection-end-line="15" selection-end-column="45" />
+            <state relative-caret-position="17">
+              <caret line="1" column="23" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/config_cluster.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="102">
+              <caret line="6" column="101" selection-start-line="6" selection-start-column="101" selection-end-line="6" selection-end-column="101" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.job">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="451">
+              <caret line="100" column="14" selection-start-line="100" selection-start-column="4" selection-end-line="100" selection-end-column="14" />
               <folding>
-                <element signature="e#0#34#0" expanded="true" />
+                <element signature="e#0#16#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -99,11 +113,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="43" selection-end-column="81" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="34">
+              <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -119,7 +130,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>__scan_for_confocal_patches</find>
       <find>scan_folder_for_images</find>
       <find>self.inputs</find>
       <find>setWindowTitle</find>
@@ -149,6 +159,7 @@
       <find>work_folder</find>
       <find>scan_folder</find>
       <find>BuiltInModels</find>
+      <find>sta</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -194,15 +205,16 @@
         <option value="$PROJECT_DIR$/experiments/processes.py" />
         <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale/multiscale_features.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/config_cluster.sh" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/patient_level.py" />
         <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/builtin_models.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale/decisions_level.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/builtin_models.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/config_cluster.sh" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.job" />
       </list>
     </option>
   </component>
@@ -311,19 +323,19 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox\core" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy\full" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox\tools" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox\IO" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox\gui_tools" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox\environment" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy\full" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox\core" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -338,7 +350,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.features_level">
+  <component name="RunManager" selected="Python.decisions_level">
     <configuration name="classification" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -451,8 +463,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.features_level" />
         <item itemvalue="Python.decisions_level" />
+        <item itemvalue="Python.features_level" />
         <item itemvalue="Python.decisions_level (2)" />
         <item itemvalue="Python.decisions_level (1)" />
         <item itemvalue="Python.classification" />
@@ -493,21 +505,7 @@
       <workItem from="1558943069806" duration="41892000" />
       <workItem from="1559291473449" duration="7886000" />
       <workItem from="1559547640127" duration="17588000" />
-      <workItem from="1559806222887" duration="3825000" />
-    </task>
-    <task id="LOCAL-00004" summary="Update patching tool.">
-      <created>1555082708661</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1555082708661</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Add some package files and prepare multimodal.">
-      <created>1555572330102</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1555572330102</updated>
+      <workItem from="1559806222887" duration="6310000" />
     </task>
     <task id="LOCAL-00006" summary="Add some ressources">
       <created>1555573551845</created>
@@ -838,11 +836,25 @@
       <option name="project" value="LOCAL" />
       <updated>1559640171075</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="Update experiments.">
+      <created>1559820828999</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1559820828999</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Update experiments.">
+      <created>1559831613468</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1559831613468</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="242773000" />
+    <option name="totallyTimeSpent" value="245258000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -926,7 +938,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Rename patch method to avoid confusions." />
     <MESSAGE value="Reindex ressources of subdata." />
     <MESSAGE value="Multiple fixes." />
     <MESSAGE value="Fix patches." />
@@ -951,7 +962,8 @@
     <MESSAGE value="Update evaluations names." />
     <MESSAGE value="Update feature level evaluation and prepare patient one." />
     <MESSAGE value="Update simple procedure." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update simple procedure." />
+    <MESSAGE value="Update experiments." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update experiments." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1047,20 +1059,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="32" selection-start-line="7" selection-start-column="32" selection-end-line="7" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/generic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="1485" column="28" lean-forward="true" selection-start-line="1485" selection-start-column="28" selection-end-line="1485" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/io/common.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="245">
@@ -1298,26 +1296,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/config_cluster.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/decisions_level.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="95" lean-forward="true" selection-start-line="95" selection-end-line="96" selection-end-column="97" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/patient_level.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -1355,40 +1333,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py">
+    <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="43" selection-end-column="81" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale/decisions_level.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="14" column="16" lean-forward="true" selection-start-line="14" selection-start-column="16" selection-end-line="15" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="541">
-          <caret line="42" column="56" selection-start-line="42" selection-start-column="56" selection-end-line="42" selection-end-column="56" />
+        <state relative-caret-position="782">
+          <caret line="410" column="20" selection-start-line="410" selection-start-column="20" selection-end-line="410" selection-end-column="20" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2018.3/system/python_stubs/-1013363670/nt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7922">
+          <caret line="466" column="4" selection-start-line="466" selection-start-column="4" selection-end-line="466" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale/decisions_level.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="23" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1507">
+          <caret line="3" column="23" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="683">
-          <caret line="93" column="56" selection-start-line="93" selection-start-column="56" selection-end-line="93" selection-end-column="56" />
+        <state>
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/patient_level.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/decisions_level.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="95" lean-forward="true" selection-start-line="95" selection-end-line="96" selection-end-column="97" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
@@ -1397,18 +1388,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="40" selection-start-line="6" selection-start-column="40" selection-end-line="6" selection-end-column="40" />
+        <state relative-caret-position="451">
+          <caret line="100" column="14" selection-start-line="100" selection-start-column="4" selection-end-line="100" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="782">
-          <caret line="410" column="20" selection-start-line="410" selection-start-column="20" selection-end-line="410" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="34">
+          <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/config_cluster.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="101" selection-start-line="6" selection-start-column="101" selection-end-line="6" selection-end-column="101" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.job">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
         </state>
       </provider>
     </entry>

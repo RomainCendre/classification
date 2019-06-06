@@ -1,0 +1,16 @@
+#!/bin/ksh
+
+# La file d'attente 3d : NE PAS CHANGER
+#$ -q 3d@webern07.u-bourgogne.fr
+
+# L'adresse electronique de contact
+#$ -M romain.cendre@gmail.com
+
+# Le nom du fichier de sortie 
+#$ -o fine_tune.out
+
+# Le nom du job
+#$ -N fine_tune
+
+# Lancement du calcul
+~/my-envs/GPU/bin/python  /work/le2i/rc621381/classification/experiments/dermatology/microscopy/full/fine_tune.py
