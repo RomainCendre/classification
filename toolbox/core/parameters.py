@@ -312,6 +312,10 @@ class BuiltInSettings:
 class LocalParameters:
 
     @staticmethod
+    def get_cpu_number():
+        return 4
+
+    @staticmethod
     def get_dermatology_filters():
         return [('All', {'Label': ['Normal', 'Benign', 'Malignant', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']},
                  ['Normal', 'Benign', 'Malignant'], {}),

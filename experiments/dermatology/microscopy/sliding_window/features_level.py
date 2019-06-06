@@ -67,6 +67,7 @@ def get_norm_model(patch_level=True, norm=False):
 def features_level(slidings, folder):
 
     # Parameters
+    nb_cpu = LocalParameters.get_cpu_number()
     validation, test = LocalParameters.get_validation_test()
     settings = BuiltInSettings.get_default_dermatology()
 
@@ -90,7 +91,7 @@ def features_level(slidings, folder):
 
         # Launch process
         process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
-        process.begin(inner_cv=validation, n_jobs=4)
+        process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
         for sliding in slidings:
 

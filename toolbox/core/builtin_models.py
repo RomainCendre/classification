@@ -1,8 +1,6 @@
 from os import makedirs
 from os.path import normpath
-
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.feature_selection import chi2, f_classif
+from sklearn.feature_selection import f_classif
 from time import strftime, gmtime, time
 import keras
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
@@ -16,7 +14,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.semi_supervised import LabelSpreading
 from sklearn.svm import SVC
 from sklearn.decomposition import PCA
-from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from toolbox.core.layers import RandomLayer
 from toolbox.core.models import KerasBatchClassifier, SelectAtMostKBest, PCAAtMost, LDAAtMost
@@ -412,98 +409,3 @@ class Classifiers:
         model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
 
         return model
-
-
-class BuiltInModels:
-
-    @staticmethod
-    def get_ahmed():
-        pipe = Pipeline([('wavelet', DWTTransform()),
-                         ('cluster', KMeans()),
-                         ('clf', SVC(probability=True)),
-                         ])
-        # Define parameters to validate through grid CV
-        parameters = {
-            'dwt__mode': ['db6'],
-            'clf__C': geomspace(0.01, 1000, 6),
-            'clf__gamma': [0.001, 0.0001],
-            'clf__kernel': ['rbf']
-        }
-        return pipe, parameters
-
-    @staticmethod
-    def get_dummy():
-        pipe = Pipeline([('clf', DummyClassifier())])
-        # Define parameters to validate through grid CV
-        parameters = {}
-        return pipe, parameters
-
-    @staticmethod
-    def get_haralick():
-        pipe = Pipeline([('haralick', HaralickTransform()),
-                         ('scale', StandardScaler()),
-                         ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
-        # Define parameters to validate through grid CV
-        parameters = {
-            'clf__C': geomspace(0.01, 1000, 6).tolist(),
-            'clf__gamma': geomspace(0.01, 1000, 6).tolist()
-        }
-        return pipe, parameters
-
-    @staticmethod
-    def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0):
-        model = KerasBatchClassifier(build_fn=Classifiers.get_fine_tuning)
-        parameters = {# Build paramters
-                      'architecture': 'VGG16',
-                      'optimizer': 'adam',
-                      'metrics': [['accuracy']],
-                      # Parameters for fit
-                      'epochs': 100,
-                      'batch_size': 6,
-                      }
-        parameters.update({'output_classes': output_classes,
-                           'trainable_layers': trainable_layers,
-                           'added_layers': added_layers})
-        fit_parameters = {# Transformations
-                            'rotation_range': 180,
-                            'horizontal_flip': True,
-                            'vertical_flip': True,
-                            }
-
-        return model, parameters, fit_parameters
-
-    @staticmethod
-    def get_linear_svm_process():
-        pipe = Pipeline([('scale', StandardScaler()),
-                         ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
-        # Define parameters to validate through grid CV
-        parameters = {
-            'clf__C': geomspace(0.01, 1000, 6).tolist(),
-            'clf__gamma': geomspace(0.01, 1000, 6).tolist()
-        }
-        return pipe, parameters
-
-    @staticmethod
-    def get_pca_process():
-        pipe = Pipeline([('scale', StandardScaler()),
-                         ('pca', PCA()),
-                         ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
-        # Define parameters to validate through grid CV
-        parameters = {
-            'pca__n_components': [0.95, 0.975, 0.99],
-            'clf__C': geomspace(0.01, 1000, 6).tolist(),
-            'clf__gamma': geomspace(0.01, 1000, 6).tolist()
-        }
-        return pipe, parameters
-
-    @staticmethod
-    def get_pls_process():
-        pipe = Pipeline([('pls', PLSTransform()),
-                         ('clf', SVC(kernel='linear', class_weight='balanced', probability=True)),
-                         ])
-        # Define parameters to validate through grid CV
-        parameters = {
-            'pls__n_components': list(range(2, 12, 2)),
-            'clf__C': geomspace(0.01, 1000, 6).tolist()
-        }
-        return pipe, parameters

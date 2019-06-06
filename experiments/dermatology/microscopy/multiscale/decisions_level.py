@@ -13,6 +13,7 @@ from toolbox.core.transforms import OrderedEncoder, ArgMaxTransform
 def decision_level(multiresolution_inputs, folder):
 
     # Parameters
+    nb_cpu = LocalParameters.get_cpu_number()
     validation, test = LocalParameters.get_validation_test()
     settings = BuiltInSettings.get_default_dermatology()
 
@@ -40,7 +41,7 @@ def decision_level(multiresolution_inputs, folder):
 
         # Launch process
         process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
-        process.begin(inner_cv=validation, n_jobs=4)
+        process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
         # Filter on datasets, applying groups of labels
         inputs = multiresolution_inputs.copy_and_change(filter_groups)

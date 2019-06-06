@@ -4,14 +4,38 @@ from sklearn.model_selection import ParameterGrid
 from os.path import exists, basename, splitext, join
 from sklearn.preprocessing import LabelEncoder
 from experiments.processes import Process
-from toolbox.core.builtin_models import BuiltInModels
+from toolbox.core.builtin_models import Classifiers
+from toolbox.core.models import KerasBatchClassifier
 from toolbox.core.transforms import OrderedEncoder
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
 
 
-def fine_tune(original_inputs, folder):
+@staticmethod
+def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0):
+    model = KerasBatchClassifier(build_fn=Classifiers.get_fine_tuning)
+    parameters = {  # Build paramters
+        'architecture': 'VGG16',
+        'optimizer': 'adam',
+        'metrics': [['accuracy']],
+        # Parameters for fit
+        'epochs': 100,
+        'batch_size': 6,
+    }
+    parameters.update({'output_classes': output_classes,
+                       'trainable_layers': trainable_layers,
+                       'added_layers': added_layers})
+    fit_parameters = {  # Transformations
+        'rotation_range': 180,
+        'horizontal_flip': True,
+        'vertical_flip': True,
+    }
 
+    return model, parameters, fit_parameters
+
+
+def fine_tune(original_inputs, folder):
     # Parameters
+    nb_cpu = LocalParameters.get_cpu_number()
     validation, test = LocalParameters.get_validation_test()
     settings = BuiltInSettings.get_default_dermatology()
 
@@ -31,10 +55,11 @@ def fine_tune(original_inputs, folder):
     # Parameters combinations
     combinations = list(itertools.product(scales, ParameterGrid(layers_parameters)))
 
-    for filter_name, filter_datas, filter_groups in filters:
+    # Browse combinations
+    for filter_name, filter_datas, filter_encoder, filter_groups in filters:
 
         process = Process(output_folder=folder, name=filter_name, settings=settings, stats_keys=statistics)
-        process.begin(inner_cv=validation, outer_cv=test, n_jobs=1)
+        process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
         for scale, params in combinations:
             inputs = original_inputs.copy_and_change(filter_groups)
@@ -45,9 +70,9 @@ def fine_tune(original_inputs, folder):
             inputs.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
                                  'groups': LabelEncoder()})
             process.evaluate_step(inputs=inputs,
-                                  model=BuiltInModels.get_fine_tuning(output_classes=len(filter_datas['Label']),
-                                                                      trainable_layers=params['trainable_layer'],
-                                                                      added_layers=params['added_layer']))
+                                  model=get_fine_tuning(output_classes=len(filter_datas['Label']),
+                                                        trainable_layers=params['trainable_layer'],
+                                                        added_layers=params['added_layer']))
         process.end()
 
     # Open result folder
