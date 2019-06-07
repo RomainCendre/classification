@@ -92,9 +92,6 @@ def decision_level(multiresolution_inputs, folder):
 
         process.end()
 
-    # Open result folder
-    startfile(output_folder)
-
 
 if __name__ == "__main__":
 
@@ -108,8 +105,7 @@ if __name__ == "__main__":
         makedirs(output_folder)
 
     # Input patch
-    # multiresolution_input = DermatologyDataset.multiresolution(coefficients=[1, 0.75, 0.5, 0.25])
-    multiresolution_input = DermatologyDataset.test_multiresolution(coefficients=[1, 0.75, 0.5, 0.25])
+    multiresolution_input = DermatologyDataset.multiresolution(coefficients=[1, 0.75, 0.5, 0.25])
 
     # Compute data
     decision_level(multiresolution_input, output_folder)
