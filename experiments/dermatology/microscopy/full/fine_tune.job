@@ -13,4 +13,5 @@
 #$ -N fine_tune
 
 # Lancement du calcul
+export PYTHONPATH=/work/le2i/rc621381/classification
 ~/my-envs/GPU/bin/python  /work/le2i/rc621381/classification/experiments/dermatology/microscopy/full/fine_tune.py

@@ -11,7 +11,6 @@ from toolbox.core.transforms import OrderedEncoder
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
 
 
-@staticmethod
 def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0):
     model = KerasBatchClassifier(build_fn=Classifiers.get_fine_tuning)
     parameters = {  # Build paramters
