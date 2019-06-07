@@ -14,4 +14,5 @@
 
 # Lancement du calcul
 export PYTHONPATH=/work/le2i/rc621381/classification
+export XDG_RUNTIME_DIR=/work/le2i/rc621381/XDG
 ~/my-envs/GPU/bin/python  /work/le2i/rc621381/classification/experiments/dermatology/microscopy/full/fine_tune.py

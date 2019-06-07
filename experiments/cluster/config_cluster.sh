@@ -2,6 +2,7 @@
 mkdir /work/le2i/rc621381/Data
 mkdir /work/le2i/rc621381/Features
 mkdir /work/le2i/rc621381/Results
+mkdir /work/le2i/rc621381/XDG
 mkdir /work/le2i/rc621381/conda/envs
 # Now create link to these folders
 ln -s /work/le2i/rc621381/Data ~/Data
