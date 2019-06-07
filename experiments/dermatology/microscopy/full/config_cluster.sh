@@ -1,5 +1,13 @@
-ln -s /work/le2i/rc621381/data/ data
-ln -s /work/le2i/rc621381/conda/envs my-envs
+# Create working directory
+mkdir /work/le2i/rc621381/data
+mkdir /work/le2i/rc621381/Features
+mkdir /work/le2i/rc621381/Results
+mkdir /work/le2i/rc621381/conda/envs
+# Now create link to these folders
+ln -s /work/le2i/rc621381/data ~/data
+ln -s /work/le2i/rc621381/Features ~/Features
+ln -s /work/le2i/rc621381/Results ~/Results
+ln -s /work/le2i/rc621381/conda/envs ~/my-envs
 ln -s /work/le2i/rc621381/conda/tmp ~/.conda/pkgs
 
 cd /work/le2i/rc621381/
