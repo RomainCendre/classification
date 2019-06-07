@@ -1,16 +1,15 @@
 from collections import Counter
-from copy import deepcopy
 from os import makedirs
 import markups
 import pandas
 import pickle
 
 from PIL import Image, ImageDraw
-from matplotlib import pyplot, cm
+import matplotlib as mpl
+from matplotlib import pyplot
 from os.path import join, exists
 from keras import backend as K
 from matplotlib.backends.backend_pdf import PdfPages
-from matplotlib.image import imsave
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.metrics import auc, roc_curve, classification_report
@@ -67,6 +66,7 @@ class StatisticsWriter:
     def __init__(self, keys, dir_name, name):
         self.keys = keys
         self.pdf = PdfPages(join(dir_name, name + "_stat.pdf"))
+        mpl.use('agg')
 
     def end(self):
         self.pdf.close()
@@ -95,8 +95,8 @@ class ResultWriter:
         self.results = results
         if not isinstance(self.results, list):
             self.results = [self.results]
-
         self.settings = settings
+        mpl.use('agg')
 
     def write_results(self, dir_name, name, use_std=True):
         self.write_report(use_std=use_std, path=join(dir_name, '{name}_report.html'.format(name=name)))
