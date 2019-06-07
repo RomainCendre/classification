@@ -50,17 +50,15 @@ class DermatologyDataset:
     def images():
         home_path = ospath.expanduser('~')
         input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
-        features_folder = join(home_path, 'Features')
-        if not exists(features_folder):
-            makedirs(features_folder)
-        return DermatologyDataset.__images(input_folders, features_folder)
+        work_folder = ospath.join(home_path, '.research')
+        if not exists(work_folder):
+            makedirs(work_folder)
+        return DermatologyDataset.__images(input_folders, work_folder)
 
     @staticmethod
     def multiresolution(coefficients):
         home_path = ospath.expanduser('~')
-        input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Elisa_DB/Patients'.format(home=home_path)),
-                         ospath.normpath('{home}/Data/Skin/Saint_Etienne/Hors_DB/Patients'.format(home=home_path))]
-
+        input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
         work_folder = ospath.join(home_path, '.research')
         if not exists(work_folder):
             makedirs(work_folder)
@@ -70,7 +68,6 @@ class DermatologyDataset:
     def sliding_images(size, overlap):
         home_path = ospath.expanduser('~')
         input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
-
         work_folder = ospath.join(home_path, '.research')
         if not exists(work_folder):
             makedirs(work_folder)
@@ -89,7 +86,6 @@ class DermatologyDataset:
     def test_multiresolution(coefficients):
         here_path = ospath.dirname(__file__)
         input_folders = [ospath.normpath('{here}/../data_test/dermatology/Test'.format(here=here_path))]
-
         work_folder = ospath.join(gettempdir(), '.research')
         if not exists(work_folder):
             makedirs(work_folder)
