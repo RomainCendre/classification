@@ -60,7 +60,7 @@ def fine_tune(original_inputs, folder):
     for filter_name, filter_datas, filter_encoder, filter_groups in filters:
 
         process = Process(output_folder=folder, name=filter_name, settings=settings, stats_keys=statistics)
-        process.begin(inner_cv=validation, n_jobs=nb_cpu)
+        process.begin(inner_cv=validation, n_jobs=0)
 
         for scale, params in combinations:
             inputs = original_inputs.copy_and_change(filter_groups)
@@ -83,10 +83,6 @@ def fine_tune(original_inputs, folder):
 
 
 if __name__ == "__main__":
-
-    # Configure GPU consumption
-    LocalParameters.set_gpu(percent_gpu=0.5)
-
     # Parameters
     filename = splitext(basename(__file__))[0]
     output_folder = join(LocalParameters.get_dermatology_results(), filename)
