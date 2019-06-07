@@ -14,12 +14,12 @@ from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltIn
 def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0):
     model = KerasBatchClassifier(build_fn=Classifiers.get_fine_tuning)
     parameters = {  # Build paramters
-        'architecture': 'VGG16',
+        'architecture': 'InceptionV3',
         'optimizer': 'adam',
         'metrics': [['accuracy']],
         # Parameters for fit
         'epochs': 100,
-        'batch_size': 6,
+        'batch_size': 32,
     }
     parameters.update({'output_classes': output_classes,
                        'trainable_layers': trainable_layers,
