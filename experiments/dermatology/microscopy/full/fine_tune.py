@@ -1,5 +1,6 @@
 import itertools
 import webbrowser
+from copy import copy
 from os import makedirs
 from sklearn.model_selection import ParameterGrid
 from os.path import exists, basename, splitext, join
@@ -65,10 +66,15 @@ def fine_tune(original_inputs, folder):
             inputs = original_inputs.copy_and_change(filter_groups)
             inputs.name = '{scale}_{params}'.format(scale=scale[0], params=params)
 
-            filter_datas.update(scale[1])
-            inputs.set_filters(filter_datas)
-            inputs.set_encoders({'label': OrderedEncoder().fit(filter_datas['Label']),
-                                 'groups': LabelEncoder()})
+            # Filter datasets
+            scale_filters = copy(scale[1])
+            scale_filters.update(filter_datas)
+            inputs.set_filters(scale_filters)
+            inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'groups': LabelEncoder()})
+
+            # Change inputs
+            process.change_inputs(inputs, split_rule=test)
+
             process.evaluate_step(inputs=inputs,
                                   model=get_fine_tuning(output_classes=len(filter_datas['Label']),
                                                         trainable_layers=params['trainable_layer'],
