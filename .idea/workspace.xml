@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/experiments/cluster/tool.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -46,7 +46,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="490">
@@ -54,6 +54,15 @@
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/experiments/cluster/tool.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="36" selection-start-column="36" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -168,6 +177,7 @@
         <option value="$PROJECT_DIR$/experiments/cluster/config_cluster.sh" />
         <option value="$PROJECT_DIR$/toolbox/IO/writers.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" />
+        <option value="$PROJECT_DIR$/experiments/cluster/tool.sh" />
       </list>
     </option>
   </component>
@@ -456,13 +466,6 @@
       <workItem from="1559291473449" duration="7886000" />
       <workItem from="1559547640127" duration="17588000" />
       <workItem from="1559806222887" duration="9139000" />
-    </task>
-    <task id="LOCAL-00011" summary="Make folder for first gui tool">
-      <created>1556789616756</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1556789616756</updated>
     </task>
     <task id="LOCAL-00012" summary="Missing gui file">
       <created>1556891783149</created>
@@ -800,11 +803,18 @@
       <option name="project" value="LOCAL" />
       <updated>1559908186554</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="Fix Fine tune process by change data filter and folds.">
+      <created>1559910005819</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1559910005819</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="250640000" />
+    <option name="totallyTimeSpent" value="250867000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -888,7 +898,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Adding score level decision way." />
     <MESSAGE value="Change data test." />
     <MESSAGE value="Update labels for report file." />
     <MESSAGE value="Change main procedure to fit test." />
@@ -913,7 +922,8 @@
     <MESSAGE value="Fix cluster bu with env variable." />
     <MESSAGE value="Trying to fix display of matplotlib." />
     <MESSAGE value="Remove remaining startfile." />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove remaining startfile." />
+    <MESSAGE value="Fix Fine tune process by change data filter and folds." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix Fine tune process by change data filter and folds." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1009,7 +1019,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/vizualisation_decision.py" />
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/prepare.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -1300,13 +1309,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/cluster/config_cluster.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="33" lean-forward="true" selection-start-line="3" selection-start-column="33" selection-end-line="4" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/IO/writers.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
@@ -1351,6 +1353,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/cluster/config_cluster.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="33" lean-forward="true" selection-start-line="3" selection-start-column="33" selection-end-line="4" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="490">
@@ -1358,6 +1367,13 @@
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/cluster/tool.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="36" selection-start-column="36" selection-end-column="36" />
         </state>
       </provider>
     </entry>
