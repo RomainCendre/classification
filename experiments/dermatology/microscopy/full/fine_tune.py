@@ -75,9 +75,6 @@ def fine_tune(original_inputs, folder):
                                                         added_layers=params['added_layer']))
         process.end()
 
-    # Open result folder
-    startfile(output_folder)
-
 
 if __name__ == "__main__":
 
