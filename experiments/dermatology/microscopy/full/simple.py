@@ -2,11 +2,31 @@ import itertools
 import webbrowser
 from os import makedirs
 from os.path import exists, splitext, basename, join
-from sklearn.preprocessing import LabelEncoder
+
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.svm import SVC
+
 from experiments.processes import Process
-from toolbox.core.builtin_models import Transforms, Classifiers
+from toolbox.core.builtin_models import Transforms
 from toolbox.core.parameters import BuiltInSettings, LocalParameters, DermatologyDataset
 from toolbox.core.transforms import OrderedEncoder
+
+
+def get_linear_svm():
+    # Add scaling step
+    steps = []
+    steps.append(('scale', StandardScaler()))
+    steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
+    pipe = Pipeline(steps)
+    pipe.name = 'LinearSVM'
+
+    # Define parameters to validate through grid CV
+    parameters = [
+        {'C': [1, 10, 100, 1000], 'kernel': ['linear']},
+        {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['rbf']},
+    ]
+    return pipe, parameters
 
 
 def simple(original_inputs, folder):
@@ -29,7 +49,8 @@ def simple(original_inputs, folder):
                ('KerasMaximum', Transforms.get_keras_extractor(pooling='max'))]
 
     # Models
-    models = [('Svm', Classifiers.get_linear_svm())]
+
+    models = [('Svm', get_linear_svm())]
 
     # Parameters combinations
     combinations = list(itertools.product(methods, models))
