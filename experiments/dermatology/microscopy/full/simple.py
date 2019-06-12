@@ -49,7 +49,6 @@ def simple(original_inputs, folder):
                ('KerasMaximum', Transforms.get_keras_extractor(pooling='max'))]
 
     # Models
-
     models = [('Svm', get_linear_svm())]
 
     # Parameters combinations

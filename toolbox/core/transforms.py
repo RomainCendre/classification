@@ -2,6 +2,7 @@ import pywt
 from PIL import Image
 import numpy as np
 from pywt import dwt
+from joblib import Parallel, delayed
 from scipy.stats import gennorm
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cross_decomposition import PLSRegression
@@ -58,7 +59,6 @@ class PredictorTransform(BaseEstimator, TransformerMixin):
         else:
             self.name = 'PredictorTransform'
 
-
     def fit(self, x, y=None):
         """
         This should fit this transformer, but DWT doesn't need to fit to train data
@@ -88,13 +88,10 @@ class PredictorTransform(BaseEstimator, TransformerMixin):
 
 class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
 
-    def __init__(self, wavelets=None, mode='db', scale=1, mean=False):
+    def __init__(self, wavelets='db1', scale=1, mean=False):
         self.mean = mean
         self.scale = scale
-        if wavelets is None:
-            self.wavelets = pywt.wavelist(mode)[:5]
-        else:
-            self.wavelets = wavelets
+        self.wavelets = wavelets
 
     def fit(self, x, y=None):
         """
@@ -121,20 +118,18 @@ class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
             image = np.array(Image.open(data).convert('L'))
             coefficients = []
             for scale in range(0, self.scale):
-                for wavelet in self.wavelets:
-                    cA, (cH, cV, cD) = pywt.dwt2(image, wavelet)
-                    image = cA
-                    directions = [cH, cV, cD]
-                    for direction in directions:
-                        coefficients.append(self.get_coefficients(direction.flatten()))
+                cA, (cH, cV, cD) = pywt.dwt2(image, self.wavelets)
+                image = cA
+                directions = [cH, cV, cD]
+                coefficients.extend(Parallel(n_jobs=3)(delayed(self.get_coefficients)(direction) for direction in directions))
 
             features.append(np.array(coefficients).flatten())
         return np.array(features)
 
     def get_coefficients(self, x):
         params = gennorm.fit(x)
-        beta = params[0] # Shape
-        alpha = params[2] # Scale
+        beta = params[0]  # Shape
+        alpha = params[2]  # Scale
         return [alpha, beta]
 
 
@@ -283,6 +278,7 @@ class PNormTransform(BaseEstimator, TransformerMixin):
          p (:obj:'int'): An integer that give the normalization coefficient.
 
      """
+
     def __init__(self, p=1, axis=1):
         self.p = p
         self.axis = axis
@@ -297,7 +293,7 @@ class PNormTransform(BaseEstimator, TransformerMixin):
         if X.dtype == object:
             normalized = []
             for x in X:
-                normalized.append(np.linalg.norm(x, ord=self.p, axis=self.axis-1))
+                normalized.append(np.linalg.norm(x, ord=self.p, axis=self.axis - 1))
             return np.array(normalized)
         return np.linalg.norm(X, ord=self.p, axis=self.axis)
 
@@ -306,9 +302,9 @@ class CorrelationArrayTransform(BaseEstimator, TransformerMixin):
 
     def fit(self, X, y=None):
         labels = np.unique(y)
-        self.means = np.zeros((len(labels),X.shape[1]))
+        self.means = np.zeros((len(labels), X.shape[1]))
         for label in labels:
-            self.means[label, :] = np.mean(X[y==label, :], axis=0)
+            self.means[label, :] = np.mean(X[y == label, :], axis=0)
         return self
 
     def transform(self, X):
