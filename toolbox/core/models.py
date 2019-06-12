@@ -2,7 +2,7 @@ import types
 import numpy as np
 from copy import deepcopy
 from keras import Sequential
-from keras.utils.generic_utils import has_arg
+from keras.utils.generic_utils import has_arg, to_list
 from keras.wrappers.scikit_learn import KerasClassifier
 from numpy import hstack
 from sklearn.base import BaseEstimator, ClassifierMixin
@@ -159,7 +159,7 @@ class KerasBatchClassifier(KerasClassifier):
 
         # sparse to numpy array
         outputs = self.model.evaluate_generator(generator=valid, **fit_args)
-        outputs = np.to_list(outputs)
+        outputs = to_list(outputs)
         for name, output in zip(self.model.metrics_names, outputs):
             if name == 'acc':
                 return output
