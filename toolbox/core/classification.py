@@ -300,7 +300,7 @@ class Classifier:
 
         if isinstance(model, SVC):
             if model.kernel == 'rbf':
-                return model._dual_coef_.shape[1]
+                return model.support_vectors_.shape[1]
             else:
                 return model.coef_.shape[1]
 
