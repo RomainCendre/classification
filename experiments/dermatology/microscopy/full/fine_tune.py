@@ -60,7 +60,7 @@ def fine_tune(original_inputs, folder):
     for filter_name, filter_datas, filter_encoder, filter_groups in filters:
 
         process = Process(output_folder=folder, name=filter_name, settings=settings, stats_keys=statistics)
-        process.begin(inner_cv=validation, n_jobs=0)
+        process.begin(inner_cv=validation, n_jobs=1)
 
         for scale, params in combinations:
             inputs = original_inputs.copy_and_change(filter_groups)
