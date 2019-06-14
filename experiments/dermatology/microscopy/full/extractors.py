@@ -1,12 +1,11 @@
 import itertools
 import webbrowser
+import numpy as np
 from os import makedirs
 from os.path import exists, splitext, basename, join
-
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVC
-
 from experiments.processes import Process
 from toolbox.core.builtin_models import Transforms
 from toolbox.core.parameters import BuiltInSettings, LocalParameters, DermatologyDataset
@@ -23,8 +22,8 @@ def get_linear_svm():
 
     # Define parameters to validate through grid CV
     parameters = [
-        {'C': [1, 10, 100, 1000], 'kernel': ['linear']},
-        {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['rbf']},
+        {'clf__C': np.logspace(-2, 10, 13), 'clf__kernel': ['linear']},
+        {'clf__C': np.logspace(-2, 10, 13), 'clf__gamma': np.logspace(-9, 3, 13), 'clf__kernel': ['rbf']},
     ]
     return pipe, parameters
 
@@ -49,6 +48,7 @@ def simple(original_inputs, folder):
                ('KerasMaximum', Transforms.get_keras_extractor(pooling='max'))]
 
     # Models
+
     models = [('Svm', get_linear_svm())]
 
     # Parameters combinations
@@ -113,5 +113,3 @@ if __name__ == "__main__":
 
     # Open result folder
     webbrowser.open('file:///{folder}'.format(folder=output_folder))
-
-
