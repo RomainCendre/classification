@@ -1,18 +1,56 @@
 import webbrowser
-
+import misvm
 from numpy import array
 from os import makedirs
 from os.path import exists, splitext, basename, join
-from sklearn.preprocessing import LabelEncoder
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.semi_supervised import LabelSpreading
+from sklearn.svm import SVC
 from experiments.processes import Process
 from toolbox.core.builtin_models import Transforms, Classifiers
-from toolbox.core.models import PatchClassifier
-from toolbox.core.transforms import OrderedEncoder, ArgMaxTransform
+from toolbox.core.models import DecisionVotingClassifier, ScoreVotingClassifier
+from toolbox.core.transforms import OrderedEncoder, ArgMaxTransform, FlattenTransform
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
 
 
-def decision_level(slidings, folder):
+def get_supervised():
+    steps = [('flatten', FlattenTransform()), ('scale', StandardScaler()),
+             ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))]
+    # Add scaling step
+    pipe = Pipeline(steps)
+    pipe.name = 'LinearSVM'
+    pipe.need_fit = True
+    # Define parameters to validate through grid CV
+    parameters = {'clf__C': geomspace(0.01, 1000, 6).tolist()}
+    return pipe, parameters
 
+
+def get_semi_supervised():
+    steps = [('flatten', FlattenTransform()), ('scale', StandardScaler()),
+             ('clf', LabelSpreading(kernel='rbf'))]
+    # Add scaling step
+    pipe = Pipeline(steps)
+    pipe.name = 'LabelSpreading'
+    pipe.need_fit = True
+    # Define parameters to validate through grid CV
+    parameters = {'clf__C': geomspace(0.01, 1000, 6).tolist()}
+    return pipe, parameters
+
+
+def get_mil_decision():
+    steps = [('scale', StandardScaler()),
+             ('clf', misvm.MISVM(kernel='linear', C=1.0, max_iters=50))]
+    # Add scaling step
+    pipe = Pipeline(steps)
+    pipe.name = 'MiSVM'
+    pipe.need_fit = True
+    # Define parameters to validate through grid CV
+    parameters = {'clf__C': geomspace(0.01, 1000, 6).tolist()}
+    return pipe, parameters
+
+
+def decision_level(slidings, folder):
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
     validation, test = LocalParameters.get_validation_test()
@@ -31,11 +69,11 @@ def decision_level(slidings, folder):
 
     # Extracteur
     extractor = Transforms.get_keras_extractor(pooling='max')
-    extractor.need_fit = False
 
     # Predicteur
-    predictor = Classifiers.get_linear_svm()
-    predictor[0].need_fit = True
+    predictor = [('Supervised', get_supervised()),
+                 ('Semi_supervised', get_semi_supervised()),
+                 ('Multi_Instance', get_mil_decision())]
 
     # Browse combinations
     for filter_name, filter_datas, filter_encoder, filter_groups in filters:
@@ -45,7 +83,6 @@ def decision_level(slidings, folder):
         process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
         for sliding in slidings:
-
             # Name experiment and filter data
             name = '{sliding}'.format(sliding=sliding[0])
             inputs = sliding[1].copy_and_change(filter_groups)
@@ -75,7 +112,7 @@ def decision_level(slidings, folder):
             process.evaluate_step(inputs=scores, model=Classifiers.get_linear_svm())
             inputs.name = '{name}_score_classifier'.format(name=name)
             hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
-            process.evaluate_step(inputs=scores, model=PatchClassifier(hierarchies))
+            process.evaluate_step(inputs=scores, model=ScoreVotingClassifier(hierarchies))
 
             # DECISION level predictions
             # Extract decision from predictions
@@ -90,13 +127,14 @@ def decision_level(slidings, folder):
             inputs.set_filters(filter_datas)
             process.evaluate_step(inputs=decisions, model=Classifiers.get_linear_svm())
             inputs.name = '{name}_decision_classifier'.format(name=name)
-            hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
-            process.evaluate_step(inputs=inputs, model=PatchClassifier(hierarchies))
+            model = DecisionVotingClassifier(mode='max')
+            x = array([[0, 1, 2, 3, 1], [0, 0, 0, 1, 3], [0, 0, 0, 0, 0], [0, 1, 2, 3, 1]])
+            y = array([1, 0, 2])
+            model.fit(x, y)
+            model.predict(x)
+            process.evaluate_step(inputs=inputs, model=DecisionVotingClassifier())
 
         process.end()
-
-    # Open result folder
-    startfile(output_folder)
 
 
 if __name__ == "__main__":
@@ -110,9 +148,11 @@ if __name__ == "__main__":
     if not exists(output_folder):
         makedirs(output_folder)
 
-    # Input patch
-    windows_inputs = [('NoOverlap', DermatologyDataset.sliding_images(size=250, overlap=0)),
-                      ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50))]
+    # # Input patch
+    # slidings_inputs = [('NoOverlap', DermatologyDataset.sliding_images(size=250, overlap=0)),
+    #                    ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50))]
+
+    windows_inputs = [('NoOverlap', DermatologyDataset.test_sliding_images(size=250, overlap=0))]
 
     # Compute data
     decision_level(windows_inputs, output_folder)

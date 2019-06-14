@@ -26,7 +26,7 @@ class Classifier:
 
      """
 
-    def __init__(self, inner_cv, n_jobs=-1, callbacks=[], scoring=None, is_semi=False):
+    def __init__(self, inner_cv, n_jobs=-1, callbacks=[], scoring=None):
         """Make an initialisation of SpectraClassifier object.
 
         Take a pipeline object from scikit learn to experiments data and params for parameters
@@ -40,7 +40,6 @@ class Classifier:
         self.__callbacks = callbacks
         self.__inner_cv = inner_cv
         self.__scoring = scoring
-        self.is_semi_supervised = is_semi
         self.n_jobs = n_jobs
         self.patients_folds = None
 
@@ -94,13 +93,15 @@ class Classifier:
 
             test_indices = np.where(np.isin(groups, test))[0]
             train_indices = np.where(np.isin(groups, train))[0]
-            if not self.is_semi_supervised:
-                train_indices = train_indices[labels[train_indices] != -1]
 
             # Check that current fold respect labels
             if not self.__check_labels(labels, labels[train_indices]):
                 warnings.warn('Invalid fold, missing labels for fold {fold}'.format(fold=fold + 1))
                 continue
+
+            # Remove unwanted labels that contains -1 for semisupervised
+            if not hasattr(self.__model, 'is_semi_supervised') or not self.__model.is_semi_supervised:
+                train_indices = train_indices[labels[train_indices] != -1]
 
             print('Fold : {fold}'.format(fold=fold + 1))
 
@@ -246,7 +247,13 @@ class Classifier:
             test_indices = np.where(np.isin(groups, test))[0]
             train_indices = np.where(np.isin(groups, train))[0]
 
-            if not self.is_semi_supervised:
+            # Check that current fold respect labels
+            if not self.__check_labels(labels, labels[train_indices]):
+                warnings.warn('Invalid fold, missing labels for fold {fold}'.format(fold=fold + 1))
+                continue
+
+            # Remove unwanted labels that contains -1 for semisupervised
+            if not hasattr(self.__model, 'is_semi_supervised') or not self.__model.is_semi_supervised:
                 train_indices = train_indices[labels[train_indices] != -1]
 
             # Now fit, but find first hyper parameters

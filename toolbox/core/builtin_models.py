@@ -27,12 +27,12 @@ class Transforms:
     @staticmethod
     def get_application(architecture='InceptionV3', pooling='max'):
         # We get the deep extractor part as include_top is false
-        if architecture == 'MobileNet':
-            model = applications.MobileNet(weights='imagenet', include_top=False, pooling=pooling)
-        elif architecture == 'VGG16':
+        if architecture == 'VGG16':
             model = applications.VGG16(weights='imagenet', include_top=False, pooling=pooling)
-        elif architecture == 'VGG19':
-            model = applications.VGG19(weights='imagenet', include_top=False, pooling=pooling)
+        elif architecture == 'InceptionResNetV2':
+            model = applications.InceptionResNetV2(weights='imagenet', include_top=False, pooling=pooling)
+        elif architecture == 'NASNet':
+            model = applications.NASNetLarge(weights='imagenet', include_top=False, pooling=pooling)
         else:
             model = applications.InceptionV3(weights='imagenet', include_top=False, pooling=pooling)
         model.name = architecture
@@ -347,27 +347,15 @@ class Classifiers:
 
     @staticmethod
     def get_preprocessing_application(architecture='InceptionV3'):
-        if architecture == 'MobileNet':
-            return applications.mobilenet.preprocess_input
-        elif architecture == 'VGG16':
+        # We get the deep extractor part as include_top is false
+        if architecture == 'VGG16':
             return applications.vgg16.preprocess_input
-        elif architecture == 'VGG19':
-            return applications.vgg19.preprocess_input
+        elif architecture == 'InceptionResNetV2':
+            return applications.inception_resnet_v2.preprocess_input
+        elif architecture == 'NASNet':
+            return applications.nasnet.preprocess_input
         else:
             return applications.inception_v3.preprocess_input
-
-    @staticmethod
-    def get_scratch(output_classes, mode):
-        model = Sequential()
-        if mode == 'patch':
-            model.add(Conv2D(10, (1, 3), strides=(2, 2), input_shape=(250, 250, 3), activation='linear', name='Convolution_1'))
-        else:
-            model.add(Conv2D(10, (1, 3), strides=(2, 2), input_shape=(1000, 1000, 3), activation='linear', name='Convolution_1'))
-        model.add(Conv2D(10, (3, 1), strides=(2, 2), activation='relu', name='Convolution_2'))
-        model.add(GlobalMaxPooling2D(name='Pooling_2D'))
-        model.add(Dense(output_classes, activation='softmax', name='Predictions'))
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-        return model
 
     @staticmethod
     def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0, architecture='InceptionV3', optimizer='adam', metrics=['accuracy']):

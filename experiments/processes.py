@@ -14,9 +14,9 @@ class Process:
         self.stat_writer = StatisticsWriter(stats_keys, output_folder, name)
         self.classifier = None
 
-    def begin(self, inner_cv, n_jobs=-1, callbacks=[], scoring=None, is_semi=False):
+    def begin(self, inner_cv, n_jobs=-1, callbacks=[], scoring=None):
         self.classifier = Classifier(callbacks=callbacks, inner_cv=inner_cv,
-                                     n_jobs=n_jobs, scoring=scoring, is_semi=is_semi)
+                                     n_jobs=n_jobs, scoring=scoring)
 
     def change_inputs(self, inputs, split_rule):
         self.classifier.split_patients(inputs, split_rule)

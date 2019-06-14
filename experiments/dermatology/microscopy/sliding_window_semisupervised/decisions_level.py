@@ -1,18 +1,37 @@
-import itertools
-from numpy import array
-from os import makedirs, startfile
+import webbrowser
+import numpy as np
+from os import makedirs
 from os.path import exists, splitext, basename, join
-from sklearn.preprocessing import LabelEncoder
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.semi_supervised import LabelSpreading
 from experiments.processes import Process
 from toolbox.core.builtin_models import Transforms, Classifiers
-from toolbox.core.models import PatchClassifier
-from toolbox.core.transforms import PredictorTransform, OrderedEncoder
+from toolbox.core.transforms import OrderedEncoder, ArgMaxTransform
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
+
+
+def get_predictor():
+    steps = []
+    # Add scaling step
+    steps.append(('scale', StandardScaler()))
+    steps.append(('clf', LabelSpreading(kernel='rbf')))
+    pipe = Pipeline(steps)
+    pipe.name = 'LabelSpreading'
+    pipe.need_fit = True
+    pipe.is_semisupervised = True
+
+    # Define parameters to validate through grid CV
+    parameters = {
+        'clf__gamma': np.logspace(-9, 3, 13)
+    }
+    return pipe, parameters
 
 
 def decision_level(slidings, folder):
 
     # Parameters
+    nb_cpu = LocalParameters.get_cpu_number()
     validation, test = LocalParameters.get_validation_test()
     settings = BuiltInSettings.get_default_dermatology()
 
@@ -28,28 +47,24 @@ def decision_level(slidings, folder):
         makedirs(view_folder)
 
     # Extracteur
-    extractor = Transforms.get_keras_extractor(pooling='avg')
+    extractor = Transforms.get_keras_extractor(pooling='max')
     extractor.need_fit = False
 
     # Predicteur
-    predictor = Classifiers.get_semi_svm()
-    predictor[0].need_fit = True
+    predictor = get_predictor()
 
     # Browse combinations
     for filter_name, filter_datas, filter_encoder, filter_groups in filters:
 
         # Launch process
         process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
-        process.begin(inner_cv=validation, outer_cv=test, n_jobs=4, is_semi=True)
+        process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
         for sliding in slidings:
 
             # Name experiment and filter data
             name = '{sliding}'.format(sliding=sliding[0])
-
-            # Filter on datasets, applying groups of labels
             inputs = sliding[1].copy_and_change(filter_groups)
-            inputs.name = name
 
             # Filter datasets
             slide_filters = {'Type': ['Patch', 'Window']}
@@ -58,7 +73,7 @@ def decision_level(slidings, folder):
             inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'groups': LabelEncoder()})
 
             # Change inputs
-            process.change_inputs(inputs)
+            process.change_inputs(inputs, split_rule=test)
 
             # Extract features on datasets
             process.checkpoint_step(inputs=inputs, model=extractor)
@@ -66,17 +81,35 @@ def decision_level(slidings, folder):
             # Extract prediction on dataset
             process.checkpoint_step(inputs=inputs, model=predictor)
 
-            # Collapse informations and make predictions
+            # SCORE level predictions
+            # Collapse information and make predictions
             inputs.set_filters(filter_datas)
-            inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Window']}, 'Source')
-            process.evaluate_step(inputs=inputs, model=Classifiers.get_linear_svm())
-            hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
+            scores = inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Window']}, 'Source')
+
+            # Evaluate using svm
+            inputs.name = '{name}_score_svm'.format(name=name)
+            process.evaluate_step(inputs=scores, model=Classifiers.get_linear_svm())
+            inputs.name = '{name}_score_classifier'.format(name=name)
+            hierarchies = inputs.encode('label', np.array(list(reversed(filter_datas['Label']))))
+            process.evaluate_step(inputs=scores, model=PatchClassifier(hierarchies))
+
+            # DECISION level predictions
+            # Extract decision from predictions
+            inputs.set_filters(slide_filters)
+            process.checkpoint_step(inputs=inputs, model=ArgMaxTransform())
+
+            inputs.set_filters(filter_datas)
+            decisions = inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Window']}, 'Source')
+
+            # Evaluate using svm
+            inputs.name = '{name}_decision_svm'.format(name=name)
+            inputs.set_filters(filter_datas)
+            process.evaluate_step(inputs=decisions, model=Classifiers.get_linear_svm())
+            inputs.name = '{name}_decision_classifier'.format(name=name)
+            hierarchies = inputs.encode('label', np.array(list(reversed(filter_datas['Label']))))
             process.evaluate_step(inputs=inputs, model=PatchClassifier(hierarchies))
 
         process.end()
-
-    # Open result folder
-    startfile(output_folder)
 
 
 if __name__ == "__main__":
@@ -100,4 +133,4 @@ if __name__ == "__main__":
     decision_level(windows_inputs, output_folder)
 
     # Open result folder
-    startfile(output_folder)
+    webbrowser.open('file:///{folder}'.format(folder=output_folder))

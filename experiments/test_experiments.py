@@ -2,11 +2,8 @@ from genericpath import exists
 from os import makedirs
 from tempfile import gettempdir
 
-from numpy import arange
-
-from experiments.dermatology.microscopy.full.simple import simple as mic_simple
-from experiments.otorhinolaryngology.simple import simple as orl_simple
-from toolbox.core.parameters import ORLDataset, DermatologyDataset
+from experiments.dermatology.microscopy.descriptors import simple as mic_simple
+from toolbox.core.parameters import DermatologyDataset
 
 if __name__ == "__main__":
     # Output dir
