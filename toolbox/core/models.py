@@ -1,4 +1,6 @@
 import types
+from typing import Counter
+
 import numpy as np
 from copy import deepcopy
 from keras import Sequential
@@ -203,115 +205,102 @@ class KerasBatchClassifier(KerasClassifier):
         return res
 
 
-class ClassifierPatch(BaseEstimator, ClassifierMixin):
+class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
 
-    def __init__(self, extractor, model, patch_size):
-        self.extractor = extractor
-        self.model = model
-        self.patch_size = patch_size
-
-    def fit(self, X, y, **kwargs):
-        features = self.__extract_features_patch(X, **kwargs)
-        self.model.fit(features, y)
-        return self
-
-    def predict(self, X, **kwargs):
-        features = self.__extract_features_patch(X, **kwargs)
-        return self.model.predict(features)
-
-    def predict_proba(self, X, **kwargs):
-        features = self.__extract_features_patch(X, **kwargs)
-        return self.model.predict_proba(features)
-
-    def __extract_features_patch(self, X, **kwargs):
-        # Browse images
-        predictions = []
-        probabilities = []
-        for patches in X:
-            sub_predictions = None
-            sub_probabilities = []
-            for patch in patches:
-                current = self.extractor.predict_proba(patch.reshape(1, -1))
-                if sub_predictions is None:
-                    sub_predictions = np.zeros(current.shape)
-                sub_predictions[:, current.argmax(axis=1)] += 1
-                # sub_probabilities.append(current)
-            predictions.append(sub_predictions/len(patches))
-
-        return np.concatenate(np.array(predictions), axis=0)
-
-    @staticmethod
-    def __filter_params(params, fn, override=None):
-        """Filters `sk_params` and returns those in `fn`'s arguments.
-
-        # Arguments
-            fn : arbitrary function
-            override: dictionary, values to override `sk_params`
-
-        # Returns
-            res : dictionary containing variables
-                in both `sk_params` and `fn`'s arguments.
-        """
-        override = override or {}
-        res = {}
-        for name, value in params.items():
-            if has_arg(fn, name):
-                res.update({name: value})
-        res.update(override)
-        return res
-
-
-class PatchClassifier(BaseEstimator, ClassifierMixin):
-
-    def __init__(self, hierarchies, metric=None):
+    def __init__(self, mode='max', metric=None, prior_class_max=True):
+        self.mode = mode
+        # Set metric mode used for evaluation
         if metric:
             self.metric = metric
         else:
             self.metric = accuracy_score
-        self.hierarchies = hierarchies
+
+        self.is_prior_class_max = prior_class_max
+
+        # Init to default values other properties
+        self.number_labels = 0
         self.thresholds = None
 
     def fit(self, x, y=None):
-        """
-        This should fit this transformer, but DWT doesn't need to fit to train data
+        self.number_labels = max(y) + 1
+        if self.mode == 'dynamic_thresh':
+            self._fit_dynamic_thresh(x, y)
+            print(self.thresholds)
+        return self
 
-        Args:
-             x (:obj): Not used.
-             y (:obj): Not used.
-        """
-        x_probas = np.zeros((len(x), len(self.hierarchies)))
-        patches_number = x.shape[1]
-        for hierarchy in self.hierarchies:
-            x_probas[:, hierarchy] = np.sum(x == hierarchy, axis=1) / patches_number
+    def predict(self, x, y=None, copy=True):
+        if self.mode == 'max':
+            x = self._get_decisions_probas(x)
+            return self._get_predictions_max(x)
+        elif self.mode == 'at_least_one':
+            return self._get_predictions_at_least_one(x)
+        elif self.mode == 'dynamic_thresh':
+            x = self._get_decisions_probas(x)
+            return self._get_predictions(x, self.thresholds)
+
+    def _fit_dynamic_thresh(self, x, y):
+        x_probas = self._get_decisions_probas(x)
 
         global_score = 0
-        self.thresholds = np.zeros(len(self.hierarchies))
-        for hierarchy in self.hierarchies:
+        self.thresholds = np.zeros(self.number_labels)
+        for hierarchy in range(self.number_labels):
             potential_thresholds = np.sort(np.unique(x_probas[:, hierarchy]))
             for thresh in potential_thresholds:
                 thresholds = np.copy(self.thresholds)
                 thresholds[hierarchy] = thresh
-                score = self.metric(self.get_predictions(x_probas, thresholds), y)
+                score = self.metric(self._get_predictions(x_probas, thresholds), y)
                 if global_score < score:
                     global_score = score
                     self.thresholds[hierarchy] = thresh
-        print(self.thresholds)
-        return self
 
-    def predict(self, x, y=None, copy=True):
-        """
-        This method is the main part of this transformer.
-        Return a wavelet transform, as specified mode.
+    def _get_decisions_probas(self, x):
+        x_probas = np.zeros((len(x), self.number_labels))
+        patches_number = x.shape[1]
+        for label in range(self.number_labels):
+            x_probas[:, label] = np.sum(x == label, axis=1) / patches_number
+        return x_probas
 
-        Args:
-             x (:obj): Not used.
-             y (:obj): Not used.
-             copy (:obj): Not used.
-        """
-        return self.get_predictions(x, self.thresholds)
+    def _get_predictions_at_least_one(self, x):
+        if self.is_prior_class_max:
+            return np.amax(x, axis=1)
+        else:
+            return np.amin(x, axis=1)
 
-    def get_predictions(self, x, thresholds):
-        return np.argmax((x>thresholds)*self.hierarchies, axis=1)
+    def _get_predictions_max(self, x):
+        maximum = x.max(axis=1, keepdims=1) == x
+        return (maximum*self._get_prior_coefficients()).argmax(axis=1)
+
+    def _get_prior_coefficients(self):
+        coefficients = range(self.number_labels)
+        if self.is_prior_class_max:
+            coefficients = reversed(coefficients)
+
+        return np.array(list(coefficients))
+
+    def _get_predictions(self, x, thresholds):
+        return np.argmax((x > thresholds)*self._get_prior_coefficients(), axis=1)
 
     def predict_proba(self, x, y=None, copy=True):
         return x
+
+
+class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
+
+    def __init__(self, mode='max', hierarchies=None, metric=None):
+        self.mode = mode
+        # Set metric mode used for evaluation
+        if metric:
+            self.metric = metric
+        else:
+            self.metric = accuracy_score
+
+        # Check if we are in dynamic mode, if yes check for args
+        if self.mode in ['dynamic', 'min']:
+            self.hierarchies = hierarchies
+            self.thresholds = None
+
+    def fit(self, x, y=None):
+        print('None')
+
+    def predict(self, x, y=None, copy=True):
+        print('None')
