@@ -14,17 +14,23 @@ from toolbox.core.transforms import OrderedEncoder
 
 def get_linear_svm():
     # Add scaling step
-    steps = []
-    steps.append(('scale', StandardScaler()))
-    steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
+    steps = [('scale', StandardScaler()), ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))]
     pipe = Pipeline(steps)
     pipe.name = 'LinearSVM'
 
     # Define parameters to validate through grid CV
-    parameters = [
-        {'clf__C': np.logspace(-2, 10, 13), 'clf__kernel': ['linear']},
-        {'clf__C': np.logspace(-2, 10, 13), 'clf__gamma': np.logspace(-9, 3, 13), 'clf__kernel': ['rbf']},
-    ]
+    parameters = {'clf__C': np.logspace(-2, 6, 9).tolist()}
+    return pipe, parameters
+
+
+def get_rbf_svm():
+    # Add scaling step
+    steps = [('scale', StandardScaler()), ('clf', SVC(kernel='rbf', class_weight='balanced', probability=True))]
+    pipe = Pipeline(steps)
+    pipe.name = 'RbfSVM'
+
+    # Define parameters to validate through grid CV
+    parameters = {'clf__C': np.logspace(-2, 6, 9).tolist(), 'clf__gamma': np.logspace(-2, 3, 6)}
     return pipe, parameters
 
 
@@ -48,8 +54,7 @@ def simple(original_inputs, folder):
                ('KerasMaximum', Transforms.get_keras_extractor(pooling='max'))]
 
     # Models
-
-    models = [('Svm', get_linear_svm())]
+    models = [('LinearSVM', get_linear_svm()), ('RbfSVM', get_rbf_svm())]
 
     # Parameters combinations
     combinations = list(itertools.product(methods, models))
