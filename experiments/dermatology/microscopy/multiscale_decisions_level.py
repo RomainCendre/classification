@@ -36,11 +36,6 @@ def decision_level(multiresolution_inputs, folder):
     # Filters
     filters = LocalParameters.get_dermatology_filters()
 
-    # View
-    view_folder = join(folder, 'View')
-    if not exists(view_folder):
-        makedirs(view_folder)
-
     # Extracteur
     extractor = Transforms.get_keras_extractor(pooling='max')
     extractor.need_fit = False
