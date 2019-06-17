@@ -2,7 +2,6 @@ import itertools
 import webbrowser
 from os import makedirs
 from os.path import exists, splitext, basename, join
-
 from numpy import logspace
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler

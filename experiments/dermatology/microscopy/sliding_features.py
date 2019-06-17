@@ -1,9 +1,9 @@
+import itertools
+import misvm
 import webbrowser
 from os import makedirs
 from os.path import exists, splitext, basename, join
-
-import misvm
-from numpy import logspace, itertools
+from numpy import logspace
 from sklearn.feature_selection import f_classif
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler

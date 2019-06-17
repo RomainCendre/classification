@@ -1,3 +1,4 @@
+import itertools
 import webbrowser
 from os import makedirs
 from os.path import exists, splitext, basename, join

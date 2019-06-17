@@ -1,5 +1,6 @@
+import itertools
 import webbrowser
-from numpy import array, logspace, itertools
+from numpy import array, logspace
 from os import makedirs
 from os.path import exists, splitext, basename, join
 from sklearn.pipeline import Pipeline
@@ -37,7 +38,7 @@ def get_semi_supervised():
     return pipe, parameters
 
 
-def sliding_decision(slidings, folder):
+def sliding_decisions(slidings, folder):
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
     validation, test = LocalParameters.get_validation_test()
@@ -139,7 +140,7 @@ if __name__ == "__main__":
     windows_inputs = [('NoOverlap', DermatologyDataset.test_sliding_images(size=250, overlap=0))]
 
     # Compute data
-    sliding_decision(windows_inputs, output_folder)
+    sliding_decisions(windows_inputs, output_folder)
 
     # Open result folder
     webbrowser.open('file:///{folder}'.format(folder=output_folder))
