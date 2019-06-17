@@ -111,7 +111,7 @@ if __name__ == "__main__":
         makedirs(output_folder)
 
     # Input patch
-    image_inputs = DermatologyDataset.images()
+    image_inputs = DermatologyDataset.images(modality='Microscopy')
 
     # Compute data
     simple(image_inputs, output_folder)
