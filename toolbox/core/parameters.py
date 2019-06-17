@@ -41,37 +41,38 @@ class ORLDataset:
 
 class DermatologyDataset:
 
-    def __init__(self, work_folder=None, patch_parameters=None, multi_coefficients=None):
+    def __init__(self, work_folder=None, modality=None, patch_parameters=None, multi_coefficients=None):
         self.work_folder = work_folder
+        self.modality = modality
         self.patch_parameters = patch_parameters
         self.multi_coefficients = multi_coefficients
 
     @staticmethod
-    def images():
+    def images(modality=None):
         home_path = ospath.expanduser('~')
         input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
         work_folder = ospath.join(home_path, '.research')
         if not exists(work_folder):
             makedirs(work_folder)
-        return DermatologyDataset.__images(input_folders, work_folder)
+        return DermatologyDataset.__images(input_folders, work_folder, modality)
 
     @staticmethod
-    def multiresolution(coefficients):
+    def multiresolution(coefficients, modality=None):
         home_path = ospath.expanduser('~')
         input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
         work_folder = ospath.join(home_path, '.research')
         if not exists(work_folder):
             makedirs(work_folder)
-        return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients)
+        return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients, modality)
 
     @staticmethod
-    def sliding_images(size, overlap):
+    def sliding_images(size, overlap, modality=None):
         home_path = ospath.expanduser('~')
         input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
         work_folder = ospath.join(home_path, '.research')
         if not exists(work_folder):
             makedirs(work_folder)
-        return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap)
+        return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap, modality)
 
     @staticmethod
     def test_images():
@@ -102,19 +103,9 @@ class DermatologyDataset:
         return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap)
 
     @staticmethod
-    def __images(folders, features_folder):
-        inputs = Inputs(folders=folders, instance=dermatology.Reader(), loader=dermatology.Reader.scan_folder,
-                        tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
-                              'group_label': 'Binary_Diagnosis'})
-        inputs.load()
-        inputs.set_temporary_folder(features_folder)
-        return inputs
-
-    @staticmethod
-    def __multi_images(folders, work_folder, coefficients):
-        inputs = Inputs(folders=folders,
-                        instance=DermatologyDataset(work_folder=work_folder, multi_coefficients=coefficients),
-                        loader=DermatologyDataset.__scan_for_confocal_multi,
+    def __images(folders, work_folder, modality):
+        inputs = Inputs(folders=folders, instance=DermatologyDataset(work_folder=work_folder, modality=modality),
+                        loader=DermatologyDataset.__scan,
                         tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
                               'group_label': 'Binary_Diagnosis'})
         inputs.load()
@@ -122,22 +113,38 @@ class DermatologyDataset:
         return inputs
 
     @staticmethod
-    def __sliding_images(folders, work_folder, size, overlap):
+    def __multi_images(folders, work_folder, coefficients, modality):
+        inputs = Inputs(folders=folders,
+                        instance=DermatologyDataset(work_folder=work_folder, multi_coefficients=coefficients, modality=modality),
+                        loader=DermatologyDataset.__scan_and_multi,
+                        tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
+                              'group_label': 'Binary_Diagnosis'})
+        inputs.load()
+        inputs.set_temporary_folder(work_folder)
+        return inputs
+
+    @staticmethod
+    def __sliding_images(folders, work_folder, size, overlap, modality):
         parameters = {'Size': size,
                       'Overlap': overlap}
         inputs = Inputs(folders=folders,
-                        instance=DermatologyDataset(work_folder=work_folder, patch_parameters=parameters),
-                        loader=DermatologyDataset.__scan_confocal_and_patchify,
+                        instance=DermatologyDataset(work_folder=work_folder, patch_parameters=parameters, modality=modality),
+                        loader=DermatologyDataset.__scan_and_patchify,
                         tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
                               'group_label': 'Binary_Diagnosis'})
         inputs.load()
         inputs.set_temporary_folder(work_folder)
         return inputs
 
-    def __scan_for_confocal_multi(self, folder_path):
+    def __scan(self, folder_path):
         # Browse data
-        data_set = dermatology.Reader().scan_folder(folder_path, False)
-        data_set = data_set[data_set.Modality == 'Microscopy']
+        return dermatology.Reader().scan_folder(folder_path, parameters={'patches': True,
+                                                                         'modality': self.modality})
+
+    def __scan_and_multi(self, folder_path):
+        # Browse data
+        data_set = dermatology.Reader().scan_folder(folder_path=folder_path, parameters={'patches': False,
+                                                                                         'modality': self.modality})
 
         # Get into patches
         multis_data = []
@@ -152,6 +159,27 @@ class DermatologyDataset:
             multis_data.append(multi)
 
         return pd.concat(multis_data, sort=False)
+
+    def __scan_and_patchify(self, folder_path):
+        # Browse data
+        dataset = dermatology.Reader().scan_folder(folder_path, parameters={'patches': True,
+                                                                            'modality': self.modality})
+        images = dataset[dataset.Type == 'Full']
+        patches = dataset[dataset.Type == 'Patch']
+
+        # Get into patches
+        windows_data = [patches]
+        DermatologyDataset.__print_progress_bar(0, len(dataset), prefix='Progress:')
+        for index, (df_index, data) in zip(np.arange(len(images.index)), images.iterrows()):
+            DermatologyDataset.__print_progress_bar(index, len(images), prefix='Progress:')
+            windows = DermatologyDataset.__patchify(data['Full_Path'], data['Reference'], self.patch_parameters['Size'],
+                                                    self.patch_parameters['Overlap'], self.work_folder)
+            windows['Type'] = 'Window'
+            windows = pd.concat([windows, pd.DataFrame(data).T], sort=False)
+            windows = windows.fillna(data)
+            windows_data.append(windows)
+
+        return pd.concat(windows_data, sort=False)
 
     @staticmethod
     def __multi_resolution(filename, reference, coefficients, work_folder):
@@ -182,27 +210,6 @@ class DermatologyDataset:
                 new_image.save(meta['Full_Path'])
 
         return pd.DataFrame(metas)
-
-    def __scan_confocal_and_patchify(self, folder_path):
-        # Browse data
-        dataset = dermatology.Reader().scan_folder(folder_path)
-        dataset = dataset[dataset.Modality == 'Microscopy']
-        images = dataset[dataset.Type == 'Full']
-        patches = dataset[dataset.Type == 'Patch']
-
-        # Get into patches
-        windows_data = [patches]
-        DermatologyDataset.__print_progress_bar(0, len(dataset), prefix='Progress:')
-        for index, (df_index, data) in zip(np.arange(len(images.index)), images.iterrows()):
-            DermatologyDataset.__print_progress_bar(index, len(images), prefix='Progress:')
-            windows = DermatologyDataset.__patchify(data['Full_Path'], data['Reference'], self.patch_parameters['Size'],
-                                                    self.patch_parameters['Overlap'], self.work_folder)
-            windows['Type'] = 'Window'
-            windows = pd.concat([windows, pd.DataFrame(data).T], sort=False)
-            windows = windows.fillna(data)
-            windows_data.append(windows)
-
-        return pd.concat(windows_data, sort=False)
 
     @staticmethod
     def __patchify(filename, reference, window_size, overlap, work_folder):

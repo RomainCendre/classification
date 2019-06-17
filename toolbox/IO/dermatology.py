@@ -9,7 +9,7 @@ from pyocr import builders
 
 class Reader:
 
-    def scan_folder(self, folder_path, if_patches=True):
+    def scan_folder(self, folder_path, parameters={}):
         # Subdirectories
         subdirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
 
@@ -22,22 +22,36 @@ class Reader:
                 metas = metas.drop(columns='ID_JLP', errors='ignore')
                 images = Reader.__read_images_file(folder_path, subdir)
                 images = images.drop(columns='Depth(um)', errors='ignore')
-                if if_patches:
+
+                # Patch filter
+                if parameters.get('patches', True):
                     patches = Reader.__read_patches_file(folder_path, subdir)
                 else:
                     patches = None
+
+                # Modality filter
+                modality = parameters.get('modality', None)
+
                 # Merge both
                 images['ID'] = metas['ID'][0]
                 images = images.merge(metas)
                 images['Reference'] = images.apply(
                     lambda row: '{patient}_{image}_F'.format(patient=row['ID'], image=row.name), axis=1)
                 images['Source'] = images['Reference']
+                # Filter images
+                if modality is not None:
+                    images = images[images.Modality == modality]
+
                 if patches is not None:
                     patches['ID'] = metas['ID'][0]
                     patches = patches.merge(metas)
                     patches['Reference'] = patches.apply(
                         lambda row: '{patient}_{image}_P'.format(patient=row['ID'], image=row.name), axis=1)
                     patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0], axis=1)
+                    # Filter patches
+                    if modality is not None:
+                        patches = patches[patches.Modality == modality]
+
                 datas.append(pd.concat([images, patches], sort=False))
             except OSError:
                 print('Patient {}'.format(subdir))
