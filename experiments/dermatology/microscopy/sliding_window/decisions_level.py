@@ -1,6 +1,5 @@
 import webbrowser
-import misvm
-from numpy import array
+from numpy import array, logspace, itertools
 from os import makedirs
 from os.path import exists, splitext, basename, join
 from sklearn.pipeline import Pipeline
@@ -22,7 +21,7 @@ def get_supervised():
     pipe.name = 'LinearSVM'
     pipe.need_fit = True
     # Define parameters to validate through grid CV
-    parameters = {'clf__C': geomspace(0.01, 1000, 6).tolist()}
+    parameters = {'clf__C': logspace(-2, 3, 6).tolist()}
     return pipe, parameters
 
 
@@ -34,19 +33,7 @@ def get_semi_supervised():
     pipe.name = 'LabelSpreading'
     pipe.need_fit = True
     # Define parameters to validate through grid CV
-    parameters = {'clf__C': geomspace(0.01, 1000, 6).tolist()}
-    return pipe, parameters
-
-
-def get_mil_decision():
-    steps = [('scale', StandardScaler()),
-             ('clf', misvm.MISVM(kernel='linear', C=1.0, max_iters=50))]
-    # Add scaling step
-    pipe = Pipeline(steps)
-    pipe.name = 'MiSVM'
-    pipe.need_fit = True
-    # Define parameters to validate through grid CV
-    parameters = {'clf__C': geomspace(0.01, 1000, 6).tolist()}
+    parameters = {'clf__C': logspace(-2, 3, 6).tolist()}
     return pipe, parameters
 
 
@@ -71,9 +58,11 @@ def decision_level(slidings, folder):
     extractor = Transforms.get_keras_extractor(pooling='max')
 
     # Predicteur
-    predictor = [('Supervised', get_supervised()),
-                 ('Semi_supervised', get_semi_supervised()),
-                 ('Multi_Instance', get_mil_decision())]
+    predictors = [('Supervised', get_supervised()),
+                  ('SemiSupervised', get_semi_supervised())]
+
+    # Parameters combinations
+    combinations = list(itertools.product(slidings, predictors))
 
     # Browse combinations
     for filter_name, filter_datas, filter_encoder, filter_groups in filters:
@@ -82,9 +71,9 @@ def decision_level(slidings, folder):
         process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
         process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
-        for sliding in slidings:
+        for sliding, predictor in combinations:
             # Name experiment and filter data
-            name = '{sliding}'.format(sliding=sliding[0])
+            name = '{sliding}_{predictor}'.format(sliding=sliding[0], predictor=predictor[0])
             inputs = sliding[1].copy_and_change(filter_groups)
 
             # Filter datasets
@@ -100,7 +89,7 @@ def decision_level(slidings, folder):
             process.checkpoint_step(inputs=inputs, model=extractor)
 
             # Extract prediction on dataset
-            process.checkpoint_step(inputs=inputs, model=predictor)
+            process.checkpoint_step(inputs=inputs, model=predictor[1])
 
             # SCORE level predictions
             # Collapse information and make predictions
@@ -127,11 +116,6 @@ def decision_level(slidings, folder):
             inputs.set_filters(filter_datas)
             process.evaluate_step(inputs=decisions, model=Classifiers.get_linear_svm())
             inputs.name = '{name}_decision_classifier'.format(name=name)
-            model = DecisionVotingClassifier(mode='max')
-            x = array([[0, 1, 2, 3, 1], [0, 0, 0, 1, 3], [0, 0, 0, 0, 0], [0, 1, 2, 3, 1]])
-            y = array([1, 0, 2])
-            model.fit(x, y)
-            model.predict(x)
             process.evaluate_step(inputs=inputs, model=DecisionVotingClassifier())
 
         process.end()
@@ -149,8 +133,8 @@ if __name__ == "__main__":
         makedirs(output_folder)
 
     # # Input patch
-    # slidings_inputs = [('NoOverlap', DermatologyDataset.sliding_images(size=250, overlap=0)),
-    #                    ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50))]
+    # slidings_inputs = [('NoOverlap', DermatologyDataset.sliding_images(size=250, overlap=0, modality='Microscopy')),
+    #                    ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50, modality='Microscopy'))]
 
     windows_inputs = [('NoOverlap', DermatologyDataset.test_sliding_images(size=250, overlap=0))]
 

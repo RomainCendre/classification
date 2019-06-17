@@ -1,8 +1,9 @@
 import itertools
 import webbrowser
-import numpy as np
 from os import makedirs
 from os.path import exists, splitext, basename, join
+
+from numpy import logspace
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVC
@@ -19,7 +20,7 @@ def get_linear_svm():
     pipe.name = 'LinearSVM'
 
     # Define parameters to validate through grid CV
-    parameters = {'clf__C': np.logspace(-2, 6, 9).tolist()}
+    parameters = {'clf__C': logspace(-2, 3, 6).tolist()}
     return pipe, parameters
 
 
@@ -30,7 +31,7 @@ def get_rbf_svm():
     pipe.name = 'RbfSVM'
 
     # Define parameters to validate through grid CV
-    parameters = {'clf__C': np.logspace(-2, 6, 9).tolist(), 'clf__gamma': np.logspace(-2, 3, 6)}
+    parameters = {'clf__C': logspace(-2, 3, 6).tolist(), 'clf__gamma': logspace(-2, 3, 6).tolist()}
     return pipe, parameters
 
 

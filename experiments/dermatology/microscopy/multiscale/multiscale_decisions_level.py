@@ -1,14 +1,26 @@
 import webbrowser
 from os import makedirs
 from os.path import exists, splitext, basename, join
-
+from numpy import logspace
 from numpy.ma import array
-from sklearn.preprocessing import LabelEncoder
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.svm import SVC
 from experiments.processes import Process
 from toolbox.core.builtin_models import Transforms, Classifiers
-from toolbox.core.models import PatchClassifier
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
 from toolbox.core.transforms import OrderedEncoder, ArgMaxTransform
+
+
+def get_linear_svm():
+    # Add scaling step
+    steps = [('scale', StandardScaler()), ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))]
+    pipe = Pipeline(steps)
+    pipe.name = 'LinearSVM'
+
+    # Define parameters to validate through grid CV
+    parameters = {'clf__C': logspace(-2, 3, 6).tolist()}
+    return pipe, parameters
 
 
 def decision_level(multiresolution_inputs, folder):
@@ -69,7 +81,7 @@ def decision_level(multiresolution_inputs, folder):
 
         # Evaluate using svm
         inputs.name = 'Multi_resolution_score_svm'
-        process.evaluate_step(inputs=scores, model=Classifiers.get_linear_svm())
+        process.evaluate_step(inputs=scores, model=get_linear_svm())
         inputs.name = 'Multi_resolution_score_classifier'
         hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
         process.evaluate_step(inputs=scores, model=PatchClassifier(hierarchies))
@@ -85,7 +97,7 @@ def decision_level(multiresolution_inputs, folder):
         # Evaluate using svm
         inputs.name = 'Multi_resolution_decision_svm'
         inputs.set_filters(filter_datas)
-        process.evaluate_step(inputs=decisions, model=Classifiers.get_linear_svm())
+        process.evaluate_step(inputs=decisions, model=get_linear_svm())
         inputs.name = 'Multi_resolution_decision_classifier'
         hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
         process.evaluate_step(inputs=inputs, model=PatchClassifier(hierarchies))

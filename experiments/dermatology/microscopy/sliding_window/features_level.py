@@ -1,7 +1,9 @@
 import webbrowser
 from os import makedirs
 from os.path import exists, splitext, basename, join
-from numpy import geomspace
+
+import misvm
+from numpy import logspace, itertools
 from sklearn.feature_selection import f_classif
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
@@ -14,58 +16,54 @@ from toolbox.core.transforms import OrderedEncoder, PNormTransform, FlattenTrans
 
 
 def get_reduce_model():
-    steps = []
-    parameters = {}
+    # Steps and parameters
+    steps = [('flatten', FlattenTransform()),
+             ('scale', StandardScaler()),
+             ('reduction', SelectAtMostKBest(f_classif)),
+             ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))]
 
-    steps.append(('flatten', FlattenTransform()))
+    parameters = {'reduction__k': [20, 50, 100],
+                  'clf__C': logspace(-2, 3, 6).tolist()}
 
-    # Add reduction step
-    steps.append(('reduction', None))
-    features = [20, 50, 100]
-    kbest_p = {'reduction': SelectAtMostKBest(f_classif),
-               'reduction__k': features}
-
-    # Add scaling step
-    steps.append(('scale', StandardScaler()))
-
-    # Add classifier full
-    steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
-    parameters.update({'clf__C': geomspace(0.1, 1000, 5).tolist()})
-
-    kbest_p.update(parameters)
-    m_parameters = [kbest_p]
-
+    # Create pipeline
     pipe = Pipeline(steps)
     pipe.name = 'Reduce'
-    # Define parameters to validate through grid CV
-    return pipe, m_parameters
+    pipe.need_fit = True
+    return pipe, parameters
 
 
-def get_norm_model(patch_level=True, norm=False):
-    steps = []
-    parameters = {}
+def get_norm_model():
+    # Steps and parameters
+    steps = [('norm', PNormTransform()),
+             ('scale', StandardScaler()),
+             ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))]
 
-    # Add dimensions reducer
-    p_values = [2, 3, 5, 10]
+    parameters = {'norm__p': [2, 3, 5],
+                  'clf__C': logspace(-2, 3, 6).tolist()}
 
-    steps.append(('norm', PNormTransform()))
-    parameters.update({'norm__p': p_values})
-
-    # Add scaling step
-    steps.append(('scale', StandardScaler()))
-
-    # Add classifier full
-    steps.append(('clf', SVC(kernel='linear', class_weight='balanced', probability=True)))
-    parameters.update({'clf__C': geomspace(0.1, 1000, 5).tolist()})
-
+    # Create pipeline
     pipe = Pipeline(steps)
-    pipe.name = 'Norm'
-    # Define parameters to validate through grid CV
+    pipe.name = 'PNorm'
+    pipe.need_fit = True
+    return pipe, parameters
+
+
+def get_mil_decision():
+    # Steps and parameters
+    steps = [('scale', StandardScaler()),
+             ('clf', misvm.MISVM(kernel='linear', C=1.0, max_iters=50))]
+
+    parameters = {'clf__C': logspace(-2, 3, 6).tolist()}
+
+    # Create pipeline
+    pipe = Pipeline(steps)
+    pipe.name = 'MiSVM'
+    pipe.need_fit = True
+
     return pipe, parameters
 
 
 def features_level(slidings, folder):
-
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
     validation, test = LocalParameters.get_validation_test()
@@ -77,14 +75,17 @@ def features_level(slidings, folder):
     # Filters
     filters = LocalParameters.get_dermatology_filters()
 
-    # View
-    view_folder = join(folder, 'View')
-    if not exists(view_folder):
-        makedirs(view_folder)
-
     # Extracteur
     extractor = Transforms.get_keras_extractor(pooling='max')
     extractor.need_fit = False
+
+    # Evaluateurs
+    evaluators = [('Reduced', get_reduce_model()),
+                  ('PNorm', get_norm_model()),
+                  ('MultiInstance', get_mil_decision())]
+
+    # Parameters combinations
+    combinations = list(itertools.product(slidings, evaluators))
 
     # Browse combinations
     for filter_name, filter_datas, filter_encoder, filter_groups in filters:
@@ -93,10 +94,10 @@ def features_level(slidings, folder):
         process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
         process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
-        for sliding in slidings:
+        for sliding, evaluator in combinations:
 
             # Name experiment and filter data
-            name = '{sliding}'.format(sliding=sliding[0])
+            name = '{sliding}_{evaluator}'.format(sliding=sliding[0], evaluator=evaluator[0])
             inputs = sliding[1].copy_and_change(filter_groups)
 
             # Filter datasets
@@ -116,15 +117,10 @@ def features_level(slidings, folder):
             features = inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Window']}, 'Source')
 
             # Evaluate using svm
-            inputs.name = '{name}_reduce'.format(name=name)
-            process.evaluate_step(inputs=features, model=get_reduce_model())
-            inputs.name = '{name}_norm'.format(name=name)
-            process.evaluate_step(inputs=features, model=get_norm_model())
+            inputs.name = '{name}'.format(name=name)
+            process.evaluate_step(inputs=features, model=evaluator[1])
 
         process.end()
-
-    # Open result folder
-    startfile(output_folder)
 
 
 if __name__ == "__main__":
