@@ -2,6 +2,7 @@ name: Skin
 channels:
   - defaults
 dependencies:
+  - joblib=0.13.2
   - keras=2.2.4
   - keras-applications=1.0.6
   - keras-base=2.2.4
