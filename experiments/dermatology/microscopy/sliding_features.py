@@ -63,7 +63,7 @@ def get_mil_decision():
     return pipe, parameters
 
 
-def features_level(slidings, folder):
+def sliding_features(slidings, folder):
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
     validation, test = LocalParameters.get_validation_test()
@@ -141,7 +141,7 @@ if __name__ == "__main__":
     windows_inputs = [('NoOverlap', DermatologyDataset.test_sliding_images(size=250, overlap=0))]
 
     # Compute data
-    features_level(windows_inputs, output_folder)
+    sliding_features(windows_inputs, output_folder)
 
     # Open result folder
     webbrowser.open('file:///{folder}'.format(folder=output_folder))

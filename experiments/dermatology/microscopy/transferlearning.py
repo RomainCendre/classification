@@ -24,7 +24,7 @@ def get_linear_svm():
     return pipe, parameters
 
 
-def simple(original_inputs, folder):
+def transfer_learning(original_inputs, folder):
 
     # Advanced parameters
     nb_cpu = LocalParameters.get_cpu_number()
@@ -44,7 +44,6 @@ def simple(original_inputs, folder):
                ('NASNet', Transforms.get_keras_extractor(pooling='NASNet'))]
 
     # Models
-
     models = [('Svm', get_linear_svm())]
 
     # Parameters combinations
@@ -105,7 +104,7 @@ if __name__ == "__main__":
     image_inputs = DermatologyDataset.images(modality='Microscopy')
 
     # Compute data
-    simple(image_inputs, output_folder)
+    transfer_learning(image_inputs, output_folder)
 
     # Open result folder
     webbrowser.open('file:///{folder}'.format(folder=output_folder))

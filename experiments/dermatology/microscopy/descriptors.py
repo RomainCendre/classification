@@ -35,7 +35,7 @@ def get_rbf_svm():
     return pipe, parameters
 
 
-def simple(original_inputs, folder):
+def descriptors(original_inputs, folder):
 
     # Advanced parameters
     nb_cpu = LocalParameters.get_cpu_number()
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     image_inputs = DermatologyDataset.images(modality='Microscopy')
 
     # Compute data
-    simple(image_inputs, output_folder)
+    descriptors(image_inputs, output_folder)
 
     # Open result folder
     webbrowser.open('file:///{folder}'.format(folder=output_folder))

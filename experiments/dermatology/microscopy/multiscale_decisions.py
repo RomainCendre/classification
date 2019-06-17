@@ -23,7 +23,7 @@ def get_linear_svm():
     return pipe, parameters
 
 
-def decision_level(multiresolution_inputs, folder):
+def multiscale_decision(multiresolution_inputs, folder):
 
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     multiresolution_input = DermatologyDataset.multiresolution(coefficients=[1, 0.75, 0.5, 0.25])
 
     # Compute data
-    decision_level(multiresolution_input, output_folder)
+    multiscale_decision(multiresolution_input, output_folder)
 
     # Open result folder
     webbrowser.open('file:///{folder}'.format(folder=output_folder))
