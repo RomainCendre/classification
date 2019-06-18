@@ -26,7 +26,7 @@ class ORLDataset:
     @staticmethod
     def test_spectras():
         here_path = ospath.dirname(__file__)
-        input_folders = [ospath.normpath('{here}/data/spectroscopy/Patients.csv'.format(here=here_path))]
+        input_folders = [ospath.normpath('{here}/../data_test/spectroscopy/Patients.csv'.format(here=here_path))]
         return ORLDataset.__spectras(input_folders)
 
     @staticmethod
@@ -81,7 +81,7 @@ class DermatologyDataset:
         features_folder = join(gettempdir(), 'Features')
         if not exists(features_folder):
             makedirs(features_folder)
-        return DermatologyDataset.__images(input_folders, features_folder)
+        return DermatologyDataset.__images(input_folders, features_folder, 'Microscopy')
 
     @staticmethod
     def test_multiresolution(coefficients):
@@ -90,7 +90,7 @@ class DermatologyDataset:
         work_folder = ospath.join(gettempdir(), '.research')
         if not exists(work_folder):
             makedirs(work_folder)
-        return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients)
+        return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients, 'Microscopy')
 
     @staticmethod
     def test_sliding_images(size, overlap):
@@ -100,7 +100,7 @@ class DermatologyDataset:
         work_folder = ospath.join(gettempdir(), '.research')
         if not exists(work_folder):
             makedirs(work_folder)
-        return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap)
+        return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap, 'Microscopy')
 
     @staticmethod
     def __images(folders, work_folder, modality):

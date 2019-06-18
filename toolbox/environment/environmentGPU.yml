@@ -22,7 +22,7 @@ dependencies:
   - pip:
     - git+https://github.com/luispedro/mahotas.git#egg=mahotas
     - git+https://github.com/RomainCendre/keras-vis.git#egg=keras-vis
-      - git+https://github.com/garydoranjr/misvm.git#egg=misvm
+    - git+https://github.com/garydoranjr/misvm.git#egg=misvm
     - markups==3.0.0
     - pillow==5.3.0
     - pyocr==0.5.3
