@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/experiments/otorhinolaryngology/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/cluster/fine_tune.job" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/cluster/fine_tune.job" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/cluster/config_cluster.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/cluster/fine_tune.job" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/cluster_ub/fine_tune.job" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/cluster/send_data.bat" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/cluster_ub/send_data.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/cluster/tool.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/cluster_ub/tool.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,7 +19,7 @@
     <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1556789224799" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools" />
     <SUITE FILE_PATH="coverage/classification$test_experiments.coverage" NAME="test_experiments Coverage Results" MODIFIED="1559894677583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$simple__1_.coverage" NAME="simple (1) Coverage Results" MODIFIED="1557824978247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/otorhinolaryngology" />
-    <SUITE FILE_PATH="coverage/classification$Unittests_in_test_experiments_py.coverage" NAME="Unittests in test_experiments.py Coverage Results" MODIFIED="1560782083941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
+    <SUITE FILE_PATH="coverage/classification$Unittests_in_test_experiments_py.coverage" NAME="Unittests in test_experiments.py Coverage Results" MODIFIED="1560845525253" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$score_level.coverage" NAME="score_level Coverage Results" MODIFIED="1557316745744" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$features_level.coverage" NAME="features_level Coverage Results" MODIFIED="1559638826584" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$fine_tune.coverage" NAME="fine_tune Coverage Results" MODIFIED="1560260544044" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/full" />
@@ -39,32 +41,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_decisions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
+            <state relative-caret-position="-289">
               <caret line="1" selection-start-line="1" selection-end-line="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/finetune.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="52" selection-start-line="3" selection-start-column="52" selection-end-line="3" selection-end-column="52" />
+            <state relative-caret-position="-692">
+              <caret line="36" column="13" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="13" />
+              <folding>
+                <element signature="e#0#16#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/descriptors.py">
+        <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2040">
-              <caret line="120" column="44" lean-forward="true" selection-start-line="120" selection-start-column="44" selection-end-line="120" selection-end-column="44" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="272">
+              <caret line="16" column="60" selection-start-line="16" selection-start-column="60" selection-end-line="16" selection-end-column="60" />
             </state>
           </provider>
         </entry>
@@ -73,65 +75,36 @@
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_features.py">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret selection-end-column="16" />
-              <folding>
-                <element signature="e#1#17#0" expanded="true" />
-              </folding>
+              <caret selection-end-line="14" selection-end-column="84" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/patient_level.py">
-          <provider selected="true" editor-type-id="text-editor" />
+        <entry file="file://$PROJECT_DIR$/toolbox/environment/environmentGPU.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="13" column="20" lean-forward="true" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/toolbox/environment/environment.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="10" lean-forward="true" selection-start-column="10" selection-end-column="10" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="87" column="44" lean-forward="true" selection-start-line="87" selection-start-column="44" selection-end-line="87" selection-end-column="44" />
+            <state relative-caret-position="323">
+              <caret line="28" column="61" selection-start-line="28" selection-start-column="61" selection-end-line="28" selection-end-column="61" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/cluster/config_cluster.sh">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="2" selection-end-column="35" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/experiments/cluster/fine_tune.job">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="96" selection-start-line="17" selection-start-column="96" selection-end-line="17" selection-end-column="96" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale_decisions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="16" selection-start-column="7" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/finetune.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="36" column="13" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="13" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -211,7 +184,6 @@
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.job" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/config_cluster.sh" />
         <option value="$PROJECT_DIR$/toolbox/IO/writers.py" />
-        <option value="$PROJECT_DIR$/experiments/cluster/config_cluster.sh" />
         <option value="$PROJECT_DIR$/experiments/cluster/send_data.bat" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" />
         <option value="$PROJECT_DIR$/experiments/cluster/tool.sh" />
@@ -225,10 +197,8 @@
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/multiple_instances.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/decisions_level.py" />
         <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
-        <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
         <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/fine_tune.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/transfer_learning.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/decisions_level.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/features_level.py" />
@@ -240,6 +210,9 @@
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_features.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale_decisions.py" />
         <option value="$PROJECT_DIR$/experiments/cluster/fine_tune.job" />
+        <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
+        <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
+        <option value="$PROJECT_DIR$/experiments/cluster/config_cluster.sh" />
       </list>
     </option>
   </component>
@@ -270,7 +243,7 @@
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
               <item name="classification" type="462c0819:PsiDirectoryNode" />
               <item name="experiments" type="462c0819:PsiDirectoryNode" />
-              <item name="cluster" type="462c0819:PsiDirectoryNode" />
+              <item name="cluster_ub" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
@@ -301,6 +274,19 @@
               <item name="classification" type="462c0819:PsiDirectoryNode" />
               <item name="toolbox" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
+              <item name="classification" type="462c0819:PsiDirectoryNode" />
+              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
+              <item name="data_test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
+              <item name="classification" type="462c0819:PsiDirectoryNode" />
+              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
+              <item name="data_test" type="462c0819:PsiDirectoryNode" />
+              <item name="spectroscopy" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
@@ -499,21 +485,7 @@
       <workItem from="1559806222887" duration="9139000" />
       <workItem from="1560240472121" duration="26341000" />
       <workItem from="1560497866606" duration="12036000" />
-      <workItem from="1560758533831" duration="17455000" />
-    </task>
-    <task id="LOCAL-00034" summary="Adding score level decision way.">
-      <created>1557316790452</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1557316790452</updated>
-    </task>
-    <task id="LOCAL-00035" summary="Change data test.">
-      <created>1557316836233</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1557316836233</updated>
+      <workItem from="1560758533831" duration="20055000" />
     </task>
     <task id="LOCAL-00036" summary="Update labels for report file.">
       <created>1557331144285</created>
@@ -844,7 +816,21 @@
       <option name="project" value="LOCAL" />
       <updated>1560782081428</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="Update cluster job.">
+      <created>1560844625149</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1560844625149</updated>
+    </task>
+    <task id="LOCAL-00084" summary="Update cluster job (git clone) and update unitary test.">
+      <created>1560845814734</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1560845814734</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -866,9 +852,12 @@
     <history-entry file="Unittests_in_test_experiments_py - 2019.06.17 at 16h 34m 47s.xml">
       <configuration name="Unittests in test_experiments.py" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_in_test_experiments_py - 2019.06.18 at 10h 12m 41s.xml">
+      <configuration name="Unittests in test_experiments.py" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="310185000" />
+    <option name="totallyTimeSpent" value="312785000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -881,15 +870,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49585634" visible="true" weight="0.25524476" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49585634" visible="true" weight="0.25524476" />
       <window_info id="Structure" order="1" sideWeight="0.50414366" side_tool="true" weight="0.23676324" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3286119" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" weight="0.3279678" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.4995005" visible="true" weight="0.5191147" />
+      <window_info active="true" anchor="bottom" id="Run" order="3" sideWeight="0.4995005" visible="true" weight="0.39235413" />
       <window_info anchor="bottom" id="Debug" order="4" weight="0.3470825" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
@@ -952,8 +940,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Trying to fix display of matplotlib." />
-    <MESSAGE value="Remove remaining startfile." />
     <MESSAGE value="Fix Fine tune process by change data filter and folds." />
     <MESSAGE value="Adding tools for cluster." />
     <MESSAGE value="Update fine tune options." />
@@ -977,7 +963,9 @@
     <MESSAGE value="Change file hierarchy for experiments in microscopy." />
     <MESSAGE value="Review experiments name and test file." />
     <MESSAGE value="Update all experiments tests." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update all experiments tests." />
+    <MESSAGE value="Update cluster job." />
+    <MESSAGE value="Update cluster job (git clone) and update unitary test." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update cluster job (git clone) and update unitary test." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1179,7 +1167,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/cluster/tool.sh">
+    <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/tool.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
@@ -1275,24 +1263,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/environment/environmentGPU.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="62" selection-start-line="24" selection-start-column="62" selection-end-line="24" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/environment/environment.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="10" lean-forward="true" selection-start-column="10" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/cluster/send_data.bat">
+    <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/send_data.bat">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="91" lean-forward="true" selection-start-column="91" selection-end-line="1" selection-end-column="92" />
@@ -1342,27 +1316,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_decisions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="3" column="52" selection-start-line="3" selection-start-column="52" selection-end-line="3" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_features.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-column="16" />
-          <folding>
-            <element signature="e#1#17#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1376,16 +1333,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/finetune.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="36" column="13" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/descriptors.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2040">
@@ -1396,27 +1343,65 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/fine_tune.job">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="96" selection-start-line="17" selection-start-column="96" selection-end-line="17" selection-end-column="96" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/finetune.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-692">
+          <caret line="36" column="13" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/environment/environment.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="10" lean-forward="true" selection-start-column="10" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/environment/environmentGPU.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="20" lean-forward="true" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="87" column="44" lean-forward="true" selection-start-line="87" selection-start-column="44" selection-end-line="87" selection-end-column="44" />
+        <state relative-caret-position="323">
+          <caret line="28" column="61" selection-start-line="28" selection-start-column="61" selection-end-line="28" selection-end-column="61" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/cluster/config_cluster.sh">
+    <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="2" selection-end-column="35" />
+        <state relative-caret-position="272">
+          <caret line="16" column="60" selection-start-line="16" selection-start-column="60" selection-end-line="16" selection-end-column="60" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/cluster/fine_tune.job">
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_features.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="96" selection-start-line="17" selection-start-column="96" selection-end-line="17" selection-end-column="96" />
+        <state>
+          <caret selection-end-line="14" selection-end-column="84" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_decisions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-289">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
