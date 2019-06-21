@@ -1,5 +1,7 @@
 from collections import Counter
 from os import makedirs
+from pathlib import Path
+
 import markups
 import pandas
 import pickle
@@ -7,7 +9,6 @@ import pickle
 from PIL import Image, ImageDraw
 import matplotlib as mpl
 from matplotlib import pyplot
-from os.path import join, exists
 from keras import backend as K
 from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
@@ -22,9 +23,14 @@ class DataProjectorWriter:
     # Have to improve this tool, see callbacks.py to get clues
     @staticmethod
     def project_data(inputs, output_folder):
-
+        # Check backend type
         if not K.backend() == 'tensorflow':
             return
+
+        # Check output folder
+        output_folder = Path(output_folder)
+        if not output_folder.exists():
+            output_folder.mkdir()
 
         # Write a batch to easily launch it
         DataProjectorWriter.write_batch(output_folder)
@@ -35,14 +41,14 @@ class DataProjectorWriter:
         labels = inputs.get_labels(encode=False)
 
         # Write data
-        data_path = join(output_folder, 'data.ckpt')
+        data_path = output_folder/'data.ckpt'
         tf_data = tensorflow.Variable(datas)
         saver = tensorflow.train.Saver([tf_data])
         sess.run(tf_data.initializer)
         saver.save(sess, data_path)
 
         # Write label as metadata
-        metadata_path = join(output_folder, 'metadata.tsv')
+        metadata_path = output_folder/'metadata.tsv'
         np.savetxt(metadata_path, labels, delimiter='\t', fmt='%s')
 
         config = projector.ProjectorConfig()
@@ -56,16 +62,22 @@ class DataProjectorWriter:
 
     @staticmethod
     def write_batch(output_folder):
-        file = open(join(output_folder, 'tb_launch.bat'), "w")
+        file = open(output_folder/'tb_launch.bat', "w")
         file.write('tensorboard --logdir={}'.format("./"))
         file.close()
 
 
 class StatisticsWriter:
 
-    def __init__(self, keys, dir_name, name):
+    def __init__(self, keys, output_folder, name):
+        # Check output folder
+        output_folder = Path(output_folder)
+        if not output_folder.exists():
+            output_folder.mkdir()
+        # Fill properties
         self.keys = keys
-        self.pdf = PdfPages(join(dir_name, name + "_stat.pdf"))
+        # TODO change pdf way of concatenate
+        self.pdf = PdfPages(output_folder/'{name}_stat.pdf'.format(name=name))
         mpl.use('agg')
 
     def end(self):
@@ -98,10 +110,15 @@ class ResultWriter:
         self.settings = settings
         mpl.use('agg')
 
-    def write_results(self, dir_name, name, use_std=True):
-        self.write_report(use_std=use_std, path=join(dir_name, '{name}_report.html'.format(name=name)))
-        self.write_roc(path=join(dir_name, '{name}_rocs.pdf'.format(name=name)))
-        self.write_misclassified(path=join(dir_name, '{name}_misclassified.csv'.format(name=name)))
+    def write_results(self, output_folder, name, use_std=True):
+        # Check output folder
+        output_folder = Path(output_folder)
+        if not output_folder.exists():
+            output_folder.mkdir()
+
+        self.write_report(use_std=use_std, path=output_folder/'{name}_report.html'.format(name=name))
+        self.write_roc(path=output_folder/'{name}_rocs.pdf'.format(name=name))
+        self.write_misclassified(path=output_folder/'{name}_misclassified.csv'.format(name=name))
 
     def write_misclassified(self, path=None):
         for result in self.results:
@@ -259,9 +276,14 @@ class ResultWriter:
 
 
 class PCAProjection:
-    def __init__(self, settings, dir_name, name):
+    def __init__(self, settings, output_folder, name):
+        # Check output folder
+        output_folder = Path(output_folder)
+        if not output_folder.exists():
+            output_folder.mkdir()
+        # Fill properties
         self.settings = settings
-        self.pdf = PdfPages(join(dir_name, name + "_pca.pdf"))
+        self.pdf = PdfPages(output_folder/'{name}_pca.pdf'.format(name=name))
 
     def end(self):
         self.pdf.close()
@@ -345,10 +367,16 @@ class PatchWriter:
         self.inputs = inputs
         self.settings = settings
 
-    def write_patch(self, folder):
-        folder = join(folder, self.inputs.name)
-        if not exists(folder):
-            makedirs(folder)
+    def write_patch(self, output_folder):
+        # Check output folder
+        output_folder = Path(output_folder)
+        if not output_folder.exists():
+            output_folder.mkdir()
+
+        output_folder = output_folder/self.inputs.name
+        if not output_folder.exists():
+            output_folder.mkdir()
+
         references = list(set(self.inputs.get_from_key('Reference')))
 
         for index, reference in enumerate(references):
@@ -367,7 +395,7 @@ class PatchWriter:
                 draw = ImageDraw.Draw(image)
                 draw.rectangle(center, fill=color)
                 # draw.rectangle((start, end), outline="white")
-            image.save(join(folder, '{ref}_{lab}.png'.format(ref=reference, lab=label[0])))
+            image.save(output_folder/'{ref}_{lab}.png'.format(ref=reference, lab=label[0]))
 
 
 class ObjectManager:
