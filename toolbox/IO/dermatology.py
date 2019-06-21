@@ -2,7 +2,7 @@ from glob import glob
 import pandas as pd
 import pyocr
 from os import listdir, makedirs, path
-from os.path import isdir, join, exists
+from os.path import isdir, join, exists, normpath
 from PIL import Image
 from pyocr import builders
 
@@ -65,7 +65,7 @@ class Reader:
 
         # Read csv and add tag for path
         images = pd.read_csv(images_file, dtype=str)
-        images['Full_Path'] = images.apply(lambda row: join(parent_folder, subdir, row['Modality'], row['Path']),
+        images['Full_Path'] = images.apply(lambda row: normpath(join(parent_folder, subdir, row['Modality'], row['Path'])),
                                            axis=1)
         images['Type'] = 'Full'
         return images
@@ -79,8 +79,8 @@ class Reader:
 
         # Read csv and add tag for path
         patches = pd.read_csv(patch_file, dtype=str)
-        patches['Full_Path'] = patches.apply(lambda row: join(parent_folder, subdir, 'patches', row['Path']),
-                                           axis=1)
+        patches['Full_Path'] = patches.apply(lambda row: normpath(join(parent_folder, subdir, 'patches', row['Path'])),
+                                             axis=1)
         patches['Type'] = 'Patch'
         return patches
 
