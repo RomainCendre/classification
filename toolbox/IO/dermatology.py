@@ -1,4 +1,3 @@
-from glob import glob
 import pandas as pd
 import pyocr
 from PIL import Image
@@ -67,7 +66,7 @@ class Reader:
         # Read csv and add tag for path
         images = pd.read_csv(images_file, dtype=str)
         # images['Path'] = images.apply(lambda row: Path(row['Path']), axis=1)
-        images['Full_Path'] = images.apply(lambda row: subdir/row['Modality']/row['Path'], axis=1)
+        images['Full_Path'] = images.apply(lambda row: str(subdir/row['Modality']/row['Path']), axis=1)
         images['Type'] = 'Full'
         return images
 
@@ -81,7 +80,7 @@ class Reader:
         # Read csv and add tag for path
         patches = pd.read_csv(patch_file, dtype=str)
         # patches['Path'] = patches.apply(lambda row: normpath(row['Path']), axis=1)
-        patches['Full_Path'] = patches.apply(lambda row: subdir/'patches'/row['Path'], axis=1)
+        patches['Full_Path'] = patches.apply(lambda row: str(subdir/'patches'/row['Path']), axis=1)
         patches['Type'] = 'Patch'
         return patches
 
