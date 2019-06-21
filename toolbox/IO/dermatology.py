@@ -1,31 +1,32 @@
 from glob import glob
 import pandas as pd
 import pyocr
-from os import listdir, makedirs, path
-from os.path import isdir, join, exists, normpath
 from PIL import Image
 from pyocr import builders
+from pathlib import Path
 
 
 class Reader:
 
     def scan_folder(self, folder_path, parameters={}):
-        # Subdirectories
-        subdirs = [name for name in listdir(folder_path) if isdir(join(folder_path, name))]
+        # Go through pathlib
+        folder_path = Path(folder_path)
+        if not folder_path.is_dir():
+            raise ValueError('{folder} not a folder'.format(folder=folder_path))
 
         # Browse subdirectories
         datas = []
-        for subdir in subdirs:
+        for subdir in folder_path.iterdir():
             try:
                 # Read patient and images data
-                metas = Reader.__read_patient_file(join(folder_path, subdir))
+                metas = Reader.__read_patient_file(subdir)
                 metas = metas.drop(columns='ID_JLP', errors='ignore')
-                images = Reader.__read_images_file(folder_path, subdir)
+                images = Reader.__read_images_file(subdir)
                 images = images.drop(columns='Depth(um)', errors='ignore')
 
                 # Patch filter
                 if parameters.get('patches', True):
-                    patches = Reader.__read_patches_file(folder_path, subdir)
+                    patches = Reader.__read_patches_file(subdir)
                 else:
                     patches = None
 
@@ -59,36 +60,35 @@ class Reader:
         return pd.concat(datas, sort=False, ignore_index=True).drop(columns='Path')
 
     @staticmethod
-    def __read_images_file(parent_folder, subdir):
+    def __read_images_file(subdir):
         # Patient file
-        images_file = join(parent_folder, subdir, 'images.csv')
+        images_file = subdir/'images.csv'
 
         # Read csv and add tag for path
         images = pd.read_csv(images_file, dtype=str)
-        images['Path'] = images.apply(lambda row: normpath(row['Path']), axis=1)
-        images['Full_Path'] = images.apply(lambda row: join(parent_folder, subdir, row['Modality'], row['Path']), axis=1)
+        # images['Path'] = images.apply(lambda row: Path(row['Path']), axis=1)
+        images['Full_Path'] = images.apply(lambda row: subdir/row['Modality']/row['Path'], axis=1)
         images['Type'] = 'Full'
         return images
 
     @staticmethod
-    def __read_patches_file(parent_folder, subdir):
+    def __read_patches_file(subdir):
         # Patient file
-        patch_file = join(parent_folder, subdir, 'patches.csv')
-        if not exists(patch_file):
+        patch_file = subdir/'patches.csv'
+        if not patch_file.is_dir():
             return None
 
         # Read csv and add tag for path
         patches = pd.read_csv(patch_file, dtype=str)
-        patches['Path'] = patches.apply(lambda row: normpath(row['Path']), axis=1)
-        patches['Full_Path'] = patches.apply(lambda row: join(parent_folder, subdir, 'patches', row['Path']), axis=1)
+        # patches['Path'] = patches.apply(lambda row: normpath(row['Path']), axis=1)
+        patches['Full_Path'] = patches.apply(lambda row: subdir/'patches'/row['Path'], axis=1)
         patches['Type'] = 'Patch'
         return patches
 
     @staticmethod
     def __read_patient_file(folder_path):
         # Patient file
-        patient_file = join(folder_path, 'patient.csv')
-        return pd.read_csv(patient_file, dtype=str)
+        return pd.read_csv(folder_path/'patient.csv', dtype=str)
 
 
 class ConfocalBuilder(builders.TextBuilder):
@@ -101,91 +101,101 @@ class ConfocalBuilder(builders.TextBuilder):
 class DataManager:
 
     def __init__(self, root_folder):
-        self.table_file = path.join(root_folder, 'Table.csv')
-        self.rcm_file = path.join(root_folder, 'RCM.csv')
-        self.microscopy_folder = path.join(root_folder, 'Microscopy')
-        self.dermoscopy_folder = path.join(root_folder, 'Dermoscopy')
-        self.photography_folder = path.join(root_folder, 'Photography')
+        # Go through pathlib
+        root_folder = Path(root_folder)
+        if not root_folder.is_dir():
+            raise ValueError('{folder} not a folder'.format(folder=root_folder))
+
+        self.table_file = root_folder/'Table.csv'
+        self.rcm_file = root_folder/'RCM.csv'
+        self.microscopy_folder = root_folder/'Microscopy'
+        self.dermoscopy_folder = root_folder/'Dermoscopy'
+        self.photography_folder = root_folder/'Photography'
         self.labels = ['Malignant', 'Benign', 'Normal', 'Doubtful', 'Draw']
 
-    def compute_dermoscopy(self, source_id, label, destination):
-        destination_folder = path.join(destination, 'Dermoscopy')
-        if not path.exists(destination_folder):
-            makedirs(destination_folder)
+    def compute_dermoscopy(self, source_id, label, output_folder):
+        # Check output folder
+        output_folder = Path(output_folder)
+        output_folder = output_folder/'Dermoscopy'
+        if not output_folder.exists():
+            output_folder.mkdir()
 
+        # Browse source files
         images = []
-        folder = path.join(self.dermoscopy_folder, source_id)
-        files = glob(folder + " (*.jpg", recursive=True)
-        for source_file in files:
+        for source_file in self.dermoscopy_folder.glob('{id} (*.jpg'.format(id=source_id)):
             image = Image.open(source_file)
             width, height = image.size
-            destination_file = path.join(destination_folder, path.basename(source_file))
+            output_file = output_folder/'{base}.bmp'.format(base=source_file.stem)
             raw_image = Image.open(source_file)
-            raw_image.save(destination_file, "BMP")
+            raw_image.save(output_file, "BMP")
             images.append({'Modality': 'Dermoscopy',
-                           'Path': path.relpath(destination_file, destination_folder),
+                           'Path': output_file.relative_to(output_folder).as_posix(),
                            'Label': label,
                            'Height': height,
                            'Width': width})
         return images
 
-    def compute_photography(self, source_id, label, destination):
-        destination_folder = path.join(destination, 'Photography')
-        if not path.exists(destination_folder):
-            makedirs(destination_folder)
+    def compute_photography(self, source_id, label, output_folder):
+        # Check output folder
+        output_folder = Path(output_folder)
+        output_folder = output_folder/'Photography'
+        if not output_folder.exists():
+            output_folder.mkdir()
 
+        # Browse source files
         images = []
-        folder = path.join(self.photography_folder, source_id)
-        files = glob(folder + " (*.jpg", recursive=True)
-        for source_file in files:
+        for source_file in self.photography_folder.glob('{id} (*.jpg'.format(id=source_id)):
             image = Image.open(source_file)
             width, height = image.size
-            destination_file = path.join(destination_folder, path.basename(source_file))
+            output_file = output_folder/'{base}.bmp'.format(base=source_file.stem)
             raw_image = Image.open(source_file)
-            raw_image.save(destination_file, "BMP")
+            raw_image.save(output_file, "BMP")
             images.append({'Modality': 'Photography',
-                           'Path': path.relpath(destination_file, destination_folder),
+                           'Path': output_file.relative_to(output_folder).as_posix(),
                            'Label': label,
                            'Height': height,
                            'Width': width})
-
         return images
 
-    def compute_microscopy(self, source_id, destination):
+    def compute_microscopy(self, source_id, output_folder):
+        # Check output folder
+        output_folder = Path(output_folder)
+        output_folder = output_folder/'Microscopy'
+        if not output_folder.exists():
+            output_folder.mkdir()
+
         # Read microscopy file for each patient
         rcm_data = pd.read_csv(self.rcm_file, dtype=str)
-        # Folder where are send new data
-        destination_folder = path.join(destination, 'Microscopy')
-        if not path.exists(destination_folder):
-            makedirs(destination_folder)
 
         images = []
         microscopy_labels = rcm_data[rcm_data['ID_RCM'] == source_id]
-        microscopy_folder = path.join(self.microscopy_folder, source_id)
+        microscopy_folder = self.microscopy_folder/source_id
         for ind, row_label in microscopy_labels.iterrows():
+            # Prepare if needed sub folders
             if pd.isna(row_label['Folder']):
                 microscopy_subfolder = microscopy_folder
-                destination_subfolder = destination_folder
+                output_subfolder = output_folder
             else:
-                microscopy_subfolder = path.join(microscopy_folder, row_label['Folder'])
-                destination_subfolder = path.join(destination_folder, row_label['Folder'])
-                if not path.exists(destination_subfolder):
-                    makedirs(destination_subfolder)
+                microscopy_subfolder = microscopy_folder/row_label['Folder']
+                output_subfolder = output_folder/row_label['Folder']
+                if not output_subfolder.exists():
+                    output_subfolder.mkdir()
 
             # Browse different labels...
             for label in self.labels:
+                # If label doesn't contains images
                 if pd.isna(row_label[label]):
                     continue
-                images_refs = DataManager.ref_to_images(row_label[label])
 
+                images_refs = DataManager.ref_to_images(row_label[label])
                 # .. then images
                 for images_ref in images_refs:
                     # Construct source and destination file path
-                    source_file = path.join(microscopy_subfolder, images_ref)
-                    if not path.isfile(source_file):
-                        print("Not existing:" + source_file)
+                    source_file = microscopy_subfolder/images_ref
+                    if not source_file.is_file():
+                        print('Not existing {source}'.format(source=source_file))
                         continue
-                    destination_file = path.join(destination_subfolder, images_ref)
+                    output_file = output_subfolder/images_ref
 
                     # Open image
                     raw_image = Image.open(source_file)
@@ -201,10 +211,10 @@ class DataManager:
                         digits = '0.0'
                         image = raw_image.crop((0, 0, width, height - 45))
 
-                    image.save(destination_file, "BMP")
+                    image.save(output_file, "BMP")
                     width, height = image.size
                     images.append({'Modality': 'Microscopy',
-                                   'Path': path.relpath(destination_file, destination_folder),
+                                   'Path': output_file.relative_to(output_folder).as_posix(),
                                    'Label': label,
                                    'Depth(um)': digits,
                                    'Height': height,
@@ -212,9 +222,10 @@ class DataManager:
         return images
 
     def launch_converter(self, output_folder, excluded_meta):
-        # Create output dir
-        if not path.exists(output_folder):
-            makedirs(output_folder)
+        # Check output folder
+        output_folder = Path(output_folder)
+        if not output_folder.exists():
+            output_folder.mkdir()
 
         id_modality = ['ID_Dermoscopy', 'ID_RCM']
         # Read csv
@@ -231,29 +242,27 @@ class DataManager:
             DataManager.print_progress_bar(index, nb_patients, prefix='Progress:')
 
             # Construct folder reference
-            out_patient_folder = path.join(output_folder, row['ID'])
-            if not path.exists(out_patient_folder):
-                makedirs(out_patient_folder)
+            output_patient = output_folder/row['ID']
+            if not output_patient.exists():
+                output_patient.mkdir()
 
             # Write patient meta
-            pd.DataFrame([row.drop(id_modality, errors='ignore').to_dict()]).to_csv(
-                path.join(out_patient_folder, 'patient.csv'), index=False)
+            pd.DataFrame([row.drop(id_modality, errors='ignore').to_dict()]).to_csv(output_patient/'patient.csv', index=False)
 
             images = []
-
             if 'ID_Dermoscopy' in row.index:
                 # Get photography files
-                images.extend(self.compute_photography(row['ID_Dermoscopy'], row['Binary_Diagnosis'], out_patient_folder))
+                images.extend(self.compute_photography(row['ID_Dermoscopy'], row['Binary_Diagnosis'], output_patient))
                 # Get dermoscopy files
-                images.extend(self.compute_dermoscopy(row['ID_Dermoscopy'], row['Binary_Diagnosis'], out_patient_folder))
+                images.extend(self.compute_dermoscopy(row['ID_Dermoscopy'], row['Binary_Diagnosis'], output_patient))
 
             if 'ID_RCM' in row.index:
                 # Get microscopy files
-                images.extend(self.compute_microscopy(row['ID_RCM'], out_patient_folder))
+                images.extend(self.compute_microscopy(row['ID_RCM'], output_patient))
 
             # Write images list
             dataframe = pd.DataFrame(images)
-            dataframe.to_csv(path.join(out_patient_folder, 'images.csv'), index=False)
+            dataframe.to_csv(output_patient/'images.csv', index=False)
 
     @staticmethod
     def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):
