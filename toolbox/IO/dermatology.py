@@ -65,8 +65,8 @@ class Reader:
 
         # Read csv and add tag for path
         images = pd.read_csv(images_file, dtype=str)
-        images['Full_Path'] = images.apply(lambda row: normpath(join(parent_folder, subdir, row['Modality'], row['Path'])),
-                                           axis=1)
+        images['Path'] = images.apply(lambda row: normpath(row['Path']), axis=1)
+        images['Full_Path'] = images.apply(lambda row: join(parent_folder, subdir, row['Modality'], row['Path']), axis=1)
         images['Type'] = 'Full'
         return images
 
@@ -79,8 +79,8 @@ class Reader:
 
         # Read csv and add tag for path
         patches = pd.read_csv(patch_file, dtype=str)
-        patches['Full_Path'] = patches.apply(lambda row: normpath(join(parent_folder, subdir, 'patches', row['Path'])),
-                                             axis=1)
+        patches['Path'] = patches.apply(lambda row: normpath(row['Path']), axis=1)
+        patches['Full_Path'] = patches.apply(lambda row: join(parent_folder, subdir, 'patches', row['Path']), axis=1)
         patches['Type'] = 'Patch'
         return patches
 
