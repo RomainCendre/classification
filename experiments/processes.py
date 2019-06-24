@@ -1,5 +1,3 @@
-from os import makedirs
-from os.path import join, exists
 from toolbox.IO.writers import StatisticsWriter, ResultWriter, DataProjectorWriter, PatchWriter
 from toolbox.core.classification import Classifier
 
@@ -26,9 +24,9 @@ class Process:
         self.classifier.features_checkpoint(inputs)
         # Write data to visualize it
         if projection_folder is not None:
-            projection_folder = join(projection_folder, inputs.name)
-            if not exists(projection_folder):
-                makedirs(projection_folder)
+            projection_folder = projection_folder/inputs.name
+            if not projection_folder.is_dir():
+                projection_folder.mkdir()
             DataProjectorWriter.project_data(inputs, projection_folder)
 
     def train_step(self, inputs, model):
@@ -45,7 +43,7 @@ class Process:
             print(ex)
 
     def end(self):
-        ResultWriter(self.results, self.settings).write_results(dir_name=self.folder, name=self.name)
+        ResultWriter(self.results, self.settings).write_results(output_folder=self.folder, name=self.name)
         self.stat_writer.end()
 
 

@@ -1,7 +1,6 @@
 import itertools
 import webbrowser
-from os import makedirs
-from os.path import exists, splitext, basename, join
+from pathlib import Path
 
 from numpy import logspace
 from sklearn.pipeline import Pipeline
@@ -101,15 +100,11 @@ def descriptors(original_inputs, folder):
 
 
 if __name__ == "__main__":
-
-    # Configure GPU consumption
-    LocalParameters.set_gpu(percent_gpu=0.5)
-
     # Parameters
-    filename = splitext(basename(__file__))[0]
-    output_folder = join(LocalParameters.get_dermatology_results(), filename)
-    if not exists(output_folder):
-        makedirs(output_folder)
+    current_file = Path(__file__)
+    output_folder = LocalParameters.get_dermatology_results()/current_file.stem
+    if not output_folder.is_dir():
+        output_folder.mkdir()
 
     # Input patch
     image_inputs = DermatologyDataset.images(modality='Microscopy')
@@ -118,4 +113,4 @@ if __name__ == "__main__":
     descriptors(image_inputs, output_folder)
 
     # Open result folder
-    webbrowser.open('file:///{folder}'.format(folder=output_folder))
+    webbrowser.open(output_folder.as_uri())

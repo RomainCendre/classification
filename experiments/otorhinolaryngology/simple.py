@@ -1,9 +1,10 @@
 from os import makedirs, startfile
+from pathlib import Path
+
 from numpy import geomspace
 from numpy.ma import arange
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from os.path import exists, basename, splitext, join
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVC
@@ -50,10 +51,10 @@ def simple(spectra, output_folder):
 if __name__ == "__main__":
 
     # Output dir
-    filename = splitext(basename(__file__))[0]
-    output_folder = join(LocalParameters.get_orl_results(), filename)
-    if not exists(output_folder):
-        makedirs(output_folder)
+    current_file = Path(__file__)
+    output_folder = LocalParameters.get_orl_results()/current_file.stem
+    if not output_folder.is_dir():
+        output_folder.mkdir()
 
     # Input data
     spectra = ORLDataset.spectras()

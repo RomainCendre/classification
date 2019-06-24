@@ -1,9 +1,7 @@
-import h5py
+from pathlib import Path
 import tensorflow as tf
 from keras.backend.tensorflow_backend import set_session
 from keras import backend as K
-from os import path as ospath, makedirs
-from os.path import join, exists, expanduser, normpath
 from tempfile import gettempdir
 import numpy as np
 import pandas as pd
@@ -18,15 +16,15 @@ class ORLDataset:
 
     @staticmethod
     def spectras():
-        home_path = ospath.expanduser('~')
-        location = ospath.normpath('{home}/Data/Neck/'.format(home=home_path))
-        input_folders = [ospath.join(location, 'Patients.csv'), ospath.join(location, 'Temoins.csv')]
+        home_path = Path().home()
+        location = home_path/'Data/Neck/'
+        input_folders = [location/'Patients.csv', location/'Temoins.csv']
         return ORLDataset.__spectras(input_folders)
 
     @staticmethod
     def test_spectras():
-        here_path = ospath.dirname(__file__)
-        input_folders = [ospath.normpath('{here}/../data_test/spectroscopy/Patients.csv'.format(here=here_path))]
+        here_path = Path(__file__)
+        input_folders = [here_path.parent()/'../data_test/spectroscopy/Patients.csv']
         return ORLDataset.__spectras(input_folders)
 
     @staticmethod
@@ -49,57 +47,56 @@ class DermatologyDataset:
 
     @staticmethod
     def images(modality=None):
-        home_path = ospath.expanduser('~')
-        input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
-        work_folder = ospath.join(home_path, '.research')
-        if not exists(work_folder):
-            makedirs(work_folder)
+        home_path = Path().home()
+        input_folders = [home_path/'Data/Skin/Saint_Etienne/Patients']
+        work_folder = home_path/'.research'
+        if not work_folder.exists():
+            work_folder.mkdir()
         return DermatologyDataset.__images(input_folders, work_folder, modality)
 
     @staticmethod
     def multiresolution(coefficients, modality=None):
-        home_path = ospath.expanduser('~')
-        input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
-        work_folder = ospath.join(home_path, '.research')
-        if not exists(work_folder):
-            makedirs(work_folder)
+        home_path = Path().home()
+        input_folders = [home_path/'Data/Skin/Saint_Etienne/Patients']
+        work_folder = home_path/'.research'
+        if not work_folder.exists():
+            work_folder.mkdir()
         return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients, modality)
 
     @staticmethod
     def sliding_images(size, overlap, modality=None):
-        home_path = ospath.expanduser('~')
-        input_folders = [ospath.normpath('{home}/Data/Skin/Saint_Etienne/Patients'.format(home=home_path))]
-        work_folder = ospath.join(home_path, '.research')
-        if not exists(work_folder):
-            makedirs(work_folder)
+        home_path = Path().home()
+        input_folders = [home_path/'Data/Skin/Saint_Etienne/Patients']
+        work_folder = home_path/'.research'
+        if not work_folder.exists():
+            work_folder.mkdir()
         return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap, modality)
 
     @staticmethod
     def test_images():
-        here_path = ospath.dirname(__file__)
-        input_folders = [ospath.normpath('{here}/../data_test/dermatology/Test'.format(here=here_path))]
-        features_folder = join(gettempdir(), 'Features')
-        if not exists(features_folder):
-            makedirs(features_folder)
-        return DermatologyDataset.__images(input_folders, features_folder, 'Microscopy')
+        here_path = Path(__file__)
+        input_folders = [here_path.parent/'../data_test/dermatology/Test']
+        work_folder = Path(gettempdir())/'.research'
+        if not work_folder.exists():
+            work_folder.mkdir()
+        return DermatologyDataset.__images(input_folders, work_folder, 'Microscopy')
 
     @staticmethod
     def test_multiresolution(coefficients):
-        here_path = ospath.dirname(__file__)
-        input_folders = [ospath.normpath('{here}/../data_test/dermatology/Test'.format(here=here_path))]
-        work_folder = ospath.join(gettempdir(), '.research')
-        if not exists(work_folder):
-            makedirs(work_folder)
+        here_path = Path(__file__)
+        input_folders = [here_path.parent/'../data_test/dermatology/Test']
+        work_folder = Path(gettempdir())/'.research'
+        if not work_folder.exists():
+            work_folder.mkdir()
         return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients, 'Microscopy')
 
     @staticmethod
     def test_sliding_images(size, overlap):
-        here_path = ospath.dirname(__file__)
-        input_folders = [ospath.normpath('{here}/../data_test/dermatology/Test'.format(here=here_path))]
-
-        work_folder = ospath.join(gettempdir(), '.research')
-        if not exists(work_folder):
-            makedirs(work_folder)
+        here_path = Path(__file__)
+        input_folders = [here_path.parent/'../data_test/dermatology/Test']
+        work_folder = Path(gettempdir())/'.research'
+        if not work_folder.exists():
+            work_folder.mkdir()
         return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap, 'Microscopy')
 
     @staticmethod
@@ -183,20 +180,21 @@ class DermatologyDataset:
 
     @staticmethod
     def __multi_resolution(filename, reference, coefficients, work_folder):
-        multi_folder = ospath.join(work_folder, 'Multi')
-        if not ospath.exists(multi_folder):
-            makedirs(multi_folder)
+        multi_folder = work_folder/'Multi'
+        if not multi_folder.exists():
+            multi_folder.mkdir()
 
         image = Image.open(filename).convert('L')
         metas = []
         for index, coefficient in enumerate(coefficients):
             new_size = np.multiply(image.size, coefficient)
 
+            # Location of file
+            filepath = multi_folder/'{ref}_{coef}.png'.format(ref=reference, coef=coefficient)
+
             # Create patch informations
             meta = dict()
-            meta.update(
-                {'Full_Path': ospath.normpath(
-                    '{ref}_{coef}.png'.format(ref=ospath.join(multi_folder, reference), coef=coefficient))})
+            meta.update({'Full_Path': str(filepath)})
             meta.update({'Multi_Index': index})
             meta.update({'Coefficient': coefficient})
             meta.update({'Reference': '{ref}_{index}_M'.format(ref=reference, index=index)})
@@ -204,19 +202,19 @@ class DermatologyDataset:
             metas.append(meta)
 
             # Check if need to write patch
-            if not ospath.isfile(meta['Full_Path']):
+            if not filepath.is_file():
                 new_image = image.copy()
                 new_image.thumbnail(size=new_size, resample=3)
-                new_image.save(meta['Full_Path'])
+                new_image.save(filepath)
 
         return pd.DataFrame(metas)
 
     @staticmethod
     def __patchify(filename, reference, window_size, overlap, work_folder):
-        work_folder = ospath.join(work_folder, 'Patches')
-        patch_folder = ospath.join(work_folder, '{size}_{overlap}'.format(size=window_size, overlap=overlap))
-        if not ospath.exists(patch_folder):
-            makedirs(patch_folder)
+        work_folder = work_folder/'Patches'
+        patch_folder = work_folder/'{size}_{overlap}'.format(size=window_size, overlap=overlap)
+        if not patch_folder.exists():
+            patch_folder.mkdir()
 
         image = np.ascontiguousarray(np.array(Image.open(filename).convert('L')))
         stride = int(window_size - (window_size * overlap))  # Overlap of images
@@ -237,10 +235,13 @@ class DermatologyDataset:
 
         metas = []
         for index, (patch, location) in enumerate(zip(patches, patches_loc)):
+
+            # Location of file
+            filepath = patch_folder/'{ref}_{id}.png'.format(ref=reference, id=index)
+
             # Create patch informations
             meta = dict()
-            meta.update({'Full_Path': ospath.normpath(
-                '{ref}_{id}.png'.format(ref=ospath.join(patch_folder, reference), id=index))})
+            meta.update({'Full_Path': str(filepath)})
             meta.update({'Window_Index': int(index)})
             meta.update({'Label': 'Unknown'})
             start = location[0, 0]
@@ -258,8 +259,8 @@ class DermatologyDataset:
             metas.append(meta)
 
             # Check if need to write patch
-            if not ospath.isfile(meta['Full_Path']):
-                Image.fromarray(patch).save(meta['Full_Path'])
+            if not filepath.is_file():
+                Image.fromarray(patch).save(filepath)
 
         return pd.DataFrame(metas)
 
@@ -329,8 +330,8 @@ class LocalParameters:
 
     @staticmethod
     def get_dermatology_results():
-        home_path = expanduser("~")
-        return normpath('{home}/Results/Dermatology'.format(home=home_path))
+        home_path = Path().home()
+        return home_path/'Results/Dermatology'
 
     @staticmethod
     def get_orl_filters():
@@ -340,8 +341,8 @@ class LocalParameters:
 
     @staticmethod
     def get_orl_results():
-        home_path = expanduser("~")
-        return normpath('{home}/Results/ORL'.format(home=home_path))
+        home_path = Path().home()
+        return home_path/'Results/ORL'
 
     @staticmethod
     def get_statistics_keys():

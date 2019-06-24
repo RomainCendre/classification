@@ -1,9 +1,9 @@
 import itertools
 import webbrowser
 from copy import copy
-from os import makedirs
+from pathlib import Path
+
 from sklearn.model_selection import ParameterGrid
-from os.path import exists, basename, splitext, join
 from sklearn.preprocessing import LabelEncoder
 from experiments.processes import Process
 from toolbox.core.builtin_models import Classifiers
@@ -84,10 +84,10 @@ def fine_tune(original_inputs, folder):
 
 if __name__ == "__main__":
     # Parameters
-    filename = splitext(basename(__file__))[0]
-    output_folder = join(LocalParameters.get_dermatology_results(), filename)
-    if not exists(output_folder):
-        makedirs(output_folder)
+    current_file = Path(__file__)
+    output_folder = LocalParameters.get_dermatology_results()/current_file.stem
+    if not output_folder.is_dir():
+        output_folder.mkdir()
 
     # Input patch
     image_inputs = DermatologyDataset.images(modality='Microscopy')
@@ -96,4 +96,4 @@ if __name__ == "__main__":
     fine_tune(image_inputs, output_folder)
 
     # Open result folder
-    webbrowser.open('file:///{folder}'.format(folder=output_folder))
+    webbrowser.open(output_folder.as_uri())
