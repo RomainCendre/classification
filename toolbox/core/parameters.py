@@ -15,6 +15,14 @@ from toolbox.core.structures import Inputs, Spectra, Settings
 class ORLDataset:
 
     @staticmethod
+    def get_results_location():
+        home_path = Path().home()
+        result_folder = home_path/'Results/ORL'
+        if not result_folder.is_dir():
+            result_folder.mkdir()
+        return result_folder
+
+    @staticmethod
     def spectras():
         home_path = Path().home()
         location = home_path/'Data/Neck/'
@@ -24,7 +32,7 @@ class ORLDataset:
     @staticmethod
     def test_spectras():
         here_path = Path(__file__)
-        input_folders = [here_path.parent()/'../data_test/spectroscopy/Patients.csv']
+        input_folders = [here_path.parent/'../data_test/spectroscopy/Patients.csv']
         return ORLDataset.__spectras(input_folders)
 
     @staticmethod
@@ -32,7 +40,7 @@ class ORLDataset:
         inputs = Spectra(folders=folders, instance=otorhinolaryngology.Reader(),
                          loader=otorhinolaryngology.Reader.read_table,
                          tags={'data': 'data', 'label': 'label', 'group': 'Reference',
-                               'reference': 'Reference_spectrum'})
+                               'reference': 'Reference_spectrum', 'group_label': 'pathologie'})
         inputs.load()
         return inputs
 
@@ -44,6 +52,14 @@ class DermatologyDataset:
         self.modality = modality
         self.patch_parameters = patch_parameters
         self.multi_coefficients = multi_coefficients
+
+    @staticmethod
+    def get_results_location():
+        home_path = Path().home()
+        result_folder = home_path/'Results/Dermatology'
+        if not result_folder.is_dir():
+            result_folder.mkdir()
+        return result_folder
 
     @staticmethod
     def images(modality=None):
@@ -329,20 +345,10 @@ class LocalParameters:
                  ['Rest', 'Malignant'], {'Label': (['Normal', 'Benign'], 'Rest')})]
 
     @staticmethod
-    def get_dermatology_results():
-        home_path = Path().home()
-        return home_path/'Results/Dermatology'
-
-    @staticmethod
     def get_orl_filters():
         return [('All', {'label': ['Sain', 'Precancer', 'Cancer']}, {}),
                 ('NvsP', {'label': ['Sain', 'Pathology']}, {'label': (['Precancer', 'Cancer'], 'Pathology')}),
                 ('MvsR', {'label': ['Rest', 'Cancer']}, {'label': (['Sain', 'Precancer'], 'Rest')})]
-
-    @staticmethod
-    def get_orl_results():
-        home_path = Path().home()
-        return home_path/'Results/ORL'
 
     @staticmethod
     def get_statistics_keys():

@@ -104,7 +104,7 @@ def sliding_features(slidings, folder):
             slide_filters = {'Type': ['Patch', 'Window']}
             slide_filters.update(filter_datas)
             inputs.set_filters(slide_filters)
-            inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'groups': LabelEncoder()})
+            inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'group': LabelEncoder()})
 
             # Change inputs
             process.change_inputs(inputs, split_rule=test)
@@ -130,7 +130,7 @@ if __name__ == "__main__":
 
     # Parameters
     current_file = Path(__file__)
-    output_folder = LocalParameters.get_dermatology_results()/current_file.stem
+    output_folder = DermatologyDataset.get_results_location()/current_file.stem
     if not output_folder.is_dir():
         output_folder.mkdir()
 

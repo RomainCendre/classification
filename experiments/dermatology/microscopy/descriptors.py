@@ -74,7 +74,7 @@ def descriptors(original_inputs, folder):
 
             # Filter datasets
             inputs.set_filters(filter_datas)
-            inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'groups': LabelEncoder()})
+            inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'group': LabelEncoder()})
 
             # Change inputs
             process.change_inputs(inputs, split_rule=test)
@@ -102,7 +102,7 @@ def descriptors(original_inputs, folder):
 if __name__ == "__main__":
     # Parameters
     current_file = Path(__file__)
-    output_folder = LocalParameters.get_dermatology_results()/current_file.stem
+    output_folder = DermatologyDataset.get_results_location()/current_file.stem
     if not output_folder.is_dir():
         output_folder.mkdir()
 

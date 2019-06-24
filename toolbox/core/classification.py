@@ -1,11 +1,9 @@
-import glob
 import warnings
-from os.path import join
 from copy import deepcopy
 
 import h5py
 import numpy as np
-from numpy import unique, array_equal, save, load, array
+from numpy import unique, array_equal, array
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
@@ -200,7 +198,7 @@ class Classifier:
 
         if inputs.temporary is not None:
             # Create HDF5 file
-            file_path = '{folder_prefix}.hdf5'.format(folder_prefix=join(inputs.temporary, prefix))
+            file_path = '{folder_prefix}.hdf5'.format(folder_prefix=inputs.temporary/prefix)
             features_file = h5py.File(file_path, 'a')
             # Now process HDF5 file
             try:

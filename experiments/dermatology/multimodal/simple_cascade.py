@@ -49,7 +49,7 @@ if __name__ == "__main__":
     inputs.name = 'Multimodal'
     inputs.set_filters(filters)
     inputs.set_encoders({'label': OrderedEncoder().fit(filters['Label']),
-                         'groups': LabelEncoder()})
+                         'group': LabelEncoder()})
 
     # Open result folder
     startfile(output_folder)

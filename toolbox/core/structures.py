@@ -199,7 +199,7 @@ class Inputs(Data):
 
         # Filter and get groups
         groups = self.get_from_key(self.tags['group'])
-        return self.encode(key='groups', data=groups)
+        return self.encode(key='group', data=groups)
 
     def get_groups_labels(self):
         self.check_load()

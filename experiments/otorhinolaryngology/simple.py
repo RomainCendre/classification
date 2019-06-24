@@ -25,6 +25,7 @@ def get_spectrum_classifier():
 def simple(spectra, output_folder):
 
     # Parameters
+    nb_cpu = LocalParameters.get_cpu_number()
     validation, test = LocalParameters.get_validation_test()
     settings = BuiltInSettings.get_default_orl()
 
@@ -38,12 +39,13 @@ def simple(spectra, output_folder):
         inputs = spectra.copy_and_change(filter_groups)
 
         process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
-        process.begin(inner_cv=validation, outer_cv=test, n_jobs=2)
+        process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
         # Change filters
         inputs.set_filters(filter_datas)
         inputs.set_encoders({'label': OrderedEncoder().fit(filter_datas['label']),
-                             'groups': LabelEncoder()})
+                             'group': LabelEncoder()})
+        process.change_inputs(inputs, split_rule=test)
         process.evaluate_step(inputs=inputs, model=get_spectrum_classifier())
         process.end()
 
@@ -52,7 +54,7 @@ if __name__ == "__main__":
 
     # Output dir
     current_file = Path(__file__)
-    output_folder = LocalParameters.get_orl_results()/current_file.stem
+    output_folder = ORLDataset.get_results_location()/current_file.stem
     if not output_folder.is_dir():
         output_folder.mkdir()
 

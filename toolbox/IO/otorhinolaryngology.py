@@ -1,5 +1,6 @@
+from pathlib import Path
+
 import pandas
-from os.path import join, splitext
 from numpy.ma import array
 from toolbox.core.structures import Spectra
 
@@ -52,7 +53,6 @@ class Reader:
             A spectra object.
         """
         # Read csv
-        base_folder = splitext(table_path)[0]
         meta_patient = pandas.read_csv(table_path, dtype=str).fillna('')
         meta_patient['Reference'] = meta_patient.apply(lambda row: '{id}_{patient}'.format(id=row['identifier'],
                                                                                            patient=row['patient']),
@@ -63,7 +63,7 @@ class Reader:
             if not current_file:
                 continue
 
-            patient_datas = Reader.read_file(join(base_folder, current_file))
+            patient_datas = Reader.read_file(table_path.parent/table_path.stem/current_file)
             patient_datas['Reference'] = row['Reference']
             patient_datas = patient_datas.merge(meta_patient, on='Reference')
 
