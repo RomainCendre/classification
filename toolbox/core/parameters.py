@@ -6,7 +6,7 @@ from tempfile import gettempdir
 import numpy as np
 import pandas as pd
 from PIL import Image
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import StratifiedKFold, GroupKFold
 
 from toolbox.IO import dermatology, otorhinolaryngology
 from toolbox.core.structures import Inputs, Spectra, Settings
@@ -356,7 +356,7 @@ class LocalParameters:
 
     @staticmethod
     def get_validation_test():
-        return StratifiedKFold(n_splits=5), StratifiedKFold(n_splits=5)  # GroupKFold(n_splits=5)
+        return GroupKFold(n_splits=3), StratifiedKFold(n_splits=5)  # GroupKFold(n_splits=5)
 
     @staticmethod
     def set_gpu(percent_gpu=1, allow_growth=True):

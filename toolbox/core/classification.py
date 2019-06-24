@@ -109,7 +109,7 @@ class Classifier:
             # Estimate best combination
             grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
                                        n_jobs=self.n_jobs, scoring=self.__scoring, verbose=1, iid=False)
-            grid_search.fit(datas[train_indices], y=labels[train_indices], **self.__fit_params)
+            grid_search.fit(datas[train_indices], y=labels[train_indices], groups=groups[train_indices], **self.__fit_params)
             best_params = grid_search.best_params_
 
             # Fit the model, with the bests parameters
