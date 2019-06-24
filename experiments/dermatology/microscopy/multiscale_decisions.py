@@ -23,7 +23,7 @@ def get_linear_svm():
     return pipe, parameters
 
 
-def multiscale_decision(multiresolution_inputs, output_folder):
+def multiscale_decision(multiresolution_inputs, folder):
 
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
@@ -48,7 +48,7 @@ def multiscale_decision(multiresolution_inputs, output_folder):
     for filter_name, filter_datas, filter_encoder, filter_groups in filters:
 
         # Launch process
-        process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
+        process = Process(output_folder=folder, name=filter_name, settings=settings, stats_keys=statistics)
         process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
         # Filter on datasets, applying groups of labels

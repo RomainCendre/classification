@@ -63,7 +63,7 @@ class TestMicroscopyMultiscale(unittest.TestCase):
 class TestMicroscopySliding(unittest.TestCase):
 
     def setUp(self):
-        self.microscopy = DermatologyDataset.test_sliding_images(size=250, overlap=0)
+        self.microscopy = [('Test', DermatologyDataset.test_sliding_images(size=250, overlap=0))]
         self.output_folder = DermatologyDataset.get_results_location(is_test=True)
 
     def tearDown(self):

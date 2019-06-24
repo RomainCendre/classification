@@ -69,7 +69,7 @@ def sliding_decisions(slidings, folder):
     for filter_name, filter_datas, filter_encoder, filter_groups in filters:
 
         # Launch process
-        process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
+        process = Process(output_folder=folder, name=filter_name, settings=settings, stats_keys=statistics)
         process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
         for sliding, predictor in combinations:
