@@ -51,9 +51,9 @@ def sliding_decisions(slidings, folder):
     filters = LocalParameters.get_dermatology_filters()
 
     # View
-    view_folder = join(folder, 'View')
-    if not exists(view_folder):
-        makedirs(view_folder)
+    view_folder = folder/'View'
+    if not view_folder.is_dir():
+        view_folder.mkdir()
 
     # Extracteur
     extractor = Transforms.get_keras_extractor(pooling='max')

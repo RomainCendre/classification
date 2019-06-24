@@ -15,11 +15,14 @@ from toolbox.core.structures import Inputs, Spectra, Settings
 class ORLDataset:
 
     @staticmethod
-    def get_results_location():
-        home_path = Path().home()
-        result_folder = home_path/'Results/ORL'
+    def get_results_location(is_test=False):
+        if is_test:
+            base_folder = Path(gettempdir())
+        else:
+            base_folder = Path().home()
+        result_folder = base_folder/'Results/ORL'
         if not result_folder.is_dir():
-            result_folder.mkdir()
+            result_folder.mkdir(parents=True)
         return result_folder
 
     @staticmethod
@@ -54,11 +57,14 @@ class DermatologyDataset:
         self.multi_coefficients = multi_coefficients
 
     @staticmethod
-    def get_results_location():
-        home_path = Path().home()
-        result_folder = home_path/'Results/Dermatology'
+    def get_results_location(is_test=False):
+        if is_test:
+            base_folder = Path(gettempdir())
+        else:
+            base_folder = Path().home()
+        result_folder = base_folder/'Results/Dermatology'
         if not result_folder.is_dir():
-            result_folder.mkdir()
+            result_folder.mkdir(parents=True)
         return result_folder
 
     @staticmethod
@@ -227,7 +233,12 @@ class DermatologyDataset:
 
     @staticmethod
     def __patchify(filename, reference, window_size, overlap, work_folder):
+        # Manage folder that contains root of patches
         work_folder = work_folder/'Patches'
+        if not work_folder.exists():
+            work_folder.mkdir()
+
+        # Manage patches folder
         patch_folder = work_folder/'{size}_{overlap}'.format(size=window_size, overlap=overlap)
         if not patch_folder.exists():
             patch_folder.mkdir()

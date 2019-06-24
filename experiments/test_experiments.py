@@ -1,6 +1,6 @@
 import unittest
 from genericpath import exists
-from os import makedirs
+from pathlib import Path
 from tempfile import gettempdir
 from numpy.ma import arange
 from experiments.dermatology.microscopy.descriptors import descriptors
@@ -9,6 +9,7 @@ from experiments.dermatology.microscopy.multiscale_decisions import multiscale_d
 from experiments.dermatology.microscopy.sliding_decisions import sliding_decisions
 from experiments.dermatology.microscopy.sliding_features import sliding_features
 from experiments.dermatology.microscopy.transferlearning import transfer_learning
+from experiments.otorhinolaryngology.simple import simple
 from toolbox.core.parameters import DermatologyDataset, ORLDataset
 
 
@@ -16,27 +17,21 @@ class TestORL(unittest.TestCase):
 
     def setUp(self):
         self.spectra = ORLDataset.test_spectras()
+        self.output_folder = ORLDataset.get_results_location(is_test=True)
 
     def tearDown(self):
         print('Cleaning...')
 
     def test_orl_process(self):
         spectra = self.spectra
-        spectra.change_wavelength(wavelength=arange(start=445, stop=962, step=1))
-        spectra.apply_average_filter(size=5)
-        spectra.norm_patient()
-        spectra.apply_scaling()
-        # orl_simple(spectra, output_folder)
+        simple(spectra, self.output_folder)
 
 
 class TestMicroscopyWhole(unittest.TestCase):
 
     def setUp(self):
         self.microscopy = DermatologyDataset.test_images()
-        # Output dir
-        self.output_folder = gettempdir()
-        if not exists(self.output_folder):
-            makedirs(self.output_folder)
+        self.output_folder = DermatologyDataset.get_results_location(is_test=True)
 
     def tearDown(self):
         print('Nettoyage !')
@@ -56,10 +51,7 @@ class TestMicroscopyMultiscale(unittest.TestCase):
 
     def setUp(self):
         self.microscopy = DermatologyDataset.test_multiresolution(coefficients=[1, 0.75, 0.5, 0.25])
-        # Output dir
-        self.output_folder = gettempdir()
-        if not exists(self.output_folder):
-            makedirs(self.output_folder)
+        self.output_folder = DermatologyDataset.get_results_location(is_test=True)
 
     def tearDown(self):
         print('Nettoyage !')
@@ -67,14 +59,12 @@ class TestMicroscopyMultiscale(unittest.TestCase):
     def test_multiscale(self):
         multiscale_decision(self.microscopy, self.output_folder)
 
+
 class TestMicroscopySliding(unittest.TestCase):
 
     def setUp(self):
         self.microscopy = DermatologyDataset.test_sliding_images(size=250, overlap=0)
-        # Output dir
-        self.output_folder = gettempdir()
-        if not exists(self.output_folder):
-            makedirs(self.output_folder)
+        self.output_folder = DermatologyDataset.get_results_location(is_test=True)
 
     def tearDown(self):
         print('Nettoyage !')
