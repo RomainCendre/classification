@@ -196,29 +196,28 @@ class Classifier:
         else:
             prefix = type(self.__model).__name__
 
+        features = None
         if inputs.temporary is not None:
-            # Create HDF5 file
+            # Construct hdf5 file
             file_path = '{folder_prefix}.hdf5'.format(folder_prefix=inputs.temporary/prefix)
-            features_file = h5py.File(file_path, 'a')
-            # Now process HDF5 file
-            try:
-                features = []
-                # Check if already extracted
-                if not set(references).issubset(features_file.keys()):
-                    features = self.__feature_extraction(prefix, datas, labels, unique_labels, groups)
+            # Try reading features if exists
+            with h5py.File(file_path, 'r') as features_file:
+                if set(references).issubset(features_file.keys()):
+                    features = []
+                    print('Loading data at {file}'.format(file=file_path))
+                    for reference in references:
+                        features.append(features_file[reference][()])
+                    features = array(features)
 
+            # If reading fails, so compute and write it
+            if features is None:
+                with h5py.File(file_path, 'w') as features_file:
+                    features = self.__feature_extraction(prefix, datas, labels, unique_labels, groups)
                     # Now save features as files
                     print('Writing data at {file}'.format(file=file_path))
                     for feature, reference in zip(features, references):
                         if reference not in features_file.keys():
                             features_file.create_dataset(reference, data=feature)
-                else:
-                    print('Loading data at {file}'.format(file=file_path))
-                    for reference in references:
-                        features.append(features_file[reference][()])
-                    features = array(features)
-            finally:
-                features_file.close()
         else:
             features = self.__feature_extraction(prefix, datas, labels, unique_labels, groups)
 
