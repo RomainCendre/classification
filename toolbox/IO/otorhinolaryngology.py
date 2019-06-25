@@ -2,7 +2,6 @@ from pathlib import Path
 
 import pandas
 from numpy.ma import array
-from toolbox.core.structures import Spectra
 
 
 class Reader:

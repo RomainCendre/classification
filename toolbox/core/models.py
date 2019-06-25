@@ -1,6 +1,4 @@
 import types
-from typing import Counter
-
 import numpy as np
 from copy import deepcopy
 from keras import Sequential

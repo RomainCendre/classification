@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/variational_autoencoder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/classification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/IO/dermatology.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/dermatology.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/models.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,6 +26,7 @@
     <SUITE FILE_PATH="coverage/classification$parameters.coverage" NAME="parameters Coverage Results" MODIFIED="1558359068728" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/core" />
     <SUITE FILE_PATH="coverage/classification$Unittests_for_test_experiments_TestMicroscopyWhole.coverage" NAME="Unittests for test_experiments.TestMicroscopyWhole Coverage Results" MODIFIED="1561380530158" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$sliding_decisions.coverage" NAME="sliding_decisions Coverage Results" MODIFIED="1561380070808" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
+    <SUITE FILE_PATH="coverage/classification$variational_autoencoder.coverage" NAME="variational_autoencoder Coverage Results" MODIFIED="1561469517455" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
     <SUITE FILE_PATH="coverage/classification$decisions_level.coverage" NAME="decisions_level Coverage Results" MODIFIED="1560771913303" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$transferlearning.coverage" NAME="transferlearning Coverage Results" MODIFIED="1561122490909" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
     <SUITE FILE_PATH="coverage/classification$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1557153270631" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier" />
@@ -41,31 +45,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="12" selection-start-line="2" selection-start-column="5" selection-end-line="2" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/cluster_local/tasks">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/variational_autoencoder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="629">
-              <caret line="214" column="44" selection-start-line="214" selection-start-column="44" selection-end-line="214" selection-end-column="44" />
+            <state relative-caret-position="340">
+              <caret line="163" column="31" selection-start-line="163" selection-start-column="31" selection-end-line="163" selection-end-column="31" />
               <folding>
-                <element signature="e#0#15#0" expanded="true" />
+                <element signature="e#0#37#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/toolbox/core/generators.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="16" column="52" selection-start-line="16" selection-start-column="42" selection-end-line="16" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/toolbox/core/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="334">
+              <caret line="174" column="17" selection-start-line="174" selection-start-column="8" selection-end-line="174" selection-end-column="17" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -123,7 +130,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/experiments/dermatology/test.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/sliding_window_semisupervised/decisions_level.py" />
         <option value="$PROJECT_DIR$/experiments/otorhinolaryngology/otorhinolaryngology.py" />
         <option value="$PROJECT_DIR$/experiments/test.py" />
@@ -140,7 +146,6 @@
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" />
         <option value="$PROJECT_DIR$/toolbox/core/builtin_models.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/transfer_learning.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/models.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/multiple_instances.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised/decisions_level.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/fine_tune.py" />
@@ -156,12 +161,10 @@
         <option value="$PROJECT_DIR$/experiments/cluster_local/config_cluster.sh" />
         <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
         <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
-        <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/prepare.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/writers.py" />
         <option value="$PROJECT_DIR$/experiments/cluster_local/send_data.bat" />
         <option value="$PROJECT_DIR$/experiments/processes.py" />
-        <option value="$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py" />
         <option value="$PROJECT_DIR$/toolbox/core/structures.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/descriptors.py" />
@@ -174,12 +177,16 @@
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_features.py" />
         <option value="$PROJECT_DIR$/experiments/test_experiments.py" />
         <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
+        <option value="$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py" />
+        <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/models.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/variational_autoencoder.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-2225" />
-    <option name="y" value="-370" />
+    <option name="x" value="-2253" />
+    <option name="y" value="-369" />
     <option name="width" value="1920" />
     <option name="height" value="770" />
   </component>
@@ -288,19 +295,19 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy\full" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox\core" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\cluster_local" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy\sliding_window" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy\full" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\multimodal" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy\full" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox\core" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -315,29 +322,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests in test_experiments.py">
-    <configuration name="simple" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="classification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/experiments/otorhinolaryngology" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.variational_autoencoder">
     <configuration name="sliding_decisions" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -352,6 +337,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_decisions.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="variational_autoencoder" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="classification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/experiments/dermatology/microscopy" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/dermatology/microscopy/variational_autoencoder.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -407,11 +414,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.variational_autoencoder" />
         <item itemvalue="Python tests.Unittests in test_experiments.py" />
         <item itemvalue="Python tests.Unittests for test_experiments.TestMicroscopyWhole" />
         <item itemvalue="Python.sliding_decisions" />
         <item itemvalue="Python tests.Unittests for test_experiments.TestMicroscopySliding" />
-        <item itemvalue="Python.simple" />
       </list>
     </recent_temporary>
   </component>
@@ -457,14 +464,7 @@
       <workItem from="1561109186296" duration="12830000" />
       <workItem from="1561367549636" duration="3236000" />
       <workItem from="1561373174745" duration="9633000" />
-      <workItem from="1561447888695" duration="5354000" />
-    </task>
-    <task id="LOCAL-00051" summary="Update feature level evaluation and prepare patient one.">
-      <created>1559639023611</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1559639023611</updated>
+      <workItem from="1561447888695" duration="10806000" />
     </task>
     <task id="LOCAL-00052" summary="Update simple procedure.">
       <created>1559640171075</created>
@@ -802,7 +802,14 @@
       <option name="project" value="LOCAL" />
       <updated>1561454282201</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="Change writting mode.">
+      <created>1561454507617</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1561454507618</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -838,7 +845,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="357230000" />
+    <option name="totallyTimeSpent" value="362682000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -853,13 +860,13 @@
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49585634" visible="true" weight="0.26873127" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49585634" visible="true" weight="0.26873127" />
       <window_info id="Structure" order="1" sideWeight="0.50414366" side_tool="true" weight="0.23676324" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3286119" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" weight="0.3279678" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.4995005" visible="true" weight="0.40543258" />
+      <window_info active="true" anchor="bottom" id="Run" order="3" sideWeight="0.4995005" visible="true" weight="0.18812877" />
       <window_info anchor="bottom" id="Debug" order="4" weight="0.3470825" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
@@ -874,7 +881,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.1013986" />
+      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.21278721" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
@@ -922,7 +929,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added comparison with rbf kernel on descriptors." />
     <MESSAGE value="Update envs and tl process." />
     <MESSAGE value="Change the way reader are implemented." />
     <MESSAGE value="Update environments descriptions to include a project that allow multiple instance classifiers." />
@@ -947,7 +953,8 @@
     <MESSAGE value="Fix unitary test. Missing valid data test for dermatology process." />
     <MESSAGE value="Change way features are written." />
     <MESSAGE value="Change way path are generated for feature extraction." />
-    <option name="LAST_COMMIT_MESSAGE" value="Change way path are generated for feature extraction." />
+    <MESSAGE value="Change writting mode." />
+    <option name="LAST_COMMIT_MESSAGE" value="Change writting mode." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -990,60 +997,53 @@
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
       <expression>
-        <expression-string>groups[train_indices]</expression-string>
+        <expression-string>x_test = x[train]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>labels[train_indices]</expression-string>
+        <expression-string>next(KFold(2).split(x, y))</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>datas[train_indices]</expression-string>
+        <expression-string>t.__iter__</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>model.fit(datas[train_indices], y=labels[train_indices], groups=groups[train_indices])</expression-string>
+        <expression-string>t.next()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>groups=groups</expression-string>
+        <expression-string>t= KFold(2).split(x, y)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>grid_search.fit(datas[train_indices], y=labels[train_indices], groups=groups)</expression-string>
+        <expression-string>result.next()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>grid_search.fit(datas[train_indices], y=labels[train_indices])</expression-string>
+        <expression-string>KFold(2).split(x, y)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>grid_search.fit(datas[train_indices], y=labels[train_indices], **self.__fit_params)</expression-string>
+        <expression-string>train, test = KFold(2).split(x, y).next()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>inputs.get_groups()</expression-string>
+        <expression-string>train,test = list(KFold(2).split(x, y))</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/experiments/otorhinolaryngology/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/multimodal/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/__init__.py" />
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.job" />
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/full/config_cluster.sh" />
     <entry file="file://$USER_HOME$/.PyCharm2018.3/system/python_stubs/-1013363670/PyQt5/QtCore/QStandardPaths.py">
@@ -1106,13 +1106,6 @@
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/codecs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="308" selection-start-line="308" selection-end-line="308" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/src/misvm/misvm/mi_svm.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -1148,16 +1141,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4335">
-          <caret line="270" column="23" selection-start-line="270" selection-start-column="23" selection-end-line="270" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/tool.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -1179,13 +1162,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="11" column="26" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="221" column="8" lean-forward="true" selection-start-line="221" selection-start-column="8" selection-end-line="224" selection-end-column="33" />
         </state>
       </provider>
     </entry>
@@ -1240,16 +1216,6 @@
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/patient_level.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="346">
-          <caret line="65" selection-start-line="65" selection-end-line="65" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/multimodal/simple_cascade.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="373">
@@ -1257,13 +1223,6 @@
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="203" column="25" selection-start-line="203" selection-start-column="8" selection-end-line="203" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -1368,33 +1327,98 @@
     <entry file="file://$PROJECT_DIR$/experiments/cluster_local/tasks">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="12" selection-start-line="2" selection-start-column="5" selection-end-line="2" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="64" column="26" lean-forward="true" selection-start-line="64" selection-start-column="26" selection-end-line="64" selection-end-column="57" />
+        <state relative-caret-position="113">
+          <caret line="36" column="38" selection-start-line="51" selection-start-column="68" selection-end-line="51" selection-end-column="75" />
           <folding>
-            <element signature="e#0#24#0" expanded="true" />
+            <element signature="e#0#16#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="214" column="44" selection-start-line="214" selection-start-column="44" selection-end-line="214" selection-end-column="44" />
+        <state relative-caret-position="493">
+          <caret line="206" column="37" lean-forward="true" selection-start-line="206" selection-start-column="37" selection-end-line="206" selection-end-column="37" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="239" column="52" selection-start-line="239" selection-start-column="52" selection-end-line="239" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="125" selection-start-line="125" selection-end-line="125" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="88" lean-forward="true" selection-start-line="88" selection-end-line="88" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="308" selection-start-line="308" selection-end-line="308" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/generators.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="16" column="52" selection-start-line="16" selection-start-column="42" selection-end-line="16" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="334">
+          <caret line="174" column="17" selection-start-line="174" selection-start-column="8" selection-end-line="174" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/variational_autoencoder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="163" column="31" selection-start-line="163" selection-start-column="31" selection-end-line="163" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#37#0" expanded="true" />
           </folding>
         </state>
       </provider>

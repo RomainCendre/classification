@@ -73,7 +73,7 @@ class Reader:
     def __read_patches_file(subdir):
         # Patient file
         patch_file = subdir/'patches.csv'
-        if not patch_file.is_dir():
+        if not patch_file.is_file():
             return None
 
         # Read csv and add tag for path
