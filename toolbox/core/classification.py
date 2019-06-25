@@ -212,7 +212,7 @@ class Classifier:
 
             # If reading fails, so compute and write it
             if features is None:
-                with h5py.File(file_path, 'w') as features_file:
+                with h5py.File(file_path, 'a') as features_file:
                     features = self.__feature_extraction(prefix, datas, labels, unique_labels, groups)
                     # Now save features as files
                     print('Writing data at {file}'.format(file=file_path))

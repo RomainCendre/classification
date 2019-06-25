@@ -62,8 +62,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="578">
-              <caret line="211" column="55" selection-start-line="211" selection-start-column="55" selection-end-line="211" selection-end-column="55" />
+            <state relative-caret-position="629">
+              <caret line="214" column="44" selection-start-line="214" selection-start-column="44" selection-end-line="214" selection-end-column="44" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -457,21 +457,7 @@
       <workItem from="1561109186296" duration="12830000" />
       <workItem from="1561367549636" duration="3236000" />
       <workItem from="1561373174745" duration="9633000" />
-      <workItem from="1561447888695" duration="4492000" />
-    </task>
-    <task id="LOCAL-00049" summary="Updating multiresolution experiment.">
-      <created>1559574178417</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1559574178417</updated>
-    </task>
-    <task id="LOCAL-00050" summary="Update evaluations names.">
-      <created>1559636408364</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1559636408364</updated>
+      <workItem from="1561447888695" duration="5354000" />
     </task>
     <task id="LOCAL-00051" summary="Update feature level evaluation and prepare patient one.">
       <created>1559639023611</created>
@@ -802,7 +788,21 @@
       <option name="project" value="LOCAL" />
       <updated>1561381079465</updated>
     </task>
-    <option name="localTasksCounter" value="98" />
+    <task id="LOCAL-00098" summary="Change way features are written.">
+      <created>1561453658777</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1561453658778</updated>
+    </task>
+    <task id="LOCAL-00099" summary="Change way path are generated for feature extraction.">
+      <created>1561454282201</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1561454282201</updated>
+    </task>
+    <option name="localTasksCounter" value="100" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -838,7 +838,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="356368000" />
+    <option name="totallyTimeSpent" value="357230000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -922,8 +922,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update of voting model based on decision." />
-    <MESSAGE value="Updating all processes, to support new hypothesis." />
     <MESSAGE value="Added comparison with rbf kernel on descriptors." />
     <MESSAGE value="Update envs and tl process." />
     <MESSAGE value="Change the way reader are implemented." />
@@ -947,7 +945,9 @@
     <MESSAGE value="Adding groups for gridsearch." />
     <MESSAGE value="Fixing bugs in procedures." />
     <MESSAGE value="Fix unitary test. Missing valid data test for dermatology process." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix unitary test. Missing valid data test for dermatology process." />
+    <MESSAGE value="Change way features are written." />
+    <MESSAGE value="Change way path are generated for feature extraction." />
+    <option name="LAST_COMMIT_MESSAGE" value="Change way path are generated for feature extraction." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1391,8 +1391,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="211" column="55" selection-start-line="211" selection-start-column="55" selection-end-line="211" selection-end-column="55" />
+        <state relative-caret-position="629">
+          <caret line="214" column="44" selection-start-line="214" selection-start-column="44" selection-end-line="214" selection-end-column="44" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
