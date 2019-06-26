@@ -37,10 +37,10 @@ def transfer_learning(original_inputs, folder):
     filters = LocalParameters.get_dermatology_filters()
 
     # Methods
-    methods = [('VGG16', Transforms.get_keras_extractor(pooling='VGG16')),
+    methods = [('VGG16', Transforms.get_keras_extractor(architecture='VGG16')),
                ('InceptionV3', Transforms.get_keras_extractor(architecture='InceptionV3')),
-               ('InceptionResNetV2', Transforms.get_keras_extractor(pooling='InceptionResNetV2')),
-               ('NASNet', Transforms.get_keras_extractor(pooling='NASNet'))]
+               ('InceptionResNetV2', Transforms.get_keras_extractor(architecture='InceptionResNetV2')),
+               ('NASNet', Transforms.get_keras_extractor(architecture='NASNet'))]
 
     # Models
     models = [('Svm', get_linear_svm())]

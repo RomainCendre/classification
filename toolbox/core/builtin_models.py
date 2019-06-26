@@ -55,7 +55,7 @@ class Transforms:
                             'preprocessing_function':
                                 Classifiers.get_preprocessing_application(architecture=architecture)}
         extractor = KerasBatchClassifier(Transforms.get_application, **extractor_params)
-        extractor.name = 'Keras{pool}'.format(pool=pooling)
+        extractor.name = '{architecture}_{pool}'.format(architecture=architecture, pool=pooling)
         return extractor
 
     @staticmethod
