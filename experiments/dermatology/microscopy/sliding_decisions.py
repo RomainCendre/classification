@@ -129,14 +129,12 @@ if __name__ == "__main__":
     if not output_folder.is_dir():
         output_folder.mkdir()
 
-    # # Input patch
-    # slidings_inputs = [('NoOverlap', DermatologyDataset.sliding_images(size=250, overlap=0, modality='Microscopy')),
-    #                    ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50, modality='Microscopy'))]
-
-    windows_inputs = [('NoOverlap', DermatologyDataset.test_sliding_images(size=250, overlap=0))]
+    # Input patch
+    slidings_inputs = [('NoOverlap', DermatologyDataset.sliding_images(size=250, overlap=0, modality='Microscopy')),
+                       ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50, modality='Microscopy'))]
 
     # Compute data
-    sliding_decisions(windows_inputs, output_folder)
+    sliding_decisions(slidings_inputs, output_folder)
 
     # Open result folder
     webbrowser.open(output_folder.as_uri())

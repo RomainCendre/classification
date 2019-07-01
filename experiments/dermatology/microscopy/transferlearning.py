@@ -89,10 +89,6 @@ def transfer_learning(original_inputs, folder):
 
 
 if __name__ == "__main__":
-
-    # Configure GPU consumption
-    LocalParameters.set_gpu(percent_gpu=0.5)
-
     # Parameters
     current_file = Path(__file__)
     output_folder = DermatologyDataset.get_results_location()/current_file.stem
