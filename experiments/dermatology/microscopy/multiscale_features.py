@@ -127,8 +127,7 @@ if __name__ == "__main__":
         output_folder.mkdir()
 
     # Input patch
-    # multiresolution_input = DermatologyDataset.multiresolution(coefficients=[1, 0.75, 0.5, 0.25], modality='Microscopy')
-    multiresolution_input = DermatologyDataset.test_multiresolution(coefficients=[1, 0.75, 0.5, 0.25])
+    multiresolution_input = DermatologyDataset.multiresolution(coefficients=[1, 0.75, 0.5, 0.25], modality='Microscopy')
 
     # Compute data
     multiscale_features(multiresolution_input, output_folder)
