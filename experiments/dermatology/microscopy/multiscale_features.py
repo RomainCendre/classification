@@ -1,8 +1,5 @@
-import itertools
-from pathlib import Path
-
-import misvm
 import webbrowser
+from pathlib import Path
 from numpy import logspace
 from sklearn.feature_selection import f_classif
 from sklearn.pipeline import Pipeline
@@ -10,9 +7,9 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVC
 from experiments.processes import Process
 from toolbox.core.builtin_models import Transforms
-from toolbox.core.models import SelectAtMostKBest, PCAAtMost
+from toolbox.core.models import PCAAtMost, SelectAtMostKBest
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
-from toolbox.core.transforms import OrderedEncoder, PNormTransform, FlattenTransform
+from toolbox.core.transforms import OrderedEncoder, FlattenTransform, PNormTransform
 
 
 def get_reduce_model():
@@ -65,22 +62,7 @@ def get_norm_model():
     return pipe, parameters
 
 
-def get_mil_decision():
-    # Steps and parameters
-    steps = [('scale', StandardScaler()),
-             ('clf', misvm.MISVM(kernel='linear', C=1.0, max_iters=50))]
-
-    parameters = {'clf__C': logspace(-2, 3, 6).tolist()}
-
-    # Create pipeline
-    pipe = Pipeline(steps)
-    pipe.name = 'MiSVM'
-    pipe.need_fit = True
-
-    return pipe, parameters
-
-
-def sliding_features(slidings, folder):
+def multiscale_features(multiresolution_inputs, folder):
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
     validation, test = LocalParameters.get_validation_test()
@@ -99,11 +81,7 @@ def sliding_features(slidings, folder):
     # Evaluateurs
     evaluators = [('Reduced', get_reduce_model()),
                   ('Select', get_select_model()),
-                  ('PNorm', get_norm_model()),
-                  ('MultiInstance', get_mil_decision())]
-
-    # Parameters combinations
-    combinations = list(itertools.product(slidings, evaluators))
+                  ('PNorm', get_norm_model())]
 
     # Browse combinations
     for filter_name, filter_datas, filter_encoder, filter_groups in filters:
@@ -112,14 +90,14 @@ def sliding_features(slidings, folder):
         process = Process(output_folder=folder, name=filter_name, settings=settings, stats_keys=statistics)
         process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
-        for sliding, evaluator in combinations:
+        for evaluator in evaluators:
 
             # Name experiment and filter data
-            name = '{sliding}_{evaluator}'.format(sliding=sliding[0], evaluator=evaluator[0])
-            inputs = sliding[1].copy_and_change(filter_groups)
+            name = '{evaluator}'.format(evaluator=evaluator[0])
+            inputs = multiresolution_inputs.copy_and_change(filter_groups)
 
             # Filter datasets
-            slide_filters = {'Type': ['Patch', 'Window']}
+            slide_filters = {'Type': ['Multi']}
             slide_filters.update(filter_datas)
             inputs.set_filters(slide_filters)
             inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'group': LabelEncoder()})
@@ -132,7 +110,7 @@ def sliding_features(slidings, folder):
 
             # Collapse information and make predictions
             inputs.set_filters(filter_datas)
-            features = inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Window']}, 'Source')
+            features = inputs.collapse({'Type': ['Full']}, 'Reference', {'Type': ['Multi']}, 'Source')
 
             # Evaluate using svm
             features.name = '{name}'.format(name=name)
@@ -149,11 +127,11 @@ if __name__ == "__main__":
         output_folder.mkdir()
 
     # Input patch
-    slidings_inputs = [('NoOverlap', DermatologyDataset.sliding_images(size=250, overlap=0, modality='Microscopy')),
-                       ('Overlap50', DermatologyDataset.sliding_images(size=250, overlap=0.50, modality='Microscopy'))]
+    # multiresolution_input = DermatologyDataset.multiresolution(coefficients=[1, 0.75, 0.5, 0.25], modality='Microscopy')
+    multiresolution_input = DermatologyDataset.test_multiresolution(coefficients=[1, 0.75, 0.5, 0.25])
 
     # Compute data
-    sliding_features(slidings_inputs, output_folder)
+    multiscale_features(multiresolution_input, output_folder)
 
     # Open result folder
     webbrowser.open(output_folder.as_uri())
