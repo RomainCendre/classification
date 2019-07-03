@@ -1,6 +1,5 @@
 import webbrowser
 from pathlib import Path
-
 from numpy import logspace
 from numpy.ma import array
 from sklearn.pipeline import Pipeline
@@ -8,6 +7,7 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVC
 from experiments.processes import Process
 from toolbox.core.builtin_models import Transforms, Classifiers
+from toolbox.core.models import ScoreVotingClassifier, DecisionVotingClassifier
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
 from toolbox.core.transforms import OrderedEncoder, ArgMaxTransform
 
@@ -79,7 +79,7 @@ def multiscale_decision(multiresolution_inputs, folder):
         process.evaluate_step(inputs=scores, model=get_linear_svm())
         inputs.name = 'Multi_resolution_score_classifier'
         hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
-        process.evaluate_step(inputs=scores, model=PatchClassifier(hierarchies))
+        process.evaluate_step(inputs=scores, model=ScoreVotingClassifier(hierarchies))
 
         # DECISION level predictions
         # Extract decision from predictions
@@ -95,7 +95,7 @@ def multiscale_decision(multiresolution_inputs, folder):
         process.evaluate_step(inputs=decisions, model=get_linear_svm())
         inputs.name = 'Multi_resolution_decision_classifier'
         hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
-        process.evaluate_step(inputs=inputs, model=PatchClassifier(hierarchies))
+        process.evaluate_step(inputs=inputs, model=DecisionVotingClassifier(hierarchies))
 
         process.end()
 

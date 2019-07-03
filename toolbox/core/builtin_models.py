@@ -361,7 +361,7 @@ class Classifiers:
     def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0, architecture='InceptionV3', optimizer='adam', metrics=['accuracy']):
 
         # We get the deep extractor part as include_top is false
-        base_model = Transforms.get_application(architecture)
+        base_model = Transforms.get_application(architecture, pooling='avg')
 
         # We disable all layers trainable property
         for layer in base_model.layers:
@@ -380,11 +380,8 @@ class Classifiers:
             x = Dense(1024, activation='relu', name='predictions_dense_1')(x)
             x = Dropout(0.5, name='predictions_dropout_1')(x)
         if added_layers > 2:
-            x = Dense(1024, activation='relu', name='predictions_dense_2')(x)
+            x = Dense(512, activation='relu', name='predictions_dense_2')(x)
             x = Dropout(0.5, name='predictions_dropout_2')(x)
-        if added_layers > 3:
-            x = Dense(512, activation='relu', name='predictions_dense_3')(x)
-            x = Dropout(0.5, name='predictions_dropout_3')(x)
 
         x = Dense(output_classes, activation='softmax', name='predictions_final')(x)
 

@@ -1,5 +1,4 @@
 from collections import Counter
-from os import makedirs
 from pathlib import Path
 
 import markups

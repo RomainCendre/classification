@@ -367,7 +367,7 @@ class LocalParameters:
 
     @staticmethod
     def get_validation_test():
-        return GroupKFold(n_splits=3), StratifiedKFold(n_splits=5)  # GroupKFold(n_splits=5)
+        return GroupKFold(n_splits=3), StratifiedKFold(n_splits=3)  # GroupKFold(n_splits=5)
 
     @staticmethod
     def set_gpu(percent_gpu=1, allow_growth=True):

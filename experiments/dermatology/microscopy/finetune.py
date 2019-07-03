@@ -19,8 +19,8 @@ def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0):
         'optimizer': 'adam',
         'metrics': [['accuracy']],
         # Parameters for fit
-        'epochs': 100,
-        'batch_size': 32,
+        'epochs': 50,
+        'batch_size': 64,
     }
     parameters.update({'output_classes': output_classes,
                        'trainable_layers': trainable_layers,
@@ -51,7 +51,7 @@ def fine_tune(original_inputs, folder):
 
     # Layers parameters
     layers_parameters = {'trainable_layer': [0, 1, 2],
-                         'added_layer': [1, 2, 3, 4]}
+                         'added_layer': [1, 2, 3]}
 
     # Parameters combinations
     combinations = list(itertools.product(scales, ParameterGrid(layers_parameters)))
