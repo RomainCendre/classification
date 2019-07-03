@@ -4,7 +4,7 @@ from copy import deepcopy
 import h5py
 import numpy as np
 from numpy import unique, array_equal, array
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, ParameterGrid
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from toolbox.core.models import KerasBatchClassifier
@@ -106,11 +106,16 @@ class Classifier:
             # Clone model
             model = deepcopy(self.__model)
 
-            # Estimate best combination
-            grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
-                                       n_jobs=self.n_jobs, scoring=self.__scoring, verbose=1, iid=False)
-            grid_search.fit(datas[train_indices], y=labels[train_indices], groups=groups[train_indices], **self.__fit_params)
-            best_params = grid_search.best_params_
+            # Estimate best combination, if single parameter combination detected,
+            # GridSearch is not performed, else we launch it
+            params_grid = ParameterGrid(self.__params)
+            if len(params_grid) == 1:
+                best_params = list(params_grid)[0]
+            else:
+                grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
+                                           n_jobs=self.n_jobs, scoring=self.__scoring, verbose=1, iid=False)
+                grid_search.fit(datas[train_indices], y=labels[train_indices], groups=groups[train_indices], **self.__fit_params)
+                best_params = grid_search.best_params_
 
             # Fit the model, with the bests parameters
             model.set_params(**best_params)
