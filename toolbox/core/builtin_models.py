@@ -41,7 +41,7 @@ class Transforms:
 
     @staticmethod
     def get_image_dwt():
-        pipe = Pipeline([('dwt', DWTDescriptorTransform(wavelets=['db2'], scale=4))])
+        pipe = Pipeline([('dwt', DWTDescriptorTransform(wavelets=['db2'], scale=2))])
         pipe.name = 'DWT'
         # Define parameters to validate through grid CV
         parameters = {}#{'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']}

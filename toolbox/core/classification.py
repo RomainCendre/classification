@@ -229,13 +229,16 @@ class Classifier:
             file_path = inputs.temporary/'{prefix}.hdf5'.format(prefix=prefix)
             # Try reading features if exists
             if file_path.is_file():
-                with h5py.File(file_path, 'r') as features_file:
-                    if set(references).issubset(features_file.keys()):
-                        features = []
-                        print('Loading data at {file}'.format(file=file_path))
-                        for reference in references:
-                            features.append(features_file[reference][()])
-                        features = array(features)
+                try:
+                    with h5py.File(file_path, 'r') as features_file:
+                        if set(references).issubset(features_file.keys()):
+                            features = []
+                            print('Loading data at {file}'.format(file=file_path))
+                            for reference in references:
+                                features.append(features_file[reference][()])
+                            features = array(features)
+                except:
+                    file_path.unlink()
 
             # If reading fails, so compute and write it
             if features is None:
