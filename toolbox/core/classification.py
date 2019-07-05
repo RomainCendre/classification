@@ -42,15 +42,37 @@ class Classifier:
         self.patients_folds = None
 
     def split_patients(self, inputs, split_rule):
-        # Groups
-        groups = list(inputs.get_groups())
-        unique_groups = list(unique(groups))
-        indices = [groups.index(element) for element in unique_groups]
+
+        # # Groups
+        # groups = list(inputs.get_groups())
+        # unique_groups = list(unique(groups))
+        # indices = [groups.index(element) for element in unique_groups]
+        # # Labels
+        # groups_labels = list(inputs.get_groups_labels())
+        # unique_groups_labels = [groups_labels[element] for element in indices]
+
+        # Data
+        datas = inputs.get_datas()
         # Labels
-        groups_labels = list(inputs.get_groups_labels())
-        unique_groups_labels = [groups_labels[element] for element in indices]
-        # Make folds
-        self.patients_folds = list(enumerate(split_rule.split(X=unique_groups, y=unique_groups_labels)))
+        labels = inputs.get_labels()
+        # Groups
+        groups = inputs.get_groups()
+        # Groups Labels
+        groups_labels = inputs.get_groups_labels()
+        unique_groups_labels = unique(groups_labels)
+
+        groups_folds = []
+        # Browse each type of group label
+        for group_label in unique_groups_labels:
+            indices = np.where(groups_labels==group_label)[0]
+            # Make folds
+            folds = list(split_rule.split(X=datas[indices], y=labels[indices], groups=groups[indices]))
+            folds_original = [indices[f[1]] for f in folds]
+            patients_folds = [unique(groups[f]) for f in folds_original]
+            groups_folds.append(patients_folds)
+
+        # Make final folds
+        self.patients_folds = [np.concatenate(z) for z in zip(*groups_folds)]
 
     def set_model(self, model):
         if isinstance(model, tuple):
