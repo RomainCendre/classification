@@ -41,11 +41,11 @@ def get_generators(x_train, x_test, y_train, y_test):
     # Build generators
     generator = ResourcesGenerator(rescale=1. / 255)
     train_generator = generator.flow_from_paths(x_train, y_train, color_mode='grayscale', target_size=(252, 252),
-                                                class_mode='input',
+                                                class_mode='both',
                                                 batch_size=batch_size)
     validation_generator = generator.flow_from_paths(x_test, y_test, target_size=(252, 252),
                                                      color_mode='grayscale',
-                                                     class_mode='input',
+                                                     class_mode='both',
                                                      batch_size=batch_size, shuffle=False)
     return train_generator, validation_generator
 
@@ -123,12 +123,17 @@ z = Add()([z_mu, z_eps])
 
 x_pred = decoder(z)
 
-vae = Model(inputs=[x, eps], outputs=x_pred)
-vae.compile(optimizer='rmsprop', loss=nll)
-
 x_train, x_test, y_train, y_test = get_inputs()
 train_generator, validation_generator = get_generators(x_train, x_test, y_train, y_test)
 
+vae = Model(inputs=[x, eps], outputs=[z, x_pred])
+
+# vae.compile(optimizer='rmsprop', loss=nll)
+# vae.fit_generator(train_generator,
+#                   shuffle=True,
+#                   epochs=epochs,
+#                   validation_data=validation_generator)
+vae.compile(optimizer='rmsprop', loss=[davies_bouldin_score, nll])
 vae.fit_generator(train_generator,
                   shuffle=True,
                   epochs=epochs,

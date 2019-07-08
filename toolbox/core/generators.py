@@ -22,7 +22,10 @@ class ResourcesGenerator(ImageDataGenerator):
                         save_format='png',
                         subset=None,
                         interpolation='nearest'):
-        return ResourcesIterator(
+        local_mode = class_mode
+        if class_mode == 'both':
+            class_mode = None
+        iterator = ResourcesIterator(
             filenames, self, labels,
             target_size=target_size, color_mode=color_mode,
             classes=classes, class_mode=class_mode,
@@ -33,6 +36,8 @@ class ResourcesGenerator(ImageDataGenerator):
             save_format=save_format,
             subset=subset,
             interpolation=interpolation)
+        iterator.class_mode = local_mode
+        return iterator
 
 
 class ResourcesIterator(Iterator, Sequence):

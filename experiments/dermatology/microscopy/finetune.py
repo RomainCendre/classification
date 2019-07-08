@@ -47,14 +47,14 @@ def fine_tune(original_inputs, folder):
     filters = LocalParameters.get_dermatology_filters()
 
     # Image filters
-    scales = [('Thumbnails', {'Type': 'Patch'}), ('Full', {'Type': 'Full'})]
+    types = [('Thumbnails', {'Type': 'Patch'}), ('Full', {'Type': 'Full'})]
 
     # Layers parameters
     layers_parameters = {'trainable_layer': [0, 1, 2],
                          'added_layer': [1, 2, 3]}
 
     # Parameters combinations
-    combinations = list(itertools.product(scales, ParameterGrid(layers_parameters)))
+    combinations = list(itertools.product(types, ParameterGrid(layers_parameters)))
 
     # Browse combinations
     for filter_name, filter_datas, filter_encoder, filter_groups in filters:
@@ -63,6 +63,7 @@ def fine_tune(original_inputs, folder):
         process.begin(inner_cv=validation, n_jobs=1)
 
         for scale, params in combinations:
+
             inputs = original_inputs.copy_and_change(filter_groups)
             inputs.name = '{scale}_{params}'.format(scale=scale[0], params=params)
 

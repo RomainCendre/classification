@@ -47,6 +47,9 @@ def descriptors(original_inputs, folder):
     # Filters
     filters = LocalParameters.get_dermatology_filters()
 
+    # Types
+    types = [('Thumbnails', {'Type': 'Patch'}), ('Full', {'Type': 'Full'})]
+
     # Methods
     methods = [('Wavelet', Transforms.get_image_dwt()),
                ('Haralick', Transforms.get_haralick(mean=False)),
@@ -57,7 +60,7 @@ def descriptors(original_inputs, folder):
     models = [('LinearSVM', get_linear_svm()), ('RbfSVM', get_rbf_svm())]
 
     # Parameters combinations
-    combinations = list(itertools.product(methods, models))
+    combinations = list(itertools.product(types, methods, models))
 
     # Browse combinations
     for filter_name, filter_datas, filter_encoder, filter_groups in filters:
@@ -65,9 +68,9 @@ def descriptors(original_inputs, folder):
         process = Process(output_folder=folder, name=filter_name, settings=settings, stats_keys=statistics)
         process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
-        for extractor, model in combinations:
+        for im_type, extractor, model in combinations:
 
-            name = '{method}_{model}'.format(method=extractor[0], model=model[0])
+            name = '{type}_{method}_{model}'.format(type=im_type[0], method=extractor[0], model=model[0])
 
             # Name experiment and filter data
             inputs = original_inputs.copy_and_change(filter_groups)
@@ -82,18 +85,11 @@ def descriptors(original_inputs, folder):
             # Extract features on datasets
             process.checkpoint_step(inputs=inputs, model=extractor[1])
 
-            # Evaluate Patch
-            patch_filter = {'Type': ['Patch']}
-            patch_filter.update(filter_datas)
-            inputs.set_filters(patch_filter)
-            inputs.name = '{name}_Patch'.format(name=name)
-            process.evaluate_step(inputs=inputs, model=model[1])
-
-            # Evaluate Full
-            full_filter = {'Type': ['Full']}
-            full_filter.update(filter_datas)
-            inputs.set_filters(full_filter)
-            inputs.name = '{name}_Full'.format(name=name)
+            # Evaluate
+            type_filter = im_type[1]
+            type_filter.update(filter_datas)
+            inputs.set_filters(type_filter)
+            inputs.name = name
             process.evaluate_step(inputs=inputs, model=model[1])
 
         process.end()
