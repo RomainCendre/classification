@@ -10,10 +10,6 @@ import numpy as np
 import os
 from PIL import Image as pil_image
 import matplotlib.pyplot as plt
-
-# reparameterization trick
-# instead of sampling from Q(z|X), sample eps = N(0,I)
-# z = z_mean + sqrt(var)*eps
 from sklearn.metrics import davies_bouldin_score
 from sklearn.model_selection import GroupKFold
 
@@ -21,6 +17,34 @@ from toolbox.core.generators import ResourcesGenerator
 from toolbox.core.transforms import OrderedEncoder
 
 from toolbox.core.parameters import DermatologyDataset, LocalParameters
+
+
+def davies_bouldin_score_tensor(labels, X, n_labels):
+    # Change size of inputs
+    X = K.batch_flatten(X)
+    n_feat = X.shape[1]
+    onehot = K.expand_dims(K.one_hot(K.cast(labels, 'int32'), n_labels))*K.ones([1, n_feat])
+
+    # Compute mean, change size to one hot matrix shape
+    X_labels = K.permute_dimensions(K.dot(K.expand_dims(X), K.ones([1, n_labels])), (0, 2, 1))*onehot  # Mean overall element of vector X
+    cluster_means = K.mean(X_labels, axis=0)
+    global_mean = K.mean(cluster_means, axis=0)
+
+    # Compute metrics intra / extra
+    intra = K.sum((cluster_means-X_labels)**2)
+    extra = K.sum((global_mean-cluster_means)**2)
+
+    return extra/intra
+
+
+def cluster_loss(n_labels, mode='dbs'):
+    def dbs(y_true, y_pred):
+        return davies_bouldin_score_tensor(y_true, y_pred, n_labels)
+
+    if mode == 'dbs':
+        return dbs
+    else:
+        return None
 
 
 def get_inputs():
@@ -31,9 +55,9 @@ def get_inputs():
     image_inputs.set_filters(patch_filter)
 
     # Data from microscopy
-    x = image_inputs.get_datas()
-    y = image_inputs.get_labels()
-    groups = image_inputs.get_groups()
+    x = image_inputs.get('data')
+    y = image_inputs.get('label')
+    groups = image_inputs.get('group')
     train, test = next(GroupKFold(2).split(x, y, groups))
     return x[train], x[test], y[train], y[test]
 
@@ -41,8 +65,15 @@ def get_inputs():
 def get_generators(x_train, x_test, y_train, y_test):
     # Build generators
     generator = ResourcesGenerator(rescale=1. / 255)
+    # train_generator = generator.flow_from_paths(x_train, y_train, color_mode='grayscale', target_size=(252, 252),
+    #                                             class_mode='input',
+    #                                             batch_size=batch_size)
+    # validation_generator = generator.flow_from_paths(x_test, y_test, target_size=(252, 252),
+    #                                                  color_mode='grayscale',
+    #                                                  class_mode='input',
+    #                                                  batch_size=batch_size, shuffle=False)
     train_generator = generator.flow_from_paths(x_train, y_train, color_mode='grayscale', target_size=(252, 252),
-                                                class_mode='input',
+                                                class_mode='both',
                                                 batch_size=batch_size)
     validation_generator = generator.flow_from_paths(x_test, y_test, target_size=(252, 252),
                                                      color_mode='grayscale',
@@ -190,24 +221,48 @@ def vae():
 
     return vae, encoder
 
+def e_cluster_constraint():
+    input_img = Input(shape=original_dim)
+    label_layer = Input((1,), dtype=np.uint8)
+    # Encoding network
+    x = Conv2D(16, (3, 3), activation='relu', padding='same')(input_img)
+    x = MaxPooling2D((2, 2), padding='same')(x)
+    x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+    x = MaxPooling2D((2, 2), padding='same')(x)
+    x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+    encoded = MaxPooling2D((2, 2), padding='same', name='encoded_output')(x)
+    vae = Model([input_img, label_layer], encoded)
+    vae.compile(optimizer='adadelta', loss=cluster_loss(3, 'dbs'), target_tensors=label_layer)
 
-def hybrid_conv_ae():
+    return vae
+
+def ae_cluster_constraint():
     input_img = Input(shape=original_dim)
     # Encoding network
-    x = Conv2D(16, (3, 3), activation='relu', padding='same', strides=2)(input_img)
-    x = Conv2D(32, (3, 3), activation='relu', padding='same', strides=2)(x)
-    encoder = Conv2D(32, (2, 2), activation='relu', padding="same", strides=2)(x)
+    x = Conv2D(16, (3, 3), activation='relu', padding='same')(input_img)
+    x = MaxPooling2D((2, 2), padding='same')(x)
+    x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+    x = MaxPooling2D((2, 2), padding='same')(x)
+    x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+    label_layer = Input((1,))
+    encoded = MaxPooling2D((2, 2), padding='same', name='encoded_output')(x)
     # Decoding network
-    x = Conv2D(32, (2, 2), activation='relu', padding="same")(encoder)
+    x = Conv2D(8, (3, 3), activation='relu', padding='same')(encoded)
     x = UpSampling2D((2, 2))(x)
-    x = Conv2D(32, (3, 3), activation='relu', padding='same')(x)
+    x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
     x = UpSampling2D((2, 2))(x)
     x = Conv2D(16, (3, 3), activation='relu')(x)
     x = UpSampling2D((2, 2))(x)
-    decoder = Conv2D(1, (3, 3), activation='sigmoid', padding='same')(x)
+    decoded = Conv2D(1, (3, 3), activation='sigmoid', padding='same', name='decoded_output')(x)
+    vae = Model([input_img, label_layer], [encoded, decoded])
+    losses = {
+        'decoded_output': binary_crossentropy,
+        'encoded_output': cluster_loss(3, 'dbs')
+    }
+    lossWeights = {'decoded_output': 1.0, 'encoded_output': 1.0}
+    vae.compile(optimizer='adadelta', loss=losses, loss_weights=lossWeights)
 
-    return Model(input_img, decoder)
-
+    return vae
 
 def plot_results(models,
                  data,
@@ -271,6 +326,15 @@ def plot_results(models,
     plt.show()
 
 
+X = np.random.rand(6, 15)
+y = np.array([0, 0, 1, 1, 2, 2])
+score = davies_bouldin_score(X, y)
+
+TX = K.variable(X)
+Ty = K.variable(y)
+scoreT = davies_bouldin_score_tensor(Ty, TX, 3)
+
+
 # Configure GPU consumption
 LocalParameters.set_gpu(percent_gpu=0.5)
 # network parameters
@@ -288,7 +352,8 @@ train_generator, validation_generator = get_generators(x_train, x_test, y_train,
 # autoencoder = cae()
 # autoencoder = deep_cae()
 # autoencoder = conv_ae()
-autoencoder, encoder = vae()
+# autoencoder, encoder = vae()
+autoencoder = e_cluster_constraint()
 
 autoencoder.fit_generator(train_generator,
                           nb_epoch=epochs,

@@ -16,9 +16,6 @@ class Process:
         self.classifier = Classifier(callbacks=callbacks, inner_cv=inner_cv,
                                      n_jobs=n_jobs, scoring=scoring)
 
-    def change_inputs(self, inputs, split_rule):
-        self.classifier.split_patients(inputs, split_rule)
-
     def checkpoint_step(self, inputs, model, projection_folder=None):
         self.classifier.set_model(model)
         self.classifier.features_checkpoint(inputs)

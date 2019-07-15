@@ -22,7 +22,7 @@ def get_reduce_model():
              ('pca', PCAAtMost()),
              ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))]
 
-    parameters = {'pca__n_components': [20, 50, 100],
+    parameters = {'pca__n_components': [20, 50],
                   'clf__C': logspace(-2, 3, 6).tolist()}
 
     # Create pipeline
@@ -39,7 +39,7 @@ def get_select_model():
              ('select', SelectAtMostKBest(f_classif)),
              ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))]
 
-    parameters = {'select__k': [20, 50, 100],
+    parameters = {'select__k': [20, 50],
                   'clf__C': logspace(-2, 3, 6).tolist()}
 
     # Create pipeline

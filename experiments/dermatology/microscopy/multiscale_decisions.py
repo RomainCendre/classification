@@ -23,7 +23,7 @@ def get_linear_svm():
     return pipe, parameters
 
 
-def multiscale_decision(multiresolution_inputs, folder):
+def multiscale_decision(multiresolution_inputs, folder, homemade=False):
 
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
@@ -77,9 +77,11 @@ def multiscale_decision(multiresolution_inputs, folder):
         # Evaluate using svm
         inputs.name = 'Multi_resolution_score_svm'
         process.evaluate_step(inputs=scores, model=get_linear_svm())
-        inputs.name = 'Multi_resolution_score_classifier'
-        hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
-        process.evaluate_step(inputs=scores, model=ScoreVotingClassifier(hierarchies))
+
+        if homemade:
+            inputs.name = 'Multi_resolution_score_classifier'
+            hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
+            process.evaluate_step(inputs=scores, model=ScoreVotingClassifier(hierarchies))
 
         # DECISION level predictions
         # Extract decision from predictions
@@ -93,9 +95,11 @@ def multiscale_decision(multiresolution_inputs, folder):
         inputs.name = 'Multi_resolution_decision_svm'
         inputs.set_filters(filter_datas)
         process.evaluate_step(inputs=decisions, model=get_linear_svm())
-        inputs.name = 'Multi_resolution_decision_classifier'
-        hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
-        process.evaluate_step(inputs=inputs, model=DecisionVotingClassifier(hierarchies))
+
+        if homemade:
+            inputs.name = 'Multi_resolution_decision_classifier'
+            hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
+            process.evaluate_step(inputs=inputs, model=DecisionVotingClassifier(hierarchies))
 
         process.end()
 

@@ -38,7 +38,7 @@ def get_semi_supervised():
     return pipe, parameters
 
 
-def sliding_decisions(slidings, folder):
+def sliding_decisions(slidings, folder, homemade=False):
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
     validation, test = LocalParameters.get_validation_test()
@@ -100,9 +100,11 @@ def sliding_decisions(slidings, folder):
             # Evaluate using svm
             inputs.name = '{name}_score_svm'.format(name=name)
             process.evaluate_step(inputs=scores, model=Classifiers.get_linear_svm())
-            inputs.name = '{name}_score_classifier'.format(name=name)
-            hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
-            process.evaluate_step(inputs=scores, model=ScoreVotingClassifier(hierarchies))
+
+            if homemade:
+                inputs.name = '{name}_score_classifier'.format(name=name)
+                hierarchies = inputs.encode('label', array(list(reversed(filter_datas['Label']))))
+                process.evaluate_step(inputs=scores, model=ScoreVotingClassifier(hierarchies))
 
             # DECISION level predictions
             # Extract decision from predictions
@@ -116,8 +118,10 @@ def sliding_decisions(slidings, folder):
             inputs.name = '{name}_decision_svm'.format(name=name)
             inputs.set_filters(filter_datas)
             process.evaluate_step(inputs=decisions, model=Classifiers.get_linear_svm())
-            inputs.name = '{name}_decision_classifier'.format(name=name)
-            process.evaluate_step(inputs=inputs, model=DecisionVotingClassifier())
+
+            if homemade:
+                inputs.name = '{name}_decision_classifier'.format(name=name)
+                process.evaluate_step(inputs=inputs, model=DecisionVotingClassifier())
 
         process.end()
 

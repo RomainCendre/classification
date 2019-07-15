@@ -38,7 +38,7 @@ def descriptors(original_inputs, folder):
 
     # Advanced parameters
     nb_cpu = LocalParameters.get_cpu_number()
-    validation, test = LocalParameters.get_validation_test()
+    validation = LocalParameters.get_validation()
     settings = BuiltInSettings.get_default_dermatology()
 
     # Statistics expected
@@ -78,12 +78,10 @@ def descriptors(original_inputs, folder):
             # Filter datasets
             inputs.set_filters(filter_datas)
             inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'group': LabelEncoder()})
-
-            # Change inputs
-            process.change_inputs(inputs, split_rule=test)
+            inputs.build_folds()
 
             # Extract features on datasets
-            process.checkpoint_step(inputs=inputs, model=extractor[1])
+            # process.checkpoint_step(inputs=inputs, model=extractor[1])
 
             # Evaluate
             type_filter = im_type[1]
