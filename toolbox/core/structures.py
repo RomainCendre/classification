@@ -1,3 +1,5 @@
+import warnings
+
 import pandas as pd
 from collections import Iterable
 from copy import copy, deepcopy
@@ -5,6 +7,7 @@ from itertools import chain
 import numpy as np
 from sklearn import preprocessing
 from sklearn.exceptions import NotFittedError
+from sklearn.model_selection import GroupKFold, KFold
 from sklearn.utils.multiclass import unique_labels
 
 
@@ -135,15 +138,11 @@ class Inputs(Data):
         input.data = pd.DataFrame(rows)
         return input
 
-    def aggregate(self, x):
-        try:
-            uniq = x.unique()
-            if len(uniq) == 1:
-                return uniq[0]
-            else:
-                return list(uniq)
-        except:
-            return list(x)
+    def copy_and_change(self, substitute):
+        inputs = deepcopy(self)
+        for key, value in substitute.items():
+            inputs.data[key] = inputs.data[key].apply(lambda x: value[1] if x in value[0] else x)
+        return inputs
 
     def decode(self, key, indices):
         is_list = isinstance(indices, np.ndarray)
@@ -185,52 +184,18 @@ class Inputs(Data):
 
         return result
 
-    def get_datas(self):
+    def get(self, tag, encode=True):
         self.check_load()
-        if 'data' not in self.tags:
-            return None
-
-        return self.get_from_key(self.tags['data'])
-
-    def get_groups(self):
-        self.check_load()
-        if 'group' not in self.tags:
+        if tag not in self.tags:
+            warnings.warn('Invalid tag: {tag} not in {tags}'.format(tag=tag, tags=self.tags))
             return None
 
         # Filter and get groups
-        groups = self.get_from_key(self.tags['group'])
-        return self.encode(key='group', data=groups)
-
-    def get_groups_labels(self):
-        self.check_load()
-        if 'group_label' not in self.tags:
-            return None
-
-        # Filter and get groups
-        groups = self.get_from_key(self.tags['group_label'])
-        return self.encode(key='group_label', data=groups)
-
-    def get_labels(self, encode=True):
-        self.check_load()
-        if 'label' not in self.tags:
-            return None
-
-        # Filter and get groups
-        labels = self.get_from_key(self.tags['label'])
+        metas = self.get_from_key(self.tags[tag])
         if encode:
-            return self.encode(key='label', data=labels)
+            return self.encode(key=tag, data=metas)
         else:
-            return labels
-
-    def get_reference(self):
-        self.check_load()
-        if 'reference' not in self.tags:
-            return None
-
-        return self.get_from_key(self.tags['reference'])
-
-    def get_unique_labels(self, encode=True):
-        return unique_labels(self.get_labels(encode=encode))
+            return metas
 
     def load(self):
         if 'data' not in self.tags:
@@ -245,8 +210,40 @@ class Inputs(Data):
     def set_encoders(self, encoders):
         self.encoders = encoders
 
-    def set_temporary_folder(self, temp_folder):
-        self.temporary = temp_folder
+    def set_temporary_folder(self, folder):
+        self.temporary_folder = folder
+
+    def build_folds(self, by_patients=True):
+        # Data
+        datas = self.get('data')
+        # Labels
+        labels = self.get('label')
+        # References
+        references = self.get('reference')
+        # Groups
+        groups = self.get('group')
+        # Groups Labels
+        groups_labels = self.get('group_label')
+        unique_groups_labels = np.unique(groups_labels)
+
+        # Rule to create folds
+        if by_patients:
+            split_rule = GroupKFold(n_splits=4)
+        else:
+            split_rule = KFold(n_splits=4)
+
+        folds = np.zeros(groups.shape, dtype=np.int64)
+        # Browse each type of group label
+        for group_label in unique_groups_labels:
+            indices = np.where(groups_labels==group_label)[0]
+            # Make folds
+            current_folds = list(split_rule.split(X=datas[indices], y=labels[indices], groups=groups[indices]))
+            for index, fold in enumerate(current_folds):
+                folds[fold[1]] = index #Add tests to folds
+
+        # Make final folds
+        self.update('Fold', folds, references)
+        self.tags.update({'fold': 'Fold'})
 
     def sub_inputs(self, filters=None):
         inputs = deepcopy(self)
@@ -257,13 +254,7 @@ class Inputs(Data):
         inputs.data = inputs.data.reset_index(drop=True)
         return inputs
 
-    def copy_and_change(self, substitute):
-        inputs = deepcopy(self)
-        for key, value in substitute.items():
-            inputs.data[key] = inputs.data[key].apply(lambda x: value[1] if x in value[0] else x)
-        return inputs
-
-    def update(self, key, datas, references):
+    def update(self, key, datas, references, field=None):
         self.check_load()
         if 'reference' not in self.tags:
             return None
@@ -271,15 +262,20 @@ class Inputs(Data):
         references = [ref for ref in references]
         datas = [d for d in datas]
         # Now update, if already exist just update values
+        temp = pd.DataFrame({key: datas, self.tags['reference']: references})
+        if temp[key].dtype == 'int64':
+            temp[key] = temp[key].astype('Int64')
+
         if key in self.data.columns:
             self.data = self.data.set_index(self.tags['reference'])
-            temp = pd.DataFrame({key: datas, self.tags['reference']: references}).set_index(self.tags['reference'])
+            temp = temp.set_index(self.tags['reference'])
             self.data.update(temp)
             self.data = self.data.reset_index()
         else:
-            temp = pd.DataFrame({key: datas, self.tags['reference']: references})
             self.data = self.data.join(temp.set_index(self.tags['reference']), on=self.tags['reference'])
-        self.tags.update({'data': key})
+
+        if field is not None:
+            self.tags.update({field: key})
 
 
 class Spectra(Inputs):

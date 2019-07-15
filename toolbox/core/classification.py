@@ -41,39 +41,6 @@ class Classifier:
         self.n_jobs = n_jobs
         self.patients_folds = None
 
-    def split_patients(self, inputs, split_rule):
-
-        # # Groups
-        # groups = list(inputs.get_groups())
-        # unique_groups = list(unique(groups))
-        # indices = [groups.index(element) for element in unique_groups]
-        # # Labels
-        # groups_labels = list(inputs.get_groups_labels())
-        # unique_groups_labels = [groups_labels[element] for element in indices]
-
-        # Data
-        datas = inputs.get_datas()
-        # Labels
-        labels = inputs.get_labels()
-        # Groups
-        groups = inputs.get_groups()
-        # Groups Labels
-        groups_labels = inputs.get_groups_labels()
-        unique_groups_labels = unique(groups_labels)
-
-        groups_folds = []
-        # Browse each type of group label
-        for group_label in unique_groups_labels:
-            indices = np.where(groups_labels==group_label)[0]
-            # Make folds
-            folds = list(split_rule.split(X=datas[indices], y=labels[indices], groups=groups[indices]))
-            folds_original = [indices[f[1]] for f in folds]
-            patients_folds = [unique(groups[f]) for f in folds_original]
-            groups_folds.append(patients_folds)
-
-        # Make final folds
-        self.patients_folds = [np.concatenate(z) for z in zip(*groups_folds)]
-
     def set_model(self, model):
         if isinstance(model, tuple):
             self.__model = model[0]
@@ -98,10 +65,11 @@ class Classifier:
          Returns:
 
         """
-        datas = inputs.get_datas()
-        labels = inputs.get_labels()
-        groups = inputs.get_groups()
-        reference = inputs.get_reference()
+        datas = inputs.get('data')
+        labels = inputs.get('label')
+        groups = inputs.get('group')
+        folds = inputs.get('fold')
+        reference = inputs.get('reference')
 
         # Check valid labels, at least several classes
         if not self.__check_labels(labels):
@@ -109,10 +77,10 @@ class Classifier:
 
         # Encode labels to go from string to int
         results = []
-        for fold, (train, test) in self.patients_folds:
+        for fold, test in enumerate(unique(folds)):
 
+            train_indices = np.where(np.isin(groups, test, invert=True))[0]
             test_indices = np.where(np.isin(groups, test))[0]
-            train_indices = np.where(np.isin(groups, train))[0]
 
             # Check that current fold respect labels
             if not self.__check_labels(labels, labels[train_indices]):
@@ -211,11 +179,11 @@ class Classifier:
             return
 
         # Extract needed data
-        datas = inputs.get_datas()
-        labels = inputs.get_labels()
-        unique_labels = inputs.get_unique_labels()
-        groups = inputs.get_groups()
-        references = inputs.get_reference()
+        datas = inputs.get('data')
+        labels = inputs.get('label')
+        groups = inputs.get('group')
+        references = inputs.get('reference')
+        unique_labels = unique(labels)
 
         # Location of folder followed by prefix
         if hasattr(self.__model, 'name'):
@@ -224,9 +192,9 @@ class Classifier:
             prefix = type(self.__model).__name__
 
         features = None
-        if inputs.temporary is not None:
+        if inputs.temporary_folder is not None:
             # Construct hdf5 file
-            file_path = inputs.temporary/'{prefix}.hdf5'.format(prefix=prefix)
+            file_path = inputs.temporary_folder/'{prefix}.hdf5'.format(prefix=prefix)
             # Try reading features if exists
             if file_path.is_file():
                 try:
