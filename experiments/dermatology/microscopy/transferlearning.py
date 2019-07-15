@@ -67,9 +67,7 @@ def transfer_learning(original_inputs, folder):
             # Filter datasets
             inputs.set_filters(filter_datas)
             inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'group': LabelEncoder()})
-
-            # Change inputs
-            process.change_inputs(inputs, split_rule=test)
+            inputs.build_folds()
 
             # Extract features on datasets
             process.checkpoint_step(inputs=inputs, model=extractor[1])

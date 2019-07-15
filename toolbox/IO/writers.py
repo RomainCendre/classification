@@ -36,8 +36,8 @@ class DataProjectorWriter:
 
         sess = K.get_session()
 
-        datas = inputs.get_datas()
-        labels = inputs.get_labels(encode=False)
+        datas = inputs.get('data')
+        labels = inputs.get('label', encode=False)
 
         # Write data
         data_path = output_folder/'data.ckpt'
@@ -288,9 +288,9 @@ class PCAProjection:
         self.pdf.close()
 
     def write_projection(self, inputs):
-        data = inputs.get_datas()
-        labels = inputs.get_labels(encode=False)
-        ulabels = inputs.get_unique_labels(encode=False)
+        data = inputs.get('data')
+        labels = inputs.get('label', encode=False)
+        ulabels = np.unique(labels)
         pca = PCA(2, whiten=True)  # project to 2 dimensions
         projected = pca.fit_transform(data)
         figure = pyplot.figure()

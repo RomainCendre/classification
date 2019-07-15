@@ -72,9 +72,7 @@ def fine_tune(original_inputs, folder):
             scale_filters.update(filter_datas)
             inputs.set_filters(scale_filters)
             inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'group': LabelEncoder()})
-
-            # Change inputs
-            process.change_inputs(inputs, split_rule=test)
+            inputs.build_folds()
 
             process.evaluate_step(inputs=inputs,
                                   model=get_fine_tuning(output_classes=len(filter_datas['Label']),

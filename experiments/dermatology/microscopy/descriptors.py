@@ -81,7 +81,7 @@ def descriptors(original_inputs, folder):
             inputs.build_folds()
 
             # Extract features on datasets
-            # process.checkpoint_step(inputs=inputs, model=extractor[1])
+            process.checkpoint_step(inputs=inputs, model=extractor[1])
 
             # Evaluate
             type_filter = im_type[1]

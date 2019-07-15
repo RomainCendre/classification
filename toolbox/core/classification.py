@@ -146,9 +146,9 @@ class Classifier:
 
     def fit(self, inputs):
         # Extract needed data
-        datas = inputs.get_datas()
-        labels = inputs.get_labels()
-        groups = inputs.get_groups()
+        datas = inputs.get('data')
+        labels = inputs.get('label')
+        groups = inputs.get('group')
 
         # Check valid labels, at least several classes
         if not self.__check_labels(labels):
