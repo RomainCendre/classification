@@ -3,12 +3,19 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/descriptors.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/descriptors.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/finetune.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/finetune.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale_decisions.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale_decisions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale_features.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_decisions.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_decisions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_features.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/processes.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/processes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/IO/dermatology.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/dermatology.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/IO/writers.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/writers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/classification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/parameters.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +69,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="148">
@@ -77,11 +84,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="223" column="58" selection-start-line="223" selection-start-column="58" selection-end-line="223" selection-end-column="58" />
+            <state relative-caret-position="645">
+              <caret line="336" lean-forward="true" selection-start-line="336" selection-end-line="336" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/experiments/processes.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="169">
+              <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
             </state>
           </provider>
         </entry>
@@ -157,8 +173,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>research</find>
-      <find>__scan_confocal_and_patchify</find>
       <find>work_folder</find>
       <find>scan_folder</find>
       <find>BuiltInModels</find>
@@ -187,6 +201,8 @@
       <find>get_data</find>
       <find>get_</find>
       <find>_shape</find>
+      <find>mkdir</find>
+      <find>.mkdir</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -223,10 +239,8 @@
         <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
         <option value="$PROJECT_DIR$/experiments/dermatology/prepare.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/multimodal/simple_cascade.py" />
-        <option value="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" />
         <option value="$PROJECT_DIR$/experiments/test_experiments.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py" />
-        <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/toolbox/core/models.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/autoencoder.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/variational_autoencoder.py" />
@@ -237,16 +251,18 @@
         <option value="$PROJECT_DIR$/experiments/cluster_local/send_data.bat" />
         <option value="$PROJECT_DIR$/experiments/dermatology/devs/autoencoder.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/devs/variational_autoencoder.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
-        <option value="$PROJECT_DIR$/toolbox/IO/writers.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
-        <option value="$PROJECT_DIR$/experiments/processes.py" />
         <option value="$PROJECT_DIR$/toolbox/core/structures.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/descriptors.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
+        <option value="$PROJECT_DIR$/toolbox/IO/writers.py" />
+        <option value="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" />
+        <option value="$PROJECT_DIR$/experiments/processes.py" />
+        <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/finetune.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale_decisions.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale_features.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_decisions.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/descriptors.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_features.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py" />
       </list>
@@ -564,21 +580,7 @@
       <workItem from="1562744568538" duration="596000" />
       <workItem from="1562855381506" duration="707000" />
       <workItem from="1563194644192" duration="3912000" />
-      <workItem from="1563259646379" duration="5847000" />
-    </task>
-    <task id="LOCAL-00071" summary="Adding a comparison of architectures for tranfer learning.">
-      <created>1560499832472</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1560499832472</updated>
-    </task>
-    <task id="LOCAL-00072" summary="Update of voting model based on decision.">
-      <created>1560500897476</created>
-      <option name="number" value="00072" />
-      <option name="presentableId" value="LOCAL-00072" />
-      <option name="project" value="LOCAL" />
-      <updated>1560500897483</updated>
+      <workItem from="1563259646379" duration="8163000" />
     </task>
     <task id="LOCAL-00073" summary="Updating all processes, to support new hypothesis.">
       <created>1560514764866</created>
@@ -909,7 +911,21 @@
       <option name="project" value="LOCAL" />
       <updated>1563275111118</updated>
     </task>
-    <option name="localTasksCounter" value="120" />
+    <task id="LOCAL-00120" summary="Fix previous commit.">
+      <created>1563275210316</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1563275210316</updated>
+    </task>
+    <task id="LOCAL-00121" summary="Update feature extraction.">
+      <created>1563276920999</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1563276920999</updated>
+    </task>
+    <option name="localTasksCounter" value="122" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -945,7 +961,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="433177000" />
+    <option name="totallyTimeSpent" value="435493000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1029,7 +1045,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Adding groups for gridsearch." />
     <MESSAGE value="Fixing bugs in procedures." />
     <MESSAGE value="Fix unitary test. Missing valid data test for dermatology process." />
     <MESSAGE value="Change way features are written." />
@@ -1052,9 +1067,10 @@
     <MESSAGE value="Update data tag when doing feature checkpoint." />
     <MESSAGE value="Update function to save data array." />
     <MESSAGE value="Update descriptors/ft procedures." />
-    <MESSAGE value="Fix previous commit." />
     <MESSAGE value="Update validation scheme method." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update validation scheme method." />
+    <MESSAGE value="Fix previous commit." />
+    <MESSAGE value="Update feature extraction." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update feature extraction." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1081,7 +1097,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/toolbox/IO/dermatology.py</url>
-          <line>169</line>
+          <line>166</line>
           <option name="timeStamp" value="91" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1466,27 +1482,10 @@ scoreT.eval(sess)</expression-string>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/processes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="38" column="21" selection-start-line="38" selection-start-column="21" selection-end-line="38" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="175">
           <caret line="115" column="36" lean-forward="true" selection-start-line="115" selection-start-column="36" selection-end-line="115" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="223" column="58" selection-start-line="223" selection-start-column="58" selection-end-line="223" selection-end-column="58" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
@@ -1560,6 +1559,23 @@ scoreT.eval(sess)</expression-string>
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="645">
+          <caret line="336" lean-forward="true" selection-start-line="336" selection-end-line="336" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/processes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
         </state>
       </provider>
     </entry>

@@ -227,7 +227,10 @@ class Classifier:
         if hasattr(self.__model, 'need_fit') and self.__model.need_fit:
             features = self.__feature_extraction_fit(inputs)
         else:
-            features = Classifier.__feature_extraction_simple(self.__model, inputs)
+            datas = inputs.get('data')
+            labels = inputs.get('label')
+            unique_labels = unique(labels)
+            features = Classifier.__feature_extraction_simple(self.__model, datas, unique_labels)
 
         return array(features)
 

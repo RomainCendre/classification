@@ -55,8 +55,7 @@ if __name__ == "__main__":
     # Output dir
     current_file = Path(__file__)
     output_folder = ORLDataset.get_results_location()/current_file.stem
-    if not output_folder.is_dir():
-        output_folder.mkdir()
+    output_folder.mkdir(exist_ok=True)
 
     # Input data
     spectra = ORLDataset.spectras()

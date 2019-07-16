@@ -28,8 +28,7 @@ class DataProjectorWriter:
 
         # Check output folder
         output_folder = Path(output_folder)
-        if not output_folder.exists():
-            output_folder.mkdir()
+        output_folder.mkdir(exist_ok=True)
 
         # Write a batch to easily launch it
         DataProjectorWriter.write_batch(output_folder)
@@ -71,8 +70,8 @@ class StatisticsWriter:
     def __init__(self, keys, output_folder, name):
         # Check output folder
         output_folder = Path(output_folder)
-        if not output_folder.exists():
-            output_folder.mkdir()
+        output_folder.mkdir(exist_ok=True)
+
         # Fill properties
         self.keys = keys
         # TODO change pdf way of concatenate
@@ -112,8 +111,7 @@ class ResultWriter:
     def write_results(self, output_folder, name, use_std=True):
         # Check output folder
         output_folder = Path(output_folder)
-        if not output_folder.exists():
-            output_folder.mkdir()
+        output_folder.mkdir(exist_ok=True)
 
         self.write_report(use_std=use_std, path=output_folder/'{name}_report.html'.format(name=name))
         self.write_roc(path=output_folder/'{name}_rocs.pdf'.format(name=name))
@@ -278,8 +276,7 @@ class PCAProjection:
     def __init__(self, settings, output_folder, name):
         # Check output folder
         output_folder = Path(output_folder)
-        if not output_folder.exists():
-            output_folder.mkdir()
+        output_folder.mkdir(exist_ok=True)
         # Fill properties
         self.settings = settings
         self.pdf = PdfPages(output_folder/'{name}_pca.pdf'.format(name=name))
@@ -369,12 +366,10 @@ class PatchWriter:
     def write_patch(self, output_folder):
         # Check output folder
         output_folder = Path(output_folder)
-        if not output_folder.exists():
-            output_folder.mkdir()
+        output_folder.mkdir(exist_ok=True)
 
         output_folder = output_folder/self.inputs.name
-        if not output_folder.exists():
-            output_folder.mkdir()
+        output_folder.mkdir(exist_ok=True)
 
         references = list(set(self.inputs.get_from_key('Reference')))
 

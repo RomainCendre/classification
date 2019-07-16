@@ -21,9 +21,8 @@ class Process:
         self.classifier.features_checkpoint(inputs)
         # Write data to visualize it
         if projection_folder is not None:
-            projection_folder = projection_folder/inputs.name
-            if not projection_folder.is_dir():
-                projection_folder.mkdir()
+            projection_folder = projection_folder / inputs.name
+            projection_folder.mkdir(exist_ok=True)
             DataProjectorWriter.project_data(inputs, projection_folder)
 
     def train_step(self, inputs, model):
@@ -33,8 +32,7 @@ class Process:
     def evaluate_step(self, inputs, model):
         try:
             folder = self.folder / self.name
-            if folder.is_dir():
-                folder.mkdir()
+            folder.mkdir(exist_ok=True)
 
             inputs.write(folder)  # Write data on disk
             self.__add_input_stat(inputs)  # Write statistics

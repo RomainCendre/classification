@@ -20,8 +20,7 @@ class ORLDataset:
         else:
             base_folder = Path().home()
         result_folder = base_folder/'Results/ORL'
-        if not result_folder.is_dir():
-            result_folder.mkdir(parents=True)
+        result_folder.mkdir(parents=True, exist_ok=True)
         return result_folder
 
     @staticmethod
@@ -62,8 +61,7 @@ class DermatologyDataset:
         else:
             base_folder = Path().home()
         result_folder = base_folder/'Results/Dermatology'
-        if not result_folder.is_dir():
-            result_folder.mkdir(parents=True)
+        result_folder.mkdir(parents=True, exist_ok=True)
         return result_folder
 
     @staticmethod
@@ -71,8 +69,7 @@ class DermatologyDataset:
         home_path = Path().home()
         input_folders = [home_path/'Data/Skin/Saint_Etienne/Patients']
         work_folder = home_path/'.research'
-        if not work_folder.exists():
-            work_folder.mkdir()
+        work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__images(input_folders, work_folder, modality)
 
     @staticmethod
@@ -80,8 +77,7 @@ class DermatologyDataset:
         home_path = Path().home()
         input_folders = [home_path/'Data/Skin/Saint_Etienne/Patients']
         work_folder = home_path/'.research'
-        if not work_folder.exists():
-            work_folder.mkdir()
+        work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients, modality)
 
     @staticmethod
@@ -89,8 +85,7 @@ class DermatologyDataset:
         home_path = Path().home()
         input_folders = [home_path/'Data/Skin/Saint_Etienne/Patients']
         work_folder = home_path/'.research'
-        if not work_folder.exists():
-            work_folder.mkdir()
+        work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap, modality)
 
     @staticmethod
@@ -98,8 +93,7 @@ class DermatologyDataset:
         here_path = Path(__file__)
         input_folders = [here_path.parent/'../data_test/dermatology/Test']
         work_folder = Path(gettempdir())/'.research'
-        if not work_folder.exists():
-            work_folder.mkdir()
+        work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__images(input_folders, work_folder, 'Microscopy')
 
     @staticmethod
@@ -107,8 +101,7 @@ class DermatologyDataset:
         here_path = Path(__file__)
         input_folders = [here_path.parent/'../data_test/dermatology/Test']
         work_folder = Path(gettempdir())/'.research'
-        if not work_folder.exists():
-            work_folder.mkdir()
+        work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients, 'Microscopy')
 
     @staticmethod
@@ -116,8 +109,7 @@ class DermatologyDataset:
         here_path = Path(__file__)
         input_folders = [here_path.parent/'../data_test/dermatology/Test']
         work_folder = Path(gettempdir())/'.research'
-        if not work_folder.exists():
-            work_folder.mkdir()
+        work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap, 'Microscopy')
 
     @staticmethod
@@ -202,8 +194,7 @@ class DermatologyDataset:
     @staticmethod
     def __multi_resolution(filename, reference, coefficients, work_folder):
         multi_folder = work_folder/'Multi'
-        if not multi_folder.exists():
-            multi_folder.mkdir()
+        multi_folder.mkdir(exist_ok=True)
 
         image = Image.open(filename).convert('L')
         metas = []
@@ -234,13 +225,11 @@ class DermatologyDataset:
     def __patchify(filename, reference, window_size, overlap, work_folder):
         # Manage folder that contains root of patches
         work_folder = work_folder/'Patches'
-        if not work_folder.exists():
-            work_folder.mkdir()
+        work_folder.mkdir(exist_ok=True)
 
         # Manage patches folder
         patch_folder = work_folder/'{size}_{overlap}'.format(size=window_size, overlap=overlap)
-        if not patch_folder.exists():
-            patch_folder.mkdir()
+        patch_folder.mkdir(exist_ok=True)
 
         image = np.ascontiguousarray(np.array(Image.open(filename).convert('L')))
         stride = int(window_size - (window_size * overlap))  # Overlap of images

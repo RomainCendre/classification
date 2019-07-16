@@ -114,8 +114,7 @@ class DataManager:
         # Check output folder
         output_folder = Path(output_folder)
         output_folder = output_folder/'Dermoscopy'
-        if not output_folder.exists():
-            output_folder.mkdir()
+        output_folder.mkdir(exist_ok=True)
 
         # Browse source files
         images = []
@@ -136,8 +135,7 @@ class DataManager:
         # Check output folder
         output_folder = Path(output_folder)
         output_folder = output_folder/'Photography'
-        if not output_folder.exists():
-            output_folder.mkdir()
+        output_folder.mkdir(exist_ok=True)
 
         # Browse source files
         images = []
@@ -158,8 +156,7 @@ class DataManager:
         # Check output folder
         output_folder = Path(output_folder)
         output_folder = output_folder/'Microscopy'
-        if not output_folder.exists():
-            output_folder.mkdir()
+        output_folder.mkdir(exist_ok=True)
 
         # Read microscopy file for each patient
         rcm_data = pd.read_csv(self.rcm_file, dtype=str)
@@ -175,8 +172,7 @@ class DataManager:
             else:
                 microscopy_subfolder = microscopy_folder/row_label['Folder']
                 output_subfolder = output_folder/row_label['Folder']
-                if not output_subfolder.exists():
-                    output_subfolder.mkdir()
+                output_subfolder.mkdir(exist_ok=True)
 
             # Browse different labels...
             for label in self.labels:
@@ -221,8 +217,7 @@ class DataManager:
     def launch_converter(self, output_folder, excluded_meta):
         # Check output folder
         output_folder = Path(output_folder)
-        if not output_folder.exists():
-            output_folder.mkdir()
+        output_folder.mkdir(exist_ok=True)
 
         id_modality = ['ID_Dermoscopy', 'ID_RCM']
         # Read csv
@@ -240,8 +235,7 @@ class DataManager:
 
             # Construct folder reference
             output_patient = output_folder/row['ID']
-            if not output_patient.exists():
-                output_patient.mkdir()
+            output_patient.mkdir(exist_ok=True)
 
             # Write patient meta
             pd.DataFrame([row.drop(id_modality, errors='ignore').to_dict()]).to_csv(output_patient/'patient.csv', index=False)
