@@ -41,7 +41,7 @@ def get_semi_supervised():
 def sliding_decisions(slidings, folder, homemade=False):
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
-    validation, test = LocalParameters.get_validation()
+    validation = LocalParameters.get_validation()
     settings = BuiltInSettings.get_default_dermatology()
 
     # Statistics expected

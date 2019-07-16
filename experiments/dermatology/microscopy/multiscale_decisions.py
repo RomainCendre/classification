@@ -27,7 +27,7 @@ def multiscale_decision(multiresolution_inputs, folder, homemade=False):
 
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
-    validation, test = LocalParameters.get_validation()
+    validation = LocalParameters.get_validation()
     settings = BuiltInSettings.get_default_dermatology()
 
     # Statistics expected
