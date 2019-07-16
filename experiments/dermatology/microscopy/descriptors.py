@@ -51,8 +51,8 @@ def descriptors(original_inputs, folder):
     types = [('Thumbnails', {'Type': 'Patch'}), ('Full', {'Type': 'Full'})]
 
     # Methods
-    methods = [('Wavelet', Transforms.get_image_dwt()),
-               ('Haralick', Transforms.get_haralick(mean=False)),
+    methods = [#('Wavelet', Transforms.get_image_dwt()),
+               #('Haralick', Transforms.get_haralick(mean=False)),
                ('KerasAverage', Transforms.get_keras_extractor(pooling='avg')),
                ('KerasMaximum', Transforms.get_keras_extractor(pooling='max'))]
 
@@ -70,13 +70,14 @@ def descriptors(original_inputs, folder):
 
         for im_type, extractor, model in combinations:
 
-            name = '{type}_{method}_{model}'.format(type=im_type[0], method=extractor[0], model=model[0])
-
             # Name experiment and filter data
             inputs = original_inputs.copy_and_change(filter_groups)
+            inputs.name = '{type}_{method}_{model}'.format(type=im_type[0], method=extractor[0], model=model[0])
 
             # Filter datasets
-            inputs.set_filters(filter_datas)
+            type_filter = im_type[1]
+            type_filter.update(filter_datas)
+            inputs.set_filters(type_filter)
             inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'group': LabelEncoder()})
             inputs.build_folds()
 
@@ -84,10 +85,6 @@ def descriptors(original_inputs, folder):
             process.checkpoint_step(inputs=inputs, model=extractor[1])
 
             # Evaluate
-            type_filter = im_type[1]
-            type_filter.update(filter_datas)
-            inputs.set_filters(type_filter)
-            inputs.name = name
             process.evaluate_step(inputs=inputs, model=model[1])
 
         process.end()
