@@ -32,17 +32,22 @@ class Process:
 
     def evaluate_step(self, inputs, model):
         try:
-            self.__add_input_stat(inputs)
+            folder = self.folder / self.name
+            if folder.is_dir():
+                folder.mkdir()
+
+            inputs.write(folder)  # Write data on disk
+            self.__add_input_stat(inputs)  # Write statistics
             # Evaluate model
             self.classifier.set_model(model)
             self.results.append(self.classifier.evaluate(inputs))
+
         except Exception as ex:
             print(ex)
 
     def end(self):
         ResultWriter(self.results, self.settings).write_results(output_folder=self.folder, name=self.name)
         self.stat_writer.end()
-
 
     def __add_input_stat(self, inputs):
         if self.stat_writer is not None:

@@ -107,9 +107,9 @@ class Inputs(Data):
         self.tags = tags
         self.encoders = None
 
-    def collapse(self, filters, on, filters_collapse, on_collapse, data_tags=None):
+    def collapse(self, filters, on, filters_collapse, on_collapse, data_tag=None):
         pd.options.mode.chained_assignment = None
-        if data_tags is None:
+        if data_tag is None:
             data_tag = self.tags['data']
 
         # Filters
@@ -276,6 +276,12 @@ class Inputs(Data):
 
         if field is not None:
             self.tags.update({field: key})
+
+    def read(self, name):
+        self.data.read_csv(name)
+
+    def write(self, folder):
+        self.data.to_csv(folder/'{name}.csv'.format(name=self.name))
 
 
 class Spectra(Inputs):
