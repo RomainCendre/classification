@@ -79,8 +79,8 @@ class Classifier:
         results = []
         for fold, test in enumerate(unique(folds)):
 
-            train_indices = np.where(np.isin(groups, test, invert=True))[0]
-            test_indices = np.where(np.isin(groups, test))[0]
+            train_indices = np.where(np.isin(folds, test, invert=True))[0]
+            test_indices = np.where(np.isin(folds, test))[0]
 
             # Check that current fold respect labels
             if not self.__check_labels(labels, labels[train_indices]):
@@ -212,6 +212,7 @@ class Classifier:
                     print('Writing data at {file}'.format(file=file_path))
                     for feature, reference in zip(features, references):
                         if reference not in features_file.keys():
+                            print(reference)
                             features_file.create_dataset(reference, data=feature)
         else:
             features = self.__feature_extraction(prefix, inputs)
@@ -240,13 +241,14 @@ class Classifier:
         unique_labels = unique(labels)
         groups = inputs.get('group')
         folds = inputs.get('fold')
-        features = len(labels) * [None]
+        samples = len(datas)
+        features = None
 
         for fold, test in enumerate(unique(folds)):
             # Clone model
             model = deepcopy(self.__model)
-            train_indices = np.where(np.isin(groups, test, invert=True))[0]
-            test_indices = np.where(np.isin(groups, test))[0]
+            train_indices = np.where(np.isin(folds, test, invert=True))[0]
+            test_indices = np.where(np.isin(folds, test))[0]
 
             # Check that current fold respect labels
             if not self.__check_labels(labels, labels[train_indices]):
@@ -260,7 +262,7 @@ class Classifier:
             # Now fit, but find first hyper parameters
             grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
                                        n_jobs=self.n_jobs, refit=False, scoring=self.__scoring, verbose=1, iid=False)
-            grid_search.fit(datas[train_indices], y=labels[train_indices], **self.__fit_params)
+            grid_search.fit(datas[train_indices], y=labels[train_indices], groups=groups[train_indices], **self.__fit_params)
             best_params = grid_search.best_params_
 
             # Fit the model, with the bests parameters
@@ -273,8 +275,10 @@ class Classifier:
 
             test_features = Classifier.__feature_extraction_simple(model, datas[test_indices], unique_labels)
 
-            for index, feature in enumerate(test_features):
-                features[test_indices[index]] = feature
+            if features is None:
+                features = np.zeros(shape=(samples,) + test_features.shape[1:])
+
+            features[test_indices] = test_features
 
         return features
 
