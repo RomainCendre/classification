@@ -83,7 +83,7 @@ def get_mil_decision():
 def sliding_features(slidings, folder):
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
-    validation, test = LocalParameters.get_validation_test()
+    validation, test = LocalParameters.get_validation()
     settings = BuiltInSettings.get_default_dermatology()
 
     # Statistics expected

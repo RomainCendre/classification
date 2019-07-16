@@ -65,7 +65,7 @@ def get_norm_model():
 def multiscale_features(multiresolution_inputs, folder):
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
-    validation, test = LocalParameters.get_validation_test()
+    validation, test = LocalParameters.get_validation()
     settings = BuiltInSettings.get_default_dermatology()
 
     # Statistics expected
