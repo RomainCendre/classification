@@ -221,7 +221,7 @@ class Classifier:
             features = self.__feature_extraction(prefix, datas, labels, unique_labels, groups)
 
         # Update input
-        inputs.update(prefix, features, references)
+        inputs.update(prefix, features, references, 'data')
 
     def __feature_extraction(self, prefix, datas, labels, nb_labels, groups):
         # Now browse data
