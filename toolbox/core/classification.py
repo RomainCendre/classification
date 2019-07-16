@@ -179,11 +179,7 @@ class Classifier:
             return
 
         # Extract needed data
-        datas = inputs.get('data')
-        labels = inputs.get('label')
-        groups = inputs.get('group')
         references = inputs.get('reference')
-        unique_labels = unique(labels)
 
         # Location of folder followed by prefix
         if hasattr(self.__model, 'name'):
@@ -211,37 +207,43 @@ class Classifier:
             # If reading fails, so compute and write it
             if features is None:
                 with h5py.File(file_path, 'a') as features_file:
-                    features = self.__feature_extraction(prefix, datas, labels, unique_labels, groups)
+                    features = self.__feature_extraction(prefix, inputs)
                     # Now save features as files
                     print('Writing data at {file}'.format(file=file_path))
                     for feature, reference in zip(features, references):
                         if reference not in features_file.keys():
                             features_file.create_dataset(reference, data=feature)
         else:
-            features = self.__feature_extraction(prefix, datas, labels, unique_labels, groups)
+            features = self.__feature_extraction(prefix, inputs)
 
         # Update input
         inputs.update(prefix, features, references, 'data')
 
-    def __feature_extraction(self, prefix, datas, labels, nb_labels, groups):
+    def __feature_extraction(self, prefix, inputs):
         # Now browse data
         print('Extraction features with {prefix}'.format(prefix=prefix))
 
         # If needed to fit, so fit model
         if hasattr(self.__model, 'need_fit') and self.__model.need_fit:
-            features = self.__feature_extraction_fit(datas, labels, nb_labels, groups)
+            features = self.__feature_extraction_fit(inputs)
         else:
-            features = Classifier.__feature_extraction_simple(self.__model, datas, nb_labels)
+            features = Classifier.__feature_extraction_simple(self.__model, inputs)
 
         return array(features)
 
-    def __feature_extraction_fit(self, datas, labels, nb_labels, groups):
+    def __feature_extraction_fit(self, inputs):
+        datas = inputs.get('data')
+        labels = inputs.get('label')
+        unique_labels = unique(labels)
+        groups = inputs.get('group')
+        folds = inputs.get('fold')
         features = len(labels) * [None]
-        for fold, (train, test) in self.patients_folds:
+
+        for fold, test in enumerate(unique(folds)):
             # Clone model
             model = deepcopy(self.__model)
+            train_indices = np.where(np.isin(groups, test, invert=True))[0]
             test_indices = np.where(np.isin(groups, test))[0]
-            train_indices = np.where(np.isin(groups, train))[0]
 
             # Check that current fold respect labels
             if not self.__check_labels(labels, labels[train_indices]):
@@ -266,7 +268,7 @@ class Classifier:
             else:
                 model.fit(datas[train_indices], y=labels[train_indices])
 
-            test_features = Classifier.__feature_extraction_simple(model, datas[test_indices], nb_labels)
+            test_features = Classifier.__feature_extraction_simple(model, datas[test_indices], unique_labels)
 
             for index, feature in enumerate(test_features):
                 features[test_indices[index]] = feature
@@ -286,14 +288,14 @@ class Classifier:
         return len(unique(labels)) > 1 and array_equal(unique(labels), unique(labels_fold))
 
     @staticmethod
-    def __feature_extraction_simple(model, datas, nb_labels):
+    def __feature_extraction_simple(model, datas, unique_labels):
         # Now transform data
         if hasattr(model, 'transform'):
             features = model.transform(datas)
         else:
             features = model.predict_proba(datas)
             if len(model.classes_) != 0:
-                features = Classifier.predict_proba_ordered(features, model.classes_, nb_labels)
+                features = Classifier.predict_proba_ordered(features, model.classes_, unique_labels)
         return features
 
     @staticmethod
