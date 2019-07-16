@@ -51,8 +51,8 @@ def descriptors(original_inputs, folder):
     types = [('Thumbnails', {'Type': 'Patch'}), ('Full', {'Type': 'Full'})]
 
     # Methods
-    methods = [#('Wavelet', Transforms.get_image_dwt()),
-               #('Haralick', Transforms.get_haralick(mean=False)),
+    methods = [('Wavelet', Transforms.get_image_dwt()),
+               ('Haralick', Transforms.get_haralick(mean=False)),
                ('KerasAverage', Transforms.get_keras_extractor(pooling='avg')),
                ('KerasMaximum', Transforms.get_keras_extractor(pooling='max'))]
 
