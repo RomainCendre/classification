@@ -15,7 +15,7 @@ from toolbox.core.transforms import OrderedEncoder
 
 def get_spectrum_classifier():
     pipe = Pipeline([('pca', PCA(n_components=0.99)),
-                     ('lda', LinearDiscriminantAnalysis(n_components=20)),
+                     # ('lda', LinearDiscriminantAnalysis(n_components=20)),
                      ('scale', StandardScaler()),
                      ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
     pipe.name = 'PatchClassifier'
@@ -26,26 +26,28 @@ def simple(spectra, output_folder):
 
     # Parameters
     nb_cpu = LocalParameters.get_cpu_number()
-    validation, test = LocalParameters.get_validation_test()
+    validation = LocalParameters.get_validation()
     settings = BuiltInSettings.get_default_orl()
-
-    # Filters
-    filters = LocalParameters.get_orl_filters()
 
     # Statistics expected
     statistics = LocalParameters.get_statistics_keys()
 
+    # Filters
+    filters = LocalParameters.get_orl_filters()
+
     for filter_name, filter_datas, filter_groups in filters:
-        inputs = spectra.copy_and_change(filter_groups)
 
         process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
         process.begin(inner_cv=validation, n_jobs=nb_cpu)
 
         # Change filters
+        inputs = spectra.copy_and_change(filter_groups)
+
         inputs.set_filters(filter_datas)
         inputs.set_encoders({'label': OrderedEncoder().fit(filter_datas['label']),
                              'group': LabelEncoder()})
-        process.change_inputs(inputs, split_rule=test)
+        inputs.build_folds()
+
         process.evaluate_step(inputs=inputs, model=get_spectrum_classifier())
         process.end()
 

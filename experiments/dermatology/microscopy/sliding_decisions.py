@@ -34,7 +34,7 @@ def get_semi_supervised():
     pipe.name = 'LabelSpreading'
     pipe.need_fit = True
     # Define parameters to validate through grid CV
-    parameters = {'clf__C': logspace(-2, 3, 6).tolist()}
+    parameters = {'clf__gamma': logspace(-2, 3, 6).tolist()}
     return pipe, parameters
 
 
