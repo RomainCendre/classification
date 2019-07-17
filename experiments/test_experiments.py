@@ -1,8 +1,4 @@
 import unittest
-from genericpath import exists
-from pathlib import Path
-from tempfile import gettempdir
-from numpy.ma import arange
 from experiments.dermatology.microscopy.descriptors import descriptors
 from experiments.dermatology.microscopy.finetune import fine_tune
 from experiments.dermatology.microscopy.multiscale_decisions import multiscale_decision

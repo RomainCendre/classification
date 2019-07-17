@@ -19,31 +19,30 @@ class ORLDataset:
             base_folder = Path(gettempdir())
         else:
             base_folder = Path().home()
-        result_folder = base_folder/'Results/ORL'
+        result_folder = base_folder / 'Results/ORL'
         result_folder.mkdir(parents=True, exist_ok=True)
         return result_folder
 
     @staticmethod
     def spectras():
         home_path = Path().home()
-        location = home_path/'Data/Neck/'
-        input_folders = [location/'Patients.csv', location/'Temoins.csv']
+        location = home_path / 'Data/Neck/'
+        input_folders = [location / 'Patients.csv', location / 'Temoins.csv']
         return ORLDataset.__spectras(input_folders)
 
     @staticmethod
     def test_spectras():
-        here_path = Path(__file__)
-        input_folders = [here_path.parent/'../data_test/spectroscopy/Patients.csv']
-        return ORLDataset.__spectras(input_folders)
+        generator = otorhinolaryngology.Generator((4, 7), 30)
+        return Spectra(data=generator.generate_study(),
+                       tags={'data': 'data', 'label': 'label', 'group': 'Reference',
+                             'reference': 'Reference_spectrum', 'group_label': 'pathologie'})
 
     @staticmethod
     def __spectras(folders):
-        inputs = Spectra(folders=folders, instance=otorhinolaryngology.Reader(),
-                         loader=otorhinolaryngology.Reader.read_table,
-                         tags={'data': 'data', 'label': 'label', 'group': 'Reference',
-                               'reference': 'Reference_spectrum', 'group_label': 'pathologie'})
-        inputs.load()
-        return inputs
+        return Spectra.load(folders=folders, instance=otorhinolaryngology.Reader(),
+                            loader=otorhinolaryngology.Reader.read_table,
+                            tags={'data': 'data', 'label': 'label', 'group': 'Reference',
+                                  'reference': 'Reference_spectrum', 'group_label': 'pathologie'})
 
 
 class DermatologyDataset:
@@ -60,55 +59,55 @@ class DermatologyDataset:
             base_folder = Path(gettempdir())
         else:
             base_folder = Path().home()
-        result_folder = base_folder/'Results/Dermatology'
+        result_folder = base_folder / 'Results/Dermatology'
         result_folder.mkdir(parents=True, exist_ok=True)
         return result_folder
 
     @staticmethod
     def images(modality=None):
         home_path = Path().home()
-        input_folders = [home_path/'Data/Skin/Saint_Etienne/Patients']
-        work_folder = home_path/'.research'
+        input_folders = [home_path / 'Data/Skin/Saint_Etienne/Patients']
+        work_folder = home_path / '.research'
         work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__images(input_folders, work_folder, modality)
 
     @staticmethod
     def multiresolution(coefficients, modality=None):
         home_path = Path().home()
-        input_folders = [home_path/'Data/Skin/Saint_Etienne/Patients']
-        work_folder = home_path/'.research'
+        input_folders = [home_path / 'Data/Skin/Saint_Etienne/Patients']
+        work_folder = home_path / '.research'
         work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients, modality)
 
     @staticmethod
     def sliding_images(size, overlap, modality=None):
         home_path = Path().home()
-        input_folders = [home_path/'Data/Skin/Saint_Etienne/Patients']
-        work_folder = home_path/'.research'
+        input_folders = [home_path / 'Data/Skin/Saint_Etienne/Patients']
+        work_folder = home_path / '.research'
         work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap, modality)
 
     @staticmethod
     def test_images():
         here_path = Path(__file__)
-        input_folders = [here_path.parent/'../data_test/dermatology/Test']
-        work_folder = Path(gettempdir())/'.research'
+        input_folders = [here_path.parent / '../data_test/dermatology/Test']
+        work_folder = Path(gettempdir()) / '.research'
         work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__images(input_folders, work_folder, 'Microscopy')
 
     @staticmethod
     def test_multiresolution(coefficients):
         here_path = Path(__file__)
-        input_folders = [here_path.parent/'../data_test/dermatology/Test']
-        work_folder = Path(gettempdir())/'.research'
+        input_folders = [here_path.parent / '../data_test/dermatology/Test']
+        work_folder = Path(gettempdir()) / '.research'
         work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients, 'Microscopy')
 
     @staticmethod
     def test_sliding_images(size, overlap):
         here_path = Path(__file__)
-        input_folders = [here_path.parent/'../data_test/dermatology/Test']
-        work_folder = Path(gettempdir())/'.research'
+        input_folders = [here_path.parent / '../data_test/dermatology/Test']
+        work_folder = Path(gettempdir()) / '.research'
         work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap, 'Microscopy')
 
@@ -125,7 +124,8 @@ class DermatologyDataset:
     @staticmethod
     def __multi_images(folders, work_folder, coefficients, modality):
         inputs = Inputs(folders=folders,
-                        instance=DermatologyDataset(work_folder=work_folder, multi_coefficients=coefficients, modality=modality),
+                        instance=DermatologyDataset(work_folder=work_folder, multi_coefficients=coefficients,
+                                                    modality=modality),
                         loader=DermatologyDataset.__scan_and_multi,
                         tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
                               'group_label': 'Binary_Diagnosis'})
@@ -138,7 +138,8 @@ class DermatologyDataset:
         parameters = {'Size': size,
                       'Overlap': overlap}
         inputs = Inputs(folders=folders,
-                        instance=DermatologyDataset(work_folder=work_folder, patch_parameters=parameters, modality=modality),
+                        instance=DermatologyDataset(work_folder=work_folder, patch_parameters=parameters,
+                                                    modality=modality),
                         loader=DermatologyDataset.__scan_and_patchify,
                         tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
                               'group_label': 'Binary_Diagnosis'})
@@ -193,7 +194,7 @@ class DermatologyDataset:
 
     @staticmethod
     def __multi_resolution(filename, reference, coefficients, work_folder):
-        multi_folder = work_folder/'Multi'
+        multi_folder = work_folder / 'Multi'
         multi_folder.mkdir(exist_ok=True)
 
         image = Image.open(filename).convert('L')
@@ -202,7 +203,7 @@ class DermatologyDataset:
             new_size = np.multiply(image.size, coefficient)
 
             # Location of file
-            filepath = multi_folder/'{ref}_{coef}.png'.format(ref=reference, coef=coefficient)
+            filepath = multi_folder / '{ref}_{coef}.png'.format(ref=reference, coef=coefficient)
 
             # Create patch informations
             meta = dict()
@@ -224,11 +225,11 @@ class DermatologyDataset:
     @staticmethod
     def __patchify(filename, reference, window_size, overlap, work_folder):
         # Manage folder that contains root of patches
-        work_folder = work_folder/'Patches'
+        work_folder = work_folder / 'Patches'
         work_folder.mkdir(exist_ok=True)
 
         # Manage patches folder
-        patch_folder = work_folder/'{size}_{overlap}'.format(size=window_size, overlap=overlap)
+        patch_folder = work_folder / '{size}_{overlap}'.format(size=window_size, overlap=overlap)
         patch_folder.mkdir(exist_ok=True)
 
         image = np.ascontiguousarray(np.array(Image.open(filename).convert('L')))
@@ -252,7 +253,7 @@ class DermatologyDataset:
         for index, (patch, location) in enumerate(zip(patches, patches_loc)):
 
             # Location of file
-            filepath = patch_folder/'{ref}_{id}.png'.format(ref=reference, id=index)
+            filepath = patch_folder / '{ref}_{id}.png'.format(ref=reference, id=index)
 
             # Create patch informations
             meta = dict()

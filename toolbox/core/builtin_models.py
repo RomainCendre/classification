@@ -16,9 +16,9 @@ from sklearn.svm import SVC
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from toolbox.core.layers import RandomLayer
-from toolbox.core.models import KerasBatchClassifier, SelectAtMostKBest, PCAAtMost, LDAAtMost
+from toolbox.core.models import KerasBatchClassifier
 from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform, DWTDescriptorTransform, \
-    PNormTransform, FlattenTransform
+    PNormTransform, FlattenTransform, PCAAtMost, SelectAtMostKBest, LDAAtMost
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
 

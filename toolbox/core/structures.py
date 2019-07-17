@@ -54,16 +54,11 @@ class Data:
         else:
             self.filters = filters
 
-    def check_load(self):
-        if self.data is None:
-            raise Exception('Data not loaded !')
-
     def get_from_key(self, key, filters=None, flatten=False):
         cur_filters = copy(self.filters)
         if filters is not None:
             cur_filters.update(filters)
 
-        self.check_load()
         if key not in self.data.columns:
             return None
 
@@ -98,14 +93,12 @@ class Data:
 
 class Inputs(Data):
 
-    def __init__(self, folders, instance, loader, tags, filters={}, name=''):
+    def __init__(self, data, tags, filters={}):
         super().__init__(None, filters)
-        self.folders = folders
-        self.instance = instance
-        self.loader = loader
-        self.name = name
+        self.data = data
         self.tags = tags
         self.encoders = None
+        self.name = 'default'
 
     def collapse(self, filters, on, filters_collapse, on_collapse, data_tag=None):
         pd.options.mode.chained_assignment = None
@@ -185,7 +178,6 @@ class Inputs(Data):
         return result
 
     def get(self, tag, encode=True):
-        self.check_load()
         if tag not in self.tags:
             warnings.warn('Invalid tag: {tag} not in {tags}'.format(tag=tag, tags=self.tags))
             return None
@@ -196,16 +188,6 @@ class Inputs(Data):
             return self.encode(key=tag, data=metas)
         else:
             return metas
-
-    def load(self):
-        if 'data' not in self.tags:
-            print('data is needed at least.')
-            return
-
-        # Load data and set loading property to True
-        self.data = pd.concat([self.loader(self.instance, folder) for folder in self.folders], sort=False, ignore_index=True)
-        # self.data.reset_index()
-        self.load_state = True
 
     def set_encoders(self, encoders):
         self.encoders = encoders
@@ -255,7 +237,6 @@ class Inputs(Data):
         return inputs
 
     def update(self, key, datas, references, field=None):
-        self.check_load()
         if 'reference' not in self.tags:
             return None
         # As list for update of Dataframe
@@ -282,6 +263,12 @@ class Inputs(Data):
 
     def write(self, folder):
         self.data.to_csv(folder/'{name}.csv'.format(name=self.name))
+
+    @classmethod
+    def load(cls, folders, instance, loader, tags, filters={}):
+        # Load data
+        data = pd.concat([loader(instance, folder) for folder in folders], sort=False, ignore_index=True)
+        return cls(data, tags, filters)
 
 
 class Spectra(Inputs):

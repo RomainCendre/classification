@@ -10,7 +10,6 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVC
 from experiments.processes import Process
 from toolbox.core.builtin_models import Transforms
-from toolbox.core.models import SelectAtMostKBest, PCAAtMost
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
 from toolbox.core.transforms import OrderedEncoder, PNormTransform, FlattenTransform
 
