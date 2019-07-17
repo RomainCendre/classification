@@ -14,34 +14,6 @@ from sklearn.utils.multiclass import unique_labels
 from toolbox.core.generators import ResourcesGenerator
 
 
-class SelectAtMostKBest(SelectKBest):
-
-    def _check_params(self, X, y):
-        if not (self.k == "all" or 0 <= self.k <= X.shape[1]):
-            # set k to "all" (skip feature selection), if less than k features are available
-            self.k = "all"
-
-
-class LDAAtMost(LinearDiscriminantAnalysis):
-
-    def fit(self, X, y=None):
-        n_samples, n_features = X.shape
-        if not (0 <= self.n_components <= min(n_samples, n_features)):
-            # set k to "all" (skip feature selection), if less than k features are available
-            self.n_components = min(n_samples, n_features)
-        return super().fit(X, y)
-
-
-class PCAAtMost(PCA):
-
-    def fit_transform(self, X, y=None):
-        n_samples, n_features = X.shape
-        if not (0 <= self.n_components <= min(n_samples, n_features)):
-            # set k to "all" (skip feature selection), if less than k features are available
-            self.n_components = min(n_samples, n_features)
-        return super().fit_transform(X, y)
-
-
 class KerasBatchClassifier(KerasClassifier):
 
     def check_params(self, params):
