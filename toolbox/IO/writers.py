@@ -147,8 +147,8 @@ class ResultWriter:
         if path is None:
             print(report)
         else:
-            with open(path, "w") as text_file:
-                text_file.write("%s" % mk_report.get_document_body())
+            with open(path, mode='w', encoding='utf8') as text_file:
+                text_file.write("%s" % mk_report.get_whole_html())
 
     def write_roc(self, path):
 
