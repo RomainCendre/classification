@@ -113,23 +113,21 @@ class DermatologyDataset:
 
     @staticmethod
     def __images(folders, work_folder, modality):
-        inputs = Inputs(folders=folders, instance=DermatologyDataset(work_folder=work_folder, modality=modality),
-                        loader=DermatologyDataset.__scan,
-                        tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
-                              'group_label': 'Binary_Diagnosis'})
-        inputs.load()
+        inputs = Inputs.load(folders=folders, instance=DermatologyDataset(work_folder=work_folder, modality=modality),
+                             loader=DermatologyDataset.__scan,
+                             tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
+                                   'group_label': 'Binary_Diagnosis'})
         inputs.set_temporary_folder(work_folder)
         return inputs
 
     @staticmethod
     def __multi_images(folders, work_folder, coefficients, modality):
-        inputs = Inputs(folders=folders,
-                        instance=DermatologyDataset(work_folder=work_folder, multi_coefficients=coefficients,
-                                                    modality=modality),
-                        loader=DermatologyDataset.__scan_and_multi,
-                        tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
-                              'group_label': 'Binary_Diagnosis'})
-        inputs.load()
+        inputs = Inputs.load(folders=folders,
+                             instance=DermatologyDataset(work_folder=work_folder, multi_coefficients=coefficients,
+                                                         modality=modality),
+                             loader=DermatologyDataset.__scan_and_multi,
+                             tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
+                                   'group_label': 'Binary_Diagnosis'})
         inputs.set_temporary_folder(work_folder)
         return inputs
 
@@ -137,13 +135,12 @@ class DermatologyDataset:
     def __sliding_images(folders, work_folder, size, overlap, modality):
         parameters = {'Size': size,
                       'Overlap': overlap}
-        inputs = Inputs(folders=folders,
-                        instance=DermatologyDataset(work_folder=work_folder, patch_parameters=parameters,
-                                                    modality=modality),
-                        loader=DermatologyDataset.__scan_and_patchify,
-                        tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
-                              'group_label': 'Binary_Diagnosis'})
-        inputs.load()
+        inputs = Inputs.load(folders=folders,
+                             instance=DermatologyDataset(work_folder=work_folder, patch_parameters=parameters,
+                                                         modality=modality),
+                             loader=DermatologyDataset.__scan_and_patchify,
+                             tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
+                                   'group_label': 'Binary_Diagnosis'})
         inputs.set_temporary_folder(work_folder)
         return inputs
 
