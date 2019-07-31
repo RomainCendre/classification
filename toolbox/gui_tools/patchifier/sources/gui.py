@@ -294,7 +294,9 @@ class QLabelWidget(QWidget):
         self.init_gui()
 
     def change_mode(self, current, previous):
-        self.change_label.emit(self.pathologies[current.row()])
+        current_label = self.pathologies[current.row()]
+        self.update_color(current_label)
+        self.change_label.emit(current_label)
 
     def init_gui(self):
         # Then build annotation tool
@@ -338,6 +340,11 @@ class QLabelWidget(QWidget):
 
     def send_key(self, key):
         self.image_resume.selectRow(key)
+
+    def update_color(self, current_label):
+        color_tuple = self.settings.get_color(current_label)
+        qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
+        self.image_resume.setStyleSheet('QTableView{selection-background-color: '+qcolor.name()+'}')
 
 
 class QPatchWidget(QWidget):
