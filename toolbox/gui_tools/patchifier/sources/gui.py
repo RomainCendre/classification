@@ -15,6 +15,7 @@ from toolbox.IO import dermatology
 
 
 class QPatchExtractor(QMainWindow):
+    # Modes
     LABEL = 0
     PATCH = 1
 
@@ -59,7 +60,7 @@ class QPatchExtractor(QMainWindow):
         self.viewer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         # Build annotate component
         self.annotate_widget = QTabWidget()
-        self.label_widget = QLabelWidget(self.annotate_widget, self.pathologies)
+        self.label_widget = QLabelWidget(self.annotate_widget, self.pathologies, self.settings)
         self.label_widget.change_label.connect(self.change_image_label)
         self.patch_widget = QPatchWidget(self.annotate_widget)
         self.patch_widget.changed_patch_size.connect(self.viewer.setRectangleSize)
@@ -282,12 +283,13 @@ class QPatchExtractor(QMainWindow):
 
 
 class QLabelWidget(QWidget):
-    #Signals
+    # Signals
     change_label = pyqtSignal(str)
 
-    def __init__(self, parent, pathologies):
+    def __init__(self, parent, pathologies, settings):
         super(QLabelWidget, self).__init__(parent)
         self.pathologies = pathologies
+        self.settings = settings
         self.default_value = len(pathologies)-1
         self.init_gui()
 
@@ -298,6 +300,7 @@ class QLabelWidget(QWidget):
         # Then build annotation tool
         self.image_resume = QTableWidget()
         self.image_resume.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.image_resume.setSelectionMode(QAbstractItemView.SingleSelection)
         self.image_resume.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.image_resume.setRowCount(len(self.pathologies))
         self.image_resume.setColumnCount(3)
