@@ -58,6 +58,7 @@ class QPatchExtractor(QMainWindow):
         # Build annotate component
         self.annotate_widget = QTabWidget()
         self.label_widget = QLabelWidget(self.annotate_widget, self.pathologies)
+        self.label_widget.change_label.connect(self.change_image_label)
         self.patch_widget = QPatchWidget(self.annotate_widget)
         self.annotate_widget.currentChanged.connect(self.change_mode)
         self.annotate_widget.addTab(self.label_widget, 'Labels')
@@ -80,6 +81,14 @@ class QPatchExtractor(QMainWindow):
         # Send data to components
         self.label_widget.send_image(self.get_image_data())
         self.update_image()
+
+    def change_image_label(self, label):
+        current = self.get_image_data()
+        if not current['Label'] == label:
+            self.dataframe.loc[current.name, 'Label'] = label
+            dataframe = self.get_dataframe('Full')
+            # Send data to components
+            self.label_widget.send_patient(dataframe)
 
     def change_mode(self):
         mode = self.get_mode()
@@ -265,7 +274,7 @@ class QPatchExtractor(QMainWindow):
 
 
 class QLabelWidget(QWidget):
-    change_label = pyqtSignal(int)
+    change_label = pyqtSignal(str)
 
     def __init__(self, parent, pathologies):
         super(QLabelWidget, self).__init__(parent)
@@ -274,7 +283,7 @@ class QLabelWidget(QWidget):
         self.init_gui()
 
     def change_mode(self, current, previous):
-        self.change_label.emit(current.row())
+        self.change_label.emit(self.pathologies[current.row()])
 
     def init_gui(self):
         # Then build annotation tool
@@ -390,6 +399,13 @@ class QtImageViewer(QGraphicsView):
         else:
             self.mouse_rect.hide()
 
+    def clearImage(self):
+        """ Removes the current image pixmap from the scene if it exists.
+        """
+        if self.hasImage():
+            self.scene.removeItem(self._pixmapHandle)
+            self._pixmapHandle = None
+
     def keyPressEvent(self, event):
         self.keyPressed.emit(event.key())
 
@@ -397,13 +413,6 @@ class QtImageViewer(QGraphicsView):
         """ Returns whether or not the scene contains an image pixmap.
         """
         return self._pixmapHandle is not None
-
-    def clearImage(self):
-        """ Removes the current image pixmap from the scene if it exists.
-        """
-        if self.hasImage():
-            self.scene.removeItem(self._pixmapHandle)
-            self._pixmapHandle = None
 
     def image(self):
         """ Returns the scene's current image pixmap as a QImage, or else None if no image exists.
