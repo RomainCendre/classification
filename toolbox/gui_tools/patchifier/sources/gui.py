@@ -85,9 +85,9 @@ class QPatchExtractor(QMainWindow):
         mode = self.get_mode()
         # Actions depend on mode
         if mode == QPatchExtractor.LABEL:
-            self.viewer.selection_enable(False)
+            self.viewer.change_selection_state(False)
         else:
-            self.viewer.selection_enable(True)
+            self.viewer.change_selection_state(True)
 
     def change_patient(self, move):
         # Start by closing previous df
@@ -353,7 +353,6 @@ class QtImageViewer(QGraphicsView):
 
     def __init__(self):
         QGraphicsView.__init__(self)
-
         # Image is displayed as a QPixmap in a QGraphicsScene attached to this QGraphicsView.
         self.scene = QGraphicsScene()
         self.text = QGraphicsTextItem()
@@ -366,27 +365,28 @@ class QtImageViewer(QGraphicsView):
         self.scene.addItem(self.text)
         self.scene.addItem(self.mouse_rect)
         self.setScene(self.scene)
-
         # Store a local handle to the scene's current image pixmap.
         self._pixmapHandle = None
-
         # Image aspect ratio mode.
         self.aspectRatioMode = Qt.KeepAspectRatio
-
         # Scroll bar behaviour.
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-
         # Stack of QRectF zoom boxes in scene coordinates.
         self.zoomStack = []
-
         # Flags for enabling/disabling mouse interaction.
-        self.canZoom = True
-        self.canPan = True
+        self.selection_state = True
 
     def change_mouse_default_color(self, color):
         self.mouse_color = QColor.fromRgbF(color[0], color[1], color[2])
         self.mouse_rect.setPen(QPen(self.mouse_color, 6, Qt.DotLine))
+
+    def change_selection_state(self, enable=True):
+        self.selection_state = enable
+        if self.selection_state:
+            self.mouse_rect.show()
+        else:
+            self.mouse_rect.hide()
 
     def keyPressEvent(self, event):
         self.keyPressed.emit(event.key())
@@ -403,12 +403,27 @@ class QtImageViewer(QGraphicsView):
             self.scene.removeItem(self._pixmapHandle)
             self._pixmapHandle = None
 
+    def image(self):
+        """ Returns the scene's current image pixmap as a QImage, or else None if no image exists.
+        :rtype: QImage | None
+        """
+        if self.hasImage():
+            return self._pixmapHandle.pixmap().toImage()
+        return None
+
+    def mouseRectColorTransition(self, color):
+        if self.selection_state:
+            self.animation = QPropertyAnimation(self, b'pcolor')
+            self.animation.setDuration(1000)
+            self.animation.setStartValue(color)
+            self.animation.setEndValue(self.mouse_color)
+            self.animation.start()
+
     def loadImage(self, path):
         """ Load an image from file.
         Without any arguments, loadImageFromFile() will popup a file dialog to choose the image file.
         With a fileName argument, loadImageFromFile(fileName) will attempt to load the specified image file directly.
         """
-
         if path is None or len(path) == 0 or not isfile(path):
             self.setImage(QImage())
         else:
@@ -422,21 +437,6 @@ class QtImageViewer(QGraphicsView):
         if self.hasImage():
             return self._pixmapHandle.pixmap()
         return None
-
-    def image(self):
-        """ Returns the scene's current image pixmap as a QImage, or else None if no image exists.
-        :rtype: QImage | None
-        """
-        if self.hasImage():
-            return self._pixmapHandle.pixmap().toImage()
-        return None
-
-    def mouseRectColorTransition(self, color):
-        self.animation = QPropertyAnimation(self, b'pcolor')
-        self.animation.setDuration(1000)
-        self.animation.setStartValue(color)
-        self.animation.setEndValue(self.mouse_color)
-        self.animation.start()
 
     def setImage(self, image):
         """ Set the scene's current image pixmap to the input QImage or QPixmap.
@@ -476,13 +476,6 @@ class QtImageViewer(QGraphicsView):
     def setRectangleSize(self, size):
         self.mouse_rect.setRect(-(size / 2), -(size / 2), size, size)
 
-    def selection_enable(self, enable):
-        if enable:
-            self.mouse_rect.show()
-        else:
-            self.mouse_rect.hide()
-        # self.update()
-
     def mouseMoveEvent(self, event):
         self.mouse_rect.setPos(self.mapToScene(event.pos()))
 
@@ -491,12 +484,8 @@ class QtImageViewer(QGraphicsView):
         """
         scenePos = self.mapToScene(event.pos())
         if event.button() == Qt.LeftButton:
-            if self.canPan:
-                self.setDragMode(QGraphicsView.ScrollHandDrag)
             self.leftMouseButtonPressed.emit(scenePos.x(), scenePos.y())
         elif event.button() == Qt.RightButton:
-            if self.canZoom:
-                self.setDragMode(QGraphicsView.RubberBandDrag)
             self.rightMouseButtonPressed.emit(scenePos.x(), scenePos.y())
         QGraphicsView.mousePressEvent(self, event)
 
@@ -509,13 +498,6 @@ class QtImageViewer(QGraphicsView):
             self.setDragMode(QGraphicsView.NoDrag)
             self.leftMouseButtonReleased.emit(scenePos.x(), scenePos.y())
         elif event.button() == Qt.RightButton:
-            if self.canZoom:
-                viewBBox = self.zoomStack[-1] if len(self.zoomStack) else self.sceneRect()
-                selectionBBox = self.scene.selectionArea().boundingRect().intersected(viewBBox)
-                self.scene.setSelectionArea(QPainterPath())  # Clear current selection area.
-                if selectionBBox.isValid() and (selectionBBox != viewBBox):
-                    self.zoomStack.append(selectionBBox)
-                    self.updateViewer()
             self.setDragMode(QGraphicsView.NoDrag)
             self.rightMouseButtonReleased.emit(scenePos.x(), scenePos.y())
 
@@ -526,9 +508,6 @@ class QtImageViewer(QGraphicsView):
         if event.button() == Qt.LeftButton:
             self.leftMouseButtonDoubleClicked.emit(scenePos.x(), scenePos.y())
         elif event.button() == Qt.RightButton:
-            if self.canZoom:
-                self.zoomStack = []  # Clear zoom stack.
-                self.updateViewer()
             self.rightMouseButtonDoubleClicked.emit(scenePos.x(), scenePos.y())
         QGraphicsView.mouseDoubleClickEvent(self, event)
 
