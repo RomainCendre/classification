@@ -1,8 +1,10 @@
-import pandas as pd
+import numpy as np
+import pandas as pandas
 import pyocr
 from PIL import Image
 from pyocr import builders
 from pathlib import Path
+from natsort import index_natsorted, order_by_index
 
 
 class Reader:
@@ -17,46 +19,50 @@ class Reader:
         datas = []
         for subdir in folder_path.iterdir():
             try:
-                # Read patient and images data
-                metas = Reader.__read_patient_file(subdir)
-                metas = metas.drop(columns='ID_JLP', errors='ignore')
-                images = Reader.__read_images_file(subdir)
-                images = images.drop(columns='Depth(um)', errors='ignore')
-
-                # Patch filter
-                if parameters.get('patches', True):
-                    patches = Reader.__read_patches_file(subdir)
-                else:
-                    patches = None
-
-                # Modality filter
-                modality = parameters.get('modality', None)
-
-                # Merge both
-                images['ID'] = metas['ID'][0]
-                images = images.merge(metas)
-                images['Reference'] = images.apply(
-                    lambda row: '{patient}_{image}_F'.format(patient=row['ID'], image=row.name), axis=1)
-                images['Source'] = images['Reference']
-                # Filter images
-                if modality is not None:
-                    images = images[images.Modality == modality]
-
-                if patches is not None:
-                    patches['ID'] = metas['ID'][0]
-                    patches = patches.merge(metas)
-                    patches['Reference'] = patches.apply(
-                        lambda row: '{patient}_{image}_P'.format(patient=row['ID'], image=row.name), axis=1)
-                    patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0], axis=1)
-                    # Filter patches
-                    if modality is not None:
-                        patches = patches[patches.Modality == modality]
-
-                datas.append(pd.concat([images, patches], sort=False))
+                datas.append(self.scan_subfolder(subdir, parameters))
             except OSError:
                 print('Patient {}'.format(subdir))
 
-        return pd.concat(datas, sort=False, ignore_index=True).drop(columns='Path')
+        return pandas.concat(datas, sort=False, ignore_index=True).drop(columns='Path')
+
+    @staticmethod
+    def scan_subfolder(subdir, parameters={}):
+        # Read patient and images data
+        metas = Reader.__read_patient_file(subdir)
+        metas = metas.drop(columns='ID_JLP', errors='ignore')
+        images = Reader.__read_images_file(subdir)
+        images = images.drop(columns='Depth(um)', errors='ignore')
+
+        # Patch filter
+        if parameters.get('patches', True):
+            patches = Reader.__read_patches_file(subdir)
+        else:
+            patches = None
+
+        # Modality filter
+        modality = parameters.get('modality', None)
+
+        # Merge both
+        images['ID'] = metas['ID'][0]
+        images = images.merge(metas)
+        images['Reference'] = images.apply(
+            lambda row: '{patient}_{image}_F'.format(patient=row['ID'], image=row.name), axis=1)
+        images['Source'] = images['Reference']
+        # Filter images
+        if modality is not None:
+            images = images[images.Modality == modality]
+
+        if patches is not None:
+            patches['ID'] = metas['ID'][0]
+            patches = patches.merge(metas)
+            patches['Reference'] = patches.apply(
+                lambda row: '{patient}_{image}_P'.format(patient=row['ID'], image=row.name), axis=1)
+            patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0],
+                                              axis=1)
+            # Filter patches
+            if modality is not None:
+                patches = patches[patches.Modality == modality]
+        return pandas.concat([images, patches], sort=False)
 
     @staticmethod
     def __read_images_file(subdir):
@@ -64,7 +70,8 @@ class Reader:
         images_file = subdir/'images.csv'
 
         # Read csv and add tag for path
-        images = pd.read_csv(images_file, dtype=str)
+        images = pandas.read_csv(images_file, dtype=str)
+        images = images.reindex(index=order_by_index(images.index, index_natsorted(images.Path)))
         images['Full_Path'] = images.apply(lambda row: str(subdir/row['Modality']/row['Path']), axis=1)
         images['Type'] = 'Full'
         return images
@@ -77,7 +84,7 @@ class Reader:
             return None
 
         # Read csv and add tag for path
-        patches = pd.read_csv(patch_file, dtype=str)
+        patches = pandas.read_csv(patch_file, dtype=str)
         patches['Full_Path'] = patches.apply(lambda row: str(subdir/'patches'/row['Path']), axis=1)
         patches['Type'] = 'Patch'
         return patches
@@ -85,7 +92,68 @@ class Reader:
     @staticmethod
     def __read_patient_file(folder_path):
         # Patient file
-        return pd.read_csv(folder_path/'patient.csv', dtype=str)
+        return pandas.read_csv(folder_path/'patient.csv', dtype=str)
+
+
+class Generator:
+
+    def __init__(self, nb_spectra, nb_patients):
+        self.nb_spectra = nb_spectra
+        self.nb_patients = nb_patients
+
+    def generate_study(self):
+        random_patient = list(np.random.randint(3, size=self.nb_patients))
+        patients = []
+        for index, random in enumerate(random_patient):
+            patient = self.generate_patient(random)
+            patient['patient'] = index
+            patient['operateur'] = 'V0'
+            patients.append(patient)
+
+        patients = pandas.concat(patients, sort=False, ignore_index=True)
+        patients['Reference'] = patients.apply(lambda row: '{patient}'.format(patient=row['patient']),
+                                               axis=1)
+
+        patients['Reference_spectrum'] = patients.apply(
+            lambda row: '{reference}_{spectrum}'.format(reference=row['Reference'],
+                                                        spectrum=row['spectrum_id']), axis=1)
+        return patients
+
+    def generate_patient(self, mode):
+        random_data = list(np.random.randint(mode + 1, size=np.random.randint(self.nb_spectra[0], self.nb_spectra[1])))
+        data = []
+        for index, random in enumerate(random_data):
+            datum = self.generate_spectrum(random)
+            datum['spectrum_id'] = index
+            data.append(datum)
+
+        if mode == 2:
+            label = 'Cancer'
+        elif mode == 1:
+            label = 'Precancer'
+        else:
+            label = 'Sain'
+
+        patient = pandas.concat(data)
+        patient['pathologie'] = label
+        return patient
+
+    def generate_spectrum(self, mode):
+        wavelength = np.arange(start=445, stop=962, step=1)
+        indices = np.linspace(0, 1, len(wavelength), endpoint=False)
+
+        if mode == 2:
+            data = np.sin(2 * np.pi * indices)
+            label = 'Cancer'
+        elif mode == 1:
+            data = np.square(2 * np.pi * indices)
+            label = 'Precancer'
+        else:
+            indices[:] = 0
+            data = indices
+            label = 'Sain'
+
+        return pandas.DataFrame({'data': [data], 'wavelength': [wavelength], 'label': label})
 
 
 class ConfocalBuilder(builders.TextBuilder):
@@ -159,14 +227,14 @@ class DataManager:
         output_folder.mkdir(exist_ok=True)
 
         # Read microscopy file for each patient
-        rcm_data = pd.read_csv(self.rcm_file, dtype=str)
+        rcm_data = pandas.read_csv(self.rcm_file, dtype=str)
 
         images = []
         microscopy_labels = rcm_data[rcm_data['ID_RCM'] == source_id]
         microscopy_folder = self.microscopy_folder/source_id
         for ind, row_label in microscopy_labels.iterrows():
             # Prepare if needed sub folders
-            if pd.isna(row_label['Folder']):
+            if pandas.isna(row_label['Folder']):
                 microscopy_subfolder = microscopy_folder
                 output_subfolder = output_folder
             else:
@@ -177,7 +245,7 @@ class DataManager:
             # Browse different labels...
             for label in self.labels:
                 # If label doesn't contains images
-                if pd.isna(row_label[label]):
+                if pandas.isna(row_label[label]):
                     continue
 
                 images_refs = DataManager.ref_to_images(row_label[label])
@@ -221,7 +289,7 @@ class DataManager:
 
         id_modality = ['ID_Dermoscopy', 'ID_RCM']
         # Read csv
-        table = pd.read_csv(self.table_file, dtype=str)
+        table = pandas.read_csv(self.table_file, dtype=str)
         table = table.drop(excluded_meta, axis=1)
         nb_patients = table.shape[0]
 
@@ -238,7 +306,7 @@ class DataManager:
             output_patient.mkdir(exist_ok=True)
 
             # Write patient meta
-            pd.DataFrame([row.drop(id_modality, errors='ignore').to_dict()]).to_csv(output_patient/'patient.csv', index=False)
+            pandas.DataFrame([row.drop(id_modality, errors='ignore').to_dict()]).to_csv(output_patient/'patient.csv', index=False)
 
             images = []
             if 'ID_Dermoscopy' in row.index:
@@ -252,7 +320,7 @@ class DataManager:
                 images.extend(self.compute_microscopy(row['ID_RCM'], output_patient))
 
             # Write images list
-            dataframe = pd.DataFrame(images)
+            dataframe = pandas.DataFrame(images)
             dataframe.to_csv(output_patient/'images.csv', index=False)
 
     @staticmethod

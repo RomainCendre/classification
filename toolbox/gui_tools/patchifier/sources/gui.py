@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from pathlib import Path
 
+from PyQt5 import QtWidgets
 from natsort import natsorted
 from os.path import join, isfile, abspath, exists
 from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QRect, QPropertyAnimation, pyqtProperty
@@ -55,14 +56,18 @@ class QPatchExtractor(QMainWindow):
         self.viewer.grabKeyboard()
         self.viewer.keyPressed.connect(self.key_pressed)
         self.viewer.leftMouseButtonPressed.connect(self.click_event)
+        self.viewer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         # Build annotate component
         self.annotate_widget = QTabWidget()
         self.label_widget = QLabelWidget(self.annotate_widget, self.pathologies)
         self.label_widget.change_label.connect(self.change_image_label)
         self.patch_widget = QPatchWidget(self.annotate_widget)
+        self.patch_widget.changed_patch_size.connect(self.viewer.setRectangleSize)
+        self.patch_widget.set_value(250)
         self.annotate_widget.currentChanged.connect(self.change_mode)
         self.annotate_widget.addTab(self.label_widget, 'Labels')
         self.annotate_widget.addTab(self.patch_widget, 'Patchs')
+        self.annotate_widget.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         # Build final layout
         global_widget = QWidget()
         global_layout = QGridLayout(global_widget)
@@ -114,6 +119,7 @@ class QPatchExtractor(QMainWindow):
         self.image_bar.setRange(0, len(dataframe)-1)
         # Send data to components
         self.label_widget.send_patient(dataframe)
+        self.patch_widget.send_patches(self.get_dataframe('Patch'))
         self.reset_image()
 
     def click_event(self, x, y):
@@ -180,7 +186,9 @@ class QPatchExtractor(QMainWindow):
 
     def get_image_data(self):
         dataframe = self.get_dataframe('Full')
-        return dataframe.iloc[self.image_index]
+        if self.image_index < len(dataframe):
+            return dataframe.iloc[self.image_index]
+        return None
 
     def get_mode(self):
         return self.annotate_widget.currentIndex()
@@ -274,6 +282,7 @@ class QPatchExtractor(QMainWindow):
 
 
 class QLabelWidget(QWidget):
+    #Signals
     change_label = pyqtSignal(str)
 
     def __init__(self, parent, pathologies):
@@ -310,6 +319,8 @@ class QLabelWidget(QWidget):
         patch_layout.addWidget(self.image_resume)
 
     def send_image(self, data):
+        if data is None:
+            return
         current = data['Label']
         try:
             index = self.pathologies.index(current)
@@ -327,29 +338,36 @@ class QLabelWidget(QWidget):
 
 
 class QPatchWidget(QWidget):
+    # Signals
+    changed_patch_size = pyqtSignal(int)
 
     def __init__(self, parent):
         super(QPatchWidget, self).__init__(parent)
         self.init_gui()
 
     def init_gui(self):
-        self.out_size = QSpinBox()
-        self.out_size.setEnabled(False)
-        # self.out_size.valueChanged.connect(self.viewer.setRectangleSize)
-        self.out_size.setRange(0, 1000)
-        self.out_size.setSingleStep(10)
-        self.out_size.setSuffix("px")
-        self.out_size.setValue(250)
-
+        self.size = QSpinBox()
+        self.size.valueChanged.connect(self.changed_patch_size.emit)
+        self.size.setRange(0, 1000)
+        self.size.setSingleStep(10)
+        self.size.setSuffix("px")
+        # Create table that list current patches
+        self.table = QTableWidget()
         # Then build patch tool
         patch_layout = QGridLayout(self)
-        patch_layout.addWidget(QTableWidget(), 0, 0, 1, 2)
+        patch_layout.addWidget(self.table, 0, 0, 1, 2)
         patch_layout.addWidget(QLabel('Keyboard Shortcuts: 0: Healthy / 1: Benign / 1:Malignant'), 1, 0, 1, 2)
-        patch_layout.addWidget(QLabel('Width/Height'), 2, 0)
-        patch_layout.addWidget(self.out_size, 2, 1)
+        patch_layout.addWidget(QLabel('Patch Width/Height'), 2, 0)
+        patch_layout.addWidget(self.size, 2, 1)
 
     def send_key(self, key):
         print(key)
+
+    def send_patches(self, data):
+        print(data)
+
+    def set_value(self, size):
+        self.size.setValue(size)
 
 
 class QtImageViewer(QGraphicsView):
