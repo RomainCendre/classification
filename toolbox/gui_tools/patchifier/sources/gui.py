@@ -108,11 +108,13 @@ class QPatchExtractor(QMainWindow):
         self.reset_image()
 
     def click_event(self, x, y):
-        if not self.output:
-            self.viewer.mouseRectColorTransition(QColor(Qt.red))
+        mode = self.get_mode()
+        # Actions depend on mode
+        if mode == QPatchExtractor.LABEL:
             return
         # Acquire image and it to dataframe
-        self.write_patch(x, y)
+        # self.viewer.mouseRectColorTransition(QColor(Qt.red))
+        # self.write_patch(x, y)
 
     def close_dataframe(self):
         # TODO
