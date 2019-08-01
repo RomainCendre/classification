@@ -10,7 +10,7 @@ from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QRect, QPropertyAnimation, pyqt
 from PyQt5.QtGui import QImage, QPixmap, QPainterPath, QColor, QFont, QPen
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWindow, QHBoxLayout, QWidget, QLabel, \
     QGraphicsTextItem, QPushButton, QSpinBox, QGraphicsRectItem, QProgressBar, QVBoxLayout, \
-    QTableWidget, QTabWidget, QTableWidgetItem, QAbstractItemView, QGraphicsItemGroup
+    QTableWidget, QTabWidget, QTableWidgetItem, QAbstractItemView, QGraphicsItemGroup, QComboBox
 from toolbox.IO import dermatology
 
 
@@ -62,9 +62,11 @@ class QPatchExtractor(QMainWindow):
         self.viewer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         # Build annotate component
         self.annotate_widget = QTabWidget()
+        # First label tool
         self.label_widget = QLabelWidget(self.annotate_widget, self.pathologies, self.settings)
         self.label_widget.change_label.connect(self.change_image_label)
-        self.patch_widget = QPatchWidget(self.annotate_widget, self.pathologies, self.settings)
+        # Second patch tool
+        self.patch_widget = QPatchWidget(self.annotate_widget, self.pathologies[:-1], self.settings)
         self.patch_widget.changed_patch_selection.connect(self.change_patch)
         self.patch_widget.changed_patch_size.connect(self.viewer.setRectangleSize)
         self.patch_widget.changed_mode.connect(self.viewer.change_mouse_color)
@@ -379,7 +381,6 @@ class QPatchWidget(QWidget):
         super(QPatchWidget, self).__init__(parent)
         self.pathologies = pathologies
         self.settings = settings
-        self.mode = 0
         self.init_gui()
 
     def init_gui(self):
@@ -394,6 +395,12 @@ class QPatchWidget(QWidget):
         hheader = self.table.horizontalHeader()
         hheader.setStretchLastSection(True)
         self.table.selectionModel().currentRowChanged.connect(self.row_changed)
+        # Manage patch mode
+        self.mode = QComboBox()
+        for pathology in self.pathologies:
+            self.mode.addItem(pathology)
+        self.mode.setCurrentIndex(-1)
+        self.mode.currentIndexChanged.connect(self.mode_changed)
         # Manage patch size
         self.size = QSpinBox()
         self.size.valueChanged.connect(self.changed_patch_size.emit)
@@ -405,7 +412,7 @@ class QPatchWidget(QWidget):
         patch_layout = QGridLayout(self)
         patch_layout.addWidget(self.table, 0, 0, 1, 4)
         patch_layout.addWidget(QLabel('Mode'), 1, 0)
-        patch_layout.addWidget(QLabel(''), 1, 1)
+        patch_layout.addWidget(self.mode, 1, 1)
         patch_layout.addWidget(QLabel('Width/Height'), 1, 2)
         patch_layout.addWidget(self.size, 1, 3)
 
@@ -416,12 +423,14 @@ class QPatchWidget(QWidget):
         qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
         self.changed_patch_selection.emit(current.row(), qcolor)
 
+    def mode_changed(self, mode):
+        color_tuple = self.settings.get_color(self.pathologies[mode])
+        qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
+        self.changed_mode.emit(qcolor)
+
     def send_key(self, key):
-        if key < len(self.pathologies):
-            self.mode = key
-            color_tuple = self.settings.get_color(self.pathologies[self.mode])
-            qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
-            self.changed_mode.emit(qcolor)
+        if key < self.mode.count():
+            self.mode.setCurrentIndex(key)
 
     def send_patches(self, data):
         self.table.setRowCount(0)
