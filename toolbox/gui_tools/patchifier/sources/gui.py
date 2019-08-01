@@ -7,7 +7,7 @@ from PyQt5 import QtWidgets
 from natsort import natsorted
 from os.path import join, isfile, abspath, exists
 from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QRect, QPropertyAnimation, pyqtProperty
-from PyQt5.QtGui import QImage, QPixmap, QPainterPath, QColor, QFont, QPen
+from PyQt5.QtGui import QImage, QPixmap, QPainterPath, QColor, QFont, QPen, QBrush
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWindow, QHBoxLayout, QWidget, QLabel, \
     QGraphicsTextItem, QPushButton, QSpinBox, QGraphicsRectItem, QProgressBar, QVBoxLayout, \
     QTableWidget, QTabWidget, QTableWidgetItem, QAbstractItemView, QGraphicsItemGroup, QComboBox
@@ -397,8 +397,9 @@ class QPatchWidget(QWidget):
         self.table.selectionModel().currentRowChanged.connect(self.row_changed)
         # Manage patch mode
         self.mode = QComboBox()
-        for pathology in self.pathologies:
+        for index, pathology in enumerate(self.pathologies):
             self.mode.addItem(pathology)
+            self.mode.setItemData(index, QBrush(self.get_color(pathology)), Qt.BackgroundColorRole)
         self.mode.setCurrentIndex(-1)
         self.mode.currentIndexChanged.connect(self.mode_changed)
         # Manage patch size
@@ -416,17 +417,17 @@ class QPatchWidget(QWidget):
         patch_layout.addWidget(QLabel('Width/Height'), 1, 2)
         patch_layout.addWidget(self.size, 1, 3)
 
+    def get_color(self, label):
+        color_tuple = self.settings.get_color(label)
+        return QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
+
     def row_changed(self, current, previous):
         if current.row() == -1:
             return
-        color_tuple = self.settings.get_color(self.table.item(current.row(), 3).text())
-        qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
-        self.changed_patch_selection.emit(current.row(), qcolor)
+        self.changed_patch_selection.emit(current.row(), self.get_color(self.table.item(current.row(), 3).text()))
 
     def mode_changed(self, mode):
-        color_tuple = self.settings.get_color(self.pathologies[mode])
-        qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
-        self.changed_mode.emit(qcolor)
+        self.changed_mode.emit(self.get_color(self.pathologies[mode]))
 
     def send_key(self, key):
         if key < self.mode.count():
@@ -441,8 +442,7 @@ class QPatchWidget(QWidget):
             # Get current label
             current_label = row['Label']
             # Get current color
-            color_tuple = self.settings.get_color(current_label)
-            qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
+            qcolor = self.get_color(current_label)
             # Create table items
             item = QTableWidgetItem('{center}'.format(center=row['Center_X']))
             item.setBackground(qcolor)

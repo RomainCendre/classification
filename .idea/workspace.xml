@@ -15,7 +15,7 @@
     <SUITE FILE_PATH="coverage/classification$gui.coverage" NAME="gui Coverage Results" MODIFIED="1564491253767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources" />
     <SUITE FILE_PATH="coverage/classification$multiscale_features.coverage" NAME="multiscale_features Coverage Results" MODIFIED="1562166368435" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
     <SUITE FILE_PATH="coverage/classification$test_experiments.coverage" NAME="test_experiments Coverage Results" MODIFIED="1559894677583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
-    <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1564669392621" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier" />
+    <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1564670061924" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier" />
     <SUITE FILE_PATH="coverage/classification$score_level.coverage" NAME="score_level Coverage Results" MODIFIED="1557316745744" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$features_level.coverage" NAME="features_level Coverage Results" MODIFIED="1559638826584" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$descriptors.coverage" NAME="descriptors Coverage Results" MODIFIED="1563264286240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
@@ -60,8 +60,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="401" column="36" selection-start-line="401" selection-start-column="36" selection-end-line="401" selection-end-column="36" />
+            <state relative-caret-position="418">
+              <caret line="428" column="33" selection-start-line="428" selection-start-column="33" selection-end-line="428" selection-end-column="33" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -513,14 +513,7 @@
       <workItem from="1563530423672" duration="10946000" />
       <workItem from="1563545028037" duration="11522000" />
       <workItem from="1564409133198" duration="41031000" />
-      <workItem from="1564663285831" duration="5988000" />
-    </task>
-    <task id="LOCAL-00094" summary="Fixing process and way to deal with.">
-      <created>1561377996118</created>
-      <option name="number" value="00094" />
-      <option name="presentableId" value="LOCAL-00094" />
-      <option name="project" value="LOCAL" />
-      <updated>1561377996118</updated>
+      <workItem from="1564663285831" duration="6654000" />
     </task>
     <task id="LOCAL-00095" summary="Adding groups for gridsearch.">
       <created>1561379826990</created>
@@ -858,7 +851,14 @@
       <option name="project" value="LOCAL" />
       <updated>1564667910298</updated>
     </task>
-    <option name="localTasksCounter" value="143" />
+    <task id="LOCAL-00143" summary="Update patch selection tool.">
+      <created>1564669417241</created>
+      <option name="number" value="00143" />
+      <option name="presentableId" value="LOCAL-00143" />
+      <option name="project" value="LOCAL" />
+      <updated>1564669417241</updated>
+    </task>
+    <option name="localTasksCounter" value="144" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -894,7 +894,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="519108000" />
+    <option name="totallyTimeSpent" value="519774000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -909,21 +909,21 @@
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.89920425" visible="true" weight="0.24325675" />
-      <window_info id="Structure" order="1" sideWeight="0.10079575" side_tool="true" visible="true" weight="0.24325675" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.89856803" visible="true" weight="0.24325675" />
+      <window_info id="Structure" order="1" sideWeight="0.10143198" side_tool="true" visible="true" weight="0.24325675" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3286119" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" sideWeight="0.4986577" weight="0.46175638" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.46753246" weight="0.15694165" />
-      <window_info active="true" anchor="bottom" id="Debug" order="4" sideWeight="0.6348651" visible="true" weight="0.24144869" />
+      <window_info active="true" anchor="bottom" id="Run" order="3" sideWeight="0.46703297" visible="true" weight="0.15694165" />
+      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.6348651" weight="0.24144869" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.499001" weight="0.26861167" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.36513487" side_tool="true" visible="true" weight="0.24144869" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.53296703" side_tool="true" visible="true" weight="0.15694165" />
       <window_info anchor="bottom" id="Terminal" order="12" weight="0.32997987" />
       <window_info anchor="bottom" id="Python Console" order="13" />
       <window_info anchor="bottom" id="Messages" order="14" />
@@ -978,7 +978,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update descriptors/ft procedures." />
     <MESSAGE value="Update validation scheme method." />
     <MESSAGE value="Fix previous commit." />
     <MESSAGE value="Update feature extraction." />
@@ -1003,7 +1002,8 @@
     <MESSAGE value="Update selection color." />
     <MESSAGE value="Update selection animation." />
     <MESSAGE value="Update disposition of gui tool." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update disposition of gui tool." />
+    <MESSAGE value="Update patch selection tool." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update patch selection tool." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1503,8 +1503,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="401" column="36" selection-start-line="401" selection-start-column="36" selection-end-line="401" selection-end-column="36" />
+        <state relative-caret-position="418">
+          <caret line="428" column="33" selection-start-line="428" selection-start-column="33" selection-end-line="428" selection-end-column="33" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
