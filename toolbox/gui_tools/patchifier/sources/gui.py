@@ -69,6 +69,7 @@ class QPatchExtractor(QMainWindow):
         self.patch_widget.changed_patch_size.connect(self.viewer.setRectangleSize)
         self.patch_widget.changed_mode.connect(self.viewer.change_mouse_color)
         self.patch_widget.set_value(250)
+        self.patch_widget.send_key(0)
         self.annotate_widget.currentChanged.connect(self.change_mode)
         self.annotate_widget.addTab(self.label_widget, 'Labels')
         self.annotate_widget.addTab(self.patch_widget, 'Patchs')
@@ -482,6 +483,7 @@ class QtImageViewer(QGraphicsView):
         self.zoomStack = []
         # Flags for enabling/disabling mouse interaction.
         self.selection_state = True
+        self.setMouseTracking(True)
 
     def change_mouse_color(self, color):
         self.mouse_color = color
@@ -524,8 +526,9 @@ class QtImageViewer(QGraphicsView):
             self.animation = QPropertyAnimation(self, b'pcolor')
             self.animation.setDuration(1000)
             self.animation.setStartValue(color)
-            color.setAlphaF(0)
-            self.animation.setEndValue(color)
+            end_color = QColor(color)
+            end_color.setAlphaF(0)
+            self.animation.setEndValue(end_color)
             self.animation.start()
 
     def loadImage(self, path):
@@ -640,6 +643,6 @@ class QtImageViewer(QGraphicsView):
     def _set_pcolor(self, color):
         brush = self.mouse_rect.brush()
         brush.setColor(color)
-        self.mouse_rect.setBrush(brush)
+        self.mouse_rect.setBrush(color)
 
     pcolor = pyqtProperty(QColor, fset=_set_pcolor)
