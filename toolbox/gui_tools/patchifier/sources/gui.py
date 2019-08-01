@@ -400,12 +400,14 @@ class QPatchWidget(QWidget):
         self.size.setRange(0, 1000)
         self.size.setSingleStep(10)
         self.size.setSuffix("px")
+        self.size.setEnabled(False)
         # Then build patch tool
         patch_layout = QGridLayout(self)
-        patch_layout.addWidget(self.table, 0, 0, 1, 2)
-        patch_layout.addWidget(QLabel('Keyboard Shortcuts: 0: Healthy / 1: Benign / 1:Malignant'), 1, 0, 1, 2)
-        patch_layout.addWidget(QLabel('Patch Width/Height'), 2, 0)
-        patch_layout.addWidget(self.size, 2, 1)
+        patch_layout.addWidget(self.table, 0, 0, 1, 4)
+        patch_layout.addWidget(QLabel('Mode'), 1, 0)
+        patch_layout.addWidget(QLabel(''), 1, 1)
+        patch_layout.addWidget(QLabel('Width/Height'), 1, 2)
+        patch_layout.addWidget(self.size, 1, 3)
 
     def row_changed(self, current, previous):
         if current.row() == -1:
@@ -582,7 +584,7 @@ class QtImageViewer(QGraphicsView):
             self.patches.removeFromGroup(patch)
         # Create new items
         for patch in patches:
-            patch_item = QGraphicsRectItem(patch[0]-patch[2], patch[1]-patch[2], patch[2], patch[2])
+            patch_item = QGraphicsRectItem(patch[0]-(patch[2]/2), patch[1]-(patch[2]/2), patch[2], patch[2])
             patch_item.setPen(QPen(self.patch_color, 4, Qt.SolidLine))
             self.patches.addToGroup(patch_item)
 
