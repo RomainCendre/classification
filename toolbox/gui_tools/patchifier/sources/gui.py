@@ -18,7 +18,7 @@ class QPatchExtractor(QMainWindow):
     # Modes
     LABEL = 0
     PATCH = 1
-    BBOX = 1
+    BBOX = 2
 
     def __init__(self, input_folder, pathologies, settings):
         super(QPatchExtractor, self).__init__()
@@ -67,6 +67,7 @@ class QPatchExtractor(QMainWindow):
         self.patch_widget = QPatchWidget(self.annotate_widget, self.pathologies, self.settings)
         self.patch_widget.changed_patch_selection.connect(self.change_patch)
         self.patch_widget.changed_patch_size.connect(self.viewer.setRectangleSize)
+        self.patch_widget.changed_mode.connect(self.viewer.change_mouse_color)
         self.patch_widget.set_value(250)
         self.annotate_widget.currentChanged.connect(self.change_mode)
         self.annotate_widget.addTab(self.label_widget, 'Labels')
@@ -371,6 +372,7 @@ class QPatchWidget(QWidget):
     # Signals
     changed_patch_size = pyqtSignal(int)
     changed_patch_selection = pyqtSignal(int, QColor)
+    changed_mode = pyqtSignal(QColor)
 
     def __init__(self, parent, pathologies, settings):
         super(QPatchWidget, self).__init__(parent)
@@ -414,6 +416,9 @@ class QPatchWidget(QWidget):
     def send_key(self, key):
         if key < len(self.pathologies):
             self.mode = key
+            color_tuple = self.settings.get_color(self.pathologies[self.mode])
+            qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
+            self.changed_mode.emit(qcolor)
 
     def send_patches(self, data):
         self.table.setRowCount(0)
@@ -479,7 +484,7 @@ class QtImageViewer(QGraphicsView):
         self.selection_state = True
 
     def change_mouse_color(self, color):
-        self.mouse_color = QColor.fromRgbF(color[0], color[1], color[2])
+        self.mouse_color = color
         self.mouse_rect.setPen(QPen(self.mouse_color, 6, Qt.DotLine))
 
     def change_selection_state(self, enable=True):
