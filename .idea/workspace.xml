@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/parameters.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,7 +15,7 @@
     <SUITE FILE_PATH="coverage/classification$gui.coverage" NAME="gui Coverage Results" MODIFIED="1564491253767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources" />
     <SUITE FILE_PATH="coverage/classification$multiscale_features.coverage" NAME="multiscale_features Coverage Results" MODIFIED="1562166368435" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
     <SUITE FILE_PATH="coverage/classification$test_experiments.coverage" NAME="test_experiments Coverage Results" MODIFIED="1559894677583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
-    <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1564648658486" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier" />
+    <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1564658670790" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier" />
     <SUITE FILE_PATH="coverage/classification$score_level.coverage" NAME="score_level Coverage Results" MODIFIED="1557316745744" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$features_level.coverage" NAME="features_level Coverage Results" MODIFIED="1559638826584" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$descriptors.coverage" NAME="descriptors Coverage Results" MODIFIED="1563264286240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
@@ -86,8 +84,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="64" column="94" selection-start-line="64" selection-start-column="94" selection-end-line="64" selection-end-column="94" />
+            <state relative-caret-position="440">
+              <caret line="549" column="46" selection-start-line="549" selection-start-column="46" selection-end-line="549" selection-end-column="46" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -550,14 +548,7 @@
       <workItem from="1563518715057" duration="4494000" />
       <workItem from="1563530423672" duration="10946000" />
       <workItem from="1563545028037" duration="11522000" />
-      <workItem from="1564409133198" duration="30107000" />
-    </task>
-    <task id="LOCAL-00087" summary="Update cluster process for local one.">
-      <created>1560860792277</created>
-      <option name="number" value="00087" />
-      <option name="presentableId" value="LOCAL-00087" />
-      <option name="project" value="LOCAL" />
-      <updated>1560860792277</updated>
+      <workItem from="1564409133198" duration="37258000" />
     </task>
     <task id="LOCAL-00088" summary="Update cluster process for local one.">
       <created>1561109466451</created>
@@ -895,7 +886,14 @@
       <option name="project" value="LOCAL" />
       <updated>1564586966799</updated>
     </task>
-    <option name="localTasksCounter" value="136" />
+    <task id="LOCAL-00136" summary="Add patch browser.">
+      <created>1564648733637</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1564648733638</updated>
+    </task>
+    <option name="localTasksCounter" value="137" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -931,7 +929,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="502196000" />
+    <option name="totallyTimeSpent" value="509347000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -952,15 +950,15 @@
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3286119" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" sideWeight="0.4986577" weight="0.46175638" />
-      <window_info active="true" anchor="bottom" id="Run" order="3" sideWeight="0.47452548" visible="true" weight="0.15694165" />
-      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.6422819" weight="0.37677053" />
+      <window_info active="true" anchor="bottom" id="Run" order="3" sideWeight="0.47352648" visible="true" weight="0.15694165" />
+      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.6413586" weight="0.37625754" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.4995005" weight="0.26861167" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.52547455" side_tool="true" visible="true" weight="0.15694165" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5264735" side_tool="true" visible="true" weight="0.15694165" />
       <window_info anchor="bottom" id="Terminal" order="12" weight="0.32997987" />
       <window_info anchor="bottom" id="Python Console" order="13" />
       <window_info anchor="bottom" id="Messages" order="14" />
@@ -1015,7 +1013,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update process, simplify dwt." />
     <MESSAGE value="Update TL process, NasNet not working." />
     <MESSAGE value="Update of data sending scripts and main procedures." />
     <MESSAGE value="Update structure and folds creation." />
@@ -1040,7 +1037,8 @@
     <MESSAGE value="Fix bug on gui tool and order image by natural sort." />
     <MESSAGE value="Fix some of the behaviours." />
     <MESSAGE value="Adding colors to label tool." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding colors to label tool." />
+    <MESSAGE value="Add patch browser." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add patch browser." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1088,6 +1086,11 @@
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
       <expression>
+        <expression-string>patch[0]-patch[2]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>row['Center_X']</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
@@ -1127,11 +1130,6 @@ qcolor = QColor.getRgbF(color[0], color[1], color[2], 0.25)</expression-string>
       <expression>
         <expression-string>color = self.settings.get_color(current_label)
         qcolor = QColor.getRgbF(color[0], color[1], color[2], 0.25)</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>self.settings.get_color(current_label)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
@@ -1543,8 +1541,8 @@ qcolor = QColor.getRgbF(color[0], color[1], color[2], 0.25)</expression-string>
     </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="64" column="94" selection-start-line="64" selection-start-column="94" selection-end-line="64" selection-end-column="94" />
+        <state relative-caret-position="440">
+          <caret line="549" column="46" selection-start-line="549" selection-start-column="46" selection-end-line="549" selection-end-column="46" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>

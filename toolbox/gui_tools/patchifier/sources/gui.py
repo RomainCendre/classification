@@ -9,8 +9,8 @@ from os.path import join, isfile, abspath, exists
 from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QRect, QPropertyAnimation, pyqtProperty
 from PyQt5.QtGui import QImage, QPixmap, QPainterPath, QColor, QFont, QPen
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWindow, QHBoxLayout, QWidget, QLabel, \
-    QGraphicsTextItem, QFileDialog, QPushButton, QDialog, QSpinBox, QGraphicsRectItem, QProgressBar, QVBoxLayout, \
-    QTableWidget, QTabWidget, QComboBox, QTableWidgetItem, QAbstractItemView
+    QGraphicsTextItem, QPushButton, QSpinBox, QGraphicsRectItem, QProgressBar, QVBoxLayout, \
+    QTableWidget, QTabWidget, QTableWidgetItem, QAbstractItemView, QGraphicsItemGroup
 from toolbox.IO import dermatology
 
 
@@ -23,6 +23,7 @@ class QPatchExtractor(QMainWindow):
         super(QPatchExtractor, self).__init__()
         self.patient_index = 0
         self.image_index = 0
+        self.patch_index = 0
         self.dataframe = None
         self.patients_directories = [str(path) for path in input_folder.iterdir()]
         self.patients_directories = natsorted(self.patients_directories)
@@ -63,6 +64,7 @@ class QPatchExtractor(QMainWindow):
         self.label_widget = QLabelWidget(self.annotate_widget, self.pathologies, self.settings)
         self.label_widget.change_label.connect(self.change_image_label)
         self.patch_widget = QPatchWidget(self.annotate_widget, self.pathologies, self.settings)
+        self.patch_widget.changed_patch_selection.connect(self.change_patch)
         self.patch_widget.changed_patch_size.connect(self.viewer.setRectangleSize)
         self.patch_widget.set_value(250)
         self.annotate_widget.currentChanged.connect(self.change_mode)
@@ -104,6 +106,10 @@ class QPatchExtractor(QMainWindow):
         else:
             self.viewer.change_selection_state(True)
 
+    def change_patch(self, index):
+        self.patch_index = index
+        self.viewer.set_current_patch(index)
+
     def change_patient(self, move):
         # Start by closing previous df
         self.close_dataframe()
@@ -121,6 +127,7 @@ class QPatchExtractor(QMainWindow):
         # Send data to components
         self.label_widget.send_patient(dataframe)
         self.patch_widget.send_patches(self.get_dataframe('Patch'))
+        self.viewer.set_patches(self.get_patches())
         self.reset_image()
 
     def click_event(self, x, y):
@@ -194,6 +201,13 @@ class QPatchExtractor(QMainWindow):
     def get_mode(self):
         return self.annotate_widget.currentIndex()
 
+    def get_patches(self):
+        dataframe = self.get_dataframe('Patch')
+        patches = []
+        for index, row in dataframe.iterrows():
+            patches.append((int(row['Center_X']), int(row['Center_Y']), int(row['Width'])))
+        return patches
+
     def get_patient(self):
         return self.get_patient_folder().name
 
@@ -223,7 +237,7 @@ class QPatchExtractor(QMainWindow):
             self.change_patient(1)
         elif key == Qt.Key_Down:
             self.change_patient(-1)
-        elif Qt.Key_0 <= key <= Qt.Key_9:
+        elif Qt.Key_0 <= key <= Qt.Key_9 or Qt.Key_Delete:
             self.tool_controls(key)
 
     def open_dataframe(self):
@@ -243,7 +257,10 @@ class QPatchExtractor(QMainWindow):
         if self.get_mode() == QPatchExtractor.LABEL:
             self.label_widget.send_key(key - Qt.Key_0)
         else:
-            self.patch_widget.send_key(key - Qt.Key_0)
+            if key == Qt.Key_Delete:
+                self.patch_widget.send_remove()
+            else:
+                self.patch_widget.send_key(key - Qt.Key_0)
 
     def update_image(self):
         self.image_bar.setValue(self.image_index)
@@ -350,6 +367,7 @@ class QLabelWidget(QWidget):
 class QPatchWidget(QWidget):
     # Signals
     changed_patch_size = pyqtSignal(int)
+    changed_patch_selection = pyqtSignal(int)
 
     def __init__(self, parent, pathologies, settings):
         super(QPatchWidget, self).__init__(parent)
@@ -369,6 +387,7 @@ class QPatchWidget(QWidget):
         self.table.resizeColumnsToContents()
         hheader = self.table.horizontalHeader()
         hheader.setStretchLastSection(True)
+        self.table.selectionModel().currentRowChanged.connect(self.row_changed)
         # Manage patch size
         self.size = QSpinBox()
         self.size.valueChanged.connect(self.changed_patch_size.emit)
@@ -381,6 +400,9 @@ class QPatchWidget(QWidget):
         patch_layout.addWidget(QLabel('Keyboard Shortcuts: 0: Healthy / 1: Benign / 1:Malignant'), 1, 0, 1, 2)
         patch_layout.addWidget(QLabel('Patch Width/Height'), 2, 0)
         patch_layout.addWidget(self.size, 2, 1)
+
+    def row_changed(self, current, previous):
+        self.changed_patch_selection.emit(current.row())
 
     def send_key(self, key):
         if key < len(self.pathologies):
@@ -395,9 +417,6 @@ class QPatchWidget(QWidget):
             self.table.setItem(index, 0, QTableWidgetItem('{center}'.format(center=row['Center_X'])))
             self.table.setItem(index, 1, QTableWidgetItem('{center}'.format(center=row['Center_Y'])))
             self.table.setItem(index, 2, QTableWidgetItem('{label}'.format(label=row['Label'])))
-
-    def send_remove(self):
-        print('todo')
 
     def set_value(self, size):
         self.size.setValue(size)
@@ -417,14 +436,12 @@ class QtImageViewer(QGraphicsView):
         QGraphicsView.__init__(self)
         # Image is displayed as a QPixmap in a QGraphicsScene attached to this QGraphicsView.
         self.scene = QGraphicsScene()
-        self.text = QGraphicsTextItem()
-        self.text.setFont(QFont('Arial', 20))
-        self.text.setPos(0, 0)
-        self.text.setDefaultTextColor(QColor(255, 0, 0))
+        self.patch_color = QColor(Qt.white)
         self.mouse_color = QColor(Qt.blue)
         self.mouse_rect = QGraphicsRectItem(-25, -25, 50, 50)
         self.mouse_rect.setPen(QPen(self.mouse_color, 6, Qt.DotLine))
-        self.scene.addItem(self.text)
+        self.patches = QGraphicsItemGroup()
+        self.scene.addItem(self.patches)
         self.scene.addItem(self.mouse_rect)
         self.setScene(self.scene)
         # Store a local handle to the scene's current image pixmap.
@@ -447,8 +464,10 @@ class QtImageViewer(QGraphicsView):
         self.selection_state = enable
         if self.selection_state:
             self.mouse_rect.show()
+            self.patches.show()
         else:
             self.mouse_rect.hide()
+            self.patches.hide()
 
     def clearImage(self):
         """ Removes the current image pixmap from the scene if it exists.
@@ -518,6 +537,23 @@ class QtImageViewer(QGraphicsView):
         self._pixmapHandle.setZValue(-1)
         self.setSceneRect(QRectF(pixmap.rect()))  # Set scene size to image size.
         self.updateViewer()
+
+    def set_current_patch(self, index):
+        # Default color items
+        for patch in self.patches:
+            patch.setPen(QPen(self.patch_color, 4, Qt.SolidLine))
+        # Set selection
+        self.patches[index].setPen(QPen(self.patch_color, 4, Qt.SolidLine))
+
+    def set_patches(self, patches):
+        # Delete patches items
+        for patch in self.patches.childItems():
+            self.patches.removeFromGroup(patch)
+        # Create new items
+        for patch in patches:
+            patch_item = QGraphicsRectItem(patch[0]-patch[2], patch[1]-patch[2], patch[2], patch[2])
+            patch_item.setPen(QPen(self.patch_color, 4, Qt.SolidLine))
+            self.patches.addToGroup(patch_item)
 
     def updateViewer(self):
         """ Show current zoom (if showing entire image, apply current aspect ratio mode).
