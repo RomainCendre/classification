@@ -62,7 +62,7 @@ class QPatchExtractor(QMainWindow):
         self.annotate_widget = QTabWidget()
         self.label_widget = QLabelWidget(self.annotate_widget, self.pathologies, self.settings)
         self.label_widget.change_label.connect(self.change_image_label)
-        self.patch_widget = QPatchWidget(self.annotate_widget)
+        self.patch_widget = QPatchWidget(self.annotate_widget, self.pathologies, self.settings)
         self.patch_widget.changed_patch_size.connect(self.viewer.setRectangleSize)
         self.patch_widget.set_value(250)
         self.annotate_widget.currentChanged.connect(self.change_mode)
@@ -167,10 +167,10 @@ class QPatchExtractor(QMainWindow):
         # Extract patch
         return raw_image.copy(patch_rect)
 
-    def get_dataframe(self, filter=None):
-        if filter is None:
+    def get_dataframe(self, type_filter=None):
+        if type_filter is None:
             return self.dataframe
-        return self.dataframe[self.dataframe['Type'] == 'Full']
+        return self.dataframe[self.dataframe['Type'] == type_filter]
 
     def get_image(self, absolute=True):
         dataframe = self.get_dataframe('Full')
@@ -300,28 +300,28 @@ class QLabelWidget(QWidget):
 
     def init_gui(self):
         # Then build annotation tool
-        self.image_resume = QTableWidget()
-        self.image_resume.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.image_resume.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.image_resume.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.image_resume.setRowCount(len(self.pathologies))
-        self.image_resume.setColumnCount(3)
-        self.image_resume.setHorizontalHeaderLabels(('Keyboard Shortcut', 'Name', 'Total'))
+        self.table = QTableWidget()
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table.setRowCount(len(self.pathologies))
+        self.table.setColumnCount(3)
+        self.table.setHorizontalHeaderLabels(('Keyboard Shortcut', 'Name', 'Total'))
         # Keyboard + Label
         for index, label in enumerate(self.pathologies):
-            self.image_resume.setItem(index, 0, QTableWidgetItem('Numpad {index}'.format(index=index)))
-            self.image_resume.setItem(index, 1, QTableWidgetItem('{label}'.format(label=label)))
-        self.image_resume.resizeColumnsToContents()
-        hheader = self.image_resume.horizontalHeader()
+            self.table.setItem(index, 0, QTableWidgetItem('Numpad {index}'.format(index=index)))
+            self.table.setItem(index, 1, QTableWidgetItem('{label}'.format(label=label)))
+        self.table.resizeColumnsToContents()
+        hheader = self.table.horizontalHeader()
         hheader.setStretchLastSection(True)
-        vheader = self.image_resume.verticalHeader()
+        vheader = self.table.verticalHeader()
         vheader.hide()
         vheader.setStretchLastSection(True)
         # Connect to changes
-        self.image_resume.selectionModel().currentRowChanged.connect(self.change_mode)
+        self.table.selectionModel().currentRowChanged.connect(self.change_mode)
 
         patch_layout = QVBoxLayout(self)
-        patch_layout.addWidget(self.image_resume)
+        patch_layout.addWidget(self.table)
 
     def send_image(self, data):
         if data is None:
@@ -331,38 +331,50 @@ class QLabelWidget(QWidget):
             index = self.pathologies.index(current)
         except:
             index = self.default_value
-        self.image_resume.selectRow(index)
+        self.table.selectRow(index)
 
     def send_patient(self, data):
         values = data['Label'].value_counts()
         for index, label in enumerate(self.pathologies):
-            self.image_resume.setItem(index, 2, QTableWidgetItem('{count}'.format(count=values.get(label, 0))))
+            self.table.setItem(index, 2, QTableWidgetItem('{count}'.format(count=values.get(label, 0))))
 
     def send_key(self, key):
-        self.image_resume.selectRow(key)
+        self.table.selectRow(key)
 
     def update_color(self, current_label):
         color_tuple = self.settings.get_color(current_label)
         qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
-        self.image_resume.setStyleSheet('QTableView{selection-background-color: '+qcolor.name()+'}')
+        self.table.setStyleSheet('QTableView{selection-background-color: '+qcolor.name()+'}')
 
 
 class QPatchWidget(QWidget):
     # Signals
     changed_patch_size = pyqtSignal(int)
 
-    def __init__(self, parent):
+    def __init__(self, parent, pathologies, settings):
         super(QPatchWidget, self).__init__(parent)
+        self.pathologies = pathologies
+        self.settings = settings
+        self.mode = 0
         self.init_gui()
 
     def init_gui(self):
+        # Create table that list current patches
+        self.table = QTableWidget()
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table.setColumnCount(3)
+        self.table.setHorizontalHeaderLabels(('Center X', 'Center Y', 'Label'))
+        self.table.resizeColumnsToContents()
+        hheader = self.table.horizontalHeader()
+        hheader.setStretchLastSection(True)
+        # Manage patch size
         self.size = QSpinBox()
         self.size.valueChanged.connect(self.changed_patch_size.emit)
         self.size.setRange(0, 1000)
         self.size.setSingleStep(10)
         self.size.setSuffix("px")
-        # Create table that list current patches
-        self.table = QTableWidget()
         # Then build patch tool
         patch_layout = QGridLayout(self)
         patch_layout.addWidget(self.table, 0, 0, 1, 2)
@@ -371,10 +383,21 @@ class QPatchWidget(QWidget):
         patch_layout.addWidget(self.size, 2, 1)
 
     def send_key(self, key):
-        print(key)
+        if key < len(self.pathologies):
+            self.mode = key
 
     def send_patches(self, data):
-        print(data)
+        self.table.setRowCount(0)
+        if len(data) == 0:
+            return
+        self.table.setRowCount(len(data))
+        for index, row in data.iterrows():
+            self.table.setItem(index, 0, QTableWidgetItem('{center}'.format(center=row['Center_X'])))
+            self.table.setItem(index, 1, QTableWidgetItem('{center}'.format(center=row['Center_Y'])))
+            self.table.setItem(index, 2, QTableWidgetItem('{label}'.format(label=row['Label'])))
+
+    def send_remove(self):
+        print('todo')
 
     def set_value(self, size):
         self.size.setValue(size)

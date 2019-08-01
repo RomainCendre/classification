@@ -315,8 +315,8 @@ class BuiltInSettings:
 
     @staticmethod
     def get_default_dermatology():
-        colors = dict(Malignant=(1, 0, 0), Benign=(0.5, 0.5, 0), Normal=(0, 1, 0), Pathology=(0.75, 0.75, 0),
-                      Rest=(0.25, 0.25, 0), Luck=(0, 0, 1))
+        colors = dict(Malignant=(0.93, 0.5, 0.2), Benign=(1, 0.75, 0), Normal=(0.44, 0.68, 0.28),
+                      Pathology=(0.75, 0.75, 0), Rest=(0.90, 0.47, 0), Luck=(0, 0, 1))
         lines = {'Malignant': {'linestyle': '-'},
                  'Benign': {'linestyle': '-.'},
                  'Normal': {'linestyle': '-'},

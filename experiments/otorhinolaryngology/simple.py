@@ -1,4 +1,4 @@
-from os import makedirs, startfile
+from os import startfile
 from pathlib import Path
 
 from numpy import geomspace
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     spectra = ORLDataset.spectras()
     spectra.change_wavelength(wavelength=arange(start=445, stop=962, step=1))
     spectra.apply_average_filter(size=5)
-    # spectra.norm_patient()
+    spectra.norm_patient()
     # spectra.apply_scaling()
 
     # Compute data
