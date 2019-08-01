@@ -82,21 +82,25 @@ class QPatchExtractor(QMainWindow):
     def change_image(self, move):
         dataframe = self.get_dataframe('Full')
         length = len(dataframe)
-        if length == 0:
+        if length == 0 or move is None:
             self.image_index = 0
         else:
             self.image_index = (self.image_index + move) % length
         # Send data to components
         self.label_widget.send_image(self.get_image_data())
+        self.patch_widget.send_patches(self.get_patches_data())
+        self.viewer.set_patches(self.get_patches_location())
         self.update_image()
 
     def change_image_label(self, label):
         current = self.get_image_data()
-        if not current['Label'] == label:
-            self.dataframe.loc[current.name, 'Label'] = label
-            dataframe = self.get_dataframe('Full')
-            # Send data to components
-            self.label_widget.send_patient(dataframe)
+        # Check everything is fine and needed
+        if len(current) == 0 or current['Label'] == label:
+            return
+        self.dataframe.loc[current.name, 'Label'] = label
+        dataframe = self.get_dataframe('Full')
+        # Send data to components
+        self.label_widget.send_patient(dataframe)
 
     def change_mode(self):
         mode = self.get_mode()
@@ -126,8 +130,6 @@ class QPatchExtractor(QMainWindow):
         self.image_bar.setRange(0, len(dataframe)-1)
         # Send data to components
         self.label_widget.send_patient(dataframe)
-        self.patch_widget.send_patches(self.get_dataframe('Patch'))
-        self.viewer.set_patches(self.get_patches())
         self.reset_image()
 
     def click_event(self, x, y):
@@ -196,13 +198,18 @@ class QPatchExtractor(QMainWindow):
         dataframe = self.get_dataframe('Full')
         if self.image_index < len(dataframe):
             return dataframe.iloc[self.image_index]
-        return None
+        return dataframe
 
     def get_mode(self):
         return self.annotate_widget.currentIndex()
 
-    def get_patches(self):
+    def get_patches_data(self):
         dataframe = self.get_dataframe('Patch')
+        current_image = self.get_image_data()
+        return dataframe[dataframe['Source'] == current_image['Reference']]
+
+    def get_patches_location(self):
+        dataframe = self.get_patches_data()
         patches = []
         for index, row in dataframe.iterrows():
             patches.append((int(row['Center_X']), int(row['Center_Y']), int(row['Width'])))
@@ -241,14 +248,11 @@ class QPatchExtractor(QMainWindow):
             self.tool_controls(key)
 
     def open_dataframe(self):
-        self.dataframe = dermatology.Reader.scan_subfolder(self.get_patient_folder(), parameters={'patches': True,
-                                                                                                  'modality': 'Microscopy'})
+        self.dataframe = dermatology.Reader.scan_subfolder(self.get_patient_folder(),
+                                                           parameters={'patches': True, 'modality': 'Microscopy'})
 
     def reset_image(self):
-        self.image_index = 0
-        # Send data to components
-        self.label_widget.send_image(self.get_image_data())
-        self.update_image()
+        self.change_image(None)
 
     def show_patches(self):
         print('todo')
@@ -341,8 +345,6 @@ class QLabelWidget(QWidget):
         patch_layout.addWidget(self.table)
 
     def send_image(self, data):
-        if data is None:
-            return
         current = data['Label']
         try:
             index = self.pathologies.index(current)
@@ -382,8 +384,8 @@ class QPatchWidget(QWidget):
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.table.setColumnCount(3)
-        self.table.setHorizontalHeaderLabels(('Center X', 'Center Y', 'Label'))
+        self.table.setColumnCount(4)
+        self.table.setHorizontalHeaderLabels(('Center X', 'Center Y', 'Size', 'Label'))
         self.table.resizeColumnsToContents()
         hheader = self.table.horizontalHeader()
         hheader.setStretchLastSection(True)
@@ -414,9 +416,24 @@ class QPatchWidget(QWidget):
             return
         self.table.setRowCount(len(data))
         for index, row in data.iterrows():
-            self.table.setItem(index, 0, QTableWidgetItem('{center}'.format(center=row['Center_X'])))
-            self.table.setItem(index, 1, QTableWidgetItem('{center}'.format(center=row['Center_Y'])))
-            self.table.setItem(index, 2, QTableWidgetItem('{label}'.format(label=row['Label'])))
+            # Get current label
+            current_label = row['Label']
+            # Get current color
+            color_tuple = self.settings.get_color(current_label)
+            qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
+            # Create table items
+            item = QTableWidgetItem('{center}'.format(center=row['Center_X']))
+            item.setBackground(qcolor)
+            self.table.setItem(index, 0, item)
+            item = QTableWidgetItem('{center}'.format(center=row['Center_Y']))
+            item.setBackground(qcolor)
+            self.table.setItem(index, 1, item)
+            item = QTableWidgetItem('{size}'.format(size=row['Width']))
+            item.setBackground(qcolor)
+            self.table.setItem(index, 2, item)
+            item = QTableWidgetItem('{label}'.format(label=row['Label']))
+            item.setBackground(qcolor)
+            self.table.setItem(index, 3, item)
 
     def set_value(self, size):
         self.size.setValue(size)
@@ -437,6 +454,7 @@ class QtImageViewer(QGraphicsView):
         # Image is displayed as a QPixmap in a QGraphicsScene attached to this QGraphicsView.
         self.scene = QGraphicsScene()
         self.patch_color = QColor(Qt.white)
+        self.patch_selection = QColor(Qt.darkGreen)
         self.mouse_color = QColor(Qt.blue)
         self.mouse_rect = QGraphicsRectItem(-25, -25, 50, 50)
         self.mouse_rect.setPen(QPen(self.mouse_color, 6, Qt.DotLine))
@@ -540,10 +558,10 @@ class QtImageViewer(QGraphicsView):
 
     def set_current_patch(self, index):
         # Default color items
-        for patch in self.patches:
+        for patch in self.patches.childItems():
             patch.setPen(QPen(self.patch_color, 4, Qt.SolidLine))
         # Set selection
-        self.patches[index].setPen(QPen(self.patch_color, 4, Qt.SolidLine))
+        self.patches.childItems()[index].setPen(QPen(self.patch_selection, 8, Qt.SolidLine))
 
     def set_patches(self, patches):
         # Delete patches items
