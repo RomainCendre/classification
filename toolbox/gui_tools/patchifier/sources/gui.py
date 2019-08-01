@@ -139,7 +139,7 @@ class QPatchExtractor(QMainWindow):
         if mode == QPatchExtractor.LABEL:
             return
         # Acquire image and it to dataframe
-        # self.viewer.mouseRectColorTransition(QColor(Qt.red))
+        self.viewer.mouse_color_transition(QColor(Qt.red))
         # self.write_patch(x, y)
 
     def close_dataframe(self):
@@ -475,7 +475,7 @@ class QtImageViewer(QGraphicsView):
         # Flags for enabling/disabling mouse interaction.
         self.selection_state = True
 
-    def change_mouse_default_color(self, color):
+    def change_mouse_color(self, color):
         self.mouse_color = QColor.fromRgbF(color[0], color[1], color[2])
         self.mouse_rect.setPen(QPen(self.mouse_color, 6, Qt.DotLine))
 
@@ -511,12 +511,13 @@ class QtImageViewer(QGraphicsView):
             return self._pixmapHandle.pixmap().toImage()
         return None
 
-    def mouseRectColorTransition(self, color):
+    def mouse_color_transition(self, color):
         if self.selection_state:
             self.animation = QPropertyAnimation(self, b'pcolor')
             self.animation.setDuration(1000)
             self.animation.setStartValue(color)
-            self.animation.setEndValue(self.mouse_color)
+            color.setAlphaF(0)
+            self.animation.setEndValue(color)
             self.animation.start()
 
     def loadImage(self, path):
@@ -629,8 +630,8 @@ class QtImageViewer(QGraphicsView):
         QGraphicsView.mouseDoubleClickEvent(self, event)
 
     def _set_pcolor(self, color):
-        pen = self.mouse_rect.pen()
-        pen.setColor(color)
-        self.mouse_rect.setPen(pen)
+        brush = self.mouse_rect.brush()
+        brush.setColor(color)
+        self.mouse_rect.setBrush(brush)
 
     pcolor = pyqtProperty(QColor, fset=_set_pcolor)
