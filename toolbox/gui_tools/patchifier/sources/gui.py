@@ -18,8 +18,9 @@ class QPatchExtractor(QMainWindow):
     # Modes
     LABEL = 0
     PATCH = 1
+    BBOX = 1
 
-    def __init__(self, input_folder, pathologies, settings, output=''):
+    def __init__(self, input_folder, pathologies, settings):
         super(QPatchExtractor, self).__init__()
         self.patient_index = 0
         self.image_index = 0
@@ -415,7 +416,7 @@ class QPatchWidget(QWidget):
         if len(data) == 0:
             return
         self.table.setRowCount(len(data))
-        for index, row in data.iterrows():
+        for index, (rindex, row) in enumerate(data.iterrows()):
             # Get current label
             current_label = row['Label']
             # Get current color

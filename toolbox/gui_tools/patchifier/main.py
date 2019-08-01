@@ -23,8 +23,7 @@ if __name__ == '__main__':
     home_path = Path().home()
     input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
     viewer = QPatchExtractor(input_folder, pathologies,
-                             settings=BuiltInSettings.get_default_dermatology(),
-                             output=patch_folder)
+                             settings=BuiltInSettings.get_default_dermatology())
 
     # Show the viewer and run the application.
     viewer.show()
