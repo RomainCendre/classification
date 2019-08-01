@@ -111,9 +111,9 @@ class QPatchExtractor(QMainWindow):
         else:
             self.viewer.change_selection_state(True)
 
-    def change_patch(self, index):
+    def change_patch(self, index, color):
         self.patch_index = index
-        self.viewer.set_current_patch(index)
+        self.viewer.set_current_patch(index, color)
 
     def change_patient(self, move):
         # Start by closing previous df
@@ -370,7 +370,7 @@ class QLabelWidget(QWidget):
 class QPatchWidget(QWidget):
     # Signals
     changed_patch_size = pyqtSignal(int)
-    changed_patch_selection = pyqtSignal(int)
+    changed_patch_selection = pyqtSignal(int, QColor)
 
     def __init__(self, parent, pathologies, settings):
         super(QPatchWidget, self).__init__(parent)
@@ -405,7 +405,11 @@ class QPatchWidget(QWidget):
         patch_layout.addWidget(self.size, 2, 1)
 
     def row_changed(self, current, previous):
-        self.changed_patch_selection.emit(current.row())
+        if current.row() == -1:
+            return
+        color_tuple = self.settings.get_color(self.table.item(current.row(), 3).text())
+        qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
+        self.changed_patch_selection.emit(current.row(), qcolor)
 
     def send_key(self, key):
         if key < len(self.pathologies):
@@ -455,7 +459,6 @@ class QtImageViewer(QGraphicsView):
         # Image is displayed as a QPixmap in a QGraphicsScene attached to this QGraphicsView.
         self.scene = QGraphicsScene()
         self.patch_color = QColor(Qt.white)
-        self.patch_selection = QColor(Qt.darkGreen)
         self.mouse_color = QColor(Qt.blue)
         self.mouse_rect = QGraphicsRectItem(-25, -25, 50, 50)
         self.mouse_rect.setPen(QPen(self.mouse_color, 6, Qt.DotLine))
@@ -558,12 +561,12 @@ class QtImageViewer(QGraphicsView):
         self.setSceneRect(QRectF(pixmap.rect()))  # Set scene size to image size.
         self.updateViewer()
 
-    def set_current_patch(self, index):
+    def set_current_patch(self, index, color):
         # Default color items
         for patch in self.patches.childItems():
             patch.setPen(QPen(self.patch_color, 4, Qt.SolidLine))
         # Set selection
-        self.patches.childItems()[index].setPen(QPen(self.patch_selection, 8, Qt.SolidLine))
+        self.patches.childItems()[index].setPen(QPen(color, 8, Qt.SolidLine))
 
     def set_patches(self, patches):
         # Delete patches items
