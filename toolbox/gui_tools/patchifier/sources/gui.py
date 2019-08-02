@@ -1,15 +1,11 @@
-import glob
-import os
 import pandas as pd
 from pathlib import Path
-
 from PyQt5 import QtWidgets
 from natsort import natsorted
-from os.path import join, isfile, abspath, exists
 from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QRect, QPropertyAnimation, pyqtProperty
-from PyQt5.QtGui import QImage, QPixmap, QPainterPath, QColor, QFont, QPen, QBrush
-from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWindow, QHBoxLayout, QWidget, QLabel, \
-    QGraphicsTextItem, QPushButton, QSpinBox, QGraphicsRectItem, QProgressBar, QVBoxLayout, \
+from PyQt5.QtGui import QImage, QPixmap, QColor, QPen, QBrush
+from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWindow, QWidget, QLabel, \
+    QSpinBox, QGraphicsRectItem, QProgressBar, QVBoxLayout, \
     QTableWidget, QTabWidget, QTableWidgetItem, QAbstractItemView, QGraphicsItemGroup, QComboBox
 from toolbox.IO import dermatology
 
@@ -25,7 +21,9 @@ class QPatchExtractor(QMainWindow):
         self.patient_index = 0
         self.image_index = 0
         self.patch_index = 0
-        self.dataframe = None
+        self.patient = None
+        self.images = None
+        self.patches = None
         self.patients_directories = [str(path) for path in input_folder.iterdir()]
         self.patients_directories = natsorted(self.patients_directories)
         self.patients_directories = [Path(path) for path in self.patients_directories]
@@ -67,7 +65,7 @@ class QPatchExtractor(QMainWindow):
         self.label_widget.change_label.connect(self.change_image_label)
         # Second patch tool
         self.patch_widget = QPatchWidget(self.annotate_widget, self.pathologies[:-1], self.settings)
-        self.patch_widget.changed_patch_selection.connect(self.change_patch)
+        self.patch_widget.changed_patch_selection.connect(self.viewer.set_current_patch)
         self.patch_widget.changed_patch_size.connect(self.viewer.setRectangleSize)
         self.patch_widget.changed_mode.connect(self.viewer.change_mouse_color)
         self.patch_widget.set_value(250)
@@ -85,39 +83,34 @@ class QPatchExtractor(QMainWindow):
         self.setCentralWidget(global_widget)
 
     def change_image(self, move):
-        dataframe = self.get_dataframe('Full')
-        length = len(dataframe)
+        length = len(self.images)
         if length == 0 or move is None:
             self.image_index = 0
         else:
             self.image_index = (self.image_index + move) % length
+        # Open patches
+        self.open_patches()
         # Send data to components
-        self.label_widget.send_image(self.get_image_data())
-        self.patch_widget.send_patches(self.get_patches_data())
+        self.label_widget.send_image(self.get_image())
+        self.patch_widget.send_patches(self.patches)
         self.viewer.set_patches(self.get_patches_draw())
         self.update_image()
 
     def change_image_label(self, label):
-        current = self.get_image_data()
+        image = self.get_image()
         # Check everything is fine and needed
-        if len(current) == 0 or current['Label'] == label:
+        if len(image) == 0 or image['Label'] == label:
             return
-        self.dataframe.loc[current.name, 'Label'] = label
-        dataframe = self.get_dataframe('Full')
+        self.images.loc[image.name, 'Label'] = label
         # Send data to components
-        self.label_widget.send_patient(dataframe)
+        self.label_widget.send_images(self.images)
 
     def change_mode(self):
-        mode = self.get_mode()
         # Actions depend on mode
-        if mode == QPatchExtractor.LABEL:
+        if self.get_mode() == QPatchExtractor.LABEL:
             self.viewer.change_mouse_state(False)
         else:
             self.viewer.change_mouse_state(True)
-
-    def change_patch(self, index):
-        self.patch_index = index
-        self.viewer.set_current_patch(index)
 
     def change_patient(self, move):
         # Start by closing previous df
@@ -126,25 +119,16 @@ class QPatchExtractor(QMainWindow):
         length = len(self.patients_directories)
         self.patient_index = (self.patient_index + move) % length
         # Open new df
-        self.open_dataframe()
+        self.open_patient_and_images()
         self.update_patient()
-        # Update image
-        dataframe = self.get_dataframe('Full')
-        if dataframe is None:
-            return
-        self.image_bar.setRange(0, len(dataframe)-1)
-        # Send data to components
-        self.label_widget.send_patient(dataframe)
         self.reset_image()
 
     def click_event(self, x, y):
-        mode = self.get_mode()
         # Actions depend on mode
-        if mode == QPatchExtractor.LABEL:
+        if self.get_mode() == QPatchExtractor.LABEL:
             return
         # Acquire image and it to dataframe
-        self.viewer.mouse_color_transition(QColor(Qt.red))
-        # self.write_patch(x, y)
+        self.write_patch(x, y)
 
     def close_dataframe(self):
         # TODO
@@ -156,8 +140,7 @@ class QPatchExtractor(QMainWindow):
             return
 
         folder = self.get_current_folder()
-        if not exists(folder):
-            os.makedirs(folder)
+        folder.mkdir(exist_ok=True)
 
         self.dataframe.to_csv(file, index=False)
 
@@ -165,13 +148,19 @@ class QPatchExtractor(QMainWindow):
         self.close_dataframe()
         super().closeEvent(event)
 
+    def delete_patch(self):
+        index = self.patch_widget.get_patch_selected()
+        self.patches = self.patches.drop(self.patches.index[index])
+        # TODO write patch
+        self.update_patch()
+
     def extract_patch(self, x, y):
         # Load image
         raw_image = self.viewer.image()
         image_rect = raw_image.rect()
 
         # Compute patch position
-        size = self.out_size.value()
+        size = self.patch_widget.get_size()
         patch_rect = QRect(x - size / 2, y - size / 2, size, size)
 
         # Test if patch rectangle is full
@@ -185,63 +174,28 @@ class QPatchExtractor(QMainWindow):
         color_tuple = self.settings.get_color(label)
         return QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
 
-    def get_dataframe(self, type_filter=None):
-        if type_filter is None:
-            return self.dataframe
-        return self.dataframe[self.dataframe['Type'] == type_filter]
-
-    def get_image(self, absolute=True):
-        dataframe = self.get_dataframe('Full')
-        if dataframe is None or len(dataframe) == 0:
-            return None
-
-        if self.image_index >= len(dataframe):
-            self.image_index = 0
-
-        if absolute:
-            return dataframe['Full_Path'].iloc[self.image_index]
-        else:
-            return dataframe['Path'].iloc[self.image_index]
-
-    def get_image_data(self):
-        dataframe = self.get_dataframe('Full')
-        if self.image_index < len(dataframe):
-            return dataframe.iloc[self.image_index]
-        return dataframe
+    def get_image(self):
+        # If doesnt exist or not valid return empty one
+        if self.images is None or self.image_index >= len(self.images):
+            return pd.Series()
+        return self.images.iloc[self.image_index]
 
     def get_mode(self):
         return self.annotate_widget.currentIndex()
 
-    def get_patches_data(self):
-        dataframe = self.get_dataframe('Patch')
-        current_image = self.get_image_data()
-        return dataframe[dataframe['Source'] == current_image['Reference']]
-
     def get_patches_draw(self):
-        dataframe = self.get_patches_data()
         patches = []
-        for index, row in dataframe.iterrows():
+        # If not patches found return
+        if self.patches is None:
+            return patches
+        # Else construct patches
+        for index, row in self.patches.iterrows():
             patches.append((int(row['Center_X']), int(row['Center_Y']),
                             int(row['Width']), self.get_color(row['Label'])))
         return patches
 
-    def get_patient(self):
-        return self.get_patient_folder().name
-
-    def get_patient_binary(self):
-        if self.dataframe is None or len(self.dataframe) == 0:
-            return None
-
-        return self.dataframe.iloc[0].loc['Binary_Diagnosis']
-
     def get_patient_folder(self):
         return self.patients_directories[self.patient_index]
-
-    def get_patient_pathology(self):
-        if self.dataframe is None or len(self.dataframe) == 0:
-            return None
-
-        return self.dataframe.iloc[0].loc['Diagnosis']
 
     def key_pressed(self, key):
         # Action that move image of a patient
@@ -257,60 +211,88 @@ class QPatchExtractor(QMainWindow):
         elif Qt.Key_0 <= key <= Qt.Key_9 or Qt.Key_Delete:
             self.tool_controls(key)
 
-    def open_dataframe(self):
-        self.dataframe = dermatology.Reader.scan_subfolder(self.get_patient_folder(),
-                                                           parameters={'patches': True, 'modality': 'Microscopy'})
+    def open_patient_and_images(self):
+        self.patient = dermatology.Reader.read_patient_file(self.get_patient_folder())
+        self.images = dermatology.Reader.read_images_file(self.get_patient_folder(), modality='Microscopy')
+        if self.patient is None or len(self.patient) == 0:
+            return
+        self.patient = self.patient.iloc[0]
+
+    def open_patches(self):
+        self.patches = dermatology.Reader.read_patches_file(self.get_patient_folder(),
+                                                            modality='Microscopy',
+                                                            source=self.get_image().get('Path', None))
 
     def reset_image(self):
         self.change_image(None)
-
-    def show_patches(self):
-        print('todo')
 
     def tool_controls(self, key):
         if self.get_mode() == QPatchExtractor.LABEL:
             self.label_widget.send_key(key - Qt.Key_0)
         else:
             if key == Qt.Key_Delete:
-                self.patch_widget.send_remove()
+                self.delete_patch()
             else:
                 self.patch_widget.send_key(key - Qt.Key_0)
 
     def update_image(self):
         self.image_bar.setValue(self.image_index)
-        self.image_bar.setFormat(self.get_image(absolute=False))
-        self.viewer.loadImage(self.get_image())
+        self.image_bar.setFormat(str(self.get_image().get('Path', '')))
+        self.viewer.loadImage(Path(self.get_image().get('Full_Path', '')))
+
+    def update_patch(self):
+        self.patch_widget.send_patches(self.patches)
+        self.viewer.set_patches(self.get_patches_draw())
 
     def update_patient(self):
         self.patient_bar.setValue(self.patient_index)
-        self.patient_bar.setFormat(
-            'Patient: {patient} - Pathology: {pathology}({binary})'.format(patient=self.get_patient(),
-                                                                          pathology=self.get_patient_pathology(),
-                                                                          binary=self.get_patient_binary()))
+        if self.patient is None:
+            id, diagnosis, bdiagnosis = 'NA', 'NA', 'NA'
+        else:
+            id = self.patient.get('ID', 'NA')
+            diagnosis = self.patient.get('Diagnosis', 'NA')
+            bdiagnosis = self.patient.get('Binary_Diagnosis', 'NA')
+        self.patient_bar.setFormat(F'Patient: {id} - Pathology: {diagnosis}({bdiagnosis})')
+        self.label_widget.send_images(self.images)
+        # Update image
+        if self.images is None:
+            return
+        self.image_bar.setRange(0, len(self.images) - 1)
 
     def write_patch(self, x, y):
+        # Get patch
         patch = self.extract_patch(x, y)
         if not patch:
-            self.viewer.mouseRectColorTransition(QColor(Qt.red))
+            self.viewer.mouse_color_transition(QColor(Qt.red))
             return
-
-        filename = '{count}.bmp'.format(count=len(glob.glob(join(self.get_current_folder(), '*.bmp'))))
-        patch_path = join(self.get_current_folder(), 'patches', filename)
-        # Write image in dataframe
-        self.dataframe = self.dataframe.append({'Modality': 'Microscopy',
-                                                'Path': os.path.relpath(patch_path, self.get_current_folder()),
-                                                'Height': patch.height(),
-                                                'Width': patch.width(),
-                                                'Center_X': int(x),
-                                                'Center_Y': int(y),
-                                                'Label': self.pathologies[self.pathology_index],
-                                                'Source': self.get_current_image(full=False)}, ignore_index=True)
-
-        patch_dir = abspath(join(patch_path, os.pardir))
-        if not exists(patch_dir):
-            os.makedirs(patch_dir)
-        patch.save(patch_path, format='bmp')
-        self.viewer.mouseRectColorTransition(QColor(Qt.green))
+        # If valid check to construct it
+        patch_folder = self.get_patient_folder() / 'patches'
+        patch_folder.mkdir(exist_ok=True)
+        patches = list(patch_folder.glob('*.bmp'))
+        patches = [int(patch.stem) for patch in patches]
+        if not patches:
+            name = 0
+        else:
+            name = max(patches) + 1
+        patch_file = patch_folder / '{name}.bmp'.format(name=name)
+        # Prepare and write patch
+        patch_data = pd.Series()
+        patch_data['Modality'] = 'Microscopy'
+        patch_data['Path'] = patch_file.name
+        patch_data['Height'] = patch.height()
+        patch_data['Width'] = patch.width()
+        patch_data['Center_X'] = int(x)
+        patch_data['Center_Y'] = int(y)
+        patch_data['Label'] = self.patch_widget.get_mode()
+        patch_data['Source'] = self.get_image().get('Path', 'NA')
+        if self.patches is None:
+            self.patches = pd.DataFrame()
+        self.patches = self.patches.append(patch_data, ignore_index=True)
+        patch.save(str(patch_file), format='bmp')
+        self.patches.to_csv()
+        self.update_patch()
+        # Everything well done
+        self.viewer.mouse_color_transition(QColor(Qt.green))
 
 
 class QLabelWidget(QWidget):
@@ -321,7 +303,7 @@ class QLabelWidget(QWidget):
         super(QLabelWidget, self).__init__(parent)
         self.pathologies = pathologies
         self.settings = settings
-        self.default_value = len(pathologies)-1
+        self.default_value = len(pathologies) - 1
         self.init_gui()
 
     def change_mode(self, current, previous):
@@ -355,14 +337,14 @@ class QLabelWidget(QWidget):
         patch_layout.addWidget(self.table)
 
     def send_image(self, data):
-        current = data['Label']
+        current = data.get('Label', 'NA')
         try:
             index = self.pathologies.index(current)
         except:
             index = self.default_value
         self.table.selectRow(index)
 
-    def send_patient(self, data):
+    def send_images(self, data):
         values = data['Label'].value_counts()
         for index, label in enumerate(self.pathologies):
             self.table.setItem(index, 2, QTableWidgetItem('{count}'.format(count=values.get(label, 0))))
@@ -373,7 +355,7 @@ class QLabelWidget(QWidget):
     def update_color(self, current_label):
         color_tuple = self.settings.get_color(current_label)
         qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
-        self.table.setStyleSheet('QTableView{selection-background-color: '+qcolor.name()+'}')
+        self.table.setStyleSheet('QTableView{selection-background-color: ' + qcolor.name() + '}')
 
 
 class QPatchWidget(QWidget):
@@ -426,6 +408,18 @@ class QPatchWidget(QWidget):
         color_tuple = self.settings.get_color(label)
         return QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
 
+    def get_mode(self):
+        return self.mode.currentText()
+
+    def get_patch_selected(self, is_index=True):
+        if is_index:
+            return self.table.currentRow()
+        else:
+            return self.table.currentRow()
+
+    def get_size(self):
+        return self.size.value()
+
     def row_changed(self, current, previous):
         if current.row() == -1:
             return
@@ -438,12 +432,14 @@ class QPatchWidget(QWidget):
         if key < self.mode.count():
             self.mode.setCurrentIndex(key)
 
-    def send_patches(self, data):
+    def send_patches(self, patches):
+        # Empty the table
         self.table.setRowCount(0)
-        if len(data) == 0:
+        # Check data is valid
+        if patches is None or len(patches) == 0:
             return
-        self.table.setRowCount(len(data))
-        for index, (rindex, row) in enumerate(data.iterrows()):
+        self.table.setRowCount(len(patches))
+        for index, (rindex, row) in enumerate(patches.iterrows()):
             # Get current label
             current_label = row['Label']
             # Get current color
@@ -451,6 +447,7 @@ class QPatchWidget(QWidget):
             # Create table items
             item = QTableWidgetItem('{center}'.format(center=row['Center_X']))
             item.setBackground(qcolor)
+            item.setData(0, row.name)
             self.table.setItem(index, 0, item)
             item = QTableWidgetItem('{center}'.format(center=row['Center_Y']))
             item.setBackground(qcolor)
@@ -551,10 +548,10 @@ class QtImageViewer(QGraphicsView):
         Without any arguments, loadImageFromFile() will popup a file dialog to choose the image file.
         With a fileName argument, loadImageFromFile(fileName) will attempt to load the specified image file directly.
         """
-        if path is None or len(path) == 0 or not isfile(path):
+        if path is None or not path.is_file():
             self.setImage(QImage())
         else:
-            image = QImage(path)
+            image = QImage(str(path))
             self.setImage(image)
 
     def pixmap(self):
@@ -585,6 +582,9 @@ class QtImageViewer(QGraphicsView):
         self.updateViewer()
 
     def set_current_patch(self, index):
+        # Checks
+        if index == -1:
+            return
         # Delete brush
         no_brush = QBrush()
         for item in self.patches.childItems():
@@ -600,8 +600,8 @@ class QtImageViewer(QGraphicsView):
             self.patches.removeFromGroup(patch)
         # Create new items
         for patch in patches:
-            patch_item = QGraphicsRectItem(patch[0]-(patch[2]/2), patch[1]-(patch[2]/2), patch[2], patch[2])
-            patch_item.setPen(QPen(patch[3], 4, Qt.SolidLine))
+            patch_item = QGraphicsRectItem(patch[0] - (patch[2] / 2), patch[1] - (patch[2] / 2), patch[2], patch[2])
+            patch_item.setPen(QPen(patch[3], 6, Qt.SolidLine))
             self.patches.addToGroup(patch_item)
 
     def updateViewer(self):

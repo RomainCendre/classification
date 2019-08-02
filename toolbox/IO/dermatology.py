@@ -28,19 +28,16 @@ class Reader:
     @staticmethod
     def scan_subfolder(subdir, parameters={}):
         # Read patient and images data
-        metas = Reader.__read_patient_file(subdir)
+        metas = Reader.read_patient_file(subdir)
         metas = metas.drop(columns='ID_JLP', errors='ignore')
-        images = Reader.__read_images_file(subdir)
+        images = Reader.read_images_file(subdir, modality=parameters.get('modality', None))
         images = images.drop(columns='Depth(um)', errors='ignore')
 
         # Patch filter
         if parameters.get('patches', True):
-            patches = Reader.__read_patches_file(subdir)
+            patches = Reader.read_patches_file(subdir, modality=parameters.get('modality', None))
         else:
             patches = None
-
-        # Modality filter
-        modality = parameters.get('modality', None)
 
         # Merge both
         images['ID'] = metas['ID'][0]
@@ -48,9 +45,6 @@ class Reader:
         images['Reference'] = images.apply(
             lambda row: '{patient}_{image}_F'.format(patient=row['ID'], image=row.name), axis=1)
         images['Source'] = images['Reference']
-        # Filter images
-        if modality is not None:
-            images = images[images.Modality == modality]
 
         if patches is not None:
             patches['ID'] = metas['ID'][0]
@@ -59,25 +53,27 @@ class Reader:
                 lambda row: '{patient}_{image}_P'.format(patient=row['ID'], image=row.name), axis=1)
             patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0],
                                               axis=1)
-            # Filter patches
-            if modality is not None:
-                patches = patches[patches.Modality == modality]
         return pandas.concat([images, patches], sort=False)
 
     @staticmethod
-    def __read_images_file(subdir):
+    def read_images_file(subdir, modality=None):
         # Patient file
         images_file = subdir/'images.csv'
-
+        # Folder name
+        folder_name = subdir.name
         # Read csv and add tag for path
         images = pandas.read_csv(images_file, dtype=str)
         images = images.reindex(index=order_by_index(images.index, index_natsorted(images.Path)))
         images['Full_Path'] = images.apply(lambda row: str(subdir/row['Modality']/row['Path']), axis=1)
         images['Type'] = 'Full'
+        images['Reference2'] = images.apply(
+            lambda row: Reader.filter_str('{id}_{image}'.format(id=folder_name, image=row['Path'])), axis=1)
+        if modality is not None:
+            images = images[images.Modality == modality]
         return images
 
     @staticmethod
-    def __read_patches_file(subdir):
+    def read_patches_file(subdir, modality=None, source=None):
         # Patient file
         patch_file = subdir/'patches.csv'
         if not patch_file.is_file():
@@ -87,12 +83,20 @@ class Reader:
         patches = pandas.read_csv(patch_file, dtype=str)
         patches['Full_Path'] = patches.apply(lambda row: str(subdir/'patches'/row['Path']), axis=1)
         patches['Type'] = 'Patch'
+        if modality is not None:
+            patches = patches[patches.Modality == modality]
+        if source is not None:
+            patches = patches[patches.Source == source]
         return patches
 
     @staticmethod
-    def __read_patient_file(folder_path):
+    def read_patient_file(folder_path):
         # Patient file
         return pandas.read_csv(folder_path/'patient.csv', dtype=str)
+
+    @staticmethod
+    def filter_str(my_string):
+        return ''.join([c if c.isalnum() else '_' for c in my_string])
 
 
 class Generator:
