@@ -83,11 +83,10 @@ class QPatchExtractor(QMainWindow):
         self.setCentralWidget(global_widget)
 
     def change_image(self, move):
-        length = len(self.images)
-        if length == 0 or move is None:
+        if self.images is None or len(self.images) == 0 or move is None:
             self.image_index = 0
         else:
-            self.image_index = (self.image_index + move) % length
+            self.image_index = (self.image_index + move) % len(self.images)
         # Open patches
         self.open_patches()
         # Send data to components
@@ -116,6 +115,7 @@ class QPatchExtractor(QMainWindow):
         # Start by closing previous df
         self.close_images()
         self.close_patches()
+        self.close_patient()
         # Change patient
         length = len(self.patients_directories)
         self.patient_index = (self.patient_index + move) % length
@@ -131,18 +131,23 @@ class QPatchExtractor(QMainWindow):
         # Acquire image and it to dataframe
         self.write_patch(x, y)
 
-    def close_images(self):
-        if self.images is not None:
-            self.images.to_csv(self.get_patient_folder()/'images.csv', index=False)
+    def close_images(self, save=True):
+        if self.images is not None and save:
+            self.images.drop(columns=['Full_Path', 'Type', 'Reference2'], errors='ignore').to_csv(self.get_patient_folder()/'images.csv', index=False)
+        self.images = None
 
     def close_patches(self, save=False):
         if self.patches is not None and save:
             self.patches.drop(columns=['Full_Path', 'Type'], errors='ignore').to_csv(self.get_patient_folder()/'patches.csv', index=False)
         self.patches = None
 
+    def close_patient(self):
+        self.patient = None
+
     def closeEvent(self, event):
         self.close_images()
         self.close_patches()
+        self.close_patient()
         super().closeEvent(event)
 
     def delete_patch(self):
@@ -262,8 +267,9 @@ class QPatchExtractor(QMainWindow):
         self.label_widget.send_images(self.images)
         # Update image
         if self.images is None:
-            return
-        self.image_bar.setRange(0, len(self.images) - 1)
+            self.image_bar.setRange(0, 0)
+        else:
+            self.image_bar.setRange(0, len(self.images) - 1)
 
     def write_patch(self, x, y):
         # Get patch
@@ -354,9 +360,18 @@ class QLabelWidget(QWidget):
         self.table.selectRow(index)
 
     def send_images(self, data):
-        values = data['Label'].value_counts()
+        # Count occurences
+        if data is None:
+            values = None
+        else:
+            values = data['Label'].value_counts()
+        # Now fill fields
         for index, label in enumerate(self.pathologies):
-            self.table.setItem(index, 2, QTableWidgetItem('{count}'.format(count=values.get(label, 0))))
+            if values is None:
+                value = 0
+            else:
+                value = values.get(label, 0)
+            self.table.setItem(index, 2, QTableWidgetItem('{value}'.format(value=value)))
 
     def send_key(self, key):
         self.table.selectRow(key)

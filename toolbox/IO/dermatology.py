@@ -63,6 +63,8 @@ class Reader:
         folder_name = subdir.name
         # Read csv and add tag for path
         images = pandas.read_csv(images_file, dtype=str)
+        if len(images) == 0:
+            return None
         images = images.reindex(index=order_by_index(images.index, index_natsorted(images.Path)))
         images['Full_Path'] = images.apply(lambda row: str(subdir/row['Modality']/row['Path']), axis=1)
         images['Type'] = 'Full'
