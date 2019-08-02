@@ -94,7 +94,7 @@ class QPatchExtractor(QMainWindow):
         # Send data to components
         self.label_widget.send_image(self.get_image_data())
         self.patch_widget.send_patches(self.get_patches_data())
-        self.viewer.set_patches(self.get_patches_location())
+        self.viewer.set_patches(self.get_patches_draw())
         self.update_image()
 
     def change_image_label(self, label):
@@ -111,13 +111,13 @@ class QPatchExtractor(QMainWindow):
         mode = self.get_mode()
         # Actions depend on mode
         if mode == QPatchExtractor.LABEL:
-            self.viewer.change_selection_state(False)
+            self.viewer.change_mouse_state(False)
         else:
-            self.viewer.change_selection_state(True)
+            self.viewer.change_mouse_state(True)
 
-    def change_patch(self, index, color):
+    def change_patch(self, index):
         self.patch_index = index
-        self.viewer.set_current_patch(index, color)
+        self.viewer.set_current_patch(index)
 
     def change_patient(self, move):
         # Start by closing previous df
@@ -181,6 +181,10 @@ class QPatchExtractor(QMainWindow):
         # Extract patch
         return raw_image.copy(patch_rect)
 
+    def get_color(self, label):
+        color_tuple = self.settings.get_color(label)
+        return QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
+
     def get_dataframe(self, type_filter=None):
         if type_filter is None:
             return self.dataframe
@@ -213,11 +217,12 @@ class QPatchExtractor(QMainWindow):
         current_image = self.get_image_data()
         return dataframe[dataframe['Source'] == current_image['Reference']]
 
-    def get_patches_location(self):
+    def get_patches_draw(self):
         dataframe = self.get_patches_data()
         patches = []
         for index, row in dataframe.iterrows():
-            patches.append((int(row['Center_X']), int(row['Center_Y']), int(row['Width'])))
+            patches.append((int(row['Center_X']), int(row['Center_Y']),
+                            int(row['Width']), self.get_color(row['Label'])))
         return patches
 
     def get_patient(self):
@@ -374,7 +379,7 @@ class QLabelWidget(QWidget):
 class QPatchWidget(QWidget):
     # Signals
     changed_patch_size = pyqtSignal(int)
-    changed_patch_selection = pyqtSignal(int, QColor)
+    changed_patch_selection = pyqtSignal(int)
     changed_mode = pyqtSignal(QColor)
 
     def __init__(self, parent, pathologies, settings):
@@ -424,7 +429,7 @@ class QPatchWidget(QWidget):
     def row_changed(self, current, previous):
         if current.row() == -1:
             return
-        self.changed_patch_selection.emit(current.row(), self.get_color(self.table.item(current.row(), 3).text()))
+        self.changed_patch_selection.emit(current.row())
 
     def mode_changed(self, mode):
         self.changed_mode.emit(self.get_color(self.pathologies[mode]))
@@ -475,10 +480,9 @@ class QtImageViewer(QGraphicsView):
         QGraphicsView.__init__(self)
         # Image is displayed as a QPixmap in a QGraphicsScene attached to this QGraphicsView.
         self.scene = QGraphicsScene()
-        self.patch_color = QColor(Qt.white)
-        self.mouse_color = QColor(Qt.blue)
+        self.default_color = QColor(Qt.blue)
         self.mouse_rect = QGraphicsRectItem(-25, -25, 50, 50)
-        self.mouse_rect.setPen(QPen(self.mouse_color, 6, Qt.DotLine))
+        self.mouse_rect.setPen(QPen(self.default_color, 6, Qt.DotLine))
         self.patches = QGraphicsItemGroup()
         self.scene.addItem(self.patches)
         self.scene.addItem(self.mouse_rect)
@@ -493,16 +497,16 @@ class QtImageViewer(QGraphicsView):
         # Stack of QRectF zoom boxes in scene coordinates.
         self.zoomStack = []
         # Flags for enabling/disabling mouse interaction.
-        self.selection_state = True
+        self.mouse_state = True
         self.setMouseTracking(True)
 
     def change_mouse_color(self, color):
         self.mouse_color = color
         self.mouse_rect.setPen(QPen(self.mouse_color, 6, Qt.DotLine))
 
-    def change_selection_state(self, enable=True):
-        self.selection_state = enable
-        if self.selection_state:
+    def change_mouse_state(self, enable=True):
+        self.mouse_state = enable
+        if self.mouse_state:
             self.mouse_rect.show()
             self.patches.show()
         else:
@@ -533,7 +537,7 @@ class QtImageViewer(QGraphicsView):
         return None
 
     def mouse_color_transition(self, color):
-        if self.selection_state:
+        if self.mouse_state:
             self.animation = QPropertyAnimation(self, b'pcolor')
             self.animation.setDuration(1000)
             self.animation.setStartValue(color)
@@ -580,12 +584,15 @@ class QtImageViewer(QGraphicsView):
         self.setSceneRect(QRectF(pixmap.rect()))  # Set scene size to image size.
         self.updateViewer()
 
-    def set_current_patch(self, index, color):
-        # Default color items
-        for patch in self.patches.childItems():
-            patch.setPen(QPen(self.patch_color, 4, Qt.SolidLine))
-        # Set selection
-        self.patches.childItems()[index].setPen(QPen(color, 8, Qt.SolidLine))
+    def set_current_patch(self, index):
+        # Delete brush
+        no_brush = QBrush()
+        for item in self.patches.childItems():
+            item.setBrush(no_brush)
+        # Create one for selection
+        color = QColor(self.default_color)
+        color.setAlphaF(0.25)
+        self.patches.childItems()[index].setBrush(QBrush(color))
 
     def set_patches(self, patches):
         # Delete patches items
@@ -594,7 +601,7 @@ class QtImageViewer(QGraphicsView):
         # Create new items
         for patch in patches:
             patch_item = QGraphicsRectItem(patch[0]-(patch[2]/2), patch[1]-(patch[2]/2), patch[2], patch[2])
-            patch_item.setPen(QPen(self.patch_color, 4, Qt.SolidLine))
+            patch_item.setPen(QPen(patch[3], 4, Qt.SolidLine))
             self.patches.addToGroup(patch_item)
 
     def updateViewer(self):
