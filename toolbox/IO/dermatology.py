@@ -81,6 +81,9 @@ class Reader:
 
         # Read csv and add tag for path
         patches = pandas.read_csv(patch_file, dtype=str)
+        if len(patches) == 0:
+            return None
+        # Customize patch table
         patches['Full_Path'] = patches.apply(lambda row: str(subdir/'patches'/row['Path']), axis=1)
         patches['Type'] = 'Patch'
         if modality is not None:
