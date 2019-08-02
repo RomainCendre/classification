@@ -73,7 +73,7 @@ class Reader:
         return images
 
     @staticmethod
-    def read_patches_file(subdir, modality=None, source=None):
+    def read_patches_file(subdir, modality=None):
         # Patient file
         patch_file = subdir/'patches.csv'
         if not patch_file.is_file():
@@ -85,8 +85,6 @@ class Reader:
         patches['Type'] = 'Patch'
         if modality is not None:
             patches = patches[patches.Modality == modality]
-        if source is not None:
-            patches = patches[patches.Source == source]
         return patches
 
     @staticmethod

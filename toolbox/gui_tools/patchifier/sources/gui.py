@@ -114,7 +114,8 @@ class QPatchExtractor(QMainWindow):
 
     def change_patient(self, move):
         # Start by closing previous df
-        self.close_dataframe()
+        self.close_images()
+        self.close_patches()
         # Change patient
         length = len(self.patients_directories)
         self.patient_index = (self.patient_index + move) % length
@@ -130,28 +131,24 @@ class QPatchExtractor(QMainWindow):
         # Acquire image and it to dataframe
         self.write_patch(x, y)
 
-    def close_dataframe(self):
-        # TODO
-        file = None  # self.get_dataframe()
-        if not file:
-            return
+    def close_images(self):
+        if self.images is not None:
+            self.images.to_csv(self.get_patient_folder()/'images.csv', index=False)
 
-        if self.dataframe is None:
-            return
-
-        folder = self.get_current_folder()
-        folder.mkdir(exist_ok=True)
-
-        self.dataframe.to_csv(file, index=False)
+    def close_patches(self):
+        if self.patches is not None:
+            self.patches.to_csv(self.get_patient_folder()/'patches.csv', index=False)
 
     def closeEvent(self, event):
-        self.close_dataframe()
+        self.close_images()
+        self.close_patches()
         super().closeEvent(event)
 
     def delete_patch(self):
         index = self.patch_widget.get_patch_selected()
         self.patches = self.patches.drop(self.patches.index[index])
-        # TODO write patch
+        self.close_patches()
+        self.open_patches()
         self.update_patch()
 
     def extract_patch(self, x, y):
@@ -180,19 +177,25 @@ class QPatchExtractor(QMainWindow):
             return pd.Series()
         return self.images.iloc[self.image_index]
 
+    def get_patches(self):
+        if self.patches is None:
+            return None
+        return self.patches[self.patches.Source == self.get_image().get('Path', 'NA')]
+
     def get_mode(self):
         return self.annotate_widget.currentIndex()
 
     def get_patches_draw(self):
-        patches = []
+        patches = self.get_patches()
+        patches_draw = []
         # If not patches found return
-        if self.patches is None:
-            return patches
+        if patches is None:
+            return patches_draw
         # Else construct patches
-        for index, row in self.patches.iterrows():
-            patches.append((int(row['Center_X']), int(row['Center_Y']),
-                            int(row['Width']), self.get_color(row['Label'])))
-        return patches
+        for index, row in patches.iterrows():
+            patches_draw.append((int(row['Center_X']), int(row['Center_Y']),
+                                 int(row['Width']), self.get_color(row['Label'])))
+        return patches_draw
 
     def get_patient_folder(self):
         return self.patients_directories[self.patient_index]
@@ -220,8 +223,7 @@ class QPatchExtractor(QMainWindow):
 
     def open_patches(self):
         self.patches = dermatology.Reader.read_patches_file(self.get_patient_folder(),
-                                                            modality='Microscopy',
-                                                            source=self.get_image().get('Path', None))
+                                                            modality='Microscopy')
 
     def reset_image(self):
         self.change_image(None)
@@ -241,7 +243,7 @@ class QPatchExtractor(QMainWindow):
         self.viewer.loadImage(Path(self.get_image().get('Full_Path', '')))
 
     def update_patch(self):
-        self.patch_widget.send_patches(self.patches)
+        self.patch_widget.send_patches(self.get_patches())
         self.viewer.set_patches(self.get_patches_draw())
 
     def update_patient(self):
@@ -286,10 +288,13 @@ class QPatchExtractor(QMainWindow):
         patch_data['Label'] = self.patch_widget.get_mode()
         patch_data['Source'] = self.get_image().get('Path', 'NA')
         if self.patches is None:
-            self.patches = pd.DataFrame()
-        self.patches = self.patches.append(patch_data, ignore_index=True)
+            self.patches = patch_data.to_frame().transpose()
+        else:
+            self.patches = self.patches.append(patch_data, ignore_index=True)
         patch.save(str(patch_file), format='bmp')
-        self.patches.to_csv()
+        # Save and reload
+        self.close_patches()
+        self.open_patches()
         self.update_patch()
         # Everything well done
         self.viewer.mouse_color_transition(QColor(Qt.green))
