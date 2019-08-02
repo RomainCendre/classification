@@ -135,9 +135,10 @@ class QPatchExtractor(QMainWindow):
         if self.images is not None:
             self.images.to_csv(self.get_patient_folder()/'images.csv', index=False)
 
-    def close_patches(self):
-        if self.patches is not None:
+    def close_patches(self, save=False):
+        if self.patches is not None and save:
             self.patches.drop(columns=['Full_Path', 'Type'], errors='ignore').to_csv(self.get_patient_folder()/'patches.csv', index=False)
+        self.patches = None
 
     def closeEvent(self, event):
         self.close_images()
@@ -146,9 +147,11 @@ class QPatchExtractor(QMainWindow):
 
     def delete_patch(self):
         index = self.patches.index[self.patch_widget.get_patch_selected()]
+        # Delete patch and row
         Path(self.patches.loc[index, 'Full_Path']).unlink()
         self.patches = self.patches.drop(index)
-        self.close_patches()
+        # Close and reopen file
+        self.close_patches(save=True)
         self.open_patches()
         self.update_patch()
 
@@ -294,7 +297,7 @@ class QPatchExtractor(QMainWindow):
             self.patches = self.patches.append(patch_data, ignore_index=True)
         patch.save(str(patch_file), format='bmp')
         # Save and reload
-        self.close_patches()
+        self.close_patches(save=True)
         self.open_patches()
         self.update_patch()
         # Everything well done
