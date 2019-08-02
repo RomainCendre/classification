@@ -145,8 +145,9 @@ class QPatchExtractor(QMainWindow):
         super().closeEvent(event)
 
     def delete_patch(self):
-        index = self.patch_widget.get_patch_selected()
-        self.patches = self.patches.drop(self.patches.index[index])
+        index = self.patches.index[self.patch_widget.get_patch_selected()]
+        Path(self.patches.loc[index, 'Full_Path']).unlink()
+        self.patches = self.patches.drop(index)
         self.close_patches()
         self.open_patches()
         self.update_patch()
