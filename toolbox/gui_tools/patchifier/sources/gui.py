@@ -91,7 +91,7 @@ class QPatchExtractor(QMainWindow):
         self.open_patches()
         # Send data to components
         self.label_widget.send_image(self.get_image())
-        self.patch_widget.send_patches(self.patches)
+        self.patch_widget.send_patches(self.get_patches())
         self.viewer.set_patches(self.get_patches_draw())
         self.update_image()
 
