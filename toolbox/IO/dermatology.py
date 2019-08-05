@@ -239,54 +239,52 @@ class DataManager:
         images = []
         microscopy_labels = rcm_data[rcm_data['ID_RCM'] == source_id]
         microscopy_folder = self.microscopy_folder/source_id
+        # Get all microscopy location
+        remains_images = [str(file.relative_to(microscopy_folder)) for file in microscopy_folder.glob('**/*.bmp')]
+        sorted_images = {'Draw': []}
+        # Identify images and their label
         for ind, row_label in microscopy_labels.iterrows():
-            # Prepare if needed sub folders
-            if pandas.isna(row_label['Folder']):
-                microscopy_subfolder = microscopy_folder
-                output_subfolder = output_folder
-            else:
-                microscopy_subfolder = microscopy_folder/row_label['Folder']
-                output_subfolder = output_folder/row_label['Folder']
-                output_subfolder.mkdir(exist_ok=True)
-
-            # Browse different labels...
-            for label in self.labels:
-                # If label doesn't contains images
+            # Browse different labels
+            for label in self.labels:# If label doesn't contains images
                 if pandas.isna(row_label[label]):
                     continue
+                referenced_images = DataManager.ref_to_images(row_label[label])
+                sorted_images[label] = referenced_images
+                remains_images = [item for item in remains_images if item not in referenced_images]
+        sorted_images['Draw'].extend(remains_images)
+        # Now browse all categories
+        for label, images_references in sorted_images.items():
+            for image_reference in images_references:
+                # Construct source and destination file path
+                source_file = microscopy_folder/image_reference
+                if not source_file.is_file():
+                    print('Not existing {source}'.format(source=source_file))
+                    continue
+                output_file = output_folder/image_reference
+                output_file.parent.mkdir(parents=True, exist_ok=True)
 
-                images_refs = DataManager.ref_to_images(row_label[label])
-                # .. then images
-                for images_ref in images_refs:
-                    # Construct source and destination file path
-                    source_file = microscopy_subfolder/images_ref
-                    if not source_file.is_file():
-                        print('Not existing {source}'.format(source=source_file))
-                        continue
-                    output_file = output_subfolder/images_ref
+                # Open image
+                raw_image = Image.open(source_file)
+                width = raw_image.size[0]
+                height = raw_image.size[1]
 
-                    # Open image
-                    raw_image = Image.open(source_file)
-                    width = raw_image.size[0]
-                    height = raw_image.size[1]
+                # Try to read optical informations
+                if height == 1000:  # Non-OCR version
+                    image = raw_image
+                    digits = '0.0'
+                else:  # OCR version
+                    # digits = DataManager.read_ocr(raw_image.crop((18, height - 25, 100, height)))
+                    digits = '0.0'
+                    image = raw_image.crop((0, 0, width, height - 45))
 
-                    # Try to read optical informations
-                    if height == 1000:  # Non-OCR version
-                        image = raw_image
-                        digits = '0.0'
-                    else:  # OCR version
-                        # digits = DataManager.read_ocr(raw_image.crop((18, height - 25, 100, height)))
-                        digits = '0.0'
-                        image = raw_image.crop((0, 0, width, height - 45))
-
-                    image.save(output_file, "BMP")
-                    width, height = image.size
-                    images.append({'Modality': 'Microscopy',
-                                   'Path': output_file.relative_to(output_folder).as_posix(),
-                                   'Label': label,
-                                   'Depth(um)': digits,
-                                   'Height': height,
-                                   'Width': width})
+                image.save(output_file, "BMP")
+                width, height = image.size
+                images.append({'Modality': 'Microscopy',
+                               'Path': output_file.relative_to(output_folder).as_posix(),
+                               'Label': label,
+                               'Depth(um)': digits,
+                               'Height': height,
+                               'Width': width})
         return images
 
     def launch_converter(self, output_folder, excluded_meta):
