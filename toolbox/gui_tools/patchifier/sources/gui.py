@@ -98,11 +98,11 @@ class QPatchExtractor(QMainWindow):
     def change_image_label(self, label):
         image = self.get_image()
         # Check everything is fine and needed
-        if len(image) == 0 or image['Label'] == label:
-            return
-        self.images.loc[image.name, 'Label'] = label
-        # Send data to components
-        self.label_widget.send_images(self.images)
+        if not (len(image) == 0 or image['Label'] == label):
+            self.images.loc[image.name, 'Label'] = label
+            # Send data to components
+            self.label_widget.send_images(self.images)
+        self.change_image(1)
 
     def change_mode(self):
         # Actions depend on mode
@@ -321,10 +321,12 @@ class QLabelWidget(QWidget):
         self.default_value = len(pathologies) - 1
         self.init_gui()
 
-    def change_mode(self, current, previous):
-        current_label = self.pathologies[current.row()]
-        self.update_color(current_label)
-        self.change_label.emit(current_label)
+    def change_mode(self, index):
+        self.update_color(index)
+        self.change_label.emit(self.pathologies[index])
+
+    def event_changed(self, current, previous):
+        self.change_mode(current.row())
 
     def init_gui(self):
         # Then build annotation tool
@@ -346,8 +348,7 @@ class QLabelWidget(QWidget):
         vheader.hide()
         vheader.setStretchLastSection(True)
         # Connect to changes
-        self.table.selectionModel().currentRowChanged.connect(self.change_mode)
-
+        self.table.selectionModel().currentRowChanged.connect(self.event_changed, Qt.QueuedConnection)
         patch_layout = QVBoxLayout(self)
         patch_layout.addWidget(self.table)
 
@@ -357,7 +358,10 @@ class QLabelWidget(QWidget):
             index = self.pathologies.index(current)
         except:
             index = self.default_value
+        self.table.selectionModel().blockSignals(True)
         self.table.selectRow(index)
+        self.update_color(index)
+        self.table.selectionModel().blockSignals(False)
 
     def send_images(self, data):
         # Count occurences
@@ -374,10 +378,14 @@ class QLabelWidget(QWidget):
             self.table.setItem(index, 2, QTableWidgetItem('{value}'.format(value=value)))
 
     def send_key(self, key):
+        # self.table.selectRow(key)
+        self.table.selectionModel().blockSignals(True)
         self.table.selectRow(key)
+        self.table.selectionModel().blockSignals(False)
+        self.change_mode(key)
 
-    def update_color(self, current_label):
-        color_tuple = self.settings.get_color(current_label)
+    def update_color(self, index):
+        color_tuple = self.settings.get_color(self.pathologies[index])
         qcolor = QColor.fromRgbF(color_tuple[0], color_tuple[1], color_tuple[2], 0.75)
         self.table.setStyleSheet('QTableView{selection-background-color: ' + qcolor.name() + '}')
 
