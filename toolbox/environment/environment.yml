@@ -21,5 +21,3 @@ dependencies:
     - pywavelets==1.0.1
     - scikit-image==0.14.1
     - textile==3.0.3
-
-prefix: C:\ProgramData\Anaconda3\envs\Skin
