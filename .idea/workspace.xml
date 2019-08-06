@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py" description="self.table.setStyleSheet('QTableView{selection-bac..." line="386" />
+    <bookmark url="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" description="self.table.setStyleSheet('QTableView{selection-bac..." line="386" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/patchifier/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/patchifier/images/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/images/icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/patchifier/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,7 +23,7 @@
     <SUITE FILE_PATH="coverage/classification$gui.coverage" NAME="gui Coverage Results" MODIFIED="1564491253767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources" />
     <SUITE FILE_PATH="coverage/classification$multiscale_features.coverage" NAME="multiscale_features Coverage Results" MODIFIED="1562166368435" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
     <SUITE FILE_PATH="coverage/classification$test_experiments.coverage" NAME="test_experiments Coverage Results" MODIFIED="1559894677583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
-    <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1565012226879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier" />
+    <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1565012290621" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier" />
     <SUITE FILE_PATH="coverage/classification$score_level.coverage" NAME="score_level Coverage Results" MODIFIED="1557316745744" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$features_level.coverage" NAME="features_level Coverage Results" MODIFIED="1559638826584" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$descriptors.coverage" NAME="descriptors Coverage Results" MODIFIED="1563264286240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
@@ -50,10 +55,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py">
+        <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
-              <caret line="384" column="28" selection-start-line="384" selection-start-column="28" selection-end-line="384" selection-end-column="28" />
+            <state relative-caret-position="509">
+              <caret line="390" lean-forward="true" selection-start-line="390" selection-end-line="390" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -62,9 +67,27 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/patchifier/main.py">
+        <entry file="file://$PROJECT_DIR$/toolbox/environment/environmentGPU.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
+            <state relative-caret-position="68">
+              <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/toolbox/environment/environment.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="23" selection-start-line="23" selection-end-line="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
               <caret line="22" selection-start-line="22" selection-end-line="22" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -143,8 +166,6 @@
         <option value="$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh" />
         <option value="$PROJECT_DIR$/experiments/cluster_local/tasks" />
         <option value="$PROJECT_DIR$/experiments/cluster_local/config_cluster.sh" />
-        <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
-        <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
         <option value="$PROJECT_DIR$/experiments/dermatology/prepare.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/multimodal/simple_cascade.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/autoencoder.py" />
@@ -176,12 +197,14 @@
         <option value="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/temp.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py" />
+        <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
+        <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1670" />
-    <option name="y" value="-370" />
+    <option name="x" value="-2110" />
+    <option name="y" value="-369" />
     <option name="width" value="1455" />
     <option name="height" value="780" />
   </component>
@@ -190,7 +213,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -282,14 +304,14 @@
               <item name="classification" type="462c0819:PsiDirectoryNode" />
               <item name="toolbox" type="462c0819:PsiDirectoryNode" />
               <item name="gui_tools" type="462c0819:PsiDirectoryNode" />
-              <item name="patchifier" type="462c0819:PsiDirectoryNode" />
+              <item name="annotate_tool" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
               <item name="classification" type="462c0819:PsiDirectoryNode" />
               <item name="toolbox" type="462c0819:PsiDirectoryNode" />
               <item name="gui_tools" type="462c0819:PsiDirectoryNode" />
-              <item name="patchifier" type="462c0819:PsiDirectoryNode" />
+              <item name="annotate_tool" type="462c0819:PsiDirectoryNode" />
               <item name="sources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -302,6 +324,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -522,13 +545,8 @@
       <workItem from="1564725805381" duration="31485000" />
       <workItem from="1564821034298" duration="5820000" />
       <workItem from="1564985488442" duration="14414000" />
-    </task>
-    <task id="LOCAL-00106" summary="Fix missing debug.">
-      <created>1561978427808</created>
-      <option name="number" value="00106" />
-      <option name="presentableId" value="LOCAL-00106" />
-      <option name="project" value="LOCAL" />
-      <updated>1561978427808</updated>
+      <workItem from="1565016799142" duration="631000" />
+      <workItem from="1565079288626" duration="693000" />
     </task>
     <task id="LOCAL-00107" summary="Adding AE experiments.">
       <created>1561992107613</created>
@@ -866,7 +884,14 @@
       <option name="project" value="LOCAL" />
       <updated>1564994286792</updated>
     </task>
-    <option name="localTasksCounter" value="155" />
+    <task id="LOCAL-00155" summary="Remove prefix from envs files.">
+      <created>1565016872631</created>
+      <option name="number" value="00155" />
+      <option name="presentableId" value="LOCAL-00155" />
+      <option name="project" value="LOCAL" />
+      <updated>1565016872632</updated>
+    </task>
+    <option name="localTasksCounter" value="156" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -902,7 +927,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="571882000" />
+    <option name="totallyTimeSpent" value="573206000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -917,7 +942,7 @@
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8973747" visible="true" weight="0.25074926" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8973747" visible="true" weight="0.25674325" />
       <window_info id="Structure" order="1" sideWeight="0.102625296" side_tool="true" weight="0.24575424" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3286119" />
@@ -938,7 +963,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.17132868" />
+      <window_info active="true" anchor="right" id="SciView" order="3" visible="true" weight="0.17132868" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
@@ -986,7 +1011,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update viewer component." />
     <MESSAGE value="Disable click event." />
     <MESSAGE value="Add modification of label" />
     <MESSAGE value="Fix bug on gui tool and order image by natural sort." />
@@ -1011,7 +1035,8 @@
     <MESSAGE value="Update labelize way." />
     <MESSAGE value="Fix patch list." />
     <MESSAGE value="Fix preparation of data." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix preparation of data." />
+    <MESSAGE value="Remove prefix from envs files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove prefix from envs files." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1116,23 +1141,6 @@ for label in self.labels:
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/tempfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="290" column="4" selection-start-line="290" selection-start-column="4" selection-end-line="290" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/prepare.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="6" column="50" selection-start-line="6" selection-start-column="50" selection-end-line="7" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/multimodal/simple_cascade.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="373">
@@ -1503,9 +1511,9 @@ for label in self.labels:
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/patchifier/main.py">
+    <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
+        <state relative-caret-position="255">
           <caret line="22" selection-start-line="22" selection-end-line="22" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -1513,10 +1521,24 @@ for label in self.labels:
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources/gui.py">
+    <entry file="file://$PROJECT_DIR$/toolbox/environment/environmentGPU.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="384" column="28" selection-start-line="384" selection-start-column="28" selection-end-line="384" selection-end-column="28" />
+        <state relative-caret-position="68">
+          <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/environment/environment.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="509">
+          <caret line="390" lean-forward="true" selection-start-line="390" selection-end-line="390" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>

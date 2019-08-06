@@ -5,7 +5,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 
 from toolbox.core.parameters import BuiltInSettings
-from toolbox.gui_tools.patchifier.sources.gui import QPatchExtractor
+from toolbox.gui_tools.annotate_tool.sources.gui import QPatchExtractor
 
 if __name__ == '__main__':
 
