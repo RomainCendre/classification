@@ -104,63 +104,57 @@ class Reader:
 
 class Generator:
 
-    def __init__(self, nb_spectra, nb_patients):
-        self.nb_spectra = nb_spectra
+    def __init__(self, nb_images, nb_patients):
+        self.nb_images = nb_images
         self.nb_patients = nb_patients
 
     def generate_study(self):
-        random_patient = list(np.random.randint(3, size=self.nb_patients))
+        random_patient = list(np.random.randint(low=1, high=3, size=self.nb_patients))
         patients = []
         for index, random in enumerate(random_patient):
             patient = self.generate_patient(random)
-            patient['patient'] = index
-            patient['operateur'] = 'V0'
+            patient['ID'] = index
+            patient['Reference'] = patient.apply(lambda row: '{patient}_{image}_F'.format(patient=row['ID'],
+                                                                                          image=row.name), axis=1)
             patients.append(patient)
 
         patients = pandas.concat(patients, sort=False, ignore_index=True)
-        patients['Reference'] = patients.apply(lambda row: '{patient}'.format(patient=row['patient']),
-                                               axis=1)
-
-        patients['Reference_spectrum'] = patients.apply(
-            lambda row: '{reference}_{spectrum}'.format(reference=row['Reference'],
-                                                        spectrum=row['spectrum_id']), axis=1)
         return patients
 
     def generate_patient(self, mode):
-        random_data = list(np.random.randint(mode + 1, size=np.random.randint(self.nb_spectra[0], self.nb_spectra[1])))
+        random_data = list(np.random.randint(mode + 1, size=np.random.randint(self.nb_images[0], self.nb_images[1])))
         data = []
         for index, random in enumerate(random_data):
-            datum = self.generate_spectrum(random)
-            datum['spectrum_id'] = index
+            datum = self.generate_image_microscopy(random)
+            datum['ID_Image'] = index
+            datum['Diagnosis'] = 'LM/LMM'
+            datum.reindex(index=['ID_Image'])
             data.append(datum)
 
         if mode == 2:
-            label = 'Cancer'
-        elif mode == 1:
-            label = 'Precancer'
+            label = 'Malignant'
         else:
-            label = 'Sain'
+            label = 'Benign'
 
-        patient = pandas.concat(data)
-        patient['pathologie'] = label
+        patient = pandas.concat(data, axis=1).transpose()
+        patient['Binary_Diagnosis'] = label
         return patient
 
-    def generate_spectrum(self, mode):
-        wavelength = np.arange(start=445, stop=962, step=1)
-        indices = np.linspace(0, 1, len(wavelength), endpoint=False)
-
+    def generate_image_microscopy(self, mode, synthetic=False):
+        toolbox_path = Path(__file__).parent.parent
+        synthetics = 'synthetics' if synthetic else 'basics'
         if mode == 2:
-            data = np.sin(2 * np.pi * indices)
-            label = 'Cancer'
+            data = toolbox_path/'data_test/dermatology/microscopy'/synthetics/'Malignant.bmp'
+            label = 'Malignant'
         elif mode == 1:
-            data = np.square(2 * np.pi * indices)
-            label = 'Precancer'
+            data = toolbox_path/'data_test/dermatology/microscopy'/synthetics/'Benign.bmp'
+            label = 'Benign'
         else:
-            indices[:] = 0
-            data = indices
-            label = 'Sain'
+            data = toolbox_path/'data_test/dermatology/microscopy'/synthetics/'Healthy.bmp'
+            label = 'Normal'
 
-        return pandas.DataFrame({'data': [data], 'wavelength': [wavelength], 'label': label})
+        return pandas.Series({'Full_Path': str(data), 'Path': data.name,
+                              'Label': label, 'Modality': 'Microscopy', 'Type': 'Full'})
 
 
 class ConfocalBuilder(builders.TextBuilder):

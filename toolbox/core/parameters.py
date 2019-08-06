@@ -89,11 +89,13 @@ class DermatologyDataset:
 
     @staticmethod
     def test_images():
-        here_path = Path(__file__)
-        input_folders = [here_path.parent / '../data_test/dermatology/Test']
-        work_folder = Path(gettempdir()) / '.research'
-        work_folder.mkdir(exist_ok=True)
-        return DermatologyDataset.__images(input_folders, work_folder, 'Microscopy')
+        generator = dermatology.Generator((10, 20), 10)
+        inputs = Inputs(data=generator.generate_study(),
+                        tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
+                              'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
+        inputs.temporary_folder = Path(gettempdir()) / '.research'
+        inputs.temporary_folder.mkdir(exist_ok=True)
+        return inputs
 
     @staticmethod
     def test_multiresolution(coefficients):

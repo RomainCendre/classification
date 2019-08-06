@@ -1,3 +1,4 @@
+import shutil
 import unittest
 from experiments.dermatology.microscopy.descriptors import descriptors
 from experiments.dermatology.microscopy.finetune import fine_tune
@@ -30,7 +31,7 @@ class TestMicroscopyWhole(unittest.TestCase):
         self.output_folder = DermatologyDataset.get_results_location(is_test=True)
 
     def tearDown(self):
-        print('Nettoyage !')
+        shutil.rmtree(self.microscopy.temporary_folder, ignore_errors=True)
 
     def test_descriptors(self):
         descriptors(self.microscopy, self.output_folder)
@@ -50,7 +51,7 @@ class TestMicroscopyMultiscale(unittest.TestCase):
         self.output_folder = DermatologyDataset.get_results_location(is_test=True)
 
     def tearDown(self):
-        print('Nettoyage !')
+        shutil.rmtree(self.microscopy.temporary_folder, ignore_errors=True)
 
     def test_multiscale(self):
         multiscale_decision(self.microscopy, self.output_folder)
@@ -63,7 +64,7 @@ class TestMicroscopySliding(unittest.TestCase):
         self.output_folder = DermatologyDataset.get_results_location(is_test=True)
 
     def tearDown(self):
-        print('Nettoyage !')
+        shutil.rmtree(self.microscopy.temporary_folder, ignore_errors=True)
 
     def test_sliding_features(self):
         sliding_features(self.microscopy, self.output_folder)

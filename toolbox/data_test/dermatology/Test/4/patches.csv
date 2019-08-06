@@ -1,5 +1,0 @@
-Modality,Path,Height,Width,Center_X,Center_Y,Label,Source
-Microscopy,4.bmp,250,250,745,725,Normal,Normal.bmp
-Microscopy,5.bmp,250,250,200,255,Normal,Normal.bmp
-Microscopy,6.bmp,250,250,745,725,Benign,Benign.bmp
-Microscopy,7.bmp,250,250,200,255,Benign,Benign.bmp

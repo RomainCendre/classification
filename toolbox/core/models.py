@@ -113,7 +113,7 @@ class KerasBatchClassifier(KerasClassifier):
         probs = self.model.predict_generator(generator=valid, **params_pred)
 
         # check if binary classification
-        if probs.shape[1] == 1:
+        if len(probs) > 0 and probs.shape[1] == 1:
             # first column is probability of class 0 and second is of class 1
             probs = hstack([1 - probs, probs])
         return probs
