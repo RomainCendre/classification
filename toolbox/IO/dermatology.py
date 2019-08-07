@@ -124,8 +124,17 @@ class Generator:
     def generate_patient(self, mode):
         random_data = list(np.random.randint(mode + 1, size=np.random.randint(self.nb_images[0], self.nb_images[1])))
         data = []
+        # Full images
         for index, random in enumerate(random_data):
-            datum = self.generate_image_microscopy(random)
+            datum = self.generate_image(random)
+            datum['ID_Image'] = index
+            datum['Diagnosis'] = 'LM/LMM'
+            datum.reindex(index=['ID_Image'])
+            data.append(datum)
+
+        # Patches images
+        for index, random in enumerate(random_data):
+            datum = self.generate_image(random, type='Patch')
             datum['ID_Image'] = index
             datum['Diagnosis'] = 'LM/LMM'
             datum.reindex(index=['ID_Image'])
@@ -140,21 +149,21 @@ class Generator:
         patient['Binary_Diagnosis'] = label
         return patient
 
-    def generate_image_microscopy(self, mode, synthetic=False):
+    def generate_image(self, mode, modality='microscopy', type='Full', synthetic=False):
         toolbox_path = Path(__file__).parent.parent
         synthetics = 'synthetics' if synthetic else 'basics'
         if mode == 2:
-            data = toolbox_path/'data_test/dermatology/microscopy'/synthetics/'Malignant.bmp'
+            data = toolbox_path/'data_test/dermatology'/modality/synthetics/'{type}_malignant.bmp'.format(type=type)
             label = 'Malignant'
         elif mode == 1:
-            data = toolbox_path/'data_test/dermatology/microscopy'/synthetics/'Benign.bmp'
+            data = toolbox_path/'data_test/dermatology'/modality/synthetics/'{type}_benign.bmp'.format(type=type)
             label = 'Benign'
         else:
-            data = toolbox_path/'data_test/dermatology/microscopy'/synthetics/'Healthy.bmp'
+            data = toolbox_path/'data_test/dermatology'/modality/synthetics/'{type}_healthy.bmp'.format(type=type)
             label = 'Normal'
 
         return pandas.Series({'Full_Path': str(data), 'Path': data.name,
-                              'Label': label, 'Modality': 'Microscopy', 'Type': 'Full'})
+                              'Label': label, 'Modality': 'Microscopy', 'Type': type})
 
 
 class ConfocalBuilder(builders.TextBuilder):

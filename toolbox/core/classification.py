@@ -212,7 +212,6 @@ class Classifier:
                     print('Writing data at {file}'.format(file=file_path))
                     for feature, reference in zip(features, references):
                         if reference not in features_file.keys():
-                            print(reference)
                             features_file.create_dataset(reference, data=feature)
         else:
             features = self.__feature_extraction(prefix, inputs)

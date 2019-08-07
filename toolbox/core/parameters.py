@@ -101,7 +101,7 @@ class DermatologyDataset:
     @staticmethod
     def __images(folder, work_folder, modality):
         if folder is None:
-            generator = dermatology.Generator((10, 20), 10)
+            generator = dermatology.Generator((5, 10), 20)
             inputs = Inputs(data=generator.generate_study(),
                             tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
                                   'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
@@ -115,7 +115,7 @@ class DermatologyDataset:
     @staticmethod
     def __multi_images(folder, work_folder, coefficients, modality):
         if folder is None:
-            generator = dermatology.Generator((10, 20), 10)
+            generator = dermatology.Generator((5, 10), 20)
             dataframe = generator.generate_study()
         else:
             dataframe = DermatologyDataset.__scan(folder, patches=False, modality=modality)
@@ -128,7 +128,7 @@ class DermatologyDataset:
     @staticmethod
     def __sliding_images(folder, work_folder, size, overlap, modality):
         if folder is None:
-            generator = dermatology.Generator((10, 20), 10)
+            generator = dermatology.Generator((5, 10), 20)
             dataframe = generator.generate_study()
         else:
             dataframe = DermatologyDataset.__scan(folder, patches=True, modality=modality)
