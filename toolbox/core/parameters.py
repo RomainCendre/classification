@@ -47,12 +47,6 @@ class ORLDataset:
 
 class DermatologyDataset:
 
-    def __init__(self, work_folder=None, modality=None, patch_parameters=None, multi_coefficients=None):
-        self.work_folder = work_folder
-        self.modality = modality
-        self.patch_parameters = patch_parameters
-        self.multi_coefficients = multi_coefficients
-
     @staticmethod
     def get_results_location(is_test=False):
         if is_test:
@@ -88,81 +82,77 @@ class DermatologyDataset:
         return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap, modality)
 
     @staticmethod
-    def test_images():
-        generator = dermatology.Generator((10, 20), 10)
-        inputs = Inputs(data=generator.generate_study(),
+    def test_images(modality=None):
+        work_folder = Path(gettempdir()) / '.research'
+        work_folder.mkdir(exist_ok=True)
+        return DermatologyDataset.__images(None, work_folder, modality)
+
+    @staticmethod
+    def test_multiresolution(coefficients, modality=None):
+        work_folder = Path(gettempdir()) / '.research'
+        work_folder.mkdir(exist_ok=True)
+        return DermatologyDataset.__multi_images(None, work_folder, coefficients, modality)
+
+    @staticmethod
+    def test_sliding_images(size, overlap, modality=None):
+        work_folder = Path(gettempdir()) / '.research'
+        work_folder.mkdir(exist_ok=True)
+        return DermatologyDataset.__sliding_images(None, work_folder, size, overlap, modality)
+
+    @staticmethod
+    def __images(folder, work_folder, modality):
+        if folder is None:
+            generator = dermatology.Generator((10, 20), 10)
+            inputs = Inputs(data=generator.generate_study(),
+                            tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
+                                  'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
+        else:
+            inputs = Inputs(data=DermatologyDataset.__scan(folder, patches=True, modality=modality),
+                            tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
+                                  'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
+        inputs.set_working_folder(work_folder)
+        return inputs
+
+    @staticmethod
+    def __multi_images(folder, work_folder, coefficients, modality):
+        if folder is None:
+            generator = dermatology.Generator((10, 20), 10)
+            dataframe = generator.generate_study()
+        else:
+            dataframe = DermatologyDataset.__scan(folder, patches=False, modality=modality)
+        inputs = Inputs(data=DermatologyDataset.__to_multi(dataframe, coefficients, work_folder),
                         tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
                               'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
-        inputs.temporary_folder = Path(gettempdir()) / '.research'
-        inputs.temporary_folder.mkdir(exist_ok=True)
+        inputs.set_working_folder(work_folder)
         return inputs
 
     @staticmethod
-    def test_multiresolution(coefficients):
-        here_path = Path(__file__)
-        input_folders = [here_path.parent / '../data_test/dermatology/Test']
-        work_folder = Path(gettempdir()) / '.research'
-        work_folder.mkdir(exist_ok=True)
-        return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients, 'Microscopy')
-
-    @staticmethod
-    def test_sliding_images(size, overlap):
-        here_path = Path(__file__)
-        input_folders = [here_path.parent / '../data_test/dermatology/Test']
-        work_folder = Path(gettempdir()) / '.research'
-        work_folder.mkdir(exist_ok=True)
-        return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap, 'Microscopy')
-
-    @staticmethod
-    def __images(folders, work_folder, modality):
-        inputs = Inputs.load(folders=folders, instance=DermatologyDataset(work_folder=work_folder, modality=modality),
-                             loader=DermatologyDataset.__scan,
-                             tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
-                                   'group_label': 'Binary_Diagnosis'})
-        inputs.set_temporary_folder(work_folder)
+    def __sliding_images(folder, work_folder, size, overlap, modality):
+        if folder is None:
+            generator = dermatology.Generator((10, 20), 10)
+            dataframe = generator.generate_study()
+        else:
+            dataframe = DermatologyDataset.__scan(folder, patches=True, modality=modality)
+        inputs = Inputs(data=DermatologyDataset.__to_patchify(dataframe, size, overlap, work_folder),
+                        tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
+                              'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
+        inputs.set_working_folder(work_folder)
         return inputs
 
     @staticmethod
-    def __multi_images(folders, work_folder, coefficients, modality):
-        inputs = Inputs.load(folders=folders,
-                             instance=DermatologyDataset(work_folder=work_folder, multi_coefficients=coefficients,
-                                                         modality=modality),
-                             loader=DermatologyDataset.__scan_and_multi,
-                             tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
-                                   'group_label': 'Binary_Diagnosis'})
-        inputs.set_temporary_folder(work_folder)
-        return inputs
-
-    @staticmethod
-    def __sliding_images(folders, work_folder, size, overlap, modality):
-        parameters = {'Size': size,
-                      'Overlap': overlap}
-        inputs = Inputs.load(folders=folders,
-                             instance=DermatologyDataset(work_folder=work_folder, patch_parameters=parameters,
-                                                         modality=modality),
-                             loader=DermatologyDataset.__scan_and_patchify,
-                             tags={'data': 'Full_Path', 'label': 'Label', 'reference': 'Reference', 'group': 'ID',
-                                   'group_label': 'Binary_Diagnosis'})
-        inputs.set_temporary_folder(work_folder)
-        return inputs
-
-    def __scan(self, folder_path):
+    def __scan(folder_path, patches=True, modality=None):
         # Browse data
-        return dermatology.Reader().scan_folder(folder_path, parameters={'patches': True,
-                                                                         'modality': self.modality})
+        return dermatology.Reader().scan_folder(folder_path, parameters={'patches': patches,
+                                                                         'modality': modality})
 
-    def __scan_and_multi(self, folder_path):
-        # Browse data
-        data_set = dermatology.Reader().scan_folder(folder_path=folder_path, parameters={'patches': False,
-                                                                                         'modality': self.modality})
-
+    @staticmethod
+    def __to_multi(dataframe, coefficients, work_folder):
         # Get into patches
         multis_data = []
-        DermatologyDataset.__print_progress_bar(0, len(data_set), prefix='Progress:')
-        for index, (df_index, data) in zip(np.arange(len(data_set.index)), data_set.iterrows()):
-            DermatologyDataset.__print_progress_bar(index, len(data_set), prefix='Progress:')
-            multi = DermatologyDataset.__multi_resolution(data['Full_Path'], data['Reference'], self.multi_coefficients,
-                                                          self.work_folder)
+        DermatologyDataset.__print_progress_bar(0, len(dataframe), prefix='Progress:')
+        for index, (df_index, data) in zip(np.arange(len(dataframe.index)), dataframe.iterrows()):
+            DermatologyDataset.__print_progress_bar(index, len(dataframe), prefix='Progress:')
+            multi = DermatologyDataset.__multi_resolution(data['Full_Path'], data['Reference'], coefficients, work_folder)
             multi['Type'] = 'Multi'
             multi = pd.concat([multi, pd.DataFrame(data).T], sort=False)
             multi = multi.fillna(data)
@@ -170,20 +160,18 @@ class DermatologyDataset:
 
         return pd.concat(multis_data, sort=False)
 
-    def __scan_and_patchify(self, folder_path):
+    @staticmethod
+    def __to_patchify(dataframe, size, overlap, work_folder):
         # Browse data
-        dataset = dermatology.Reader().scan_folder(folder_path, parameters={'patches': True,
-                                                                            'modality': self.modality})
-        images = dataset[dataset.Type == 'Full']
-        patches = dataset[dataset.Type == 'Patch']
+        images = dataframe[dataframe.Type == 'Full']
+        patches = dataframe[dataframe.Type == 'Patch']
 
         # Get into patches
         windows_data = [patches]
-        DermatologyDataset.__print_progress_bar(0, len(dataset), prefix='Progress:')
+        DermatologyDataset.__print_progress_bar(0, len(dataframe), prefix='Progress:')
         for index, (df_index, data) in zip(np.arange(len(images.index)), images.iterrows()):
             DermatologyDataset.__print_progress_bar(index, len(images), prefix='Progress:')
-            windows = DermatologyDataset.__patchify(data['Full_Path'], data['Reference'], self.patch_parameters['Size'],
-                                                    self.patch_parameters['Overlap'], self.work_folder)
+            windows = DermatologyDataset.__patchify(data['Full_Path'], data['Reference'], size, overlap, work_folder)
             windows['Type'] = 'Window'
             windows = pd.concat([windows, pd.DataFrame(data).T], sort=False)
             windows = windows.fillna(data)

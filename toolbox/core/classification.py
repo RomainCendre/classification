@@ -188,9 +188,9 @@ class Classifier:
             prefix = type(self.__model).__name__
 
         features = None
-        if inputs.temporary_folder is not None:
+        if inputs.get_working_folder() is not None:
             # Construct hdf5 file
-            file_path = inputs.temporary_folder/'{prefix}.hdf5'.format(prefix=prefix)
+            file_path = inputs.get_working_folder()/'{prefix}.hdf5'.format(prefix=prefix)
             # Try reading features if exists
             if file_path.is_file():
                 try:

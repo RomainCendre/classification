@@ -99,6 +99,39 @@ class Inputs(Data):
         self.tags = tags
         self.encoders = None
         self.name = 'default'
+        self.working_folder = None
+
+    def build_folds(self, by_patients=True):
+        # Data
+        datas = self.get('data')
+        # Labels
+        labels = self.get('label')
+        # References
+        references = self.get('reference')
+        # Groups
+        groups = self.get('group')
+        # Groups Labels
+        groups_labels = self.get('group_label')
+        unique_groups_labels = np.unique(groups_labels)
+
+        # Rule to create folds
+        if by_patients:
+            split_rule = GroupKFold(n_splits=4)
+        else:
+            split_rule = KFold(n_splits=4)
+
+        folds = np.zeros(groups.shape, dtype=np.int64)
+        # Browse each type of group label
+        for group_label in unique_groups_labels:
+            indices = np.where(groups_labels == group_label)[0]
+            # Make folds
+            current_folds = list(split_rule.split(X=datas[indices], y=labels[indices], groups=groups[indices]))
+            for index, fold in enumerate(current_folds):
+                folds[fold[1]] = index #Add tests to folds
+
+        # Make final folds
+        self.update('Fold', folds, references)
+        self.tags.update({'fold': 'Fold'})
 
     def collapse(self, filters, on, filters_collapse, on_collapse, data_tag=None):
         pd.options.mode.chained_assignment = None
@@ -189,43 +222,14 @@ class Inputs(Data):
         else:
             return metas
 
+    def get_working_folder(self):
+        return self.working_folder
+
     def set_encoders(self, encoders):
         self.encoders = encoders
 
-    def set_temporary_folder(self, folder):
-        self.temporary_folder = folder
-
-    def build_folds(self, by_patients=True):
-        # Data
-        datas = self.get('data')
-        # Labels
-        labels = self.get('label')
-        # References
-        references = self.get('reference')
-        # Groups
-        groups = self.get('group')
-        # Groups Labels
-        groups_labels = self.get('group_label')
-        unique_groups_labels = np.unique(groups_labels)
-
-        # Rule to create folds
-        if by_patients:
-            split_rule = GroupKFold(n_splits=4)
-        else:
-            split_rule = KFold(n_splits=4)
-
-        folds = np.zeros(groups.shape, dtype=np.int64)
-        # Browse each type of group label
-        for group_label in unique_groups_labels:
-            indices = np.where(groups_labels==group_label)[0]
-            # Make folds
-            current_folds = list(split_rule.split(X=datas[indices], y=labels[indices], groups=groups[indices]))
-            for index, fold in enumerate(current_folds):
-                folds[fold[1]] = index #Add tests to folds
-
-        # Make final folds
-        self.update('Fold', folds, references)
-        self.tags.update({'fold': 'Fold'})
+    def set_working_folder(self, folder):
+        self.working_folder = folder
 
     def sub_inputs(self, filters=None):
         inputs = deepcopy(self)
@@ -263,12 +267,6 @@ class Inputs(Data):
 
     def write(self, folder):
         self.data.to_csv(folder/'{name}.csv'.format(name=self.name))
-
-    @classmethod
-    def load(cls, folders, instance, loader, tags, filters={}):
-        # Load data
-        data = pd.concat([loader(instance, folder) for folder in folders], sort=False, ignore_index=True)
-        return cls(data, tags, filters)
 
 
 class Spectra(Inputs):
