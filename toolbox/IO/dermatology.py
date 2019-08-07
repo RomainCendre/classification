@@ -108,11 +108,11 @@ class Generator:
         self.nb_images = nb_images
         self.nb_patients = nb_patients
 
-    def generate_study(self):
+    def generate_study(self, patches=True):
         random_patient = list(np.random.randint(low=1, high=3, size=self.nb_patients))
         patients = []
         for index, random in enumerate(random_patient):
-            patient = self.generate_patient(random)
+            patient = self.generate_patient(random, patches)
             patient['ID'] = index
             patient['Reference'] = patient.apply(lambda row: '{patient}_{image}_F'.format(patient=row['ID'],
                                                                                           image=row.name), axis=1)
@@ -121,7 +121,7 @@ class Generator:
         patients = pandas.concat(patients, sort=False, ignore_index=True)
         return patients
 
-    def generate_patient(self, mode):
+    def generate_patient(self, mode, patches):
         random_data = list(np.random.randint(mode + 1, size=np.random.randint(self.nb_images[0], self.nb_images[1])))
         data = []
         # Full images
@@ -133,12 +133,13 @@ class Generator:
             data.append(datum)
 
         # Patches images
-        for index, random in enumerate(random_data):
-            datum = self.generate_image(random, type='Patch')
-            datum['ID_Image'] = index
-            datum['Diagnosis'] = 'LM/LMM'
-            datum.reindex(index=['ID_Image'])
-            data.append(datum)
+        if patches:
+            for index, random in enumerate(random_data):
+                datum = self.generate_image(random, type='Patch')
+                datum['ID_Image'] = index
+                datum['Diagnosis'] = 'LM/LMM'
+                datum.reindex(index=['ID_Image'])
+                data.append(datum)
 
         if mode == 2:
             label = 'Malignant'

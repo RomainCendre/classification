@@ -4,16 +4,9 @@
     <bookmark url="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" description="self.table.setStyleSheet('QTableView{selection-bac..." line="386" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Update stats writer and fix some elements.">
+    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/dermatology.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/dermatology.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/classification.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toolbox/core/parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/parameters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/microscopy/basics/Benign.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/microscopy/basics/Healthy.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/data_test/dermatology/microscopy/basics/Malignant.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/environment/environment.yml" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/environment/environment.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -72,28 +65,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/environment/environment.yml">
+        <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" column="18" lean-forward="true" selection-start-line="18" selection-start-column="18" selection-end-line="19" selection-end-column="20" />
+            <state relative-caret-position="557">
+              <caret line="361" lean-forward="true" selection-start-line="361" selection-end-line="361" />
+              <folding>
+                <element signature="e#0#24#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/toolbox/environment/environmentGPU.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="36">
-              <caret line="136" column="60" selection-start-line="136" selection-start-column="60" selection-end-line="136" selection-end-column="60" />
+            <state relative-caret-position="557">
+              <caret line="389" lean-forward="true" selection-start-line="389" selection-end-line="389" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -200,10 +187,10 @@
         <option value="$PROJECT_DIR$/toolbox/core/structures.py" />
         <option value="$PROJECT_DIR$/experiments/test_experiments.py" />
         <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
-        <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
         <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
+        <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
+        <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
       </list>
     </option>
   </component>
@@ -502,21 +489,7 @@
       <workItem from="1564985488442" duration="14414000" />
       <workItem from="1565016799142" duration="631000" />
       <workItem from="1565079288626" duration="16290000" />
-      <workItem from="1565159409554" duration="8104000" />
-    </task>
-    <task id="LOCAL-00112" summary="Update of data sending scripts and main procedures.">
-      <created>1562579793923</created>
-      <option name="number" value="00112" />
-      <option name="presentableId" value="LOCAL-00112" />
-      <option name="project" value="LOCAL" />
-      <updated>1562579793923</updated>
-    </task>
-    <task id="LOCAL-00113" summary="Update structure and folds creation.">
-      <created>1563197454443</created>
-      <option name="number" value="00113" />
-      <option name="presentableId" value="LOCAL-00113" />
-      <option name="project" value="LOCAL" />
-      <updated>1563197454443</updated>
+      <workItem from="1565159409554" duration="9129000" />
     </task>
     <task id="LOCAL-00114" summary="Update processes and file structure">
       <created>1563197855408</created>
@@ -847,13 +820,24 @@
       <option name="project" value="LOCAL" />
       <updated>1565174788442</updated>
     </task>
-    <option name="localTasksCounter" value="161" />
+    <task id="LOCAL-00161" summary="Update patient generation and bug fix.&#10;Add new package to description.">
+      <created>1565184903215</created>
+      <option name="number" value="00161" />
+      <option name="presentableId" value="LOCAL-00161" />
+      <option name="project" value="LOCAL" />
+      <updated>1565184903215</updated>
+    </task>
+    <task id="LOCAL-00162" summary="Add new files for generation.">
+      <created>1565185089171</created>
+      <option name="number" value="00162" />
+      <option name="presentableId" value="LOCAL-00162" />
+      <option name="project" value="LOCAL" />
+      <updated>1565185089171</updated>
+    </task>
+    <option name="localTasksCounter" value="163" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_test_experiments_TestMicroscopyWhole_test_descriptors - 2019.08.06 at 15h 20m 39s.xml">
-      <configuration name="Unittests for test_experiments.TestMicroscopyWhole.test_descriptors" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittests_for_test_experiments_TestMicroscopyWhole_test_descriptors - 2019.08.06 at 15h 21m 38s.xml">
       <configuration name="Unittests for test_experiments.TestMicroscopyWhole.test_descriptors" configurationId="tests" />
     </history-entry>
@@ -881,9 +865,12 @@
     <history-entry file="Unittests_in_test_experiments_py - 2019.08.07 at 15h 28m 55s.xml">
       <configuration name="Unittests in test_experiments.py" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_in_test_experiments_py - 2019.08.07 at 15h 34m 30s.xml">
+      <configuration name="Unittests in test_experiments.py" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="596907000" />
+    <option name="totallyTimeSpent" value="597932000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -967,8 +954,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add patch browser." />
-    <MESSAGE value="Adding patches to view." />
     <MESSAGE value="Fix update of patch, their display." />
     <MESSAGE value="Update patchs selection." />
     <MESSAGE value="Update selection color." />
@@ -992,7 +977,9 @@
     <MESSAGE value="Update test data and generation mecanisms." />
     <MESSAGE value="Update test data." />
     <MESSAGE value="Update stats writer and fix some elements." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update stats writer and fix some elements." />
+    <MESSAGE value="Update patient generation and bug fix.&#10;Add new package to description." />
+    <MESSAGE value="Add new files for generation." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add new files for generation." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1414,42 +1401,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="557">
-          <caret line="361" lean-forward="true" selection-start-line="361" selection-end-line="361" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="557">
           <caret line="339" lean-forward="true" selection-start-line="339" selection-end-line="339" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="136" column="60" selection-start-line="136" selection-start-column="60" selection-end-line="136" selection-end-column="60" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/test_experiments.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="73" selection-start-line="73" selection-end-line="73" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1465,6 +1422,36 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/test_experiments.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="489">
+          <caret line="73" selection-start-line="73" selection-end-line="73" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="557">
+          <caret line="361" lean-forward="true" selection-start-line="361" selection-end-line="361" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="557">
+          <caret line="389" lean-forward="true" selection-start-line="389" selection-end-line="389" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

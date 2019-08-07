@@ -116,7 +116,7 @@ class DermatologyDataset:
     def __multi_images(folder, work_folder, coefficients, modality):
         if folder is None:
             generator = dermatology.Generator((5, 10), 20)
-            dataframe = generator.generate_study()
+            dataframe = generator.generate_study(patches=False)
         else:
             dataframe = DermatologyDataset.__scan(folder, patches=False, modality=modality)
         inputs = Inputs(data=DermatologyDataset.__to_multi(dataframe, coefficients, work_folder),
