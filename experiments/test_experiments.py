@@ -60,14 +60,14 @@ class TestMicroscopyMultiscale(unittest.TestCase):
 class TestMicroscopySliding(unittest.TestCase):
 
     def setUp(self):
-        self.microscopy = [('Test', DermatologyDataset.test_sliding_images(size=250, overlap=0))]
+        self.microscopy = DermatologyDataset.test_sliding_images(size=250, overlap=0)
         self.output_folder = DermatologyDataset.get_results_location(is_test=True)
 
     def tearDown(self):
         shutil.rmtree(self.microscopy.get_working_folder(), ignore_errors=True)
 
     def test_sliding_features(self):
-        sliding_features(self.microscopy, self.output_folder)
+        sliding_features([('Test', self.microscopy)], self.output_folder)
 
     def test_sliding_decisions(self):
-        sliding_decisions(self.microscopy, self.output_folder)
+        sliding_decisions([('Test', self.microscopy)], self.output_folder)

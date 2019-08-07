@@ -38,11 +38,10 @@ class ORLDataset:
                              'reference': 'Reference_spectrum', 'group_label': 'pathologie'})
 
     @staticmethod
-    def __spectras(folders):
-        return Spectra.load(folders=folders, instance=otorhinolaryngology.Reader(),
-                            loader=otorhinolaryngology.Reader.read_table,
-                            tags={'data': 'data', 'label': 'label', 'group': 'Reference',
-                                  'reference': 'Reference_spectrum', 'group_label': 'pathologie'})
+    def __spectras(files):
+        data = pd.concat([otorhinolaryngology.Reader().read_table(file) for file in files])
+        return Spectra(data=data, tags={'data': 'data', 'label': 'label', 'group': 'Reference',
+                                        'reference': 'Reference_spectrum', 'group_label': 'pathologie'})
 
 
 class DermatologyDataset:
@@ -152,7 +151,8 @@ class DermatologyDataset:
         DermatologyDataset.__print_progress_bar(0, len(dataframe), prefix='Progress:')
         for index, (df_index, data) in zip(np.arange(len(dataframe.index)), dataframe.iterrows()):
             DermatologyDataset.__print_progress_bar(index, len(dataframe), prefix='Progress:')
-            multi = DermatologyDataset.__multi_resolution(data['Full_Path'], data['Reference'], coefficients, work_folder)
+            multi = DermatologyDataset.__multi_resolution(data['Full_Path'], data['Reference'], coefficients,
+                                                          work_folder)
             multi['Type'] = 'Multi'
             multi = pd.concat([multi, pd.DataFrame(data).T], sort=False)
             multi = multi.fillna(data)
@@ -338,8 +338,12 @@ class LocalParameters:
                 ('MvsR', {'label': ['Rest', 'Cancer']}, {'label': (['Sain', 'Precancer'], 'Rest')})]
 
     @staticmethod
-    def get_statistics_keys():
+    def get_dermatology_statistics():
         return ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
+
+    @staticmethod
+    def get_orl_statistics():
+        return ['pathologie', 'operateur', 'provenance', 'label']
 
     @staticmethod
     def get_validation():

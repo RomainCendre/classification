@@ -5,6 +5,8 @@ import markups
 import pandas
 import pickle
 
+
+from PyPDF2 import PdfFileReader, PdfFileWriter, PdfFileMerger
 from PIL import Image, ImageDraw
 import matplotlib as mpl
 from matplotlib import pyplot
@@ -71,15 +73,13 @@ class StatisticsWriter:
         # Check output folder
         output_folder = Path(output_folder)
         output_folder.mkdir(exist_ok=True)
-
+        self.filename = output_folder/'{name}_stat.pdf'.format(name=name)
+        if self.filename.is_file():
+            self.filename.unlink()
+        self.filename_temp = output_folder/'{name}_stat_temp.pdf'.format(name=name)
         # Fill properties
         self.keys = keys
-        # TODO change pdf way of concatenate
-        self.pdf = PdfPages(output_folder/'{name}_stat.pdf'.format(name=name))
         mpl.use('agg')
-
-    def end(self):
-        self.pdf.close()
 
     def write(self, inputs):
         figure, axes = pyplot.subplots(ncols=len(self.keys), figsize=(21, 7))
@@ -95,8 +95,35 @@ class StatisticsWriter:
             axes[index].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
             axes[index].set_title(key)
         figure.suptitle(inputs.name)
-        self.pdf.savefig(figure)
+        save_to = PdfPages(self.filename_temp)
+        save_to.savefig(figure)
+        save_to.close()
         pyplot.close()
+
+        output = PdfFileMerger()
+        if self.filename.is_file():
+            output.append(PdfFileReader(str(self.filename)), 'rb')
+        output.append(PdfFileReader(str(self.filename_temp)), 'rb')
+        outputStream = open(self.filename, 'wb')
+        output.write(outputStream)
+        self.filename_temp.unlink()
+        # output = PdfFileWriter()
+        # if self.filename.is_file():
+        #     pdf_filename = open(self.filename, 'rb')
+        #     output.cloneDocumentFromReader(PdfFileReader(pdf_filename))
+        # else:
+        #     pdf_filename = None
+        #
+        # pdf_temp = open(str(self.filename_temp), 'rb')
+        # output.appendPagesFromReader(PdfFileReader(pdf_temp))
+        #
+        # outputStream = open(self.filename, 'wb')
+        # output.write(outputStream)
+        # outputStream.close()
+        # if pdf_filename is not None:
+        #     pdf_filename.close()
+        # pdf_temp.close()
+        # self.filename_temp.unlink()
 
 
 class ResultWriter:

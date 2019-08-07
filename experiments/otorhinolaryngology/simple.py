@@ -30,7 +30,7 @@ def simple(spectra, output_folder):
     settings = BuiltInSettings.get_default_orl()
 
     # Statistics expected
-    statistics = LocalParameters.get_statistics_keys()
+    statistics = LocalParameters.get_orl_statistics()
 
     # Filters
     filters = LocalParameters.get_orl_filters()

@@ -86,7 +86,7 @@ def sliding_features(slidings, folder):
     settings = BuiltInSettings.get_default_dermatology()
 
     # Statistics expected
-    statistics = LocalParameters.get_statistics_keys()
+    statistics = LocalParameters.get_dermatology_statistics()
 
     # Filters
     filters = LocalParameters.get_dermatology_filters()

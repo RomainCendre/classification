@@ -45,7 +45,6 @@ class Process:
 
     def end(self):
         ResultWriter(self.results, self.settings).write_results(output_folder=self.folder, name=self.name)
-        self.stat_writer.end()
 
     def __add_input_stat(self, inputs):
         if self.stat_writer is not None:
