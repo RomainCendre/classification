@@ -59,26 +59,26 @@ class DermatologyDataset:
     @staticmethod
     def images(modality=None):
         home_path = Path().home()
-        input_folders = [home_path / 'Data/Skin/Saint_Etienne/Patients']
+        input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
         work_folder = home_path / '.research'
         work_folder.mkdir(exist_ok=True)
-        return DermatologyDataset.__images(input_folders, work_folder, modality)
+        return DermatologyDataset.__images(input_folder, work_folder, modality)
 
     @staticmethod
     def multiresolution(coefficients, modality=None):
         home_path = Path().home()
-        input_folders = [home_path / 'Data/Skin/Saint_Etienne/Patients']
+        input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
         work_folder = home_path / '.research'
         work_folder.mkdir(exist_ok=True)
-        return DermatologyDataset.__multi_images(input_folders, work_folder, coefficients, modality)
+        return DermatologyDataset.__multi_images(input_folder, work_folder, coefficients, modality)
 
     @staticmethod
     def sliding_images(size, overlap, modality=None):
         home_path = Path().home()
-        input_folders = [home_path / 'Data/Skin/Saint_Etienne/Patients']
+        input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
         work_folder = home_path / '.research'
         work_folder.mkdir(exist_ok=True)
-        return DermatologyDataset.__sliding_images(input_folders, work_folder, size, overlap, modality)
+        return DermatologyDataset.__sliding_images(input_folder, work_folder, size, overlap, modality)
 
     @staticmethod
     def test_images(modality=None):
