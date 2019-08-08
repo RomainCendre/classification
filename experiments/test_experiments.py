@@ -18,6 +18,8 @@ class TestORL(unittest.TestCase):
 
     def tearDown(self):
         print('Cleaning...')
+        shutil.rmtree(self.output_folder, ignore_errors=True)
+        print('... Achieved!')
 
     def test_orl_process(self):
         spectra = self.spectra
@@ -31,10 +33,13 @@ class TestMicroscopyWhole(unittest.TestCase):
         self.output_folder = DermatologyDataset.get_results_location(is_test=True)
 
     def tearDown(self):
+        print('Cleaning...')
         shutil.rmtree(self.microscopy.get_working_folder(), ignore_errors=True)
+        shutil.rmtree(self.output_folder, ignore_errors=True)
+        print('... Achieved!')
 
-    def test_descriptors(self):
-        descriptors(self.microscopy, self.output_folder)
+    # def test_descriptors(self):
+    #     descriptors(self.microscopy, self.output_folder)
 
     def test_transfer_learning(self):
         transfer_learning(self.microscopy, self.output_folder)
@@ -51,7 +56,10 @@ class TestMicroscopyMultiscale(unittest.TestCase):
         self.output_folder = DermatologyDataset.get_results_location(is_test=True)
 
     def tearDown(self):
+        print('Cleaning...')
         shutil.rmtree(self.microscopy.get_working_folder(), ignore_errors=True)
+        shutil.rmtree(self.output_folder, ignore_errors=True)
+        print('... Achieved!')
 
     def test_multiscale(self):
         multiscale_decision(self.microscopy, self.output_folder)
