@@ -1,5 +1,7 @@
 # Create working directory
 mkdir /work/le2i/rc621381/Data
+mkdir /work/le2i/rc621381/Data/Skin/
+mkdir /work/le2i/rc621381/Data/Skin/Saint_Etienne/
 mkdir /work/le2i/rc621381/.research
 mkdir /work/le2i/rc621381/Results
 mkdir /work/le2i/rc621381/XDG

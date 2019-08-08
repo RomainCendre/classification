@@ -1,5 +1,7 @@
 # Create working directory
 mkdir ~/Data
+mkdir ~/Data/Skin/
+mkdir ~/Data/Skin/Saint_Etienne/
 mkdir ~/envs
 mkdir ~/Results
 
