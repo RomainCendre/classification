@@ -115,6 +115,7 @@ class StatisticsWriter:
         output_stream.close()
         self.filename_temp.unlink()
 
+
 class ResultWriter:
 
     def __init__(self, results, settings):
