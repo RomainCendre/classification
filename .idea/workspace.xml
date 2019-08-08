@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/experiments/cluster_local/clean.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/test_experiments.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/test_experiments.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -52,11 +52,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/test_experiments.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="844">
               <caret line="81" lean-forward="true" selection-start-line="81" selection-end-line="81" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/experiments/cluster_local/clean.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -149,7 +158,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/config_cluster.sh" />
         <option value="$PROJECT_DIR$/experiments/cluster/send_data.bat" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/fine_tune.py" />
         <option value="$PROJECT_DIR$/experiments/cluster/tool.sh" />
@@ -200,6 +208,7 @@
         <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/writers.py" />
         <option value="$PROJECT_DIR$/experiments/test_experiments.py" />
+        <option value="$PROJECT_DIR$/experiments/cluster_local/clean.sh" />
       </list>
     </option>
   </component>
@@ -313,19 +322,19 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\cluster_local" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy\sliding_window" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy\full" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\multimodal" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\devs" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy\full" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox\core" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\cluster_local" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy\sliding_window" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy\full" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\multimodal" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -499,14 +508,7 @@
       <workItem from="1565016799142" duration="631000" />
       <workItem from="1565079288626" duration="16290000" />
       <workItem from="1565159409554" duration="9129000" />
-      <workItem from="1565250023049" duration="1083000" />
-    </task>
-    <task id="LOCAL-00116" summary="Update function to save data array.">
-      <created>1563264385599</created>
-      <option name="number" value="00116" />
-      <option name="presentableId" value="LOCAL-00116" />
-      <option name="project" value="LOCAL" />
-      <updated>1563264385599</updated>
+      <workItem from="1565250023049" duration="2269000" />
     </task>
     <task id="LOCAL-00117" summary="Update descriptors/ft procedures.">
       <created>1563267000652</created>
@@ -844,7 +846,14 @@
       <option name="project" value="LOCAL" />
       <updated>1565250514157</updated>
     </task>
-    <option name="localTasksCounter" value="165" />
+    <task id="LOCAL-00165" summary="Update tests file.">
+      <created>1565253364364</created>
+      <option name="number" value="00165" />
+      <option name="presentableId" value="LOCAL-00165" />
+      <option name="project" value="LOCAL" />
+      <updated>1565253364364</updated>
+    </task>
+    <option name="localTasksCounter" value="166" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -880,7 +889,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="599015000" />
+    <option name="totallyTimeSpent" value="600201000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -964,7 +973,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update selection color." />
     <MESSAGE value="Update selection animation." />
     <MESSAGE value="Update disposition of gui tool." />
     <MESSAGE value="Update patch selection tool." />
@@ -989,7 +997,8 @@
     <MESSAGE value="Add new files for generation." />
     <MESSAGE value="Fix statistic writer (close stream)." />
     <MESSAGE value="Missing blank line." />
-    <option name="LAST_COMMIT_MESSAGE" value="Missing blank line." />
+    <MESSAGE value="Update tests file." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update tests file." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1061,13 +1070,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/pathlib.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="386" selection-start-line="386" selection-end-line="386" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/cluster_local/tasks">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -1459,6 +1461,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="844">
           <caret line="81" lean-forward="true" selection-start-line="81" selection-end-line="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/cluster_local/clean.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
         </state>
       </provider>
     </entry>
