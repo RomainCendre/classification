@@ -81,7 +81,7 @@ class StatisticsWriter:
         self.keys = keys
         mpl.use('agg')
 
-    def write(self, inputs):
+    def __write_temporary(self, inputs):
         figure, axes = pyplot.subplots(ncols=len(self.keys), figsize=(21, 7))
         # Browse each kind of parameter
         for index, key in enumerate(self.keys):
@@ -100,31 +100,20 @@ class StatisticsWriter:
         save_to.close()
         pyplot.close()
 
+    def write(self, inputs):
+        # Write intermediate file
+        self.__write_temporary(inputs)
+        # Write final file
         output = PdfFileMerger()
+        # If previously existing
         if self.filename.is_file():
             output.append(PdfFileReader(str(self.filename)), 'rb')
         output.append(PdfFileReader(str(self.filename_temp)), 'rb')
-        outputStream = open(self.filename, 'wb')
-        output.write(outputStream)
+        # Now write final file
+        output_stream = open(self.filename, 'wb')
+        output.write(output_stream)
+        output_stream.close()
         self.filename_temp.unlink()
-        # output = PdfFileWriter()
-        # if self.filename.is_file():
-        #     pdf_filename = open(self.filename, 'rb')
-        #     output.cloneDocumentFromReader(PdfFileReader(pdf_filename))
-        # else:
-        #     pdf_filename = None
-        #
-        # pdf_temp = open(str(self.filename_temp), 'rb')
-        # output.appendPagesFromReader(PdfFileReader(pdf_temp))
-        #
-        # outputStream = open(self.filename, 'wb')
-        # output.write(outputStream)
-        # outputStream.close()
-        # if pdf_filename is not None:
-        #     pdf_filename.close()
-        # pdf_temp.close()
-        # self.filename_temp.unlink()
-
 
 class ResultWriter:
 
