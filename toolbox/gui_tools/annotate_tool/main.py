@@ -11,7 +11,8 @@ if __name__ == '__main__':
 
     # Create the QApplication.
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon('./images/icon.png'))
+    icon_path = Path(__file__).parent/'images'/'icon.png'
+    app.setWindowIcon(QIcon(str(icon_path)))
     pathologies = ['Normal', 'Benign', 'Malignant', 'Draw']
     home_path = Path().home()
     input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
