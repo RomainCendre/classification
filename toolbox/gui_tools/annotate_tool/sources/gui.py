@@ -378,7 +378,8 @@ class QLabelWidget(QWidget):
             self.table.setItem(index, 2, QTableWidgetItem('{value}'.format(value=value)))
 
     def send_key(self, key):
-        # self.table.selectRow(key)
+        if key < 0 or key >= len(self.pathologies):
+            return
         self.table.selectionModel().blockSignals(True)
         self.table.selectRow(key)
         self.table.selectionModel().blockSignals(False)
