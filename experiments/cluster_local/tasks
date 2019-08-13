@@ -1,7 +1,8 @@
 # Lancement du calcul
 export PYTHONPATH=~/classification
-taskset -c 0-3 ~/envs/CPU/bin/python ~/classification/experiments/dermatology/microscopy/descriptors.py
-taskset -c 4-7 ~/envs/CPU/bin/python ~/classification/experiments/dermatology/microscopy/transferlearning.py
-taskset -c 8-11 ~/envs/CPU/bin/python ~/classification/experiments/dermatology/microscopy/multiscale_decisions.py
-taskset -c 12-15 ~/envs/CPU/bin/python ~/classification/experiments/dermatology/microscopy/sliding_features.py
-taskset -c 16-19 ~/envs/CPU/bin/python ~/classification/experiments/dermatology/microscopy/sliding_decisions.py
+conda activate Skin
+taskset -c 0-3 python ~/classification/experiments/dermatology/microscopy/descriptors.py
+taskset -c 4-7 python ~/classification/experiments/dermatology/microscopy/transferlearning.py
+taskset -c 8-11 python ~/classification/experiments/dermatology/microscopy/multiscale_decisions.py
+taskset -c 12-15 python ~/classification/experiments/dermatology/microscopy/sliding_features.py
+taskset -c 16-19 python ~/classification/experiments/dermatology/microscopy/sliding_decisions.py
