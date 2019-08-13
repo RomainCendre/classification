@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" description="self.table.setStyleSheet('QTableView{selection-bac..." line="386" />
+    <bookmark url="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" description="self.table.setStyleSheet('QTableView{selection-bac..." line="387" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Update data location folder">
-      <change afterPath="$PROJECT_DIR$/toolbox/environment/deploy.bat" afterDir="false" />
+    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,7 +18,7 @@
     <SUITE FILE_PATH="coverage/classification$gui.coverage" NAME="gui Coverage Results" MODIFIED="1564491253767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources" />
     <SUITE FILE_PATH="coverage/classification$multiscale_features.coverage" NAME="multiscale_features Coverage Results" MODIFIED="1562166368435" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
     <SUITE FILE_PATH="coverage/classification$test_experiments.coverage" NAME="test_experiments Coverage Results" MODIFIED="1559894677583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
-    <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1565684655530" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool" />
+    <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1565685795067" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool" />
     <SUITE FILE_PATH="coverage/classification$score_level.coverage" NAME="score_level Coverage Results" MODIFIED="1557316745744" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$features_level.coverage" NAME="features_level Coverage Results" MODIFIED="1559638826584" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$descriptors.coverage" NAME="descriptors Coverage Results" MODIFIED="1565270629916" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
@@ -53,92 +53,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/environment/environment.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="20" selection-start-line="6" selection-start-column="20" selection-end-line="7" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1020">
-              <caret line="70" column="45" selection-start-line="70" selection-start-column="45" selection-end-line="70" selection-end-column="45" />
-              <folding>
-                <element signature="e#0#24#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="731">
-              <caret line="49" column="25" selection-start-line="49" selection-start-column="25" selection-end-line="49" selection-end-column="25" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/cluster_local/send_data.bat">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="92" selection-start-line="1" selection-end-line="1" selection-end-column="135" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/send_data.bat">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/toolbox/environment/deploy.bat">
+        <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="80" selection-start-column="80" selection-end-column="80" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/indexing.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="36040">
-              <caret line="2138" selection-start-line="2138" selection-end-line="2138" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/descriptors.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1496">
-              <caret line="99" column="40" selection-start-line="99" selection-start-column="40" selection-end-line="99" selection-end-column="40" />
+            <state relative-caret-position="233">
+              <caret line="371" column="25" lean-forward="true" selection-start-line="371" selection-start-column="25" selection-end-line="371" selection-end-column="25" />
               <folding>
-                <element signature="e#0#16#0" expanded="true" />
+                <element signature="e#0#19#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/environment/environmentGPU.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="2" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -195,7 +117,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/experiments/cluster/tool.sh" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/simple.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/full/transfer_learning.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window/multiple_instances.py" />
@@ -246,6 +167,7 @@
         <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/toolbox/environment/deploy.bat" />
+        <option value="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" />
       </list>
     </option>
   </component>
@@ -354,6 +276,14 @@
               <item name="gui_tools" type="462c0819:PsiDirectoryNode" />
               <item name="annotate_tool" type="462c0819:PsiDirectoryNode" />
               <item name="images" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
+              <item name="classification" type="462c0819:PsiDirectoryNode" />
+              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
+              <item name="gui_tools" type="462c0819:PsiDirectoryNode" />
+              <item name="annotate_tool" type="462c0819:PsiDirectoryNode" />
+              <item name="sources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
@@ -583,21 +513,7 @@
       <workItem from="1565159409554" duration="9129000" />
       <workItem from="1565250023049" duration="10068000" />
       <workItem from="1565615112103" duration="645000" />
-      <workItem from="1565684334779" duration="961000" />
-    </task>
-    <task id="LOCAL-00122" summary="Bring new change to folder creation.">
-      <created>1563278691942</created>
-      <option name="number" value="00122" />
-      <option name="presentableId" value="LOCAL-00122" />
-      <option name="project" value="LOCAL" />
-      <updated>1563278691942</updated>
-    </task>
-    <task id="LOCAL-00123" summary="Fix folds browsing.">
-      <created>1563283719353</created>
-      <option name="number" value="00123" />
-      <option name="presentableId" value="LOCAL-00123" />
-      <option name="project" value="LOCAL" />
-      <updated>1563283719353</updated>
+      <workItem from="1565684334779" duration="1698000" />
     </task>
     <task id="LOCAL-00124" summary="Update proedures (ORL/Sliding)">
       <created>1563286239633</created>
@@ -928,7 +844,21 @@
       <option name="project" value="LOCAL" />
       <updated>1565267046444</updated>
     </task>
-    <option name="localTasksCounter" value="171" />
+    <task id="LOCAL-00171" summary="Add script to deploy env.">
+      <created>1565685319844</created>
+      <option name="number" value="00171" />
+      <option name="presentableId" value="LOCAL-00171" />
+      <option name="project" value="LOCAL" />
+      <updated>1565685319845</updated>
+    </task>
+    <task id="LOCAL-00172" summary="Add security for invalid keys.">
+      <created>1565685829159</created>
+      <option name="number" value="00172" />
+      <option name="presentableId" value="LOCAL-00172" />
+      <option name="project" value="LOCAL" />
+      <updated>1565685829159</updated>
+    </task>
+    <option name="localTasksCounter" value="173" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -964,7 +894,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="609606000" />
+    <option name="totallyTimeSpent" value="610343000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -985,7 +915,7 @@
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3286119" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info active="true" anchor="bottom" id="Find" order="2" sideWeight="0.497003" visible="true" weight="0.9308943" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.45704296" visible="true" weight="0.26760563" />
+      <window_info active="true" anchor="bottom" id="Run" order="3" sideWeight="0.45704296" visible="true" weight="0.26760563" />
       <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.6253746" weight="0.35714287" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
@@ -1000,7 +930,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="right" id="SciView" order="3" visible="true" weight="0.26723278" />
+      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.26723278" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
@@ -1048,8 +978,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update main file." />
-    <MESSAGE value="Update patch tool." />
     <MESSAGE value="Update patch writting" />
     <MESSAGE value="Fix patch creation" />
     <MESSAGE value="Fix patch deletion." />
@@ -1073,7 +1001,9 @@
     <MESSAGE value="Update server configuration files." />
     <MESSAGE value="Add natsort." />
     <MESSAGE value="Update data location folder" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update data location folder" />
+    <MESSAGE value="Add script to deploy env." />
+    <MESSAGE value="Add security for invalid keys." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add security for invalid keys." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1327,16 +1257,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="509">
-          <caret line="390" selection-start-line="390" selection-end-line="390" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="767">
@@ -1543,6 +1463,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="80" selection-start-column="80" selection-end-column="80" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="371" column="25" lean-forward="true" selection-start-line="371" selection-start-column="25" selection-end-line="371" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -364,7 +364,7 @@ class QLabelWidget(QWidget):
         self.table.selectionModel().blockSignals(False)
 
     def send_images(self, data):
-        # Count occurences
+        # Count occurrences
         if data is None:
             values = None
         else:
