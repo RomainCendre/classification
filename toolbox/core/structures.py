@@ -316,15 +316,15 @@ class Spectra(Inputs):
             data = self.data
 
         for name, group in data.groupby(self.tags['group']):
-            print(name)
             # Get features by group
             row_ref = group[group.label == "Sain"]
             if len(row_ref) == 0:
                 data.drop(group.index)
                 continue
-            spectra_ref = row_ref.iloc[0]['data']
-            # group['data'] = group['data'].apply(lambda x: x/spectra_ref)
-            group['data'] = group['data'].apply(lambda x: (x - np.mean(spectra_ref))/np.std(spectra_ref))
+            mean = np.mean(row_ref.iloc[0]['data'])
+            std = np.std(row_ref.iloc[0]['data'])
+            for index, current in group.iterrows():
+                data.iat[index, data.columns.get_loc('data')] = (current['data'] - mean) / std
 
 
 class Outputs(Data):

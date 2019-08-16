@@ -39,7 +39,7 @@ class ORLDataset:
 
     @staticmethod
     def __spectras(files):
-        data = pd.concat([otorhinolaryngology.Reader().read_table(file) for file in files])
+        data = pd.concat([otorhinolaryngology.Reader().read_table(file) for file in files], sort=True)
         return Spectra(data=data, tags={'data': 'data', 'label': 'label', 'group': 'Reference',
                                         'reference': 'Reference_spectrum', 'group_label': 'pathologie'})
 
