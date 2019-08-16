@@ -4,6 +4,7 @@ from pathlib import Path
 from numpy import geomspace
 from numpy.ma import arange
 from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVC
@@ -13,7 +14,7 @@ from toolbox.core.transforms import OrderedEncoder
 
 
 def get_spectrum_classifier():
-    pipe = Pipeline([('pca', PCA(n_components=0.99)),
+    pipe = Pipeline([('pca', PCA(n_components=0.95)),
                      # ('lda', LinearDiscriminantAnalysis(n_components=20)),
                      ('scale', StandardScaler()),
                      ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
@@ -66,6 +67,7 @@ if __name__ == "__main__":
     spectra.apply_average_filter(size=5)
     spectra.norm_patient()
     # spectra.apply_scaling()
+    # spectra.ratios()
 
     # Compute data
     simple(spectra, output_folder)

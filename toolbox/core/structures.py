@@ -341,6 +341,16 @@ class Spectra(Inputs):
             for index, current in group.iterrows():
                 data.iat[index, data.columns.get_loc('data')] = (current['data'] - mean) / std
 
+    def ratios(self):
+        for name, current in self.data.iterrows():
+            wavelength = current['wavelength']
+            data_1 = current['data'][np.logical_and(540 < wavelength, wavelength < 550)]
+            data_2 = current['data'][np.logical_and(570 < wavelength, wavelength < 580)]
+            data_1 = np.mean(data_1)
+            data_2 = np.mean(data_2)
+            self.data.iloc[name, self.data.columns.get_loc('data')] = data_1/data_2
+
+
 
 class Outputs(Data):
     """Class that manage a result spectrum files.
