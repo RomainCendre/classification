@@ -29,6 +29,7 @@ def multiscale_decision(multiresolution_inputs, folder, homemade=False):
     nb_cpu = LocalParameters.get_cpu_number()
     validation = LocalParameters.get_validation()
     settings = BuiltInSettings.get_default_dermatology()
+    scoring = LocalParameters.get_scorer()
 
     # Statistics expected
     statistics = LocalParameters.get_dermatology_statistics()
@@ -49,7 +50,7 @@ def multiscale_decision(multiresolution_inputs, folder, homemade=False):
 
         # Launch process
         process = Process(output_folder=folder, name=filter_name, settings=settings, stats_keys=statistics)
-        process.begin(inner_cv=validation, n_jobs=nb_cpu)
+        process.begin(inner_cv=validation, n_jobs=nb_cpu, scoring=scoring)
 
         # Filter on datasets, applying groups of labels
         inputs = multiresolution_inputs.copy_and_change(filter_groups)
