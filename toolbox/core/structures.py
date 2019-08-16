@@ -308,6 +308,24 @@ class Spectra(Inputs):
     def integrate(self):
         self.data['data'] = self.data.apply(lambda x: [0, np.trapz(x['data'], x['wavelength'])], axis=1)
 
+    def norm_patient_by_healthy(self):
+        query = self.to_query(self.filters)
+        if query:
+            data = self.data.query(query)
+        else:
+            data = self.data
+
+        for name, group in data.groupby(self.tags['group']):
+            # Get features by group
+            row_ref = group[group.label == 'Sain']
+            if len(row_ref) == 0:
+                data.drop(group.index)
+                continue
+            mean = np.mean(row_ref.iloc[0]['data'])
+            std = np.std(row_ref.iloc[0]['data'])
+            for index, current in group.iterrows():
+                data.iat[index, data.columns.get_loc('data')] = (current['data'] - mean) / std
+
     def norm_patient(self):
         query = self.to_query(self.filters)
         if query:
@@ -317,12 +335,9 @@ class Spectra(Inputs):
 
         for name, group in data.groupby(self.tags['group']):
             # Get features by group
-            row_ref = group[group.label == "Sain"]
-            if len(row_ref) == 0:
-                data.drop(group.index)
-                continue
-            mean = np.mean(row_ref.iloc[0]['data'])
-            std = np.std(row_ref.iloc[0]['data'])
+            group_data = np.array([current['data'] for index, current in group.iterrows()])
+            mean = np.mean(group_data)
+            std = np.std(group_data)
             for index, current in group.iterrows():
                 data.iat[index, data.columns.get_loc('data')] = (current['data'] - mean) / std
 

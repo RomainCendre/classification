@@ -4,7 +4,6 @@ from pathlib import Path
 from numpy import geomspace
 from numpy.ma import arange
 from sklearn.decomposition import PCA
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVC
@@ -28,6 +27,7 @@ def simple(spectra, output_folder):
     nb_cpu = LocalParameters.get_cpu_number()
     validation = LocalParameters.get_validation()
     settings = BuiltInSettings.get_default_orl()
+    scoring = LocalParameters.get_scorer()
 
     # Statistics expected
     statistics = LocalParameters.get_orl_statistics()
@@ -38,10 +38,11 @@ def simple(spectra, output_folder):
     for filter_name, filter_datas, filter_groups in filters:
 
         process = Process(output_folder=output_folder, name=filter_name, settings=settings, stats_keys=statistics)
-        process.begin(inner_cv=validation, n_jobs=nb_cpu)
+        process.begin(inner_cv=validation, n_jobs=nb_cpu, scoring=scoring)
 
         # Change filters
         inputs = spectra.copy_and_change(filter_groups)
+        inputs.name = 'PCA_SVM'
 
         inputs.set_filters(filter_datas)
         inputs.set_encoders({'label': OrderedEncoder().fit(filter_datas['label']),

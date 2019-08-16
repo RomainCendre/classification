@@ -6,6 +6,7 @@ from tempfile import gettempdir
 import numpy as np
 import pandas as pd
 from PIL import Image
+from sklearn.metrics import f1_score, make_scorer
 from sklearn.model_selection import GroupKFold
 from toolbox.IO import dermatology, otorhinolaryngology
 from toolbox.core.structures import Inputs, Spectra, Settings
@@ -344,6 +345,10 @@ class LocalParameters:
     @staticmethod
     def get_orl_statistics():
         return ['pathologie', 'operateur', 'provenance', 'label']
+
+    @staticmethod
+    def get_scorer():
+        return make_scorer(lambda yt, yp: f1_score(yt, yp, average='weighted'))
 
     @staticmethod
     def get_validation():
