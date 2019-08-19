@@ -7,6 +7,7 @@ from sklearn.model_selection import ParameterGrid
 from sklearn.preprocessing import LabelEncoder
 from experiments.processes import Process
 from toolbox.core.builtin_models import Classifiers
+from toolbox.core.layers import Metrics
 from toolbox.core.models import KerasBatchClassifier
 from toolbox.core.transforms import OrderedEncoder
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
@@ -14,10 +15,11 @@ from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltIn
 
 def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0):
     model = KerasBatchClassifier(build_fn=Classifiers.get_fine_tuning)
+    metrics = Metrics()
     parameters = {  # Build paramters
         'architecture': 'InceptionV3',
         'optimizer': 'adam',
-        'metrics': [['accuracy']],
+        'callbacks': [metrics],
         # Parameters for fit
         'epochs': 50,
         'batch_size': 64,
@@ -51,8 +53,7 @@ def fine_tune(original_inputs, folder):
     types = [('Thumbnails', {'Type': 'Patch'}), ('Full', {'Type': 'Full'})]
 
     # Layers parameters
-    layers_parameters = {'trainable_layer': [0, 1, 2],
-                         'added_layer': [1, 2, 3]}
+    layers_parameters = {'trainable_layer': [0, 1, 2]}
 
     # Parameters combinations
     combinations = list(itertools.product(types, ParameterGrid(layers_parameters)))
