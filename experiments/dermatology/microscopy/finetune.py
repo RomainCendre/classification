@@ -7,7 +7,6 @@ from sklearn.model_selection import ParameterGrid
 from sklearn.preprocessing import LabelEncoder
 from experiments.processes import Process
 from toolbox.core.builtin_models import Classifiers
-from toolbox.core.layers import Metrics
 from toolbox.core.models import KerasBatchClassifier
 from toolbox.core.transforms import OrderedEncoder
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
@@ -78,8 +77,7 @@ def fine_tune(original_inputs, folder):
 
             process.evaluate_step(inputs=inputs,
                                   model=get_fine_tuning(output_classes=len(filter_datas['Label']),
-                                                        trainable_layers=params['trainable_layer'],
-                                                        added_layers=params['added_layer']))
+                                                        trainable_layers=params['trainable_layer']))
         process.end()
 
 
