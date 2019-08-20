@@ -74,7 +74,7 @@ def fine_tune(original_inputs, folder):
             inputs.build_folds()
 
             process.evaluate_step(inputs=inputs,
-                                  model=get_fine_tuning(output_classes=len(filter_datas['Label']),
+                                  model=get_fine_tuning(output_classes=len(filter_datas['Label'])-1,  # Remove Unknown
                                                         trainable_layers=params['trainable_layer']))
         process.end()
 
