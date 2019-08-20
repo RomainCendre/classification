@@ -14,11 +14,9 @@ from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltIn
 
 def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0):
     model = KerasBatchClassifier(build_fn=Classifiers.get_fine_tuning)
-    metrics = Metrics()
     parameters = {  # Build paramters
         'architecture': 'InceptionV3',
         'optimizer': 'adam',
-        'callbacks': [metrics],
         # Parameters for fit
         'epochs': 50,
         'batch_size': 64,
