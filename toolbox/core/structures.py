@@ -110,9 +110,6 @@ class Inputs(Data):
         references = self.get('reference')
         # Groups
         groups = self.get('group')
-        # Groups Labels
-        groups_labels = self.get('group_label')
-        unique_groups_labels = np.unique(groups_labels)
 
         # Rule to create folds
         if by_patients:
@@ -121,13 +118,10 @@ class Inputs(Data):
             split_rule = KFold(n_splits=4)
 
         folds = np.zeros(groups.shape, dtype=np.int64)
-        # Browse each type of group label
-        for group_label in unique_groups_labels:
-            indices = np.where(groups_labels == group_label)[0]
-            # Make folds
-            current_folds = list(split_rule.split(X=datas[indices], y=labels[indices], groups=groups[indices]))
-            for index, fold in enumerate(current_folds):
-                folds[fold[1]] = index #Add tests to folds
+        # Make folds
+        current_folds = list(split_rule.split(X=datas, y=labels, groups=groups))
+        for index, fold in enumerate(current_folds):
+            folds[fold[1]] = index  # Add tests to folds
 
         # Make final folds
         self.update('Fold', folds, references)
@@ -349,7 +343,6 @@ class Spectra(Inputs):
             data_1 = np.mean(data_1)
             data_2 = np.mean(data_2)
             self.data.iloc[name, self.data.columns.get_loc('data')] = data_1/data_2
-
 
 
 class Outputs(Data):
