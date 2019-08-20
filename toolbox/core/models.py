@@ -2,13 +2,11 @@ import types
 import numpy as np
 from copy import deepcopy
 from keras import Sequential
+from keras.optimizers import SGD
 from keras.utils.generic_utils import has_arg, to_list
 from keras.wrappers.scikit_learn import KerasClassifier
 from numpy import hstack
 from sklearn.base import BaseEstimator, ClassifierMixin
-from sklearn.decomposition import PCA
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.feature_selection import SelectKBest
 from sklearn.metrics import accuracy_score
 from sklearn.utils.multiclass import unique_labels
 from toolbox.core.generators import ResourcesGenerator
@@ -68,13 +66,13 @@ class KerasBatchClassifier(KerasClassifier):
         # Get arguments for predict
         params_fit = deepcopy(self.sk_params)
         params_fit.update(kwargs)
-        params_fit = self.__filter_params(params_fit, Sequential.fit_generator)
+        params_fit = self.filter_params(params_fit, Sequential.fit_generator)
 
         # Get generator
-        train = self.__create_generator(X=X, y=y, params=kwargs)
+        train = self.create_generator(X=X, y=y, params=kwargs)
         validation = None
         if X_validation is not None:
-            validation = self.__create_generator(X=X_validation, y=y_validation, params=kwargs)
+            validation = self.create_generator(X=X_validation, y=y_validation, params=kwargs)
 
         if not self.model._is_compiled:
             tr_x, tr_y = train[0]
@@ -102,12 +100,12 @@ class KerasBatchClassifier(KerasClassifier):
         copy_kwargs.update({'batch_size': 1})
 
         # Create generator
-        valid = self.__create_generator(X=X, params=copy_kwargs)
+        valid = self.create_generator(X=X, params=copy_kwargs)
 
         # Get arguments for predict
         params_pred = deepcopy(self.sk_params)
         params_pred.update(copy_kwargs)
-        params_pred = self.__filter_params(params_pred, Sequential.predict_generator)
+        params_pred = self.filter_params(params_pred, Sequential.predict_generator)
 
         # Predict!
         probs = self.model.predict_generator(generator=valid, **params_pred)
@@ -139,23 +137,23 @@ class KerasBatchClassifier(KerasClassifier):
                          'You should pass `metrics=["accuracy"]` to '
                          'the `model.compile()` method.')
 
-    def __create_generator(self, X, y=None, params={}):
+    def create_generator(self, X, y=None, params={}):
         # Init generator
         params_init = deepcopy(self.sk_params)
         params_init.update(params)
-        params_init = self.__filter_params(params_init, ResourcesGenerator.__init__)
+        params_init = self.filter_params(params_init, ResourcesGenerator.__init__)
         generator = ResourcesGenerator(**params_init)
 
         # Create iterator
         params_flow = deepcopy(self.sk_params)
         params_flow.update(params)
-        params_flow = self.__filter_params(params_flow, ResourcesGenerator.flow_from_paths)
+        params_flow = self.filter_params(params_flow, ResourcesGenerator.flow_from_paths)
         if y is not None:
             return generator.flow_from_paths(X, y, **params_flow)
         else:
             return generator.flow_from_paths(X, **params_flow)
 
-    def __filter_params(self, params, fn, override=None):
+    def filter_params(self, params, fn, override=None):
         """Filters `sk_params` and returns those in `fn`'s arguments.
 
         # Arguments
@@ -173,6 +171,64 @@ class KerasBatchClassifier(KerasClassifier):
                 res.update({name: value})
         res.update(override)
         return res
+
+
+class KerasFineClassifier(KerasBatchClassifier):
+
+    def check_params(self, params):
+        """Checks for user typos in `params`.
+
+        # Arguments
+            params: dictionary; the parameters to be checked
+
+        # Raises
+            ValueError: if any member of `params` is not a valid argument.
+        """
+        local_param = deepcopy(params)
+        if 'trainable_layers' in local_param:
+            local_param.pop('trainable_layers')
+        super().check_params(local_param)
+
+    def fit(self, X, y, callbacks=[], X_validation=None, y_validation=None, **kwargs):
+        self.init_model(y)
+
+        # Get arguments for predict
+        params_fit = deepcopy(self.sk_params)
+        params_fit.update(kwargs)
+        params_fit = self.filter_params(params_fit, Sequential.fit_generator)
+
+        # Get generator
+        train = self.create_generator(X=X, y=y, params=kwargs)
+        validation = None
+        if X_validation is not None:
+            validation = self.create_generator(X=X_validation, y=y_validation, params=kwargs)
+
+        # first: train only the top layers (which were randomly initialized)
+        # i.e. freeze all convolutional InceptionV3 layers
+        for layer in self.model.layers:
+            layer.trainable = False
+
+        # compile the model (should be done *after* setting layers to non-trainable)
+        self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy')
+        print('Pre-training...')
+        self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
+                                                **params_fit)
+
+        trainable_layer = kwargs.get('trainable_layers', 0)
+        for layer in self.model.layers[trainable_layer:]:
+            layer.trainable = True
+
+        # we need to recompile the model for these modifications to take effect
+        # we use SGD with a low learning rate
+        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy')
+
+        print('Final-training...')
+        # we train our model again (this time fine-tuning the top 2 inception blocks
+        # alongside the top Dense layers
+        self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
+                                                **params_fit)
+
+        return self.history
 
 
 class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
@@ -238,7 +294,7 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
 
     def _get_predictions_max(self, x):
         maximum = x.max(axis=1, keepdims=1) == x
-        return (maximum*self._get_prior_coefficients()).argmax(axis=1)
+        return (maximum * self._get_prior_coefficients()).argmax(axis=1)
 
     def _get_prior_coefficients(self):
         coefficients = range(self.number_labels)
@@ -248,7 +304,7 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
         return np.array(list(coefficients))
 
     def _get_predictions(self, x, thresholds):
-        return np.argmax((x > thresholds)*self._get_prior_coefficients(), axis=1)
+        return np.argmax((x > thresholds) * self._get_prior_coefficients(), axis=1)
 
     def predict_proba(self, x, y=None, copy=True):
         return x

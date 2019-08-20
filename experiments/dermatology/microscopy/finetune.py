@@ -7,23 +7,21 @@ from sklearn.model_selection import ParameterGrid
 from sklearn.preprocessing import LabelEncoder
 from experiments.processes import Process
 from toolbox.core.builtin_models import Classifiers
-from toolbox.core.models import KerasBatchClassifier
+from toolbox.core.models import KerasFineClassifier
 from toolbox.core.transforms import OrderedEncoder
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
 
 
-def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0):
-    model = KerasBatchClassifier(build_fn=Classifiers.get_fine_tuning)
+def get_fine_tuning(output_classes, trainable_layers=0):
+    model = KerasFineClassifier(build_fn=Classifiers.get_fine_tuning)
     parameters = {  # Build paramters
         'architecture': 'InceptionV3',
-        'optimizer': 'adam',
         # Parameters for fit
         'epochs': 50,
         'batch_size': 64,
     }
     parameters.update({'output_classes': output_classes,
-                       'trainable_layers': trainable_layers,
-                       'added_layers': added_layers})
+                       'trainable_layers': trainable_layers})
     fit_parameters = {  # Transformations
         'rotation_range': 180,
         'horizontal_flip': True,
@@ -50,7 +48,7 @@ def fine_tune(original_inputs, folder):
     types = [('Thumbnails', {'Type': 'Patch'}), ('Full', {'Type': 'Full'})]
 
     # Layers parameters
-    layers_parameters = {'trainable_layer': [0, 1, 2]}
+    layers_parameters = {'trainable_layer': [280, 249, 229]}  # First block, second block and third block indices
 
     # Parameters combinations
     combinations = list(itertools.product(types, ParameterGrid(layers_parameters)))

@@ -358,39 +358,15 @@ class Classifiers:
             return applications.inception_v3.preprocess_input
 
     @staticmethod
-    def get_fine_tuning(output_classes, trainable_layers=0, added_layers=0, architecture='InceptionV3', optimizer='adam', metrics=['accuracy']):
+    def get_fine_tuning(output_classes, architecture='InceptionV3', optimizer='adam'):
 
         # We get the deep extractor part as include_top is false
         base_model = Transforms.get_application(architecture, pooling='avg')
 
-        # We disable all layers trainable property
-        for layer in base_model.layers:
-            layer.trainable = False
-
-        # Decide wich layers are trainables
-        train_index = len(base_model.layers)-trainable_layers
-
-        # Now switch it to trainable
-        for layer in base_model.layers[train_index:]:
-            layer.trainable = True
-
         x = base_model.output
-        # Now we customize the output consider our application field
-        if added_layers > 1:
-            x = Dense(1024, activation='relu', name='predictions_dense_1')(x)
-            x = Dropout(0.5, name='predictions_dropout_1')(x)
-        if added_layers > 2:
-            x = Dense(512, activation='relu', name='predictions_dense_2')(x)
-            x = Dropout(0.5, name='predictions_dropout_2')(x)
+        # let's add a fully-connected layer
+        x = Dense(1024, activation='relu')(x)
+        # and a logistic layer -- let's say we have 200 classes
+        predictions = Dense(output_classes, activation='softmax')(x)
 
-        x = Dense(output_classes, activation='softmax', name='predictions_final')(x)
-
-        if output_classes > 2:
-            loss = 'categorical_crossentropy'
-        else:
-            loss = 'binary_crossentropy'
-
-        model = Model(inputs=base_model.inputs, outputs=x)
-        model.compile(loss=loss, optimizer=optimizer, metrics=metrics)
-
-        return model
+        return Model(inputs=base_model.inputs, outputs=predictions)
