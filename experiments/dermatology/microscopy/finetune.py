@@ -15,7 +15,7 @@ from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltIn
 def get_fine_tuning(output_classes, trainable_layers=0):
     model = KerasFineClassifier(build_fn=Classifiers.get_fine_tuning)
     parameters = {  # Build paramters
-        'architecture': 'ResNet',
+        'architecture': 'InceptionV3',
         # Parameters for fit
         'epochs': 50,
         'batch_size': 64,
@@ -23,7 +23,7 @@ def get_fine_tuning(output_classes, trainable_layers=0):
     parameters.update({'output_classes': output_classes,
                        'trainable_layers': trainable_layers})
     fit_parameters = {  # Transformations
-        'preprocessing_function': Classifiers.get_preprocessing_application(architecture='InceptionV3'),
+        'preprocessing_function': Classifiers.get_preprocessing_application(architecture='ResNet'),
         'rotation_range': 180,
         'horizontal_flip': True,
         'vertical_flip': True,

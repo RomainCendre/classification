@@ -100,8 +100,11 @@ class KerasBatchClassifier(KerasClassifier):
         copy_kwargs.update({'shuffle': False})
         copy_kwargs.update({'batch_size': 1})
 
+        # No transformation allowed for prediction
+        params = {'preprocessing_function': kwargs.get('preprocessing_function', None)}
+
         # Create generator
-        valid = self.create_generator(X=X, params=copy_kwargs)
+        valid = self.create_generator(X=X, params=params)
 
         # Get arguments for predict
         params_pred = deepcopy(self.sk_params)
@@ -121,7 +124,7 @@ class KerasBatchClassifier(KerasClassifier):
         kwargs = self.filter_sk_params(Sequential.evaluate_generator, kwargs)
 
         # Create generator
-        generator = ResourcesGenerator(preprocessing_function=kwargs.get('Preprocess', None))
+        generator = ResourcesGenerator(preprocessing_function=kwargs.get('preprocessing_function', None))
         valid = generator.flow_from_paths(X, y, batch_size=1, shuffle=False)
 
         # Get arguments for fit
@@ -201,8 +204,10 @@ class KerasFineClassifier(KerasBatchClassifier):
         # Get generator
         train = self.create_generator(X=X, y=y, params=kwargs)
         validation = None
+        # No transformation allowed for prediction
+        params = {'preprocessing_function': kwargs.get('preprocessing_function', None)}
         if X_validation is not None:
-            validation = self.create_generator(X=X_validation, y=y_validation, params=kwargs)
+            validation = self.create_generator(X=X_validation, y=y_validation, params=params)
 
         # first: train only the top layers (which were randomly initialized)
         # i.e. freeze all convolutional InceptionV3 layers
