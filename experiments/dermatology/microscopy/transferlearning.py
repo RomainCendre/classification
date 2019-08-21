@@ -43,7 +43,8 @@ def transfer_learning(original_inputs, folder):
     # Methods
     methods = [('VGG16', Transforms.get_keras_extractor(architecture='VGG16')),
                ('InceptionV3', Transforms.get_keras_extractor(architecture='InceptionV3')),
-               ('InceptionResNetV2', Transforms.get_keras_extractor(architecture='InceptionResNetV2'))]
+               ('InceptionResNetV2', Transforms.get_keras_extractor(architecture='InceptionResNetV2')),
+               ('ResNet50', Transforms.get_keras_extractor(architecture='ResNet'))]
                #('NASNet', Transforms.get_keras_extractor(architecture='NASNet'))]
 
     # Models

@@ -33,6 +33,8 @@ class Transforms:
             model = applications.InceptionResNetV2(weights='imagenet', include_top=False, pooling=pooling)
         elif architecture == 'NASNet':
             model = applications.NASNetLarge(weights='imagenet', include_top=False, pooling=pooling)
+        elif architecture == 'ResNet':
+            model = applications.ResNet50(weights='imagenet', include_top=False, pooling=pooling)
         else:
             model = applications.InceptionV3(weights='imagenet', include_top=False, pooling=pooling)
         model.name = architecture
@@ -354,6 +356,8 @@ class Classifiers:
             return applications.inception_resnet_v2.preprocess_input
         elif architecture == 'NASNet':
             return applications.nasnet.preprocess_input
+        elif architecture == 'ResNet':
+            return applications.resnet50.preprocess_input
         else:
             return applications.inception_v3.preprocess_input
 

@@ -2,6 +2,7 @@ import types
 import numpy as np
 from copy import deepcopy
 from keras import Sequential
+from keras.callbacks import EarlyStopping
 from keras.optimizers import SGD
 from keras.utils.generic_utils import has_arg, to_list
 from keras.wrappers.scikit_learn import KerasClassifier
@@ -209,10 +210,11 @@ class KerasFineClassifier(KerasBatchClassifier):
             layer.trainable = False
 
         # compile the model (should be done *after* setting layers to non-trainable)
-        self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy')
+        self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
         print('Pre-training...')
-        self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
-                                                **params_fit)
+        self.history = self.model.fit_generator(generator=train, validation_data=validation,
+                                                callbacks=[EarlyStopping(monitor='loss', patience=5)],
+                                                class_weight=train.get_weights(), **params_fit)
 
         trainable_layer = kwargs.get('trainable_layers', 0)
         for layer in self.model.layers[trainable_layer:]:
@@ -220,13 +222,13 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         # we need to recompile the model for these modifications to take effect
         # we use SGD with a low learning rate
-        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy')
+        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
 
         print('Final-training...')
         # we train our model again (this time fine-tuning the top 2 inception blocks
         # alongside the top Dense layers
         self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
-                                                **params_fit)
+                                                class_weight=train.get_weights(), **params_fit)
 
         return self.history
 

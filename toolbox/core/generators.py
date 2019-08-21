@@ -7,6 +7,7 @@ from keras_preprocessing import get_keras_submodule
 from keras_preprocessing.image import Iterator, ImageDataGenerator, load_img, img_to_array, array_to_img
 from numpy import asarray
 from PIL import Image as pil_image
+from sklearn.utils import class_weight as skweight
 
 backend = get_keras_submodule('backend')
 
@@ -123,6 +124,10 @@ class ResourcesIterator(Iterator, Sequence):
                                                  batch_size,
                                                  shuffle,
                                                  seed)
+
+    def get_weights(self):
+        # train the model on the new data for a few epochs
+        return skweight.compute_class_weight('balanced', np.unique(self.classes), self.classes)
 
     def _get_batches_of_transformed_samples(self, index_array):
 
