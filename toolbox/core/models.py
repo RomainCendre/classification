@@ -1,7 +1,7 @@
 import types
 import numpy as np
 from copy import deepcopy
-from keras import Sequential
+from keras import Sequential, Model
 from keras.callbacks import EarlyStopping
 from keras.optimizers import SGD
 from keras.utils.generic_utils import has_arg, to_list
@@ -61,57 +61,49 @@ class KerasBatchClassifier(KerasClassifier):
         else:
             raise ValueError('Invalid shape for y: ' + str(y.shape))
 
-    def fit(self, X, y, callbacks=[], X_validation=None, y_validation=None, **kwargs):
+    def fit(self, X, y, callbacks=[], X_validation=None, y_validation=None, **params):
         self.init_model(y)
 
         # Get arguments for predict
-        params_fit = deepcopy(self.sk_params)
-        params_fit.update(kwargs)
-        params_fit = self.filter_params(params_fit, Sequential.fit_generator)
+        all_params = deepcopy(self.sk_params)
+        all_params.update(params)
+        params_fit = self.filter_params(all_params, Sequential.fit_generator)
 
         # Get generator
-        train = self.create_generator(X=X, y=y, params=kwargs)
+        train = self.create_generator(X=X, y=y, params=params)
         validation = None
         if X_validation is not None:
-            validation = self.create_generator(X=X_validation, y=y_validation, params=kwargs)
+            validation = self.create_generator(X=X_validation, y=y_validation, params=params)
 
         if not self.model._is_compiled:
             tr_x, tr_y = train[0]
             self.model.fit(tr_x, tr_y)
 
-        self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
-                                                **params_fit)
+        return self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks, **params_fit)
 
-        return self.history
-
-    def predict(self, X, **kwargs):
-        probs = self.predict_proba(X, **kwargs)
+    def predict(self, X, **params):
+        probs = self.predict_proba(X, **params)
         if probs.shape[-1] > 1:
             classes = probs.argmax(axis=-1)
         else:
             classes = (probs > 0.5).astype('int32')
         return self.classes_[classes]
 
-    def predict_proba(self, X, **kwargs):
+    def predict_proba(self, X, **params):
         self.init_model()
 
         # Define some local arguments
-        copy_kwargs = deepcopy(kwargs)
-        copy_kwargs.update({'shuffle': False})
-        copy_kwargs.update({'batch_size': 1})
+        all_params = deepcopy(self.sk_params)
+        all_params.update(params)
+        all_params.update({'shuffle': False})
+        all_params.update({'batch_size': 1})
 
-        # No transformation allowed for prediction
-        params = {'preprocessing_function': kwargs.get('preprocessing_function', None)}
-
-        # Create generator
-        valid = self.create_generator(X=X, params=params)
+        # Create generator for validation
+        params_valid = {'preprocessing_function': all_params.get('preprocessing_function', None)}
+        valid = self.create_generator(X=X, params=params_valid)
 
         # Get arguments for predict
-        params_pred = deepcopy(self.sk_params)
-        params_pred.update(copy_kwargs)
-        params_pred = self.filter_params(params_pred, Sequential.predict_generator)
-
-        # Predict!
+        params_pred = self.filter_params(all_params, Sequential.predict_generator)
         probs = self.model.predict_generator(generator=valid, **params_pred)
 
         # check if binary classification
@@ -120,19 +112,21 @@ class KerasBatchClassifier(KerasClassifier):
             probs = hstack([1 - probs, probs])
         return probs
 
-    def score(self, X, y, **kwargs):
-        kwargs = self.filter_sk_params(Sequential.evaluate_generator, kwargs)
+    def score(self, X, y, **params):
 
-        # Create generator
-        generator = ResourcesGenerator(preprocessing_function=kwargs.get('preprocessing_function', None))
-        valid = generator.flow_from_paths(X, y, batch_size=1, shuffle=False)
+        # Define some local arguments
+        all_params = deepcopy(self.sk_params)
+        all_params.update(params)
+        all_params.update({'shuffle': False})
+        all_params.update({'batch_size': 1})
+
+        # Create generator for validation
+        params_valid = {'preprocessing_function': all_params.get('preprocessing_function', None)}
+        valid = self.create_generator(X=X, params=params_valid)
 
         # Get arguments for fit
-        fit_args = deepcopy(self.filter_sk_params(Sequential.evaluate_generator))
-        fit_args.update(kwargs)
-
-        # sparse to numpy array
-        outputs = self.model.evaluate_generator(generator=valid, **fit_args)
+        params_eval = self.filter_params(all_params, Sequential.evaluate_generator)
+        outputs = self.model.evaluate_generator(generator=valid, **params_eval)
         outputs = to_list(outputs)
         for name, output in zip(self.model.metrics_names, outputs):
             if name == 'acc':
@@ -191,6 +185,8 @@ class KerasFineClassifier(KerasBatchClassifier):
         local_param = deepcopy(params)
         if 'trainable_layers' in local_param:
             local_param.pop('trainable_layers')
+        if 'extractor_layers' in local_param:
+            local_param.pop('extractor_layers')
         super().check_params(local_param)
 
     def fit(self, X, y, callbacks=[], X_validation=None, y_validation=None, **kwargs):
@@ -236,6 +232,40 @@ class KerasFineClassifier(KerasBatchClassifier):
                                                 class_weight=train.get_weights(), **params_fit)
 
         return self.history
+
+    def predict_proba(self, X, **kwargs):
+        self.init_model()
+
+        # Define some local arguments
+        copy_kwargs = deepcopy(kwargs)
+        copy_kwargs.update({'shuffle': False})
+        copy_kwargs.update({'batch_size': 1})
+
+        # No transformation allowed for prediction
+        params = {'preprocessing_function': kwargs.get('preprocessing_function', None)}
+
+        # Create generator
+        valid = self.create_generator(X=X, params=params)
+
+        # Get arguments for predict
+        params_pred = deepcopy(self.sk_params)
+        params_pred.update(copy_kwargs)
+        params_pred = self.filter_params(params_pred, Sequential.predict_generator)
+
+        # Predict!
+        extractor_layers = kwargs.get('extractor_layers', None)
+        if extractor_layers is None:
+            model = self.model
+        else:
+            model = Model(self.model.inputs, self.model.layers[extractor_layers])
+
+        probs = model.predict_generator(generator=valid, **params_pred)
+
+        # check if binary classification
+        if len(probs) > 0 and probs.shape[1] == 1:
+            # first column is probability of class 0 and second is of class 1
+            probs = hstack([1 - probs, probs])
+        return probs
 
 
 class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
