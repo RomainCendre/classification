@@ -54,8 +54,8 @@ def descriptors(original_inputs, folder):
     # Methods
     methods = [('Wavelet', Transforms.get_image_dwt()),
                ('Haralick', Transforms.get_haralick(mean=False)),
-               ('KerasAverage', Transforms.get_keras_extractor(pooling='avg')),
-               ('KerasMaximum', Transforms.get_keras_extractor(pooling='max'))]
+               ('TransferLearning', Transforms.get_tl_extractor(pooling='avg')),
+               ('FineTuning', Transforms.get_ft_extractor(extract_layer=-3, train_layers=280))]
 
     # Models
     models = [('LinearSVM', get_linear_svm()), ('RbfSVM', get_rbf_svm())]

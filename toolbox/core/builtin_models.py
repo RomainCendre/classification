@@ -16,7 +16,7 @@ from sklearn.svm import SVC
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from toolbox.core.layers import RandomLayer
-from toolbox.core.models import KerasBatchClassifier
+from toolbox.core.models import KerasBatchClassifier, KerasFineClassifier
 from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform, DWTDescriptorTransform, \
     PNormTransform, FlattenTransform, PCAAtMost, SelectAtMostKBest, LDAAtMost
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
@@ -50,14 +50,28 @@ class Transforms:
         return pipe, parameters
 
     @staticmethod
-    def get_keras_extractor(architecture='InceptionV3', pooling='max'):
+    def get_tl_extractor(architecture='InceptionV3', pooling='max'):
         extractor_params = {'architecture': architecture,
-                            'batch_size': 1,
                             'pooling': pooling,
                             'preprocessing_function':
                                 Classifiers.get_preprocessing_application(architecture=architecture)}
         extractor = KerasBatchClassifier(Transforms.get_application, **extractor_params)
         extractor.name = '{architecture}_{pool}'.format(architecture=architecture, pool=pooling)
+        return extractor
+
+    @staticmethod
+    def get_ft_extractor(extract_layer, train_layers, architecture='InceptionV3'):
+        extractor_params = {'architecture': architecture,
+                            # Parameters for fit
+                            'epochs': 50,
+                            'batch_size': 64,
+                            'extractor_layers': extract_layer,
+                            'trainable_layers': train_layers,
+                            'preprocessing_function':
+                                Classifiers.get_preprocessing_application(architecture=architecture)}
+        extractor = KerasFineClassifier(Classifiers.get_fine_tuning, **extractor_params)
+        extractor.name = '{architecture}_{train}'.format(architecture=architecture, train=train_layers)
+        extractor.need_fit = True
         return extractor
 
     @staticmethod
@@ -362,7 +376,7 @@ class Classifiers:
             return applications.inception_v3.preprocess_input
 
     @staticmethod
-    def get_fine_tuning(output_classes, architecture='InceptionV3', optimizer='adam'):
+    def get_fine_tuning(output_classes, architecture='InceptionV3'):
 
         # We get the deep extractor part as include_top is false
         base_model = Transforms.get_application(architecture, pooling='avg')

@@ -233,31 +233,28 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         return self.history
 
-    def predict_proba(self, X, **kwargs):
+    def predict_proba(self, X, **params):
         self.init_model()
 
         # Define some local arguments
-        copy_kwargs = deepcopy(kwargs)
-        copy_kwargs.update({'shuffle': False})
-        copy_kwargs.update({'batch_size': 1})
+        all_params = deepcopy(self.sk_params)
+        all_params.update(params)
+        all_params.update({'shuffle': False})
+        all_params.update({'batch_size': 1})
 
-        # No transformation allowed for prediction
-        params = {'preprocessing_function': kwargs.get('preprocessing_function', None)}
-
-        # Create generator
-        valid = self.create_generator(X=X, params=params)
+        # Create generator for validation
+        params_valid = {'preprocessing_function': all_params.get('preprocessing_function', None)}
+        valid = self.create_generator(X=X, params=params_valid)
 
         # Get arguments for predict
-        params_pred = deepcopy(self.sk_params)
-        params_pred.update(copy_kwargs)
-        params_pred = self.filter_params(params_pred, Sequential.predict_generator)
+        params_pred = self.filter_params(all_params, Sequential.predict_generator)
 
         # Predict!
-        extractor_layers = kwargs.get('extractor_layers', None)
+        extractor_layers = all_params.get('extractor_layers', None)
         if extractor_layers is None:
             model = self.model
         else:
-            model = Model(self.model.inputs, self.model.layers[extractor_layers])
+            model = Model(self.model.inputs, self.model.layers[extractor_layers].output)
 
         probs = model.predict_generator(generator=valid, **params_pred)
 

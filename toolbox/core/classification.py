@@ -98,22 +98,8 @@ class Classifier:
 
             # Estimate best combination, if single parameter combination detected,
             # GridSearch is not performed, else we launch it
-            params_grid = ParameterGrid(self.__params)
-            if len(params_grid) == 1:
-                best_params = list(params_grid)[0]
-            else:
-                grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
-                                           n_jobs=self.n_jobs, scoring=self.__scoring, verbose=1, iid=False)
-                grid_search.fit(datas[train_indices], y=labels[train_indices], groups=groups[train_indices], **self.__fit_params)
-                best_params = grid_search.best_params_
-
-            # Fit the model, with the bests parameters
-            model.set_params(**best_params)
-            if isinstance(model, KerasBatchClassifier):
-                model.fit(datas[train_indices], y=labels[train_indices], callbacks=self.__callbacks,
-                          X_validation=datas[test_indices], y_validation=labels[test_indices], **self.__fit_params)
-            else:
-                model.fit(datas[train_indices], y=labels[train_indices])
+            best_params = self.__fit(model, datas[train_indices], labels[train_indices], groups[train_indices],
+                                     datas[test_indices], labels[test_indices])
 
             # Try to predict test data
             predictions = model.predict(datas[test_indices])
@@ -154,24 +140,8 @@ class Classifier:
         if not self.__check_labels(labels):
             raise ValueError('Not enough unique labels where found, at least 2.')
 
-        # Clone model
-        model = deepcopy(self.__model)
-
-        # Estimate best combination
-        grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
-                                   n_jobs=self.n_jobs, refit=False, scoring=self.__scoring, verbose=1, iid=False)
-        grid_search.fit(datas, y=labels, groups=groups, **self.__fit_params)
-        best_params = grid_search.best_params_
-
-        # Fit the model, with the bests parameters
-        model.set_params(**best_params)
-        if isinstance(model, KerasBatchClassifier):
-            model.fit(datas, y=labels, callbacks=self.__callbacks,
-                      X_validation=datas, y_validation=labels, **self.__fit_params)
-        else:
-            model.fit(datas, y=labels)
-
-        return model, best_params
+        # Now fit model
+        self.__fit(self.__model, datas, labels, groups)
 
     def features_checkpoint(self, inputs):
 
@@ -258,19 +228,9 @@ class Classifier:
             if not hasattr(self.__model, 'is_semi_supervised') or not self.__model.is_semi_supervised:
                 train_indices = train_indices[labels[train_indices] != -1]
 
-            # Now fit, but find first hyper parameters
-            grid_search = GridSearchCV(estimator=self.__model, param_grid=self.__params, cv=self.__inner_cv,
-                                       n_jobs=self.n_jobs, refit=False, scoring=self.__scoring, verbose=1, iid=False)
-            grid_search.fit(datas[train_indices], y=labels[train_indices], groups=groups[train_indices], **self.__fit_params)
-            best_params = grid_search.best_params_
-
-            # Fit the model, with the bests parameters
-            model.set_params(**best_params)
-            if isinstance(model, KerasBatchClassifier):
-                model.fit(datas[train_indices], y=labels[train_indices], callbacks=self.__callbacks,
-                          X_validation=datas[test_indices], y_validation=labels[test_indices], **self.__fit_params)
-            else:
-                model.fit(datas[train_indices], y=labels[train_indices])
+            # Now fit model
+            self.__fit(model, datas[train_indices], labels[train_indices], groups[train_indices],
+                       datas[test_indices], labels[test_indices])
 
             test_features = Classifier.__feature_extraction_simple(model, datas[test_indices], unique_labels)
 
@@ -280,6 +240,31 @@ class Classifier:
             features[test_indices] = test_features
 
         return features
+
+    def __fit(self, model, data, labels, groups, data_test=None, labels_test=None):
+        # Check for number of combinations
+        if len(self.__params) == 0:
+            best_params = {}
+        else:
+            params_grid = ParameterGrid(self.__params)
+            if len(params_grid) == 1:
+                best_params = list(params_grid)[0]
+            else:
+                # Now fit, but find first hyper parameters
+                grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
+                                           n_jobs=self.n_jobs, refit=False, scoring=self.__scoring, verbose=1, iid=False)
+                grid_search.fit(data, y=labels, groups=groups, **self.__fit_params)
+                best_params = grid_search.best_params_
+
+        # Fit the model, with the bests parameters
+        model.set_params(**best_params)
+        if isinstance(model, KerasBatchClassifier):
+            model.fit(data, y=labels, callbacks=self.__callbacks,
+                      X_validation=data_test, y_validation=labels_test, **self.__fit_params)
+        else:
+            model.fit(data, y=labels)
+
+        return best_params
 
     def __format_params(self):  # Here we proceed as multiple combination
         for param in self.__params:
