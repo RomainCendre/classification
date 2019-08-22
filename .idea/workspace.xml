@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/builtin_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/builtin_models.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,43 +54,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="844">
-              <caret line="410" selection-start-line="410" selection-end-line="410" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="556">
-              <caret line="376" lean-forward="true" selection-start-line="376" selection-end-line="376" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/generators.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="624">
-              <caret line="216" lean-forward="true" selection-start-line="216" selection-end-line="216" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/toolbox/core/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="624">
-              <caret line="369" lean-forward="true" selection-start-line="369" selection-end-line="369" />
+            <state relative-caret-position="284">
+              <caret line="349" column="12" lean-forward="true" selection-start-line="349" selection-start-column="12" selection-end-line="349" selection-end-column="12" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -99,22 +66,34 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py">
+        <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="624">
-              <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
+            <state relative-caret-position="390">
+              <caret line="104" column="42" selection-start-line="104" selection-start-column="30" selection-end-line="104" selection-end-column="42" />
               <folding>
-                <element signature="e#0#16#0" expanded="true" />
+                <element signature="e#0#15#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/finetune.py">
+        <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1598">
-              <caret line="94" selection-start-line="94" selection-end-line="94" />
+            <state relative-caret-position="565">
+              <caret line="390" lean-forward="true" selection-start-line="390" selection-end-line="390" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="624">
+              <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -220,19 +199,19 @@
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale_decisions.py" />
         <option value="$PROJECT_DIR$/toolbox/core/layers.py" />
         <option value="$PROJECT_DIR$/toolbox/core/structures.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/builtin_models.py" />
         <option value="$PROJECT_DIR$/toolbox/core/generators.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/finetune.py" />
         <option value="$PROJECT_DIR$/toolbox/core/models.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/builtin_models.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
-    <option name="y" value="-9" />
-    <option name="width" value="1938" />
-    <option name="height" value="1048" />
+    <option name="x" value="-1992" />
+    <option name="y" value="-369" />
+    <option name="width" value="1455" />
+    <option name="height" value="779" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -583,14 +562,7 @@
       <workItem from="1565957243487" duration="7961000" />
       <workItem from="1566198000493" duration="595000" />
       <workItem from="1566200484348" duration="10421000" />
-      <workItem from="1566375121638" duration="4208000" />
-    </task>
-    <task id="LOCAL-00137" summary="Adding patches to view.">
-      <created>1564658773734</created>
-      <option name="number" value="00137" />
-      <option name="presentableId" value="LOCAL-00137" />
-      <option name="project" value="LOCAL" />
-      <updated>1564658773734</updated>
+      <workItem from="1566375121638" duration="6697000" />
     </task>
     <task id="LOCAL-00138" summary="Fix update of patch, their display.">
       <created>1564661886904</created>
@@ -928,7 +900,14 @@
       <option name="project" value="LOCAL" />
       <updated>1566389984610</updated>
     </task>
-    <option name="localTasksCounter" value="186" />
+    <task id="LOCAL-00186" summary="Fix deep learning model ( prediction are no more using transformations and pre processing are now used).&#10;Adding element for fine tune feature extraction.">
+      <created>1566462406786</created>
+      <option name="number" value="00186" />
+      <option name="presentableId" value="LOCAL-00186" />
+      <option name="project" value="LOCAL" />
+      <updated>1566462406786</updated>
+    </task>
+    <option name="localTasksCounter" value="187" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -964,7 +943,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="646841000" />
+    <option name="totallyTimeSpent" value="649330000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1048,7 +1027,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update stats writer and fix some elements." />
     <MESSAGE value="Update patient generation and bug fix.&#10;Add new package to description." />
     <MESSAGE value="Add new files for generation." />
     <MESSAGE value="Fix statistic writer (close stream)." />
@@ -1073,7 +1051,8 @@
     <MESSAGE value="Update building fold component." />
     <MESSAGE value="Update fine tune process + add scenari for TL" />
     <MESSAGE value="Fix deep learning functions." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix deep learning functions." />
+    <MESSAGE value="Fix deep learning model ( prediction are no more using transformations and pre processing are now used).&#10;Adding element for fine tune feature extraction." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix deep learning model ( prediction are no more using transformations and pre processing are now used).&#10;Adding element for fine tune feature extraction." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1344,16 +1323,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="104" column="42" selection-start-line="104" selection-start-column="30" selection-end-line="104" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="82">
@@ -1504,26 +1473,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="624">
-          <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="556">
-          <caret line="376" lean-forward="true" selection-start-line="376" selection-end-line="376" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/generators.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="624">
@@ -1546,10 +1495,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="624">
-          <caret line="369" lean-forward="true" selection-start-line="369" selection-end-line="369" />
+        <state relative-caret-position="284">
+          <caret line="349" column="12" lean-forward="true" selection-start-line="349" selection-start-column="12" selection-end-line="349" selection-end-column="12" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="104" column="42" selection-start-line="104" selection-start-column="30" selection-end-line="104" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="565">
+          <caret line="390" lean-forward="true" selection-start-line="390" selection-end-line="390" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="624">
+          <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
           </folding>
         </state>
       </provider>
