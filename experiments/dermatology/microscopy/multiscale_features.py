@@ -7,9 +7,8 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVC
 from experiments.processes import Process
 from toolbox.core.builtin_models import Transforms
-from toolbox.core.models import PCAAtMost, SelectAtMostKBest
 from toolbox.core.parameters import LocalParameters, DermatologyDataset, BuiltInSettings
-from toolbox.core.transforms import OrderedEncoder, FlattenTransform, PNormTransform
+from toolbox.core.transforms import OrderedEncoder, FlattenTransform, PNormTransform, PCAAtMost, SelectAtMostKBest
 
 
 def get_reduce_model():
@@ -76,7 +75,7 @@ def multiscale_features(multiresolution_inputs, folder):
     filters = LocalParameters.get_dermatology_filters()
 
     # Extracteur
-    extractor = Transforms.get_keras_extractor(pooling='max')
+    extractor = Transforms.get_tl_extractor(pooling='avg')
     extractor.need_fit = False
 
     # Evaluateurs

@@ -45,7 +45,6 @@ def transfer_learning(original_inputs, folder):
                ('InceptionV3', Transforms.get_tl_extractor(architecture='InceptionV3')),
                ('InceptionResNetV2', Transforms.get_tl_extractor(architecture='InceptionResNetV2')),
                ('ResNet50', Transforms.get_tl_extractor(architecture='ResNet'))]
-               #('NASNet', Transforms.get_keras_extractor(architecture='NASNet'))]
 
     # Models
     models = [('Svm', get_linear_svm())]

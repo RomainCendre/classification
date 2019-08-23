@@ -93,7 +93,7 @@ def sliding_features(slidings, folder):
     filters = LocalParameters.get_dermatology_filters()
 
     # Extracteur
-    extractor = Transforms.get_keras_extractor(pooling='max')
+    extractor = Transforms.get_tl_extractor(pooling='avg')
     extractor.need_fit = False
 
     # Evaluateurs

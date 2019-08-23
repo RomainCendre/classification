@@ -56,7 +56,7 @@ def sliding_decisions(slidings, folder, homemade=False):
     view_folder.mkdir(exist_ok=True)
 
     # Extracteur
-    extractor = Transforms.get_keras_extractor(pooling='max')
+    extractor = Transforms.get_tl_extractor(pooling='avg')
 
     # Predicteur
     predictors = [('Supervised', get_supervised()),

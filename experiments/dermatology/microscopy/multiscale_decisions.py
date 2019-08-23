@@ -38,7 +38,7 @@ def multiscale_decision(multiresolution_inputs, folder, homemade=False):
     filters = LocalParameters.get_dermatology_filters()
 
     # Extracteur
-    extractor = Transforms.get_keras_extractor(pooling='max')
+    extractor = Transforms.get_tl_extractor(pooling='max')
     extractor.need_fit = False
 
     # Predicteur
