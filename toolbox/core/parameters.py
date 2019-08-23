@@ -325,11 +325,11 @@ class LocalParameters:
 
     @staticmethod
     def get_dermatology_filters():
-        return [('All', {'Label': ['Normal', 'Benign', 'Malignant', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']},
+        return [('All', {'Label': ['Normal', 'Benign', 'Malignant', 'Unknown']},
                  ['Normal', 'Benign', 'Malignant'], {}),
-                ('NvsP', {'Label': ['Normal', 'Pathology', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']},
+                ('NvsP', {'Label': ['Normal', 'Pathology', 'Unknown']},
                  ['Normal', 'Pathology'], {'Label': (['Benign', 'Malignant'], 'Pathology')}),
-                ('MvsR', {'Label': ['Rest', 'Malignant', 'Unknown'], 'Diagnosis': ['LM/LMM', 'SL', 'AL']},
+                ('MvsR', {'Label': ['Rest', 'Malignant', 'Unknown']},
                  ['Rest', 'Malignant'], {'Label': (['Normal', 'Benign'], 'Rest')})]
 
     @staticmethod
