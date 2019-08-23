@@ -61,9 +61,10 @@ def fine_tune(original_inputs, folder):
         process.begin(inner_cv=validation, n_jobs=nb_cpu, scoring=scoring)
 
         for scale, params in combinations:
-
             inputs = original_inputs.copy_and_change(filter_groups)
-            inputs.name = '{scale}_{params}'.format(scale=scale[0], params=params)
+            # Specify the name of experiment
+            str_params = ''.join(e if e.isalnum() else '_' for e in str(params))
+            inputs.name = f'{scale[0]}_{str_params}'
 
             # Filter datasets
             scale_filters = copy(scale[1])
