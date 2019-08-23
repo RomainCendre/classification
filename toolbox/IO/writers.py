@@ -94,7 +94,7 @@ class StatisticsWriter:
             axes[index].pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
             axes[index].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
             axes[index].set_title(key)
-        figure.suptitle(inputs.name)
+        figure.suptitle(f'{inputs.name} (Samples {inputs.get_number_samples()})')
         save_to = PdfPages(self.filename_temp)
         save_to.savefig(figure)
         save_to.close()

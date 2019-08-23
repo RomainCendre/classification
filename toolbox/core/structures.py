@@ -54,6 +54,17 @@ class Data:
         else:
             self.filters = filters
 
+    def get_number_samples(self, filters=None):
+        cur_filters = copy(self.filters)
+        if filters is not None:
+            cur_filters.update(filters)
+
+        query = self.to_query(cur_filters)
+        if query:
+            return len(self.data.query(query))
+        else:
+            return len(self.data)
+
     def get_from_key(self, key, filters=None, flatten=False):
         cur_filters = copy(self.filters)
         if filters is not None:
