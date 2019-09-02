@@ -2,6 +2,7 @@ from os import makedirs
 from os.path import normpath
 from sklearn.feature_selection import f_classif
 from time import strftime, gmtime, time
+from convnetskeras.convnets import preprocess_image_batch, convnet
 import keras
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
 from keras.layers import Dense, K, Conv2D, GlobalMaxPooling2D, Dropout
@@ -27,7 +28,9 @@ class Transforms:
     @staticmethod
     def get_application(architecture='InceptionV3', pooling='max'):
         # We get the deep extractor part as include_top is false
-        if architecture == 'VGG16':
+        if architecture == 'AlexNet':
+            model = convnet('alexnet', weights_path="weights/alexnet_weights.h5", heatmap=False)
+        elif architecture == 'VGG16':
             model = applications.VGG16(weights='imagenet', include_top=False, pooling=pooling)
         elif architecture == 'InceptionResNetV2':
             model = applications.InceptionResNetV2(weights='imagenet', include_top=False, pooling=pooling)
@@ -364,7 +367,9 @@ class Classifiers:
     @staticmethod
     def get_preprocessing_application(architecture='InceptionV3'):
         # We get the deep extractor part as include_top is false
-        if architecture == 'VGG16':
+        if architecture == 'AlexNet':
+            return lambda X: preprocess_image_batch(X, img_size=(256, 256), crop_size=(227, 227), color_mode="rgb")
+        elif architecture == 'VGG16':
             return applications.vgg16.preprocess_input
         elif architecture == 'InceptionResNetV2':
             return applications.inception_resnet_v2.preprocess_input
