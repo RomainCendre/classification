@@ -41,8 +41,7 @@ def transfer_learning(original_inputs, folder):
     types = [('Thumbnails', {'Type': 'Patch'}), ('Full', {'Type': 'Full'})]
 
     # Methods
-    methods = [('AlexNet', Transforms.get_tl_extractor(architecture='AlexNet')),
-               ('VGG16', Transforms.get_tl_extractor(architecture='VGG16')),
+    methods = [('VGG16', Transforms.get_tl_extractor(architecture='VGG16')),
                ('InceptionV3', Transforms.get_tl_extractor(architecture='InceptionV3')),
                ('InceptionResNetV2', Transforms.get_tl_extractor(architecture='InceptionResNetV2')),
                ('ResNet50', Transforms.get_tl_extractor(architecture='ResNet'))]

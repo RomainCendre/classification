@@ -16,7 +16,6 @@ dependencies:
   - tensorflow-base=1.12.0
   - tensorflow-gpu=1.12.0
   - pip:
-    - git+https://github.com/heuritech/convnets-keras.git#egg=convnet
     - git+https://github.com/RomainCendre/keras-vis.git#egg=keras-vis
     - git+https://github.com/luispedro/mahotas.git#egg=mahotas
     - git+https://github.com/garydoranjr/misvm.git#egg=misvm
