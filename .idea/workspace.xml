@@ -4,8 +4,10 @@
     <bookmark url="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" description="self.table.setStyleSheet('QTableView{selection-bac..." line="387" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Update process.">
+    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/cluster_ub/send_data.bat" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/cluster_ub/send_data.bat" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,26 +55,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_decisions.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2295">
-              <caret line="141" lean-forward="true" selection-start-line="141" selection-end-line="141" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="238">
+              <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_features.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/send_data.bat">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="102" column="30" lean-forward="true" selection-start-line="102" selection-start-column="30" selection-end-line="102" selection-end-column="30" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="17">
+              <caret line="1" column="98" selection-start-line="1" selection-start-column="98" selection-end-line="1" selection-end-column="98" />
             </state>
           </provider>
         </entry>
@@ -154,11 +150,7 @@
         <option value="$PROJECT_DIR$/experiments/test_experiments.py" />
         <option value="$PROJECT_DIR$/experiments/cluster_ub/clean.sh" />
         <option value="$PROJECT_DIR$/experiments/cluster_local/clean.sh" />
-        <option value="$PROJECT_DIR$/experiments/cluster_ub/send_data.bat" />
-        <option value="$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh" />
         <option value="$PROJECT_DIR$/experiments/cluster_local/send_data.bat" />
-        <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
-        <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
         <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/toolbox/environment/deploy.bat" />
         <option value="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" />
@@ -168,27 +160,31 @@
         <option value="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" />
         <option value="$PROJECT_DIR$/toolbox/core/layers.py" />
         <option value="$PROJECT_DIR$/toolbox/core/generators.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/builtin_models.py" />
         <option value="$PROJECT_DIR$/toolbox/core/models.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/descriptors.py" />
         <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/finetune.py" />
         <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_features.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_decisions.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale_features.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale_decisions.py" />
         <option value="$PROJECT_DIR$/toolbox/IO/writers.py" />
         <option value="$PROJECT_DIR$/toolbox/core/structures.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/builtin_models.py" />
+        <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
+        <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
+        <option value="$PROJECT_DIR$/experiments/cluster_ub/send_data.bat" />
+        <option value="$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1500" />
+    <option name="x" value="-2569" />
     <option name="y" value="-369" />
-    <option name="width" value="1455" />
-    <option name="height" value="780" />
+    <option name="width" value="2578" />
+    <option name="height" value="1408" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -549,20 +545,6 @@
       <workItem from="1566375121638" duration="6813000" />
       <workItem from="1566549645048" duration="7522000" />
     </task>
-    <task id="LOCAL-00142" summary="Update disposition of gui tool.">
-      <created>1564667910298</created>
-      <option name="number" value="00142" />
-      <option name="presentableId" value="LOCAL-00142" />
-      <option name="project" value="LOCAL" />
-      <updated>1564667910298</updated>
-    </task>
-    <task id="LOCAL-00143" summary="Update patch selection tool.">
-      <created>1564669417241</created>
-      <option name="number" value="00143" />
-      <option name="presentableId" value="LOCAL-00143" />
-      <option name="project" value="LOCAL" />
-      <updated>1564669417241</updated>
-    </task>
     <task id="LOCAL-00144" summary="Last update for gui.">
       <created>1564670103785</created>
       <option name="number" value="00144" />
@@ -892,7 +874,21 @@
       <option name="project" value="LOCAL" />
       <updated>1566560622432</updated>
     </task>
-    <option name="localTasksCounter" value="191" />
+    <task id="LOCAL-00191" summary="Cancel commit on alexnet">
+      <created>1567689380651</created>
+      <option name="number" value="00191" />
+      <option name="presentableId" value="LOCAL-00191" />
+      <option name="project" value="LOCAL" />
+      <updated>1567689380651</updated>
+    </task>
+    <task id="LOCAL-00192" summary="Cancel commit on alexnet">
+      <created>1567689668123</created>
+      <option name="number" value="00192" />
+      <option name="presentableId" value="LOCAL-00192" />
+      <option name="project" value="LOCAL" />
+      <updated>1567689668123</updated>
+    </task>
+    <option name="localTasksCounter" value="193" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -928,7 +924,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="658467000" />
+    <option name="totallyTimeSpent" value="659916000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -942,7 +938,7 @@
   <component name="ToolWindowManager">
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8973747" visible="true" weight="0.26473525" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8973747" visible="true" weight="0.26473525" />
       <window_info id="Structure" order="1" sideWeight="0.102625296" side_tool="true" weight="0.24575424" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3286119" />
@@ -954,7 +950,7 @@
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.10764588" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="9" sideWeight="0.499001" visible="true" weight="0.26861167" />
+      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.499001" visible="true" weight="0.26861167" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.37462538" side_tool="true" weight="0.24144869" />
       <window_info anchor="bottom" id="Terminal" order="12" weight="0.32997987" />
@@ -1011,7 +1007,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update tests file." />
     <MESSAGE value="Add cleaning procedure for local cluster" />
     <MESSAGE value="Update cleaning folder procedure and add clean for ub cluster." />
     <MESSAGE value="Update server configuration files." />
@@ -1036,7 +1031,8 @@
     <MESSAGE value="Update finetuning experiments names." />
     <MESSAGE value="Remove filtering of diagnosis." />
     <MESSAGE value="Update process." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update process." />
+    <MESSAGE value="Cancel commit on alexnet" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cancel commit on alexnet" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1228,20 +1224,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/environment/environment.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="20" selection-start-line="6" selection-start-column="20" selection-end-line="7" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="731">
@@ -1256,13 +1238,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="36040">
           <caret line="2138" selection-start-line="2138" selection-end-line="2138" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/environment/environmentGPU.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="2" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
         </state>
       </provider>
     </entry>
@@ -1396,13 +1371,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/send_data.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="85" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/cluster_local/send_data.bat">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -1440,16 +1408,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="43" column="41" selection-start-line="43" selection-start-column="41" selection-end-line="43" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale_decisions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="527">
@@ -1474,16 +1432,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="830">
           <caret line="421" selection-start-line="421" selection-end-line="421" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1514,6 +1462,54 @@
           <folding>
             <element signature="e#0#16#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="343">
+          <caret line="43" column="41" selection-start-line="43" selection-start-column="41" selection-end-line="43" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="29" column="8" lean-forward="true" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/environment/environment.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="8" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/environment/environmentGPU.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/send_data.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="98" selection-start-line="1" selection-start-column="98" selection-end-line="1" selection-end-column="98" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
         </state>
       </provider>
     </entry>
