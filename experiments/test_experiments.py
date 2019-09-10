@@ -1,11 +1,11 @@
 import shutil
 import unittest
-from experiments.dermatology.microscopy.descriptors import descriptors
-from experiments.dermatology.microscopy.finetune import fine_tune
-from experiments.dermatology.microscopy.multiscale_decisions import multiscale_decision
-from experiments.dermatology.microscopy.sliding_decisions import sliding_decisions
-from experiments.dermatology.microscopy.sliding_features import sliding_features
-from experiments.dermatology.microscopy.transferlearning import transfer_learning
+from experiments.dermatology.microscopy_old.descriptors import descriptors
+from experiments.dermatology.microscopy_old.finetune import fine_tune
+from experiments.dermatology.microscopy_old.multiscale_decisions import multiscale_decision
+from experiments.dermatology.microscopy_old.sliding_decisions import sliding_decisions
+from experiments.dermatology.microscopy_old.sliding_features import sliding_features
+from experiments.dermatology.microscopy_old.transferlearning import transfer_learning
 from experiments.otorhinolaryngology.simple import simple
 from toolbox.core.parameters import DermatologyDataset, ORLDataset
 
@@ -39,13 +39,13 @@ class TestMicroscopyWhole(unittest.TestCase):
         print('... Achieved!')
 
     # def test_descriptors(self):
-    #     descriptors(self.microscopy, self.output_folder)
+    #     descriptors(self.microscopy_old, self.output_folder)
 
     def test_transfer_learning(self):
         transfer_learning(self.microscopy, self.output_folder)
 
     def test_fine_tune(self):
-        # fine_tune(self.microscopy, self.output_folder)
+        # fine_tune(self.microscopy_old, self.output_folder)
         print('Nop')
 
 

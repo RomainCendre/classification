@@ -54,7 +54,7 @@ def get_inputs():
     patch_filter = {'Type': ['Patch']}
     image_inputs.set_filters(patch_filter)
 
-    # Data from microscopy
+    # Data from microscopy_old
     x = image_inputs.get('data')
     y = image_inputs.get('label')
     groups = image_inputs.get('group')

@@ -150,7 +150,7 @@ class Generator:
         patient['Binary_Diagnosis'] = label
         return patient
 
-    def generate_image(self, mode, modality='microscopy', type='Full', synthetic=False):
+    def generate_image(self, mode, modality='microscopy_old', type='Full', synthetic=False):
         toolbox_path = Path(__file__).parent.parent
         synthetics = 'synthetics' if synthetic else 'basics'
         if mode == 2:
@@ -237,13 +237,13 @@ class DataManager:
         output_folder = output_folder/'Microscopy'
         output_folder.mkdir(exist_ok=True)
 
-        # Read microscopy file for each patient
+        # Read microscopy_old file for each patient
         rcm_data = pandas.read_csv(self.rcm_file, dtype=str)
 
         images = []
         microscopy_labels = rcm_data[rcm_data['ID_RCM'] == source_id]
         microscopy_folder = self.microscopy_folder/source_id
-        # Get all microscopy location
+        # Get all microscopy_old location
         remains_images = [str(file.relative_to(microscopy_folder)) for file in microscopy_folder.glob('**/*.bmp')]
         sorted_images = {'Draw': []}
         # Identify images and their label
@@ -325,7 +325,7 @@ class DataManager:
                 images.extend(self.compute_dermoscopy(row['ID_Dermoscopy'], row['Binary_Diagnosis'], output_patient))
 
             if 'ID_RCM' in row.index:
-                # Get microscopy files
+                # Get microscopy_old files
                 images.extend(self.compute_microscopy(row['ID_RCM'], output_patient))
 
             # Write images list
