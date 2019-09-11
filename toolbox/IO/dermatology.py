@@ -150,7 +150,7 @@ class Generator:
         patient['Binary_Diagnosis'] = label
         return patient
 
-    def generate_image(self, mode, modality='microscopy_old', type='Full', synthetic=False):
+    def generate_image(self, mode, modality='microscopy', type='Full', synthetic=False):
         toolbox_path = Path(__file__).parent.parent
         synthetics = 'synthetics' if synthetic else 'basics'
         if mode == 2:

@@ -4,7 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" description="self.table.setStyleSheet('QTableView{selection-bac..." line="387" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
+    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Apply change to adapt methods from Wiltgen">
       <change afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/2_descriptors.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/test_experiments.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/test_experiments.py" afterDir="false" />
@@ -44,6 +44,7 @@
     <SUITE FILE_PATH="coverage/classification$Unittests_in_test_experiments_py.coverage" NAME="Unittests in test_experiments.py Coverage Results" MODIFIED="1568209656506" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$Unittests_for_test_experiments_TestMicroscopySliding.coverage" NAME="Unittests for test_experiments.TestMicroscopySliding Coverage Results" MODIFIED="1561379956304" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$Unittests_for_test_experiments_TestMicroscopySliding_test_sliding_features.coverage" NAME="Unittests for test_experiments.TestMicroscopySliding.test_sliding_features Coverage Results" MODIFIED="1565094893515" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
+    <SUITE FILE_PATH="coverage/classification$a_deep.coverage" NAME="a_deep Coverage Results" MODIFIED="1568209992899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
     <SUITE FILE_PATH="coverage/classification$fine_tune.coverage" NAME="fine_tune Coverage Results" MODIFIED="1560260544044" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/full" />
     <SUITE FILE_PATH="coverage/classification$autoencoder.coverage" NAME="autoencoder Coverage Results" MODIFIED="1563195791811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/devs" />
     <SUITE FILE_PATH="coverage/classification$simple.coverage" NAME="simple Coverage Results" MODIFIED="1566553211395" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/otorhinolaryngology" />
@@ -153,8 +154,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/toolbox/core/transforms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="439">
-              <caret line="165" column="50" selection-start-line="165" selection-start-column="50" selection-end-line="165" selection-end-column="50" />
+            <state relative-caret-position="303">
+              <caret line="157" column="19" lean-forward="true" selection-start-line="157" selection-start-column="16" selection-end-line="157" selection-end-column="117" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -452,7 +453,29 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests in test_experiments.py">
+  <component name="RunManager" selected="Python.a_deep">
+    <configuration name="a_deep" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="classification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/experiments/dermatology/microscopy" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="descriptors" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -467,28 +490,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy\a_deep.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="simple" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="classification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/experiments/otorhinolaryngology" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -558,11 +559,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.a_deep" />
         <item itemvalue="Python tests.Unittests in test_experiments.py" />
         <item itemvalue="Python.sliding_features" />
         <item itemvalue="Python.transferlearning" />
         <item itemvalue="Python.descriptors" />
-        <item itemvalue="Python.simple" />
       </list>
     </recent_temporary>
   </component>
@@ -644,14 +645,7 @@
       <workItem from="1566549645048" duration="7522000" />
       <workItem from="1568094896375" duration="687000" />
       <workItem from="1568119308802" duration="4154000" />
-      <workItem from="1568180642074" duration="11203000" />
-    </task>
-    <task id="LOCAL-00146" summary="Update main file.">
-      <created>1564753993788</created>
-      <option name="number" value="00146" />
-      <option name="presentableId" value="LOCAL-00146" />
-      <option name="project" value="LOCAL" />
-      <updated>1564753993788</updated>
+      <workItem from="1568180642074" duration="11462000" />
     </task>
     <task id="LOCAL-00147" summary="Update patch tool.">
       <created>1564756264365</created>
@@ -989,16 +983,17 @@
       <option name="project" value="LOCAL" />
       <updated>1568124301420</updated>
     </task>
-    <option name="localTasksCounter" value="195" />
+    <task id="LOCAL-00195" summary="Apply change to adapt methods from Wiltgen">
+      <created>1568209845258</created>
+      <option name="number" value="00195" />
+      <option name="presentableId" value="LOCAL-00195" />
+      <option name="project" value="LOCAL" />
+      <updated>1568209845258</updated>
+    </task>
+    <option name="localTasksCounter" value="196" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_in_test_experiments_py - 2019.08.07 at 15h 28m 55s.xml">
-      <configuration name="Unittests in test_experiments.py" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_in_test_experiments_py - 2019.08.07 at 15h 34m 30s.xml">
-      <configuration name="Unittests in test_experiments.py" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittests_in_test_experiments_py - 2019.09.11 at 15h 14m 50s.xml">
       <configuration name="Unittests in test_experiments.py" configurationId="tests" />
     </history-entry>
@@ -1023,9 +1018,15 @@
     <history-entry file="Unittests_in_test_experiments_py - 2019.09.11 at 15h 41m 48s.xml">
       <configuration name="Unittests in test_experiments.py" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_in_test_experiments_py - 2019.09.11 at 15h 47m 32s.xml">
+      <configuration name="Unittests in test_experiments.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_test_experiments_py - 2019.09.11 at 15h 48m 38s.xml">
+      <configuration name="Unittests in test_experiments.py" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="675960000" />
+    <option name="totallyTimeSpent" value="676219000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1038,16 +1039,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8973747" visible="true" weight="0.27372628" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8973747" visible="true" weight="0.27372628" />
       <window_info id="Structure" order="1" sideWeight="0.102625296" side_tool="true" weight="0.24575424" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3286119" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" sideWeight="0.497003" weight="0.2977867" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.45704296" weight="0.4476861" />
-      <window_info active="true" anchor="bottom" id="Debug" order="4" sideWeight="0.6253746" visible="true" weight="0.35714287" />
+      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.45704296" visible="true" weight="0.4476861" />
+      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.6253746" weight="0.35714287" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.10764588" />
@@ -1109,7 +1109,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update server configuration files." />
     <MESSAGE value="Add natsort." />
     <MESSAGE value="Update data location folder" />
     <MESSAGE value="Add script to deploy env." />
@@ -1134,17 +1133,11 @@
     <MESSAGE value="Cancel commit on alexnet" />
     <MESSAGE value="Adding new folder for new experiments." />
     <MESSAGE value="Change ub job" />
-    <option name="LAST_COMMIT_MESSAGE" value="Change ub job" />
+    <MESSAGE value="Apply change to adapt methods from Wiltgen" />
+    <option name="LAST_COMMIT_MESSAGE" value="Apply change to adapt methods from Wiltgen" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/toolbox/core/transforms.py</url>
-          <line>166</line>
-          <option name="timeStamp" value="132" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -1156,6 +1149,16 @@
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
+      <expression>
+        <expression-string>coefficients.extend([DWTDescriptorTransform.get_coefficients(direction) for direction in directions])</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>[DWTDescriptorTransform.get_coefficients(direction) for direction in directions]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>test= sstats.entropy(x[x &gt; 0].flatten())</expression-string>
         <language-id>Python</language-id>
@@ -1190,16 +1193,6 @@ sstats.entropy(X.flatten())</expression-string>
       </expression>
       <expression>
         <expression-string>sstats.entropy(x)</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>[np.sum(x ** 2)/x.size, sstats.entropy(x), np.std(x)]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>t = inputs.sub_inputs({'Label': ['Normal', 'Benign', 'Malignant', 'Unknown']})</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
@@ -1611,8 +1604,8 @@ sstats.entropy(X.flatten())</expression-string>
     </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/transforms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="439">
-          <caret line="165" column="50" selection-start-line="165" selection-start-column="50" selection-end-line="165" selection-end-column="50" />
+        <state relative-caret-position="303">
+          <caret line="157" column="19" lean-forward="true" selection-start-line="157" selection-start-column="16" selection-end-line="157" selection-end-column="117" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
