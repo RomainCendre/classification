@@ -3,7 +3,7 @@ from PIL import Image
 import numpy as np
 from pywt import dwt
 from joblib import Parallel, delayed
-from scipy.stats import gennorm
+from scipy import stats as sstats
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cross_decomposition import PLSRegression
 from sklearn.decomposition import PCA
@@ -118,7 +118,89 @@ class PredictorTransform(BaseEstimator, TransformerMixin):
 
 class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
 
-    def __init__(self, wavelets='db1', scale=1, mean=False):
+    def __init__(self, wavelets='db4', scale=1, mean=False):
+        self.mean = mean
+        self.scale = scale
+        self.wavelets = wavelets
+
+    def fit(self, x, y=None):
+        """
+        This should fit this transformer, but DWT doesn't need to fit to train data
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+        """
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        """
+        This method is the main part of this transformer.
+        Return a wavelet transform, as specified mode.
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+             copy (:obj): Not used.
+        """
+        features = []
+        for index, data in enumerate(x):
+            image = np.array(Image.open(data).convert('L'))
+            coefficients = []
+            for scale in range(0, self.scale):
+                cA, (cH, cV, cD) = pywt.dwt2(image, self.wavelets)
+                image = cA
+                directions = [cH, cV, cD]
+                # Concatenate last image
+                if scale == self.scale:
+                    directions.append(scale)
+                # Compute coefficients
+                coefficients.extend([DWTDescriptorTransform.get_coefficients(direction) for direction in directions])
+            features.append(np.array(coefficients).flatten())
+        return np.array(features)
+
+    @staticmethod
+    def get_coefficients(x):
+        squared = x ** 2
+        sum_quared = sum(sum(squared))
+        entropy = sstats.entropy(squared.flatten()/sum_quared)
+        return [np.sum(squared)/x.size, entropy, np.std(x)]
+
+
+class FourierDescriptorTransform(BaseEstimator, TransformerMixin):
+
+    def __init__(self, mean):
+        self.mean = mean
+
+    def fit(self, x, y=None):
+        """
+        This should fit this transformer, but DWT doesn't need to fit to train data
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+        """
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        """
+        This method is the main part of this transformer.
+        Return a wavelet transform, as specified mode.
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+             copy (:obj): Not used.
+        """
+        features = []
+        ps = np.abs(np.fft.fft(x)) ** 2
+
+        return
+
+
+class DWTFitDescriptorTransform(BaseEstimator, TransformerMixin):
+
+    def __init__(self, wavelets='db4', scale=1, mean=False):
         self.mean = mean
         self.scale = scale
         self.wavelets = wavelets

@@ -1,11 +1,7 @@
 import shutil
 import unittest
-from experiments.dermatology.microscopy_old.descriptors import descriptors
-from experiments.dermatology.microscopy_old.finetune import fine_tune
-from experiments.dermatology.microscopy_old.multiscale_decisions import multiscale_decision
-from experiments.dermatology.microscopy_old.sliding_decisions import sliding_decisions
-from experiments.dermatology.microscopy_old.sliding_features import sliding_features
-from experiments.dermatology.microscopy_old.transferlearning import transfer_learning
+
+from experiments.dermatology.microscopy.b_descriptors import descriptors
 from experiments.otorhinolaryngology.simple import simple
 from toolbox.core.parameters import DermatologyDataset, ORLDataset
 
@@ -30,6 +26,7 @@ class TestMicroscopyWhole(unittest.TestCase):
 
     def setUp(self):
         self.microscopy = DermatologyDataset.test_images()
+        self.microscopy = self.microscopy.copy_and_change({'Type': 'Patch'})
         self.output_folder = DermatologyDataset.get_results_location(is_test=True)
 
     def tearDown(self):
@@ -38,44 +35,9 @@ class TestMicroscopyWhole(unittest.TestCase):
         shutil.rmtree(self.output_folder, ignore_errors=True)
         print('... Achieved!')
 
-    # def test_descriptors(self):
-    #     descriptors(self.microscopy_old, self.output_folder)
+    def test_descriptors(self):
+        descriptors(self.microscopy, self.output_folder)
 
-    def test_transfer_learning(self):
-        transfer_learning(self.microscopy, self.output_folder)
-
-    def test_fine_tune(self):
+    def test_deep(self):
         # fine_tune(self.microscopy_old, self.output_folder)
         print('Nop')
-
-
-class TestMicroscopyMultiscale(unittest.TestCase):
-
-    def setUp(self):
-        self.microscopy = DermatologyDataset.test_multiresolution(coefficients=[1, 0.75, 0.5, 0.25])
-        self.output_folder = DermatologyDataset.get_results_location(is_test=True)
-
-    def tearDown(self):
-        print('Cleaning...')
-        shutil.rmtree(self.microscopy.get_working_folder(), ignore_errors=True)
-        shutil.rmtree(self.output_folder, ignore_errors=True)
-        print('... Achieved!')
-
-    def test_multiscale(self):
-        multiscale_decision(self.microscopy, self.output_folder)
-
-
-class TestMicroscopySliding(unittest.TestCase):
-
-    def setUp(self):
-        self.microscopy = DermatologyDataset.test_sliding_images(size=250, overlap=0)
-        self.output_folder = DermatologyDataset.get_results_location(is_test=True)
-
-    def tearDown(self):
-        shutil.rmtree(self.microscopy.get_working_folder(), ignore_errors=True)
-
-    def test_sliding_features(self):
-        sliding_features([('Test', self.microscopy)], self.output_folder)
-
-    def test_sliding_decisions(self):
-        sliding_decisions([('Test', self.microscopy)], self.output_folder)

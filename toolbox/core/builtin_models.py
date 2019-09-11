@@ -18,7 +18,7 @@ from sklearn.preprocessing import StandardScaler
 from toolbox.core.layers import RandomLayer
 from toolbox.core.models import KerasBatchClassifier, KerasFineClassifier
 from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform, DWTDescriptorTransform, \
-    PNormTransform, FlattenTransform, PCAAtMost, SelectAtMostKBest, LDAAtMost
+    PNormTransform, FlattenTransform, PCAAtMost, SelectAtMostKBest, LDAAtMost, FourierDescriptorTransform
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
 
@@ -43,10 +43,18 @@ class Transforms:
 
     @staticmethod
     def get_image_dwt():
-        pipe = Pipeline([('dwt', DWTDescriptorTransform(wavelets=['db2'], scale=2))])
+        pipe = Pipeline([('dwt', DWTDescriptorTransform(wavelets=['db4'], scale=4))])
         pipe.name = 'DWT'
         # Define parameters to validate through grid CV
-        parameters = {}#{'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']}
+        parameters = {}
+        return pipe, parameters
+
+    @staticmethod
+    def get_image_fft():
+        pipe = Pipeline([('fft', FourierDescriptorTransform())])
+        pipe.name = 'FFT'
+        # Define parameters to validate through grid CV
+        parameters = {}
         return pipe, parameters
 
     @staticmethod
