@@ -181,11 +181,11 @@ if __name__ == "__main__":
         inputs = image_inputs.copy_and_change({'Type': image_type})
         # Transfer Learning
         output = output_folder / image_type
-        output.mkdir(exist_ok=True)
+        output.mkdir(parents=True, exist_ok=True)
         transfer_learning(image_inputs, output)
         # Fine Learning
         output = output_folder / image_type
-        output.mkdir(exist_ok=True)
+        output.mkdir(parents=True, exist_ok=True)
         fine_tune(image_inputs, output)
 
     # Open result folder

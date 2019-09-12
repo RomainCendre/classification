@@ -105,7 +105,7 @@ if __name__ == "__main__":
         inputs = image_inputs.copy_and_change({'Type': image_type})
         # Compute data
         output = output_folder/image_type
-        output.mkdir(exist_ok=True)
+        output.mkdir(parents=True, exist_ok=True)
         manual(image_inputs, output)
 
     # Open result folder
