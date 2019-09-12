@@ -1,8 +1,9 @@
 # Create working directory
 ## Long term storage
-mkdir /archive/le2i/rc621381/Data
-mkdir /archive/le2i/rc621381/Data/Skin/
-mkdir /archive/le2i/rc621381/Data/Skin/Saint_Etienne/
+mkdir /work/le2i/rc621381/Data
+mkdir /work/le2i/rc621381/Data/Skin/
+mkdir /work/le2i/rc621381/Data/Skin/Saint_Etienne/
+
 ## Short term storage
 mkdir /work/le2i/rc621381/.research
 mkdir /work/le2i/rc621381/Results
@@ -11,7 +12,8 @@ mkdir /work/le2i/rc621381/conda/envs
 
 # Now create link to these folders
 ## Long term storage shortcut
-ln -s /archive/le2i/rc621381/Data ~/Data
+ln -s /work/le2i/rc621381/Data ~/Data
+
 ## Short term storage shortcut
 ln -s /work/le2i/rc621381/ ~/work
 ln -s ~/work/conda/envs ~/my-envs
