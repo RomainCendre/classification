@@ -69,16 +69,14 @@ def manual(original_inputs, folder):
         process = Process(output_folder=folder, name=filter_name, settings=settings, stats_keys=statistics)
         process.begin(inner_cv=validation, n_jobs=nb_cpu, scoring=scoring)
 
-        for im_type, extractor, model in combinations:
+        for extractor, model in combinations:
 
             # Name experiment and filter data
             inputs = original_inputs.copy_and_change(filter_groups)
             inputs.name = f'{extractor[0]}_{model[0]}'
 
             # Filter datasets
-            type_filter = im_type[1]
-            type_filter.update(filter_datas)
-            inputs.set_filters(type_filter)
+            inputs.set_filters(filter_datas)
             inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'group': LabelEncoder()})
             inputs.build_folds()
 

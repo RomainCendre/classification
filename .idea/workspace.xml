@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/core/transforms.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/core/transforms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/b_manual.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/b_manual.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -58,8 +58,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4">
-              <caret line="77" column="47" selection-start-line="77" selection-start-column="47" selection-end-line="77" selection-end-column="47" />
+            <state relative-caret-position="404">
+              <caret line="187" column="35" selection-start-line="187" selection-start-column="35" selection-end-line="187" selection-end-column="35" />
               <folding>
                 <element signature="e#0#16#0" expanded="true" />
               </folding>
@@ -67,11 +67,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/b_manual.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="60" column="4" lean-forward="true" selection-start-line="60" selection-start-column="4" selection-end-line="60" selection-end-column="68" />
+            <state relative-caret-position="404">
+              <caret line="77" column="29" selection-start-line="77" selection-start-column="29" selection-end-line="77" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -88,7 +88,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/toolbox/core/transforms.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="163">
@@ -201,9 +201,9 @@
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/b_descriptors.py" />
         <option value="$PROJECT_DIR$/experiments/test_experiments.py" />
         <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/b_manual.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py" />
         <option value="$PROJECT_DIR$/toolbox/core/transforms.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/b_manual.py" />
       </list>
     </option>
   </component>
@@ -574,21 +574,7 @@
       <workItem from="1568094896375" duration="687000" />
       <workItem from="1568119308802" duration="4154000" />
       <workItem from="1568180642074" duration="16622000" />
-      <workItem from="1568267147273" duration="12712000" />
-    </task>
-    <task id="LOCAL-00152" summary="Update labelize way.">
-      <created>1564762166684</created>
-      <option name="number" value="00152" />
-      <option name="presentableId" value="LOCAL-00152" />
-      <option name="project" value="LOCAL" />
-      <updated>1564762166684</updated>
-    </task>
-    <task id="LOCAL-00153" summary="Fix patch list.">
-      <created>1564830613161</created>
-      <option name="number" value="00153" />
-      <option name="presentableId" value="LOCAL-00153" />
-      <option name="project" value="LOCAL" />
-      <updated>1564830613162</updated>
+      <workItem from="1568267147273" duration="13043000" />
     </task>
     <task id="LOCAL-00154" summary="Fix preparation of data.">
       <created>1564994286792</created>
@@ -919,7 +905,21 @@
       <option name="project" value="LOCAL" />
       <updated>1568281085276</updated>
     </task>
-    <option name="localTasksCounter" value="201" />
+    <task id="LOCAL-00201" summary="Update Transform module (remove unused lib)">
+      <created>1568281534284</created>
+      <option name="number" value="00201" />
+      <option name="presentableId" value="LOCAL-00201" />
+      <option name="project" value="LOCAL" />
+      <updated>1568281534284</updated>
+    </task>
+    <task id="LOCAL-00202" summary="Add parents creation in new procedures.">
+      <created>1568281608435</created>
+      <option name="number" value="00202" />
+      <option name="presentableId" value="LOCAL-00202" />
+      <option name="project" value="LOCAL" />
+      <updated>1568281608435</updated>
+    </task>
+    <option name="localTasksCounter" value="203" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -955,7 +955,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="694091000" />
+    <option name="totallyTimeSpent" value="694422000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1039,8 +1039,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update local cluster." />
-    <MESSAGE value="Update parameters file (compatibility) and structure to be conform with pandas." />
     <MESSAGE value="Update simple orl tool." />
     <MESSAGE value="Add some changes from literature." />
     <MESSAGE value="Change average to f1_score." />
@@ -1064,7 +1062,9 @@
     <MESSAGE value="Update CART nb features" />
     <MESSAGE value="Update wavelet features 36 features instead of 39" />
     <MESSAGE value="Update current procedures." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update current procedures." />
+    <MESSAGE value="Update Transform module (remove unused lib)" />
+    <MESSAGE value="Add parents creation in new procedures." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add parents creation in new procedures." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1505,23 +1505,6 @@ mask&lt;0</expression-string>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/b_manual.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="60" column="4" lean-forward="true" selection-start-line="60" selection-start-column="4" selection-end-line="60" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4">
-          <caret line="77" column="47" selection-start-line="77" selection-start-column="47" selection-end-line="77" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/transforms.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="163">
@@ -1529,6 +1512,23 @@ mask&lt;0</expression-string>
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="404">
+          <caret line="187" column="35" selection-start-line="187" selection-start-column="35" selection-end-line="187" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/b_manual.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="404">
+          <caret line="77" column="29" selection-start-line="77" selection-start-column="29" selection-end-line="77" selection-end-column="29" />
         </state>
       </provider>
     </entry>
