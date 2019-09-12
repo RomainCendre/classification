@@ -182,11 +182,11 @@ if __name__ == "__main__":
         # Transfer Learning
         output = output_folder / image_type
         output.mkdir(parents=True, exist_ok=True)
-        transfer_learning(image_inputs, output)
+        transfer_learning(inputs, output)
         # Fine Learning
         output = output_folder / image_type
         output.mkdir(parents=True, exist_ok=True)
-        fine_tune(image_inputs, output)
+        fine_tune(inputs, output)
 
     # Open result folder
     webbrowser.open(output_folder.as_uri())

@@ -104,7 +104,7 @@ if __name__ == "__main__":
         # Compute data
         output = output_folder/image_type
         output.mkdir(parents=True, exist_ok=True)
-        manual(image_inputs, output)
+        manual(inputs, output)
 
     # Open result folder
     webbrowser.open(output_folder.as_uri())
