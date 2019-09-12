@@ -6,6 +6,8 @@ from numpy import logspace
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+
 from experiments.processes import Process
 from toolbox.core.builtin_models import Transforms, Classifiers
 from toolbox.core.models import KerasFineClassifier
@@ -21,6 +23,17 @@ def get_linear_svm():
 
     # Define parameters to validate through grid CV
     parameters = {'clf__C': logspace(-2, 3, 6).tolist()}
+    return pipe, parameters
+
+
+def get_cart():
+    # Add scaling step
+    steps = [('scale', StandardScaler()), ('clf', DecisionTreeClassifier())]
+    pipe = Pipeline(steps)
+    pipe.name = 'Cart'
+
+    # Define parameters to validate through grid CV
+    parameters = {}
     return pipe, parameters
 
 
@@ -65,7 +78,7 @@ def transfer_learning(original_inputs, folder):
                ('ResNet50', Transforms.get_tl_extractor(architecture='ResNet'))]
 
     # Models
-    models = [('Svm', get_linear_svm())]
+    models = [('CART', get_cart()), ('LinearSVM', get_linear_svm())]
 
     # Parameters combinations
     combinations = list(itertools.product(methods, models))
@@ -152,6 +165,28 @@ if __name__ == "__main__":
     output_folder = DermatologyDataset.get_results_location()/'fine'
     output_folder.mkdir(exist_ok=True)
     fine_tune(image_inputs, output_folder)
+
+
+if __name__ == "__main__":
+    # Parameters
+    current_file = Path(__file__)
+
+    # Input patch
+    image_inputs = DermatologyDataset.images(modality='Microscopy')
+    image_types = ['Patch', 'Full']
+    # Folder
+    output_folder = DermatologyDataset.get_results_location() / 'Deep'
+
+    for image_type in image_types:
+        inputs = image_inputs.copy_and_change({'Type': image_type})
+        # Transfer Learning
+        output = output_folder / image_type
+        output.mkdir(exist_ok=True)
+        transfer_learning(image_inputs, output)
+        # Fine Learning
+        output = output_folder / image_type
+        output.mkdir(exist_ok=True)
+        fine_tune(image_inputs, output)
 
     # Open result folder
     webbrowser.open(output_folder.as_uri())

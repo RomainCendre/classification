@@ -38,7 +38,7 @@ def get_cart():
     return pipe, parameters
 
 
-def descriptors(original_inputs, folder):
+def manual(original_inputs, folder):
 
     # Advanced parameters
     nb_cpu = LocalParameters.get_cpu_number()
@@ -52,9 +52,6 @@ def descriptors(original_inputs, folder):
     # Filters
     filters = LocalParameters.get_dermatology_filters()
 
-    # Types
-    types = [('Thumbnails', {'Type': 'Patch'}), ('Full', {'Type': 'Full'})]
-
     # Methods
     methods = [('Wavelet', Transforms.get_image_dwt()),
                ('Fourier', Transforms.get_image_fft()),
@@ -64,7 +61,7 @@ def descriptors(original_inputs, folder):
     models = [('CART', get_cart()), ('LinearSVM', get_linear_svm())]
 
     # Parameters combinations
-    combinations = list(itertools.product(types, methods, models))
+    combinations = list(itertools.product(methods, models))
 
     # Browse combinations
     for filter_name, filter_datas, filter_encoder, filter_groups in filters:
@@ -76,7 +73,7 @@ def descriptors(original_inputs, folder):
 
             # Name experiment and filter data
             inputs = original_inputs.copy_and_change(filter_groups)
-            inputs.name = '{type}_{method}_{model}'.format(type=im_type[0], method=extractor[0], model=model[0])
+            inputs.name = f'{extractor[0]}_{model[0]}'
 
             # Filter datasets
             type_filter = im_type[1]
@@ -97,14 +94,19 @@ def descriptors(original_inputs, folder):
 if __name__ == "__main__":
     # Parameters
     current_file = Path(__file__)
-    output_folder = DermatologyDataset.get_results_location()/current_file.stem
-    output_folder.mkdir(exist_ok=True)
 
     # Input patch
     image_inputs = DermatologyDataset.images(modality='Microscopy')
+    image_types = ['Patch', 'Full']
+    # Folder
+    output_folder = DermatologyDataset.get_results_location() / 'Manual'
 
-    # Compute data
-    descriptors(image_inputs, output_folder)
+    for image_type in image_types:
+        inputs = image_inputs.copy_and_change({'Type': image_type})
+        # Compute data
+        output = output_folder/image_type
+        output.mkdir(exist_ok=True)
+        manual(image_inputs, output)
 
     # Open result folder
     webbrowser.open(output_folder.as_uri())
