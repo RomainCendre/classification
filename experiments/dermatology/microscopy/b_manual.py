@@ -100,7 +100,7 @@ if __name__ == "__main__":
     output_folder = DermatologyDataset.get_results_location() / 'Manual'
 
     for image_type in image_types:
-        inputs = image_inputs.copy_and_change({'Type': image_type})
+        inputs = image_inputs.sub_inputs({'Type': image_type})
         # Compute data
         output = output_folder/image_type
         output.mkdir(parents=True, exist_ok=True)
