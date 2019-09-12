@@ -7,6 +7,8 @@ from numpy import unique, array_equal, array
 from sklearn.model_selection import GridSearchCV, ParameterGrid
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+
 from toolbox.core.models import KerasBatchClassifier
 from toolbox.core.structures import Outputs
 
@@ -299,7 +301,8 @@ class Classifier:
                 return model.support_vectors_.shape[1]
             else:
                 return model.coef_.shape[1]
-
+        elif isinstance(model, DecisionTreeClassifier):
+            return model.n_features_
         return 0
 
     @staticmethod

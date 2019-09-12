@@ -1,7 +1,7 @@
 import shutil
 import unittest
 
-from experiments.dermatology.microscopy.b_descriptors import descriptors
+from experiments.dermatology.microscopy.b_manual import descriptors
 from experiments.otorhinolaryngology.simple import simple
 from toolbox.core.parameters import DermatologyDataset, ORLDataset
 
@@ -35,7 +35,7 @@ class TestMicroscopyWhole(unittest.TestCase):
         shutil.rmtree(self.output_folder, ignore_errors=True)
         print('... Achieved!')
 
-    def test_descriptors(self):
+    def test_manual(self):
         descriptors(self.microscopy, self.output_folder)
 
     def test_deep(self):

@@ -59,8 +59,6 @@ def descriptors(original_inputs, folder):
     methods = [('Wavelet', Transforms.get_image_dwt()),
                ('Fourier', Transforms.get_image_fft()),
                ('Haralick', Transforms.get_haralick(mean=False))]
-               # ('TransferLearning', Transforms.get_tl_extractor(pooling='avg')),
-               # ('FineTuning', Transforms.get_ft_extractor(extract_layer=-3, train_layers=280))]
 
     # Models
     models = [('CART', get_cart()), ('LinearSVM', get_linear_svm())]
