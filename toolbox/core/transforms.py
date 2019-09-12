@@ -148,13 +148,16 @@ class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
         for index, data in enumerate(x):
             image = np.array(Image.open(data).convert('L'))
             coefficients = []
-            for scale in range(0, self.scale):
+            for scale in range(0, self.scale+1):
                 cA, (cH, cV, cD) = pywt.dwt2(image, self.wavelets)
                 image = cA
-                directions = [cH, cV, cD]
+                directions = []
+                # Squeeze first scale
+                if not scale == 0:
+                    directions.extend([cH, cV, cD])
                 # Concatenate last image
-                if scale == self.scale:
-                    directions.append(scale)
+                if scale == (self.scale-1):
+                    directions.append(image)
                 # Compute coefficients
                 coefficients.extend([DWTDescriptorTransform.get_coefficients(direction) for direction in directions])
             features.append(np.array(coefficients).flatten())
