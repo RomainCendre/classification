@@ -4,7 +4,6 @@ import numpy as np
 from pywt import dwt
 from joblib import Parallel, delayed
 from scipy import stats as sstats
-from skimage.draw import line_aa
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cross_decomposition import PLSRegression
 from sklearn.decomposition import PCA
@@ -282,7 +281,7 @@ class DWTFitDescriptorTransform(BaseEstimator, TransformerMixin):
         return np.array(features)
 
     def get_coefficients(self, x):
-        params = gennorm.fit(x)
+        params = sstats.gennorm.fit(x)
         beta = params[0]  # Shape
         alpha = params[2]  # Scale
         return [alpha, beta]
