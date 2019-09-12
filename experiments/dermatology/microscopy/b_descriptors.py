@@ -57,7 +57,7 @@ def descriptors(original_inputs, folder):
 
     # Methods
     methods = [('Wavelet', Transforms.get_image_dwt()),
-               #('Fourier', Transforms.get_image_fft()),
+               ('Fourier', Transforms.get_image_fft()),
                ('Haralick', Transforms.get_haralick(mean=False))]
                # ('TransferLearning', Transforms.get_tl_extractor(pooling='avg')),
                # ('FineTuning', Transforms.get_ft_extractor(extract_layer=-3, train_layers=280))]

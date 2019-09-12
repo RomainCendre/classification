@@ -4,6 +4,7 @@ import numpy as np
 from pywt import dwt
 from joblib import Parallel, delayed
 from scipy import stats as sstats
+from skimage.draw import line_aa
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cross_decomposition import PLSRegression
 from sklearn.decomposition import PCA
@@ -163,14 +164,15 @@ class DWTDescriptorTransform(BaseEstimator, TransformerMixin):
     def get_coefficients(x):
         squared = x ** 2
         sum_quared = sum(sum(squared))
-        entropy = sstats.entropy(squared.flatten()/sum_quared)
-        return [np.sum(squared)/x.size, entropy, np.std(x)]
+        entropy = sstats.entropy(squared.flatten() / sum_quared)
+        return [np.sum(squared) / x.size, entropy, np.std(x)]
 
 
 class FourierDescriptorTransform(BaseEstimator, TransformerMixin):
 
-    def __init__(self, mean):
-        self.mean = mean
+    def __init__(self, radius_feat=22, directions_feat=16):
+        self.radius_feat = radius_feat
+        self.directions_feat = directions_feat
 
     def fit(self, x, y=None):
         """
@@ -193,9 +195,46 @@ class FourierDescriptorTransform(BaseEstimator, TransformerMixin):
              copy (:obj): Not used.
         """
         features = []
-        ps = np.abs(np.fft.fft(x)) ** 2
+        for index, data in enumerate(x):
+            image = np.array(Image.open(data).convert('F'))/255
+            power_spectrum = np.abs(np.fft.rfft(image))
+            local_features = []
+            for radius in range(0, self.radius_feat):
+                mask = FourierDescriptorTransform.circular_mask(power_spectrum.shape,
+                                                                center=[0, power_spectrum.shape[1]/2],
+                                                                np_split=self.radius_feat,
+                                                                index=radius)
+                local_features.append(np.sum(power_spectrum[mask])/np.sum(mask))
 
-        return
+            for direction in range(0, self.directions_feat):
+                mask = FourierDescriptorTransform.direction_mask(power_spectrum.shape,
+                                                                 center=[0, power_spectrum.shape[1]/2],
+                                                                 np_split=self.directions_feat,
+                                                                 index=direction)
+                local_features.append(np.sum(power_spectrum[mask])/np.sum(mask))
+            features.append(np.array(local_features).flatten())
+        return features
+
+    @staticmethod
+    def circular_mask(shape, center, np_split, index):
+        Y, X = np.ogrid[:shape[0], :shape[1]]
+        dist_from_center = np.sqrt((X - center[0]) ** 2 + (Y - center[1]) ** 2)
+        radius = np.amax(dist_from_center) / np_split
+        # Compute mask
+        mask_inner = (radius * index) <= dist_from_center
+        mask_outer = dist_from_center <= radius * (index + 1)
+        return np.logical_and(mask_inner, mask_outer)
+
+    @staticmethod
+    def direction_mask(shape, center, np_split, index):
+        tolerance = 0.5
+        radius = 180. / np_split
+        Y, X = np.ogrid[:shape[0], :shape[1]]
+        angle_from_center = np.rad2deg(np.arctan2((X - center[0]), (Y - center[1])))
+        # Compute mask
+        mask_inner = (radius * index) - tolerance<= angle_from_center
+        mask_outer = angle_from_center <= (radius * index) + tolerance
+        return np.logical_and(mask_inner, mask_outer)
 
 
 class DWTFitDescriptorTransform(BaseEstimator, TransformerMixin):
@@ -233,7 +272,8 @@ class DWTFitDescriptorTransform(BaseEstimator, TransformerMixin):
                 cA, (cH, cV, cD) = pywt.dwt2(image, self.wavelets)
                 image = cA
                 directions = [cH, cV, cD]
-                coefficients.extend(Parallel(n_jobs=3)(delayed(self.get_coefficients)(direction) for direction in directions))
+                coefficients.extend(
+                    Parallel(n_jobs=3)(delayed(self.get_coefficients)(direction) for direction in directions))
 
             features.append(np.array(coefficients).flatten())
         return np.array(features)
