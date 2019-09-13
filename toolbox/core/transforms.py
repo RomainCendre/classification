@@ -308,6 +308,49 @@ class FlattenTransform(BaseEstimator, TransformerMixin):
         return x.reshape((x.shape[0], -1))
 
 
+class SpatialDescriptorTransform(BaseEstimator, TransformerMixin):
+
+    def fit(self, x, y=None):
+        """
+        This should fit this transformer, but DWT doesn't need to fit to train data
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+        """
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        """
+        This method is the main part of this transformer.
+        Return a wavelet transform, as specified mode.
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+             copy (:obj): Not used.
+        """
+
+        features = []
+        for index, data in enumerate(x):
+            image = np.array(Image.open(data).convert('L'))
+            current_features = []
+            current_features.extend(mahotas.features.haralick(image).mean(axis=0))
+            current_features.extend(SpatialDescriptorTransform.histogram_features(image))
+            features.append(current_features)
+        return np.array(features)
+
+    @staticmethod
+    def histogram_features(images):
+        features = []
+        features.append(np.mean(images))
+        features.append(np.std(images))
+        features.append(sstats.skew(images.flatten()))
+        features.append(sstats.kurtosis(images.flatten()))
+        features.append(sstats.entropy(images.flatten()))
+        return features
+
+
 class HaralickTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, mean=False):

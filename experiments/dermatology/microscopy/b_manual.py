@@ -55,7 +55,7 @@ def manual(original_inputs, folder):
     # Methods
     methods = [('Wavelet', Transforms.get_image_dwt()),
                ('Fourier', Transforms.get_image_fft()),
-               ('Haralick', Transforms.get_haralick(mean=False))]
+               ('Spatial', Transforms.get_spatial())]
 
     # Models
     models = [('CART', get_cart()), ('LinearSVM', get_linear_svm())]

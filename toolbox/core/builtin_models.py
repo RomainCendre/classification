@@ -18,7 +18,8 @@ from sklearn.preprocessing import StandardScaler
 from toolbox.core.layers import RandomLayer
 from toolbox.core.models import KerasBatchClassifier, KerasFineClassifier
 from toolbox.core.transforms import DWTTransform, PLSTransform, HaralickTransform, DWTDescriptorTransform, \
-    PNormTransform, FlattenTransform, PCAAtMost, SelectAtMostKBest, LDAAtMost, FourierDescriptorTransform
+    PNormTransform, FlattenTransform, PCAAtMost, SelectAtMostKBest, LDAAtMost, FourierDescriptorTransform, \
+    SpatialDescriptorTransform
 from toolbox.tools.tensorboard import TensorBoardWriter, TensorBoardTool
 
 
@@ -96,6 +97,14 @@ class Transforms:
         pipe.name = 'DWT'
         # Define parameters to validate through grid CV
         parameters = {}#{'dwt__mode': ['db1', 'db2', 'db3', 'db4', 'db5', 'db6']}
+        return pipe, parameters
+
+    @staticmethod
+    def get_spatial():
+        pipe = Pipeline([('spatial', SpatialDescriptorTransform())])
+        pipe.name = 'Spatial'
+        # Define parameters to validate through grid CV
+        parameters = {}
         return pipe, parameters
 
     @staticmethod
