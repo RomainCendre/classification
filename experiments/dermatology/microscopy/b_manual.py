@@ -92,7 +92,6 @@ def manual(original_inputs, folder):
 if __name__ == "__main__":
     # Parameters
     current_file = Path(__file__)
-    LocalParameters.set_gpu()
     # Input patch
     image_inputs = DermatologyDataset.images(modality='Microscopy')
     image_types = ['Patch', 'Full']
