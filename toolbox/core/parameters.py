@@ -154,7 +154,7 @@ class DermatologyDataset:
             DermatologyDataset.__print_progress_bar(index, len(dataframe), prefix='Progress:')
             multi = DermatologyDataset.__multi_resolution(data['Full_Path'], data['Reference'], coefficients,
                                                           work_folder)
-            multi['Type'] = 'Multi'
+            multi['Type'] = 'Instance'
             multi = pd.concat([multi, pd.DataFrame(data).T], sort=False)
             multi = multi.fillna(data)
             multis_data.append(multi)
@@ -173,7 +173,7 @@ class DermatologyDataset:
         for index, (df_index, data) in zip(np.arange(len(images.index)), images.iterrows()):
             DermatologyDataset.__print_progress_bar(index, len(images), prefix='Progress:')
             windows = DermatologyDataset.__patchify(data['Full_Path'], data['Reference'], size, overlap, work_folder)
-            windows['Type'] = 'Window'
+            windows['Type'] = 'Instance'
             windows = pd.concat([windows, pd.DataFrame(data).T], sort=False)
             windows = windows.fillna(data)
             windows_data.append(windows)
