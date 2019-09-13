@@ -156,23 +156,6 @@ if __name__ == "__main__":
 
     # Input patch
     image_inputs = DermatologyDataset.images(modality='Microscopy')
-    image_inputs = image_inputs.copy_and_change({'Type': 'Patch'})
-
-    # Compute data
-    output_folder = DermatologyDataset.get_results_location()/'transfer'
-    output_folder.mkdir(exist_ok=True)
-    transfer_learning(image_inputs, output_folder)
-    output_folder = DermatologyDataset.get_results_location()/'fine'
-    output_folder.mkdir(exist_ok=True)
-    fine_tune(image_inputs, output_folder)
-
-
-if __name__ == "__main__":
-    # Parameters
-    current_file = Path(__file__)
-
-    # Input patch
-    image_inputs = DermatologyDataset.images(modality='Microscopy')
     image_types = ['Patch', 'Full']
     # Folder
     output_folder = DermatologyDataset.get_results_location() / 'Deep'
@@ -180,13 +163,13 @@ if __name__ == "__main__":
     for image_type in image_types:
         inputs = image_inputs.sub_inputs({'Type': image_type})
         # Transfer Learning
-        output = output_folder / image_type
+        output = output_folder / 'transfer' / image_type
         output.mkdir(parents=True, exist_ok=True)
-        transfer_learning(inputs, output)
+        # transfer_learning(inputs, output)
         # Fine Learning
-        output = output_folder / image_type
+        output = output_folder / 'fine' / image_type
         output.mkdir(parents=True, exist_ok=True)
-        fine_tune(inputs, output)
+        # fine_tune(inputs, output)
 
     # Open result folder
     webbrowser.open(output_folder.as_uri())
