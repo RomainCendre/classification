@@ -16,7 +16,7 @@ ln -s /work/le2i/rc621381/Data ~/Data
 
 ## Short term storage shortcut
 ln -s /work/le2i/rc621381/ ~/work
-ln -s ~/work/conda/envs ~/my-envs
+ln -s ~/work/conda/envs ~/envs
 ln -s ~/work/.research ~/.research
 ln -s ~/work/Results ~/Results
 ln -s ~/work/conda/tmp ~/.conda/pkgs
