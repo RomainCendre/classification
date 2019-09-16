@@ -91,6 +91,7 @@ class QPatchExtractor(QMainWindow):
         self.open_patches()
         # Send data to components
         self.label_widget.send_image(self.get_image())
+        self.patch_widget.send_image(self.get_image())
         self.patch_widget.send_patches(self.get_patches())
         self.viewer.set_patches(self.get_patches_draw())
         self.update_image()
@@ -151,7 +152,7 @@ class QPatchExtractor(QMainWindow):
         super().closeEvent(event)
 
     def delete_patch(self):
-        index = self.patches.index[self.patch_widget.get_patch_selected()]
+        index = self.get_patches().index[self.patch_widget.get_patch_selected()]
         # Delete patch and row
         Path(self.patches.loc[index, 'Full_Path']).unlink()
         self.patches = self.patches.drop(index)
@@ -404,6 +405,7 @@ class QPatchWidget(QWidget):
         self.init_gui()
 
     def init_gui(self):
+        self.image = QLabel()
         # Create table that list current patches
         self.table = QTableWidget()
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -431,11 +433,12 @@ class QPatchWidget(QWidget):
         self.size.setEnabled(False)
         # Then build patch tool
         patch_layout = QGridLayout(self)
-        patch_layout.addWidget(self.table, 0, 0, 1, 4)
-        patch_layout.addWidget(QLabel('Mode'), 1, 0)
-        patch_layout.addWidget(self.mode, 1, 1)
-        patch_layout.addWidget(QLabel('Width/Height'), 1, 2)
-        patch_layout.addWidget(self.size, 1, 3)
+        patch_layout.addWidget(self.image, 0, 0, 1, 4)
+        patch_layout.addWidget(self.table, 1, 0, 1, 4)
+        patch_layout.addWidget(QLabel('Mode'), 2, 0)
+        patch_layout.addWidget(self.mode, 2, 1)
+        patch_layout.addWidget(QLabel('Width/Height'), 2, 2)
+        patch_layout.addWidget(self.size, 2, 3)
 
     def get_color(self, label):
         color_tuple = self.settings.get_color(label)
@@ -464,6 +467,9 @@ class QPatchWidget(QWidget):
     def send_key(self, key):
         if key < self.mode.count():
             self.mode.setCurrentIndex(key)
+
+    def send_image(self, image):
+        self.image.setText(F'Current image label: {image["Label"]}')
 
     def send_patches(self, patches):
         # Empty the table
