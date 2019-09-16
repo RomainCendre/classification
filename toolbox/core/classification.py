@@ -4,7 +4,7 @@ from copy import deepcopy
 import h5py
 import numpy as np
 from numpy import unique, array_equal, array
-from sklearn.model_selection import GridSearchCV, ParameterGrid
+from sklearn.model_selection import RandomizedSearchCV, ParameterGrid
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
@@ -253,8 +253,9 @@ class Classifier:
                 best_params = list(params_grid)[0]
             else:
                 # Now fit, but find first hyper parameters
-                grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
-                                           n_jobs=self.n_jobs, refit=False, scoring=self.__scoring, verbose=1, iid=False)
+                grid_search = RandomizedSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
+                                                 n_jobs=self.n_jobs, refit=False, scoring=self.__scoring,
+                                                 verbose=1, iid=False)
                 grid_search.fit(data, y=labels, groups=groups, **self.__fit_params)
                 best_params = grid_search.best_params_
 
