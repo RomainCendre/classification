@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QRect, QPropertyAnimation, pyqt
 from PyQt5.QtGui import QImage, QPixmap, QColor, QPen, QBrush
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWindow, QWidget, QLabel, \
     QSpinBox, QGraphicsRectItem, QProgressBar, QVBoxLayout, \
-    QTableWidget, QTabWidget, QTableWidgetItem, QAbstractItemView, QGraphicsItemGroup, QComboBox
+    QTableWidget, QTabWidget, QTableWidgetItem, QAbstractItemView, QGraphicsItemGroup, QComboBox, QGroupBox
 from toolbox.IO import dermatology
 
 
@@ -92,7 +92,7 @@ class QPatchExtractor(QMainWindow):
         # Send data to components
         self.label_widget.send_image(self.get_image())
         self.patch_widget.send_image(self.get_image())
-        self.patch_widget.send_patches(self.get_patches())
+        self.patch_widget.send_patches(self.patches, self.get_patches())
         self.viewer.set_patches(self.get_patches_draw())
         self.update_image()
 
@@ -253,7 +253,7 @@ class QPatchExtractor(QMainWindow):
         self.viewer.loadImage(Path(self.get_image().get('Full_Path', '')))
 
     def update_patch(self):
-        self.patch_widget.send_patches(self.get_patches())
+        self.patch_widget.send_patches(self.patches, self.get_patches())
         self.viewer.set_patches(self.get_patches_draw())
 
     def update_patient(self):
@@ -405,7 +405,26 @@ class QPatchWidget(QWidget):
         self.init_gui()
 
     def init_gui(self):
+        # Create table that list current patches
+        group = QGroupBox('Informations')
+        self.patient = QLabel()
         self.image = QLabel()
+        self.patches_table = QTableWidget()
+        self.patches_table.setRowCount(1)
+        self.patches_table.setColumnCount(len(self.pathologies))
+        self.patches_table.setHorizontalHeaderLabels(self.pathologies)
+        self.patches_table.resizeColumnsToContents()
+        self.patches_table.setMaximumHeight(70)
+        self.patches_table.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        vheader = self.patches_table.verticalHeader()
+        vheader.hide()
+        hheader = self.patches_table.horizontalHeader()
+        hheader.setStretchLastSection(True)
+        layout = QGridLayout(self)
+        layout.addWidget(self.patient, 0, 0)
+        layout.addWidget(self.image, 0, 1)
+        layout.addWidget(self.patches_table, 1, 0, 2, 0)
+        group.setLayout(layout)
         # Create table that list current patches
         self.table = QTableWidget()
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -433,12 +452,49 @@ class QPatchWidget(QWidget):
         self.size.setEnabled(False)
         # Then build patch tool
         patch_layout = QGridLayout(self)
-        patch_layout.addWidget(self.image, 0, 0, 1, 4)
+        patch_layout.addWidget(group, 0, 0, 1, 4)
         patch_layout.addWidget(self.table, 1, 0, 1, 4)
         patch_layout.addWidget(QLabel('Mode'), 2, 0)
         patch_layout.addWidget(self.mode, 2, 1)
         patch_layout.addWidget(QLabel('Width/Height'), 2, 2)
         patch_layout.addWidget(self.size, 2, 3)
+
+    def fill_global_patches(self, patches):
+        counting = pd.DataFrame()
+        if patches is not None:
+            counting = patches['Label'].value_counts()
+
+        for index, pathology in enumerate(self.pathologies):
+            item = QTableWidgetItem('{count}'.format(count=counting.get(pathology, 0)))
+            item.setBackground(self.get_color(pathology))
+            self.patches_table.setItem(0, index, item)
+
+    def fill_patches(self, patches):
+        # Empty the table
+        self.table.setRowCount(0)
+        # Check data is valid
+        if patches is None or len(patches) == 0:
+            return
+        self.table.setRowCount(len(patches))
+        for index, (rindex, row) in enumerate(patches.iterrows()):
+            # Get current label
+            current_label = row['Label']
+            # Get current color
+            qcolor = self.get_color(current_label)
+            # Create table items
+            item = QTableWidgetItem('{center}'.format(center=row['Center_X']))
+            item.setBackground(qcolor)
+            item.setData(0, row.name)
+            self.table.setItem(index, 0, item)
+            item = QTableWidgetItem('{center}'.format(center=row['Center_Y']))
+            item.setBackground(qcolor)
+            self.table.setItem(index, 1, item)
+            item = QTableWidgetItem('{size}'.format(size=row['Width']))
+            item.setBackground(qcolor)
+            self.table.setItem(index, 2, item)
+            item = QTableWidgetItem('{label}'.format(label=row['Label']))
+            item.setBackground(qcolor)
+            self.table.setItem(index, 3, item)
 
     def get_color(self, label):
         color_tuple = self.settings.get_color(label)
@@ -469,34 +525,12 @@ class QPatchWidget(QWidget):
             self.mode.setCurrentIndex(key)
 
     def send_image(self, image):
-        self.image.setText(F'Current image label: {image["Label"]}')
+        self.patient.setText(F'Patient: ')
+        self.image.setText(F'Image: {image["Label"]}')
 
-    def send_patches(self, patches):
-        # Empty the table
-        self.table.setRowCount(0)
-        # Check data is valid
-        if patches is None or len(patches) == 0:
-            return
-        self.table.setRowCount(len(patches))
-        for index, (rindex, row) in enumerate(patches.iterrows()):
-            # Get current label
-            current_label = row['Label']
-            # Get current color
-            qcolor = self.get_color(current_label)
-            # Create table items
-            item = QTableWidgetItem('{center}'.format(center=row['Center_X']))
-            item.setBackground(qcolor)
-            item.setData(0, row.name)
-            self.table.setItem(index, 0, item)
-            item = QTableWidgetItem('{center}'.format(center=row['Center_Y']))
-            item.setBackground(qcolor)
-            self.table.setItem(index, 1, item)
-            item = QTableWidgetItem('{size}'.format(size=row['Width']))
-            item.setBackground(qcolor)
-            self.table.setItem(index, 2, item)
-            item = QTableWidgetItem('{label}'.format(label=row['Label']))
-            item.setBackground(qcolor)
-            self.table.setItem(index, 3, item)
+    def send_patches(self, global_patches, patches):
+        self.fill_global_patches(global_patches)
+        self.fill_patches(patches)
 
     def set_value(self, size):
         self.size.setValue(size)
