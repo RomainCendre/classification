@@ -8,8 +8,7 @@ import pandas as pd
 from PIL import Image
 from sklearn.metrics import f1_score, make_scorer
 from sklearn.model_selection import GroupKFold
-from toolbox.IO import dermatology, otorhinolaryngology
-from toolbox.core.structures import Inputs, Spectra, Settings
+from toolbox_jupyter.IO import otorhinolaryngology, dermatology
 
 
 class ORL:
@@ -47,7 +46,7 @@ class Dermatology:
     def images(modality=None):
         home_path = Path().home()
         input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
-        return DermatologyDataset.__images(input_folder, work_folder, modality)
+        return Dermatology.__images(input_folder, modality)
 
     @staticmethod
     def multiresolution(coefficients, modality=None):
@@ -87,14 +86,9 @@ class Dermatology:
     def __images(folder, work_folder, modality):
         if folder is None:
             generator = dermatology.Generator((5, 10), 20)
-            inputs = Inputs(data=generator.generate_study(),
-                            tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
-                                  'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
+            inputs = generator.generate_study()
         else:
-            inputs = Inputs(data=DermatologyDataset.__scan(folder, patches=True, modality=modality),
-                            tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
-                                  'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
-        inputs.set_working_folder(work_folder)
+            inputs = Dermatology.__scan(folder, patches=True, modality=modality)
         return inputs
 
     @staticmethod
@@ -103,12 +97,8 @@ class Dermatology:
             generator = dermatology.Generator((5, 10), 20)
             dataframe = generator.generate_study(patches=False)
         else:
-            dataframe = DermatologyDataset.__scan(folder, patches=False, modality=modality)
-        inputs = Inputs(data=DermatologyDataset.__to_multi(dataframe, coefficients, work_folder),
-                        tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
-                              'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
-        inputs.set_working_folder(work_folder)
-        return inputs
+            dataframe = Dermatology.__scan(folder, patches=False, modality=modality)
+        return Dermatology.__to_multi(dataframe, coefficients, work_folder)
 
     @staticmethod
     def __sliding_images(folder, work_folder, size, overlap, modality):
@@ -116,24 +106,19 @@ class Dermatology:
             generator = dermatology.Generator((5, 10), 20)
             dataframe = generator.generate_study()
         else:
-            dataframe = DermatologyDataset.__scan(folder, patches=True, modality=modality)
-        inputs = Inputs(data=DermatologyDataset.__to_patchify(dataframe, size, overlap, work_folder),
-                        tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
-                              'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
-        inputs.set_working_folder(work_folder)
-        return inputs
+            dataframe = Dermatology.__scan(folder, patches=True, modality=modality)
+        return Dermatology.__to_patchify(dataframe, size, overlap, work_folder)
 
     @staticmethod
     def __scan(folder_path, patches=True, modality=None):
         # Browse data
-        return dermatology.Reader().scan_folder(folder_path, parameters={'patches': patches,
-                                                                         'modality': modality})
+        return dermatology.Reader().scan_folder(folder_path, parameters={'patches': patches, 'modality': modality})
 
     @staticmethod
     def __to_multi(dataframe, coefficients, work_folder):
         # Get into patches
         multis_data = []
-        DermatologyDataset.__print_progress_bar(0, len(dataframe), prefix='Progress:')
+        Dermatology.__print_progress_bar(0, len(dataframe), prefix='Progress:')
         for index, (df_index, data) in zip(np.arange(len(dataframe.index)), dataframe.iterrows()):
             DermatologyDataset.__print_progress_bar(index, len(dataframe), prefix='Progress:')
             multi = DermatologyDataset.__multi_resolution(data['Full_Path'], data['Reference'], coefficients,
