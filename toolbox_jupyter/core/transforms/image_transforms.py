@@ -146,7 +146,7 @@ class HaralickImageTransform(BaseEstimator, TransformerMixin):
         return np.array(haralick)
 
 
-class FourierDescriptorTransform(BaseEstimator, TransformerMixin):
+class FourierImageTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, radius_feat=22, directions_feat=16):
         self.radius_feat = radius_feat
