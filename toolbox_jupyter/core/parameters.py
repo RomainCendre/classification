@@ -54,7 +54,7 @@ class Dermatology:
         input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
         work_folder = home_path / '.research'
         work_folder.mkdir(exist_ok=True)
-        return DermatologyDataset.__multi_images(input_folder, work_folder, coefficients, modality)
+        return Dermatology.__multi_images(input_folder, work_folder, coefficients, modality)
 
     @staticmethod
     def sliding_images(size, overlap, modality=None):
@@ -62,28 +62,28 @@ class Dermatology:
         input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
         work_folder = home_path / '.research'
         work_folder.mkdir(exist_ok=True)
-        return DermatologyDataset.__sliding_images(input_folder, work_folder, size, overlap, modality)
+        return Dermatology.__sliding_images(input_folder, work_folder, size, overlap, modality)
 
     @staticmethod
     def test_images(modality=None):
         work_folder = Path(gettempdir()) / '.research'
         work_folder.mkdir(exist_ok=True)
-        return DermatologyDataset.__images(None, work_folder, modality)
+        return Dermatology.__images(None, modality)
 
     @staticmethod
     def test_multiresolution(coefficients, modality=None):
         work_folder = Path(gettempdir()) / '.research'
         work_folder.mkdir(exist_ok=True)
-        return DermatologyDataset.__multi_images(None, work_folder, coefficients, modality)
+        return Dermatology.__multi_images(None, work_folder, coefficients, modality)
 
     @staticmethod
     def test_sliding_images(size, overlap, modality=None):
         work_folder = Path(gettempdir()) / '.research'
         work_folder.mkdir(exist_ok=True)
-        return DermatologyDataset.__sliding_images(None, work_folder, size, overlap, modality)
+        return Dermatology.__sliding_images(None, work_folder, size, overlap, modality)
 
     @staticmethod
-    def __images(folder, work_folder, modality):
+    def __images(folder, modality):
         if folder is None:
             generator = dermatology.Generator((5, 10), 20)
             inputs = generator.generate_study()
