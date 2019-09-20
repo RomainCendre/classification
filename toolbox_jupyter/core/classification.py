@@ -12,8 +12,9 @@ class Tools:
 
     @staticmethod
     def build_folds(dataframe, tags, split=5):
-        if not isinstance(tags, dict) or ['data', 'label', 'group'] not in tags.keys:
-            raise Exception('Not a dict or missing tag: data, label, group.')
+        mandatory = ['data', 'label']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception('Not a dict or missing tag: data, label.')
         # Inputs
         datas = dataframe[tags['data']]
         labels = dataframe[tags['label']]
@@ -29,7 +30,8 @@ class Tools:
 
     @staticmethod
     def build_patients_folds(dataframe, tags, split=5):
-        if not isinstance(tags, dict) or ['data', 'label', 'group'] not in tags.keys:
+        mandatory = ['data', 'label', 'group']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception('Not a dict or missing tag: data, label, group.')
         # Inputs
         datas = dataframe[tags['data']]
