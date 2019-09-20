@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 from sklearn.metrics import f1_score, make_scorer
-from sklearn.model_selection import GroupKFold
 from toolbox_jupyter.IO import otorhinolaryngology, dermatology
 
 

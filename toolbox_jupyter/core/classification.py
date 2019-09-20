@@ -11,10 +11,12 @@ from toolbox.core.structures import Outputs
 class Tools:
 
     @staticmethod
-    def build_folds(dataframe, data, label, split=5):
+    def build_folds(dataframe, tags, split=5):
+        if not isinstance(tags, dict) or ['data', 'label', 'group'] not in tags.keys:
+            raise Exception('Not a dict or missing tag: data, label, group.')
         # Inputs
-        datas = dataframe[data]
-        labels = dataframe[label]
+        datas = dataframe[tags['data']]
+        labels = dataframe[tags['label']]
 
         # Rule to create folds
         split_rule = KFold(n_splits=split)
@@ -26,11 +28,13 @@ class Tools:
         return dataframe
 
     @staticmethod
-    def build_patients_folds(dataframe, data, label, group, split=5):
+    def build_patients_folds(dataframe, tags, split=5):
+        if not isinstance(tags, dict) or ['data', 'label', 'group'] not in tags.keys:
+            raise Exception('Not a dict or missing tag: data, label, group.')
         # Inputs
-        datas = dataframe[data]
-        labels = dataframe[label]
-        groups = dataframe[group]
+        datas = dataframe[tags['data']]
+        labels = dataframe[tags['label']]
+        groups = dataframe[tags['group']]
 
         # Rule to create folds
         split_rule = GroupKFold(n_splits=split)
