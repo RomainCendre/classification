@@ -26,7 +26,8 @@ class Reader:
     def scan_subfolder(subdir):
         images = []
         for image_type in Reader.images_types:
-            images.extend(list(subdir.glob(f'*.{image_type}')))
+            paths = list(subdir.glob(f'*.{image_type}'))
+            images.extend([str(path) for path in paths])
         sub_frame = pandas.DataFrame({'Data': images})
         sub_frame['Label'] = subdir.stem
         return sub_frame

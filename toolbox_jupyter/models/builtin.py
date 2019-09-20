@@ -43,9 +43,10 @@ class Applications:
 
     @staticmethod
     def get_transfer_tuning(architecture='InceptionV3'):
-        extractor_params = {'preprocessing_function': Applications.get_preprocessing_application(architecture=architecture)}
-        return KerasBatchClassifier(Applications.get_application(architecture=architecture,
-                                                                 pooling='avg'), **extractor_params)
+        extractor_params = {'architecture': architecture,
+                            'pooling': 'avg',
+                            'preprocessing_function': Applications.get_preprocessing_application(architecture=architecture)}
+        return KerasBatchClassifier(Applications.get_application, **extractor_params)
 
 
     @staticmethod
