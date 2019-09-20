@@ -38,7 +38,7 @@ class DWTImageTransform(BaseEstimator, TransformerMixin):
         for index, data in enumerate(x):
             image = np.array(Image.open(data).convert('L'))
             coefficients = []
-            for scale in range(0, self.scale+1):
+            for scale in range(0, self.scale + 1):
                 cA, (cH, cV, cD) = pywt.dwt2(image, self.wavelets)
                 image = cA
                 directions = []
@@ -46,7 +46,7 @@ class DWTImageTransform(BaseEstimator, TransformerMixin):
                 if not scale == 0:
                     directions.extend([cH, cV, cD])
                 # Concatenate last image
-                if scale == (self.scale-1):
+                if scale == (self.scale - 1):
                     directions.append(image)
                 # Compute coefficients
                 coefficients.extend([DWTImageTransform.get_coefficients(direction) for direction in directions])
@@ -174,22 +174,22 @@ class FourierImageTransform(BaseEstimator, TransformerMixin):
         """
         features = []
         for index, data in enumerate(x):
-            image = np.array(Image.open(data).convert('F'))/255
+            image = np.array(Image.open(data).convert('F')) / 255
             power_spectrum = np.abs(np.fft.rfft(image))
             local_features = []
             for radius in range(0, self.radius_feat):
-                mask = FourierDescriptorTransform.circular_mask(power_spectrum.shape,
-                                                                center=[0, power_spectrum.shape[1]/2],
-                                                                np_split=self.radius_feat,
-                                                                index=radius)
-                local_features.append(np.sum(power_spectrum[mask])/np.sum(mask))
+                mask = FourierImageTransform.circular_mask(power_spectrum.shape,
+                                                           center=[0, power_spectrum.shape[1] / 2],
+                                                           np_split=self.radius_feat,
+                                                           index=radius)
+                local_features.append(np.sum(power_spectrum[mask]) / np.sum(mask))
 
             for direction in range(0, self.directions_feat):
-                mask = FourierDescriptorTransform.direction_mask(power_spectrum.shape,
-                                                                 center=[0, power_spectrum.shape[1]/2],
-                                                                 np_split=self.directions_feat,
-                                                                 index=direction)
-                local_features.append(np.sum(power_spectrum[mask])/np.sum(mask))
+                mask = FourierImageTransform.direction_mask(power_spectrum.shape,
+                                                            center=[0, power_spectrum.shape[1] / 2],
+                                                            np_split=self.directions_feat,
+                                                            index=direction)
+                local_features.append(np.sum(power_spectrum[mask]) / np.sum(mask))
             features.append(np.array(local_features).flatten())
         return features
 
@@ -210,7 +210,7 @@ class FourierImageTransform(BaseEstimator, TransformerMixin):
         Y, X = np.ogrid[:shape[0], :shape[1]]
         angle_from_center = np.rad2deg(np.arctan2((X - center[0]), (Y - center[1])))
         # Compute mask
-        mask_inner = (radius * index) - tolerance<= angle_from_center
+        mask_inner = (radius * index) - tolerance <= angle_from_center
         mask_outer = angle_from_center <= (radius * index) + tolerance
         return np.logical_and(mask_inner, mask_outer)
 
@@ -256,4 +256,3 @@ class SpatialImageTransform(BaseEstimator, TransformerMixin):
         features.append(sstats.kurtosis(images.flatten()))
         features.append(sstats.entropy(images.flatten()))
         return features
-
