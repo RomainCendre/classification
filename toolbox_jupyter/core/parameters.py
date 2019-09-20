@@ -12,57 +12,41 @@ from toolbox.IO import dermatology, otorhinolaryngology
 from toolbox.core.structures import Inputs, Spectra, Settings
 
 
-class ORLDataset:
+class ORL:
 
     @staticmethod
-    def get_results_location(is_test=False):
-        if is_test:
-            base_folder = Path(gettempdir())
-        else:
-            base_folder = Path().home()
-        result_folder = base_folder / 'Results/ORL'
-        result_folder.mkdir(parents=True, exist_ok=True)
-        return result_folder
-
-    @staticmethod
-    def spectras():
+    def get_spectra():
         home_path = Path().home()
         location = home_path / 'Data/Neck/'
         input_folders = [location / 'Patients.csv', location / 'Temoins.csv']
-        return ORLDataset.__spectras(input_folders)
+        return ORL.__spectra(input_folders)
 
     @staticmethod
-    def test_spectras():
+    def get_test_spectra():
         generator = otorhinolaryngology.Generator((4, 7), 30)
-        return Spectra(data=generator.generate_study(),
-                       tags={'data': 'data', 'label': 'label', 'group': 'Reference',
-                             'reference': 'Reference_spectrum', 'group_label': 'pathologie'})
+        return generator.generate_study()
 
     @staticmethod
-    def __spectras(files):
-        data = pd.concat([otorhinolaryngology.Reader().read_table(file) for file in files], sort=True)
-        return Spectra(data=data, tags={'data': 'data', 'label': 'label', 'group': 'Reference',
-                                        'reference': 'Reference_spectrum', 'group_label': 'pathologie'})
-
-
-class DermatologyDataset:
+    def __spectra(files):
+        return pd.concat([otorhinolaryngology.Reader().read_table(file) for file in files], sort=True)
 
     @staticmethod
-    def get_results_location(is_test=False):
-        if is_test:
-            base_folder = Path(gettempdir())
-        else:
-            base_folder = Path().home()
-        result_folder = base_folder / 'Results/Dermatology'
-        result_folder.mkdir(parents=True, exist_ok=True)
-        return result_folder
+    def get_filters():
+        return [('All', {'label': ['Sain', 'Precancer', 'Cancer']}, {}),
+                ('NvsP', {'label': ['Sain', 'Pathology']}, {'label': (['Precancer', 'Cancer'], 'Pathology')}),
+                ('MvsR', {'label': ['Rest', 'Cancer']}, {'label': (['Sain', 'Precancer'], 'Rest')})]
+
+    @staticmethod
+    def get_statistics_keys():
+        return ['pathologie', 'operateur', 'provenance', 'label']
+
+
+class Dermatology:
 
     @staticmethod
     def images(modality=None):
         home_path = Path().home()
         input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
-        work_folder = home_path / '.research'
-        work_folder.mkdir(exist_ok=True)
         return DermatologyDataset.__images(input_folder, work_folder, modality)
 
     @staticmethod
@@ -289,6 +273,19 @@ class DermatologyDataset:
         if iteration == total:
             print()
 
+    @staticmethod
+    def get_statistics_keys():
+        return ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
+
+    @staticmethod
+    def get_filters():
+        return [('All', {'Label': ['Normal', 'Benign', 'Malignant', 'Unknown']},
+                 ['Normal', 'Benign', 'Malignant'], {}),
+                ('NvsP', {'Label': ['Normal', 'Pathology', 'Unknown']},
+                 ['Normal', 'Pathology'], {'Label': (['Benign', 'Malignant'], 'Pathology')}),
+                ('MvsR', {'Label': ['Rest', 'Malignant', 'Unknown']},
+                 ['Rest', 'Malignant'], {'Label': (['Normal', 'Benign'], 'Rest')})]
+
 
 class BuiltInSettings:
 
@@ -320,31 +317,24 @@ class BuiltInSettings:
 class LocalParameters:
 
     @staticmethod
-    def get_cpu_number():
-        return 4
+    def get_result_dir(is_test=False):
+        if is_test:
+            base_folder = Path(gettempdir())
+        else:
+            base_folder = Path().home()
+        result_folder = base_folder / 'Results'
+        result_folder.mkdir(parents=True, exist_ok=True)
+        return result_folder
 
     @staticmethod
-    def get_dermatology_filters():
-        return [('All', {'Label': ['Normal', 'Benign', 'Malignant', 'Unknown']},
-                 ['Normal', 'Benign', 'Malignant'], {}),
-                ('NvsP', {'Label': ['Normal', 'Pathology', 'Unknown']},
-                 ['Normal', 'Pathology'], {'Label': (['Benign', 'Malignant'], 'Pathology')}),
-                ('MvsR', {'Label': ['Rest', 'Malignant', 'Unknown']},
-                 ['Rest', 'Malignant'], {'Label': (['Normal', 'Benign'], 'Rest')})]
-
-    @staticmethod
-    def get_orl_filters():
-        return [('All', {'label': ['Sain', 'Precancer', 'Cancer']}, {}),
-                ('NvsP', {'label': ['Sain', 'Pathology']}, {'label': (['Precancer', 'Cancer'], 'Pathology')}),
-                ('MvsR', {'label': ['Rest', 'Cancer']}, {'label': (['Sain', 'Precancer'], 'Rest')})]
-
-    @staticmethod
-    def get_dermatology_statistics():
-        return ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
-
-    @staticmethod
-    def get_orl_statistics():
-        return ['pathologie', 'operateur', 'provenance', 'label']
+    def get_temp_dir(is_test=False):
+        if is_test:
+            base_folder = Path(gettempdir())
+        else:
+            base_folder = Path().home()
+        work_folder = base_folder / '.research'
+        work_folder.mkdir(exist_ok=True)
+        return work_folder
 
     @staticmethod
     def get_scorer():
