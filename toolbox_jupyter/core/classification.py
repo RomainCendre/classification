@@ -62,9 +62,9 @@ class Tools:
 
     @staticmethod
     def fit_and_transform(dataframe, tags, out, model):
-        mandatory = ['data', 'label']
+        mandatory = ['data']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception('Not a dict or missing tag: data, label.')
+            raise Exception('Not a dict or missing tag: data.')
 
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -85,9 +85,9 @@ class Tools:
 
     @staticmethod
     def transform(dataframe, tags, out, model):
-        mandatory = ['data', 'label']
+        mandatory = ['data']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception('Not a dict or missing tag: data, label, group.')
+            raise Exception('Not a dict or missing tag: data.')
         features = model.transform(dataframe[tags['data']].to_numpy())
         dataframe[out] = [f for f in features]
         return dataframe
