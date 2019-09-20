@@ -2,79 +2,11 @@ import numpy as np
 from pywt import dwt
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.cross_decomposition import PLSRegression
-from sklearn.decomposition import PCA
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from sklearn.feature_selection import SelectKBest
 from sklearn.preprocessing import Imputer
 
 
 #####################################
-# Redefinition of existing transforms
-class SelectAtMostKBest(SelectKBest):
-
-    def _check_params(self, X, y):
-        if not (self.k == "all" or 0 <= self.k <= X.shape[1]):
-            # set k to "all" (skip feature selection), if less than k features are available
-            self.k = "all"
-
-
-class LDAAtMost(LinearDiscriminantAnalysis):
-
-    def fit(self, X, y=None):
-        n_samples, n_features = X.shape
-        if not (0 <= self.n_components <= min(n_samples, n_features)):
-            # set k to "all" (skip feature selection), if less than k features are available
-            self.n_components = min(n_samples, n_features)
-        return super().fit(X, y)
-
-
-class PCAAtMost(PCA):
-
-    def fit_transform(self, X, y=None):
-        n_samples, n_features = X.shape
-        if not (0 <= self.n_components <= min(n_samples, n_features)):
-            # set k to "all" (skip feature selection), if less than k features are available
-            self.n_components = min(n_samples, n_features)
-        return super().fit_transform(X, y)
-
-
-class PredictorTransform(BaseEstimator, TransformerMixin):
-
-    def __init__(self, predictor, probabilities=True):
-        self.predictor = predictor
-        self.probabilities = probabilities
-        if probabilities:
-            self.name = 'PredictorTransformProbabilities'
-        else:
-            self.name = 'PredictorTransform'
-
-    def fit(self, x, y=None):
-        """
-        This should fit this transformer, but DWT doesn't need to fit to train data
-
-        Args:
-             x (:obj): Not used.
-             y (:obj): Not used.
-        """
-        self.predictor.fit(self, x, y=None)
-        return self
-
-    def transform(self, x, y=None, copy=True):
-        """
-        This method is the main part of this transformer.
-        Return a wavelet transform, as specified mode.
-
-        Args:
-             x (:obj): Not used.
-             y (:obj): Not used.
-             copy (:obj): Not used.
-        """
-        if self.probabilities:
-            return np.array(self.predictor.predict_proba(x))
-        else:
-            return np.array(self.predictor.predict(x))
-
-
+# Make transforms
 class ArgMaxTransform(BaseEstimator, TransformerMixin):
 
     def fit(self, x, y=None):
@@ -82,18 +14,6 @@ class ArgMaxTransform(BaseEstimator, TransformerMixin):
 
     def transform(self, x, y=None, copy=True):
         return x.argmax(axis=1)
-
-
-class FlattenTransform(BaseEstimator, TransformerMixin):
-
-    def __init__(self, axis=False):
-        self.axis = axis
-
-    def fit(self, x, y=None):
-        return self
-
-    def transform(self, x, y=None, copy=True):
-        return x.reshape((x.shape[0], -1))
 
 
 class DWTTransform(BaseEstimator, TransformerMixin):
@@ -139,6 +59,18 @@ class DWTTransform(BaseEstimator, TransformerMixin):
         return cA
 
 
+class FlattenTransform(BaseEstimator, TransformerMixin):
+
+    def __init__(self, axis=False):
+        self.axis = axis
+
+    def fit(self, x, y=None):
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        return x.reshape((x.shape[0], -1))
+
+
 class PLSTransform(PLSRegression):
 
     def transform(self, x, y=None, copy=True):
@@ -152,6 +84,43 @@ class PLSTransform(PLSRegression):
              copy (:obj): Not used.
         """
         return super(PLSRegression, self).transform(x)
+
+
+class PredictorTransform(BaseEstimator, TransformerMixin):
+
+    def __init__(self, predictor, probabilities=True):
+        self.predictor = predictor
+        self.probabilities = probabilities
+        if probabilities:
+            self.name = 'PredictorTransformProbabilities'
+        else:
+            self.name = 'PredictorTransform'
+
+    def fit(self, x, y=None):
+        """
+        This should fit this transformer, but DWT doesn't need to fit to train data
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+        """
+        self.predictor.fit(self, x, y=None)
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        """
+        This method is the main part of this transformer.
+        Return a wavelet transform, as specified mode.
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+             copy (:obj): Not used.
+        """
+        if self.probabilities:
+            return np.array(self.predictor.predict_proba(x))
+        else:
+            return np.array(self.predictor.predict(x))
 
 
 class PNormTransform(BaseEstimator, TransformerMixin):
@@ -181,6 +150,8 @@ class PNormTransform(BaseEstimator, TransformerMixin):
                 normalized.append(np.linalg.norm(x, ord=self.p, axis=self.axis - 1))
             return np.array(normalized)
         return np.linalg.norm(X, ord=self.p, axis=self.axis)
+
+
 
 
 class CorrelationArrayTransform(BaseEstimator, TransformerMixin):
