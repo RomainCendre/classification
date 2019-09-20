@@ -61,5 +61,5 @@ class Tools:
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception('Not a dict or missing tag: data, label, group.')
 
-        dataframe[out] = dataframe.apply(lambda x: extractor.transform(tags['data']), axis=1)
+        dataframe[out] = dataframe.apply(lambda x: extractor.transform([x[tags['data']]]), axis=1)
         return dataframe
