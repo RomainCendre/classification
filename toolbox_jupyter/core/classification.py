@@ -48,42 +48,18 @@ class Tools:
         return dataframe
 
     @staticmethod
-    def fit_and_transform(dataframe, data_in, data_out, extractor):
-        # Extract needed data
-        references = dataframe['reference']
+    def fit_and_transform(dataframe, tags, out, extractor):
+        mandatory = ['data', 'label', 'fold']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception('Not a dict or missing tag: data, label, group.')
+        dataframe[out] = dataframe.apply(lambda x: extractor.transform(tags['data']), axis=1)
+        return dataframe
 
     @staticmethod
-    def transform(dataframe, data_in, data_out, extractor):
+    def transform(dataframe, tags, out, extractor):
+        mandatory = ['data', 'label']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception('Not a dict or missing tag: data, label, group.')
 
-
-        features = None
-        if inputs.get_working_folder() is not None:
-            # Construct hdf5 file
-            file_path = inputs.get_working_folder()/'{prefix}.hdf5'.format(prefix=prefix)
-            # Try reading features if exists
-            if file_path.is_file():
-                try:
-                    with h5py.File(file_path, 'r') as features_file:
-                        if set(references).issubset(features_file.keys()):
-                            features = []
-                            print('Loading data at {file}'.format(file=file_path))
-                            for reference in references:
-                                features.append(features_file[reference][()])
-                            features = array(features)
-                except:
-                    file_path.unlink()
-
-            # If reading fails, so compute and write it
-            if features is None:
-                with h5py.File(file_path, 'a') as features_file:
-                    features = self.__feature_extraction(prefix, inputs)
-                    # Now save features as files
-                    print('Writing data at {file}'.format(file=file_path))
-                    for feature, reference in zip(features, references):
-                        if reference not in features_file.keys():
-                            features_file.create_dataset(reference, data=feature)
-        else:
-            features = self.__feature_extraction(prefix, inputs)
-
-        # Update input
-        inputs.update(prefix, features, references, 'data')
+        dataframe[out] = dataframe.apply(lambda x: extractor.transform(tags['data']), axis=1)
+        return dataframe
