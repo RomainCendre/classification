@@ -58,7 +58,7 @@ class Classifier:
             self.__fit_params = {}
         self.__format_params()
 
-    def evaluate(self, inputs):
+    def evaluate(self, dataframe):
         """
 
         Args:
@@ -67,11 +67,11 @@ class Classifier:
          Returns:
 
         """
-        datas = inputs.get('data')
-        labels = inputs.get('label')
-        groups = inputs.get('group')
-        folds = inputs.get('fold')
-        reference = inputs.get('reference')
+        datas = dataframe['data']
+        labels = dataframe['label']
+        groups = dataframe['group']
+        folds = dataframe['fold']
+        reference = dataframe['reference']
 
         # Check valid labels, at least several classes
         if not self.__check_labels(labels):

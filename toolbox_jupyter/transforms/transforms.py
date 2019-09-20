@@ -91,10 +91,6 @@ class PredictorTransform(BaseEstimator, TransformerMixin):
     def __init__(self, predictor, probabilities=True):
         self.predictor = predictor
         self.probabilities = probabilities
-        if probabilities:
-            self.name = 'PredictorTransformProbabilities'
-        else:
-            self.name = 'PredictorTransform'
 
     def fit(self, x, y=None):
         """
