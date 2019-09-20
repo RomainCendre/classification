@@ -38,46 +38,6 @@ class PCAAtMost(PCA):
         return super().fit_transform(X, y)
 
 
-#####################################
-# Redefinition of existing transforms
-class OrderedEncoder(BaseEstimator, TransformerMixin):
-
-    def __init__(self, unknown='Unknown'):
-        self.unknown = unknown
-
-    def fit(self, y):
-        self.map_list = y
-        return self
-
-    def fit_transform(self, y):
-        self.fit(y)
-        return self.transform(y)
-
-    def inverse_transform(self, y):
-        elements = y.tolist()
-        if not isinstance(elements, list):
-            elements = [elements]
-        return np.array([self.__inverse_element(element) for element in elements])
-
-    def transform(self, y):
-        elements = y.tolist()
-        if not isinstance(elements, list):
-            elements = [elements]
-        return np.array([self.__transform_element(element) for element in elements])
-
-    def __inverse_element(self, element):
-        if element == -1:
-            return self.unknown
-        else:
-            return self.map_list[element]
-
-    def __transform_element(self, element):
-        try:
-            return self.map_list.index(element)
-        except:
-            return -1
-
-
 class PredictorTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, predictor, probabilities=True):
@@ -177,26 +137,6 @@ class DWTTransform(BaseEstimator, TransformerMixin):
         """
         (cA, _) = dwt(x, self.mode)
         return cA
-        # if x.ndim == 2:
-        #     data_length = x.shape[1]
-        # else:
-        #     data_length = len(x)
-        #
-        # if self.segment_length == -1:
-        #     length = data_length
-        # else:
-        #     length = self.segment_length
-        #
-        # chunks = [x[:, i:i+length] for i in range(0, data_length, length)]
-        #
-        # res = None
-        # for i in range(len(chunks)):
-        #     (cA, _) = wavelet(chunks[i], self.mode)
-        #     if res is None:
-        #         res = cA
-        #     else:
-        #         res = concatenate((res, cA), axis=1)
-        # return res
 
 
 class PLSTransform(PLSRegression):
@@ -300,18 +240,3 @@ class ReduceVIF(BaseEstimator, TransformerMixin):
                 X = X.drop([X.columns.tolist()[maxloc]], axis=1)
                 dropped = True
         return X
-
-
-class LDATransform(LinearDiscriminantAnalysis):
-
-    def transform(self, x, y=None, copy=True):
-        """
-        This method is the main part of this transformer.
-        Return a wavelet transform, as specified mode.
-
-        Args:
-             x (:obj): Not used.
-             y (:obj): Not used.
-             copy (:obj): Not used.
-        """
-        return super(LinearDiscriminantAnalysis, self).transform(x)
