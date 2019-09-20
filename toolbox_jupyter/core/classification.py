@@ -56,7 +56,7 @@ class Tools:
     def fit(dataframe, tags, model):
         mandatory = ['data', 'label']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception('Not a dict or missing tag: data, label, group.')
+            raise Exception('Not a dict or missing tag: data, label.')
         model.fit(dataframe[tags['data']], y=dataframe[tags['label']])
         return model
 
@@ -73,8 +73,15 @@ class Tools:
         for fold in folds:
             mask = dataframe['Fold'] == fold
             fit_model = Tools.fit(dataframe[mask], tags, deepcopy(model))
-            dataframe[mask] = Tools.transform(dataframe[mask], tags, out, fit_model)
+            dataframe.loc[mask, out] = Tools.transform(dataframe[mask], tags, out, fit_model)[out]
         return dataframe
+
+    @staticmethod
+    def evaluate(dataframe, tags, model):
+        mandatory = ['data', 'label']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception('Not a dict or missing tag: data, label.')
+
 
     @staticmethod
     def transform(dataframe, tags, out, model):
