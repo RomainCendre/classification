@@ -11,10 +11,10 @@ from toolbox.core.structures import Outputs
 class Tools:
 
     @staticmethod
-    def build_folds(dataframe, split):
+    def build_folds(dataframe, data, label, split=5):
         # Inputs
-        datas = dataframe['data']
-        labels = dataframe['label']
+        datas = dataframe[data]
+        labels = dataframe[label]
 
         # Rule to create folds
         split_rule = KFold(n_splits=split)
@@ -26,11 +26,11 @@ class Tools:
         return dataframe
 
     @staticmethod
-    def build_patients_folds(dataframe, split):
+    def build_patients_folds(dataframe, data, label, group, split=5):
         # Inputs
-        datas = dataframe['data']
-        labels = dataframe['label']
-        groups = dataframe['group']
+        datas = dataframe[data]
+        labels = dataframe[label]
+        groups = dataframe[group]
 
         # Rule to create folds
         split_rule = GroupKFold(n_splits=split)
