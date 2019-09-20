@@ -13,7 +13,6 @@ from toolbox.core.builtin_models import Transforms, Classifiers
 from toolbox.core.models import KerasFineClassifier
 from toolbox.core.parameters import BuiltInSettings, LocalParameters, DermatologyDataset
 from toolbox.core.transforms import OrderedEncoder
-from toolbox_jupyter.IO import image
 
 
 def get_linear_svm():
@@ -153,7 +152,6 @@ def fine_tune(original_inputs, folder):
 
 
 if __name__ == "__main__":
-    test = image.Reader().scan_folder('C:\\Users\\Romain\Data\\Skin\\Thumbnails')
     # Parameters
     current_file = Path(__file__)
     LocalParameters.set_gpu()

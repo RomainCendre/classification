@@ -4,23 +4,10 @@
     <bookmark url="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" description="self.table.setStyleSheet('QTableView{selection-bac..." line="388" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Arrange transforms">
-      <change afterPath="$PROJECT_DIR$/experiments/dermatology/devs/a_simple_descriptors.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/c_decision.py" afterDir="false" />
+    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Update parameters for project.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/cluster_local/clean.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/settings/cluster_local/clean.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/cluster_local/config_cluster.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/settings/cluster_local/config_cluster.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/cluster_local/tasks" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/settings/cluster_local/tasks" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/cluster_ub/clean.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/settings/cluster_ub/clean.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/settings/cluster_ub/config_cluster.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/cluster_ub/deep.job" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/settings/cluster_ub/deep.job" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/cluster_ub/tool.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/settings/cluster_ub/tool.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/b_manual.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/b_manual.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/d_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/d_features.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/processes.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/processes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/test_experiments.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/test_experiments.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/models/builtin.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox_jupyter/models/builtin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/core/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox_jupyter/core/classification.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -51,14 +38,14 @@
     <SUITE FILE_PATH="coverage/classification$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1565089113524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool" />
     <SUITE FILE_PATH="coverage/classification$temp.coverage" NAME="temp Coverage Results" MODIFIED="1564754098396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources" />
     <SUITE FILE_PATH="coverage/classification$Unittests_for_test_experiments_TestMicroscopyWhole_test_transfer_learning.coverage" NAME="Unittests for test_experiments.TestMicroscopyWhole.test_transfer_learning Coverage Results" MODIFIED="1565100432395" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
-    <SUITE FILE_PATH="coverage/classification$test.coverage" NAME="test Coverage Results" MODIFIED="1557749559589" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$decisions_level__1_.coverage" NAME="decisions_level (1) Coverage Results" MODIFIED="1560425324590" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised" />
+    <SUITE FILE_PATH="coverage/classification$test.coverage" NAME="test Coverage Results" MODIFIED="1568994319735" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox_jupyter" />
     <SUITE FILE_PATH="coverage/classification$Unittests_for_test_experiments_TestMicroscopyWhole_test_descriptors.coverage" NAME="Unittests for test_experiments.TestMicroscopyWhole.test_descriptors Coverage Results" MODIFIED="1565163388875" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$simple__1_.coverage" NAME="simple (1) Coverage Results" MODIFIED="1557824978247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/otorhinolaryngology" />
     <SUITE FILE_PATH="coverage/classification$Unittests_in_test_experiments_py.coverage" NAME="Unittests in test_experiments.py Coverage Results" MODIFIED="1568367847026" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$Unittests_for_test_experiments_TestMicroscopySliding.coverage" NAME="Unittests for test_experiments.TestMicroscopySliding Coverage Results" MODIFIED="1561379956304" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$Unittests_for_test_experiments_TestMicroscopySliding_test_sliding_features.coverage" NAME="Unittests for test_experiments.TestMicroscopySliding.test_sliding_features Coverage Results" MODIFIED="1565094893515" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
-    <SUITE FILE_PATH="coverage/classification$a_deep.coverage" NAME="a_deep Coverage Results" MODIFIED="1568904982775" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
+    <SUITE FILE_PATH="coverage/classification$a_deep.coverage" NAME="a_deep Coverage Results" MODIFIED="1568976394014" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
     <SUITE FILE_PATH="coverage/classification$fine_tune.coverage" NAME="fine_tune Coverage Results" MODIFIED="1560260544044" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/full" />
     <SUITE FILE_PATH="coverage/classification$autoencoder.coverage" NAME="autoencoder Coverage Results" MODIFIED="1563195791811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/devs" />
     <SUITE FILE_PATH="coverage/classification$simple.coverage" NAME="simple Coverage Results" MODIFIED="1566553211395" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/otorhinolaryngology" />
@@ -73,57 +60,33 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/toolbox_jupyter/models/builtin.py">
+        <entry file="file://$PROJECT_DIR$/toolbox_jupyter/core/classification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="45" column="98" lean-forward="true" selection-start-line="45" selection-start-column="98" selection-end-line="45" selection-end-column="98" />
+            <state relative-caret-position="240">
+              <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
               <folding>
-                <element signature="e#0#12#0" expanded="true" />
+                <element signature="e#1#12#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
+        <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="62" selection-start-line="62" selection-end-line="68" selection-end-column="24" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-1836">
+              <caret column="15" lean-forward="true" selection-start-column="15" selection-end-line="1" selection-end-column="25" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/transforms.py">
+        <entry file="file://$PROJECT_DIR$/toolbox_jupyter/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="765">
-              <caret line="114" column="11" lean-forward="true" selection-start-line="114" selection-start-column="11" selection-end-line="114" selection-end-column="11" />
+            <state relative-caret-position="476">
+              <caret line="28" selection-start-line="28" selection-end-line="28" />
               <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/label.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="39" selection-start-line="39" selection-end-line="39" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/image.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3842">
-              <caret line="227" column="19" lean-forward="true" selection-start-line="227" selection-start-column="19" selection-end-line="227" selection-end-column="19" />
-              <folding>
-                <element signature="e#0#14#0" expanded="true" />
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -140,7 +103,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>open</find>
       <find>read_patches_file</find>
       <find>send_pat</find>
       <find>get_im</find>
@@ -170,6 +132,7 @@
       <find>self.__params</find>
       <find>send_patches</find>
       <find>size</find>
+      <find>copy</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -186,8 +149,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/toolbox/IO/writers.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/structures.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py" />
         <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
         <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
@@ -200,7 +161,6 @@
         <option value="$PROJECT_DIR$/experiments/cluster_ub/send_data.bat" />
         <option value="$PROJECT_DIR$/toolbox/core/transforms.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/c_multiscale.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
         <option value="$PROJECT_DIR$/experiments/test_experiments.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/d_features.py" />
         <option value="$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh" />
@@ -225,8 +185,6 @@
         <option value="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/core/structures.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/IO/dermatology.py" />
-        <option value="$PROJECT_DIR$/toolbox_jupyter/IO/image.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/core/transforms.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/core/transforms/image_transforms.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/core/transforms/label_transforms.py" />
@@ -235,14 +193,19 @@
         <option value="$PROJECT_DIR$/toolbox/core/builtin_models.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/core/applications.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/transforms/transforms.py" />
-        <option value="$PROJECT_DIR$/toolbox_jupyter/core/classification.py" />
+        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/models/builtin.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/IO/image.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/core/parameters.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/test.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/core/classification.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1843" />
-    <option name="y" value="-369" />
+    <option name="x" value="-1545" />
+    <option name="y" value="285" />
     <option name="width" value="1440" />
     <option name="height" value="774" />
   </component>
@@ -378,7 +341,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.a_deep">
+  <component name="RunManager" selected="Python.test">
     <configuration name="a_deep" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -423,6 +386,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="classification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/toolbox_jupyter" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/toolbox_jupyter/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Unittests for test_experiments.TestMicroscopySliding.test_features" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -453,28 +438,13 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests in test_experiments.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <module name="classification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/experiments" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/experiments/test_experiments.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.a_deep" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python tests.Unittests for test_experiments.TestMicroscopyWhole.test_manual" />
         <item itemvalue="Python tests.Unittests for test_experiments.TestMicroscopySliding.test_features" />
-        <item itemvalue="Python tests.Unittests in test_experiments.py" />
       </list>
     </recent_temporary>
   </component>
@@ -569,98 +539,7 @@
       <workItem from="1568809356955" duration="5536000" />
       <workItem from="1568874105276" duration="5704000" />
       <workItem from="1568898810807" duration="4949000" />
-      <workItem from="1568960463178" duration="8281000" />
-    </task>
-    <task id="LOCAL-00187" summary="Fix TL/ Fine tune and some stuff. Routines are now including FT.">
-      <created>1566482594028</created>
-      <option name="number" value="00187" />
-      <option name="presentableId" value="LOCAL-00187" />
-      <option name="project" value="LOCAL" />
-      <updated>1566482594028</updated>
-    </task>
-    <task id="LOCAL-00188" summary="Update finetuning experiments names.">
-      <created>1566552112769</created>
-      <option name="number" value="00188" />
-      <option name="presentableId" value="LOCAL-00188" />
-      <option name="project" value="LOCAL" />
-      <updated>1566552112769</updated>
-    </task>
-    <task id="LOCAL-00189" summary="Remove filtering of diagnosis.">
-      <created>1566558304095</created>
-      <option name="number" value="00189" />
-      <option name="presentableId" value="LOCAL-00189" />
-      <option name="project" value="LOCAL" />
-      <updated>1566558304096</updated>
-    </task>
-    <task id="LOCAL-00190" summary="Update process.">
-      <created>1566560622431</created>
-      <option name="number" value="00190" />
-      <option name="presentableId" value="LOCAL-00190" />
-      <option name="project" value="LOCAL" />
-      <updated>1566560622432</updated>
-    </task>
-    <task id="LOCAL-00191" summary="Cancel commit on alexnet">
-      <created>1567689380651</created>
-      <option name="number" value="00191" />
-      <option name="presentableId" value="LOCAL-00191" />
-      <option name="project" value="LOCAL" />
-      <updated>1567689380651</updated>
-    </task>
-    <task id="LOCAL-00192" summary="Cancel commit on alexnet">
-      <created>1567689668123</created>
-      <option name="number" value="00192" />
-      <option name="presentableId" value="LOCAL-00192" />
-      <option name="project" value="LOCAL" />
-      <updated>1567689668123</updated>
-    </task>
-    <task id="LOCAL-00193" summary="Adding new folder for new experiments.">
-      <created>1568123973746</created>
-      <option name="number" value="00193" />
-      <option name="presentableId" value="LOCAL-00193" />
-      <option name="project" value="LOCAL" />
-      <updated>1568123973746</updated>
-    </task>
-    <task id="LOCAL-00194" summary="Change ub job">
-      <created>1568124301420</created>
-      <option name="number" value="00194" />
-      <option name="presentableId" value="LOCAL-00194" />
-      <option name="project" value="LOCAL" />
-      <updated>1568124301420</updated>
-    </task>
-    <task id="LOCAL-00195" summary="Apply change to adapt methods from Wiltgen">
-      <created>1568209845258</created>
-      <option name="number" value="00195" />
-      <option name="presentableId" value="LOCAL-00195" />
-      <option name="project" value="LOCAL" />
-      <updated>1568209845258</updated>
-    </task>
-    <task id="LOCAL-00196" summary="Apply change to adapt methods from Wiltgen">
-      <created>1568210078596</created>
-      <option name="number" value="00196" />
-      <option name="presentableId" value="LOCAL-00196" />
-      <option name="project" value="LOCAL" />
-      <updated>1568210078596</updated>
-    </task>
-    <task id="LOCAL-00197" summary="Achieve FFT extractor.">
-      <created>1568276389100</created>
-      <option name="number" value="00197" />
-      <option name="presentableId" value="LOCAL-00197" />
-      <option name="project" value="LOCAL" />
-      <updated>1568276389101</updated>
-    </task>
-    <task id="LOCAL-00198" summary="Update CART nb features">
-      <created>1568277891877</created>
-      <option name="number" value="00198" />
-      <option name="presentableId" value="LOCAL-00198" />
-      <option name="project" value="LOCAL" />
-      <updated>1568277891877</updated>
-    </task>
-    <task id="LOCAL-00199" summary="Update wavelet features 36 features instead of 39">
-      <created>1568278749055</created>
-      <option name="number" value="00199" />
-      <option name="presentableId" value="LOCAL-00199" />
-      <option name="project" value="LOCAL" />
-      <updated>1568278749055</updated>
+      <workItem from="1568960463178" duration="25166000" />
     </task>
     <task id="LOCAL-00200" summary="Update current procedures.">
       <created>1568281085276</created>
@@ -914,7 +793,98 @@
       <option name="project" value="LOCAL" />
       <updated>1568970948579</updated>
     </task>
-    <option name="localTasksCounter" value="236" />
+    <task id="LOCAL-00236" summary="Developpement on TL function.">
+      <created>1568973153719</created>
+      <option name="number" value="00236" />
+      <option name="presentableId" value="LOCAL-00236" />
+      <option name="project" value="LOCAL" />
+      <updated>1568973153719</updated>
+    </task>
+    <task id="LOCAL-00237" summary="Update parameters for project.">
+      <created>1568977441190</created>
+      <option name="number" value="00237" />
+      <option name="presentableId" value="LOCAL-00237" />
+      <option name="project" value="LOCAL" />
+      <updated>1568977441191</updated>
+    </task>
+    <task id="LOCAL-00238" summary="Update parameters for project.">
+      <created>1568978127216</created>
+      <option name="number" value="00238" />
+      <option name="presentableId" value="LOCAL-00238" />
+      <option name="project" value="LOCAL" />
+      <updated>1568978127216</updated>
+    </task>
+    <task id="LOCAL-00239" summary="Update parameters for project.">
+      <created>1568978251983</created>
+      <option name="number" value="00239" />
+      <option name="presentableId" value="LOCAL-00239" />
+      <option name="project" value="LOCAL" />
+      <updated>1568978251983</updated>
+    </task>
+    <task id="LOCAL-00240" summary="Update whole new toolbox.">
+      <created>1568979717266</created>
+      <option name="number" value="00240" />
+      <option name="presentableId" value="LOCAL-00240" />
+      <option name="project" value="LOCAL" />
+      <updated>1568979717266</updated>
+    </task>
+    <task id="LOCAL-00241" summary="Adding fold tool.">
+      <created>1568984437996</created>
+      <option name="number" value="00241" />
+      <option name="presentableId" value="LOCAL-00241" />
+      <option name="project" value="LOCAL" />
+      <updated>1568984437996</updated>
+    </task>
+    <task id="LOCAL-00242" summary="Update fold functions">
+      <created>1568984681819</created>
+      <option name="number" value="00242" />
+      <option name="presentableId" value="LOCAL-00242" />
+      <option name="project" value="LOCAL" />
+      <updated>1568984681819</updated>
+    </task>
+    <task id="LOCAL-00243" summary="Update parameters.">
+      <created>1568984806316</created>
+      <option name="number" value="00243" />
+      <option name="presentableId" value="LOCAL-00243" />
+      <option name="project" value="LOCAL" />
+      <updated>1568984806316</updated>
+    </task>
+    <task id="LOCAL-00244" summary="Update fold functions.">
+      <created>1568985704069</created>
+      <option name="number" value="00244" />
+      <option name="presentableId" value="LOCAL-00244" />
+      <option name="project" value="LOCAL" />
+      <updated>1568985704069</updated>
+    </task>
+    <task id="LOCAL-00245" summary="Update fold function.">
+      <created>1568986469868</created>
+      <option name="number" value="00245" />
+      <option name="presentableId" value="LOCAL-00245" />
+      <option name="project" value="LOCAL" />
+      <updated>1568986469868</updated>
+    </task>
+    <task id="LOCAL-00246" summary="Add transform methods.">
+      <created>1568988771366</created>
+      <option name="number" value="00246" />
+      <option name="presentableId" value="LOCAL-00246" />
+      <option name="project" value="LOCAL" />
+      <updated>1568988771366</updated>
+    </task>
+    <task id="LOCAL-00247" summary="Update transform method.">
+      <created>1568989308288</created>
+      <option name="number" value="00247" />
+      <option name="presentableId" value="LOCAL-00247" />
+      <option name="project" value="LOCAL" />
+      <updated>1568989308288</updated>
+    </task>
+    <task id="LOCAL-00248" summary="Transform everything in one pass.">
+      <created>1568991403299</created>
+      <option name="number" value="00248" />
+      <option name="presentableId" value="LOCAL-00248" />
+      <option name="project" value="LOCAL" />
+      <updated>1568991403299</updated>
+    </task>
+    <option name="localTasksCounter" value="249" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -950,7 +920,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="774564000" />
+    <option name="totallyTimeSpent" value="791449000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -965,14 +935,14 @@
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.88257575" visible="true" weight="0.095404595" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.88257575" visible="true" weight="0.095404595" />
       <window_info id="Structure" order="1" sideWeight="0.11742424" side_tool="true" weight="0.12537463" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3279678" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" sideWeight="0.497003" weight="0.2977867" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.45704296" weight="0.14386319" />
-      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.6253746" weight="0.35714287" />
+      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.45704296" weight="0.27867204" />
+      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.6253746" visible="true" weight="0.23440644" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.10764588" />
@@ -986,7 +956,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.25324675" />
+      <window_info active="true" anchor="right" id="SciView" order="3" visible="true" weight="0.4030969" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
@@ -1034,17 +1004,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update folder output + Remove duplicate of main" />
-    <MESSAGE value="Adding compute methods." />
-    <MESSAGE value="Adding fix for GPU." />
-    <MESSAGE value="Adding procedure for merging bag of features." />
-    <MESSAGE value="Fix GPU???" />
-    <MESSAGE value="Update config cluster." />
-    <MESSAGE value="Update gui, fix deletion bug." />
-    <MESSAGE value="Use RandomSearch instead of GridSearch." />
-    <MESSAGE value="Undo - Use RandomSearch instead of GridSearch." />
-    <MESSAGE value="Adding a shortcut bat file." />
-    <MESSAGE value="Adding some automatic way for resolving user dir." />
     <MESSAGE value="Adding spyder configuration files." />
     <MESSAGE value="Adding some spyder local configuration for GUI." />
     <MESSAGE value="Adding jupyter server configuration." />
@@ -1059,7 +1018,18 @@
     <MESSAGE value="Move transforms location." />
     <MESSAGE value="Manage transforms." />
     <MESSAGE value="Update the lib." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update the lib." />
+    <MESSAGE value="Developpement on TL function." />
+    <MESSAGE value="Update parameters for project." />
+    <MESSAGE value="Update whole new toolbox." />
+    <MESSAGE value="Adding fold tool." />
+    <MESSAGE value="Update fold functions" />
+    <MESSAGE value="Update parameters." />
+    <MESSAGE value="Update fold functions." />
+    <MESSAGE value="Update fold function." />
+    <MESSAGE value="Add transform methods." />
+    <MESSAGE value="Update transform method." />
+    <MESSAGE value="Transform everything in one pass." />
+    <option name="LAST_COMMIT_MESSAGE" value="Transform everything in one pass." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1079,11 +1049,6 @@
           <line>257</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py</url>
-          <line>157</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -1097,93 +1062,54 @@
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
       <expression>
-        <expression-string>pandas.concat(datas, sort=False, ignore_index=True)</expression-string>
+        <expression-string>dataframe[mask] = Tools.transform(dataframe[mask], tags, out, fit_model)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>sub_frame = pandas.DataFrame({'Data': images})
-sub_frame['Label'] = subdir.stem</expression-string>
+        <expression-string>Tools.transform(dataframe[mask], tags, out, fit_model)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>sub_frame = pandas.DataFrame({'Data': images})
-        sub_frame['Label'] = subdir.stem</expression-string>
+        <expression-string>Tools.transform(dataframe[mask], tags, fit_model)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>pandas.DataFrame({'Data': images})</expression-string>
+        <expression-string>Tools.fit(dataframe[mask], tags, deepcopy(model))</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>pandas.DataFrame({'Full_Path':images})</expression-string>
+        <expression-string>dataframe['Fold']==fold</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>pandas.DataFrame(images)</expression-string>
+        <expression-string>dataframe['Fold'==fold]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>counting.get('Benign', 0)</expression-string>
+        <expression-string>dataframe['Fold'] = folds.tolist()  #</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>counting['Benign']</expression-string>
+        <expression-string>folds.tolist()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>counting['Normal']</expression-string>
+        <expression-string>for index, fold in enumerate(current_folds):
+            folds[fold[1]] = index</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/numpy/core/numeric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="500" selection-start-line="500" selection-end-line="500" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/transforms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1757">
-          <caret line="352" lean-forward="true" selection-start-line="352" selection-end-line="352" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/c_decision.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="40" column="14" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
-          <folding>
-            <element signature="e#2#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy_old/multiscale_decisions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="119" lean-forward="true" selection-start-line="119" selection-end-line="119" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/src/misvm/misvm/__init__.py" />
     <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy_old/sliding_features.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="606">
@@ -1200,16 +1126,6 @@ sub_frame['Label'] = subdir.stem</expression-string>
           <caret line="80" column="17" lean-forward="true" selection-start-line="80" selection-start-column="17" selection-end-line="80" selection-end-column="17" />
           <folding>
             <element signature="e#0#17#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="774">
-          <caret line="357" column="8" selection-start-line="357" selection-start-column="8" selection-end-line="357" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1261,16 +1177,6 @@ sub_frame['Label'] = subdir.stem</expression-string>
           <caret line="58" selection-start-line="58" selection-end-line="58" />
           <folding>
             <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="221" column="33" selection-start-line="221" selection-start-column="33" selection-end-line="221" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1329,13 +1235,6 @@ sub_frame['Label'] = subdir.stem</expression-string>
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="27" selection-start-column="27" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="238" column="18" selection-start-line="238" selection-start-column="8" selection-end-line="238" selection-end-column="18" />
         </state>
       </provider>
     </entry>
@@ -1407,16 +1306,6 @@ sub_frame['Label'] = subdir.stem</expression-string>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/IO/image.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="22" column="16" lean-forward="true" selection-start-line="22" selection-start-column="15" selection-end-line="22" selection-end-column="66" />
-          <folding>
-            <element signature="e#1#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox_jupyter/core/builtin_models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1428">
@@ -1436,23 +1325,6 @@ sub_frame['Label'] = subdir.stem</expression-string>
           <folding>
             <element signature="e#0#37#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1519">
-          <caret line="39" column="43" selection-start-line="39" selection-start-column="43" selection-end-line="39" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -1492,49 +1364,10 @@ sub_frame['Label'] = subdir.stem</expression-string>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/transforms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="114" column="11" lean-forward="true" selection-start-line="114" selection-start-column="11" selection-end-line="114" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/label.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="663">
           <caret line="39" selection-start-line="39" selection-end-line="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/image.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3842">
-          <caret line="227" column="19" lean-forward="true" selection-start-line="227" selection-start-column="19" selection-end-line="227" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/core/parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-408">
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/core/classification.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3457">
-          <caret line="71" column="14" selection-start-line="71" selection-start-column="8" selection-end-line="71" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1548,12 +1381,135 @@ sub_frame['Label'] = subdir.stem</expression-string>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="50" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/frame.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="2949" selection-start-line="2949" selection-end-line="2949" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="999" selection-start-line="999" selection-end-line="999" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/toolbox_jupyter/models/builtin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="45" column="98" lean-forward="true" selection-start-line="45" selection-start-column="98" selection-end-line="45" selection-end-column="98" />
+        <state relative-caret-position="238">
+          <caret line="45" column="44" selection-start-line="45" selection-start-column="44" selection-end-line="45" selection-end-column="44" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/generators.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="887">
+          <caret line="119" selection-start-line="119" selection-end-line="119" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/IO/image.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="28" column="20" lean-forward="true" selection-start-line="28" selection-start-column="20" selection-end-line="28" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/transforms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="116" selection-start-line="116" selection-end-line="116" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="104" column="18" selection-start-line="104" selection-start-column="18" selection-end-line="104" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5712">
+          <caret line="336" column="6" selection-start-line="336" selection-start-column="6" selection-end-line="336" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/core/parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2057">
+          <caret line="8" column="49" selection-start-line="8" selection-start-column="49" selection-end-line="8" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/PIL/Image.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="2614" selection-start-line="2614" selection-end-line="2614" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="562">
+          <caret line="77" column="47" lean-forward="true" selection-start-line="77" selection-start-column="47" selection-end-line="77" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/image.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="38" selection-start-line="38" selection-end-line="38" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1836">
+          <caret column="15" lean-forward="true" selection-start-column="15" selection-end-line="1" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/core/classification.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+          <folding>
+            <element signature="e#1#12#0" expanded="true" />
           </folding>
         </state>
       </provider>

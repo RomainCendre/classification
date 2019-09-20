@@ -1,5 +1,6 @@
 import h5py
-from numpy import array
+from copy import deepcopy
+import numpy as np
 from sklearn.model_selection import GridSearchCV, ParameterGrid, KFold, GroupKFold
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
@@ -23,9 +24,11 @@ class Tools:
         split_rule = KFold(n_splits=split)
 
         # Make folds
+        folds = np.zeros(len(labels), dtype=int)
         current_folds = list(split_rule.split(X=datas, y=labels))
         for index, fold in enumerate(current_folds):
-            dataframe['Fold'] = index  # Add tests to folds
+            folds[fold[1]] = index
+        dataframe['Fold'] = folds.tolist()  # Add tests to folds
         return dataframe
 
     @staticmethod
@@ -42,24 +45,42 @@ class Tools:
         split_rule = GroupKFold(n_splits=split)
 
         # Make folds
+        folds = np.zeros(len(labels), dtype=int)
         current_folds = list(split_rule.split(X=datas, y=labels, groups=groups))
         for index, fold in enumerate(current_folds):
-            dataframe['Fold'] = index  # Add tests to folds
+            folds[fold[1]] = index
+        dataframe['Fold'] = folds.tolist()  # Add
         return dataframe
 
     @staticmethod
-    def fit_and_transform(dataframe, tags, out, extractor):
-        mandatory = ['data', 'label', 'fold']
-        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception('Not a dict or missing tag: data, label, group.')
-        dataframe[out] = dataframe.apply(lambda x: extractor.transform(tags['data']), axis=1)
-        return dataframe
-
-    @staticmethod
-    def transform(dataframe, tags, out, extractor):
+    def fit(dataframe, tags, model):
         mandatory = ['data', 'label']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception('Not a dict or missing tag: data, label, group.')
-        features = extractor.transform(dataframe[tags['data']].to_numpy())
+        model.fit(dataframe[tags['data']], y=dataframe[tags['label']])
+        return model
+
+    @staticmethod
+    def fit_and_transform(dataframe, tags, out, model):
+        mandatory = ['data', 'label']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception('Not a dict or missing tag: data, label.')
+
+        if 'Fold' not in dataframe:
+            raise Exception('Need to build fold.')
+
+        folds = dataframe['Fold'].unique()
+        for fold in folds:
+            mask = dataframe['Fold'] == fold
+            fit_model = Tools.fit(dataframe[mask], tags, deepcopy(model))
+            dataframe[mask] = Tools.transform(dataframe[mask], tags, out, fit_model)
+        return dataframe
+
+    @staticmethod
+    def transform(dataframe, tags, out, model):
+        mandatory = ['data', 'label']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception('Not a dict or missing tag: data, label, group.')
+        features = model.transform(dataframe[tags['data']].to_numpy())
         dataframe[out] = [f for f in features]
         return dataframe
