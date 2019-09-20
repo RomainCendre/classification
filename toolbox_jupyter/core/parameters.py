@@ -326,10 +326,6 @@ class LocalParameters:
         return make_scorer(lambda yt, yp: f1_score(yt, yp, average='weighted'))
 
     @staticmethod
-    def get_validation():
-        return GroupKFold(n_splits=2)
-
-    @staticmethod
     def set_gpu(percent_gpu=1, allow_growth=True):
         if not K.backend() == 'tensorflow':
             return
