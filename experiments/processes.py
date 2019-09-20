@@ -30,7 +30,7 @@ class Process:
         return self.classifier.fit(inputs)
 
     def evaluate_step(self, inputs, model):
-        try:
+        # try:
             folder = self.folder / self.name
             folder.mkdir(exist_ok=True)
 
@@ -40,8 +40,8 @@ class Process:
             self.classifier.set_model(model)
             self.results.append(self.classifier.evaluate(inputs))
 
-        except Exception as ex:
-            print(ex)
+        # except Exception as ex:
+        #     print(ex)
 
     def end(self):
         ResultWriter(self.results, self.settings).write_results(output_folder=self.folder, name=self.name)

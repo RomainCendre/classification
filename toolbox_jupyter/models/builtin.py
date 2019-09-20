@@ -5,6 +5,7 @@ from keras import Sequential, Model
 from sklearn.dummy import DummyClassifier
 from sklearn.pipeline import Pipeline
 from toolbox.core.layers import RandomLayer
+from toolbox.core.models import KerasBatchClassifier
 
 
 class Applications:
@@ -39,6 +40,12 @@ class Applications:
             return applications.resnet50.preprocess_input
         else:
             return applications.inception_v3.preprocess_input
+
+    @staticmethod
+    def get_transfer_tuning(architecture='InceptionV3'):
+        extractor_params = {'preprocessing_function': Applications.get_preprocessing_application(architecture=architecture)}
+        return KerasBatchClassifier(Applications.get_application(architecture=architecture,
+                                                                 pooling='avg'), **extractor_params)
 
 
     @staticmethod

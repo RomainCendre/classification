@@ -67,7 +67,7 @@ def features(bag_inputs, folder):
     filters = LocalParameters.get_dermatology_filters()
 
     # Extracteur
-    extractor = Transforms.get_tl_extractor(pooling='avg')
+    extractor, param = Transforms.get_image_dwt()
     extractor.need_fit = False
 
     # Evaluateurs

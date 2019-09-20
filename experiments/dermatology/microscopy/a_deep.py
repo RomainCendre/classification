@@ -13,6 +13,7 @@ from toolbox.core.builtin_models import Transforms, Classifiers
 from toolbox.core.models import KerasFineClassifier
 from toolbox.core.parameters import BuiltInSettings, LocalParameters, DermatologyDataset
 from toolbox.core.transforms import OrderedEncoder
+from toolbox_jupyter.IO import image
 
 
 def get_linear_svm():
@@ -28,18 +29,22 @@ def get_linear_svm():
 
 def get_cart():
     # Add scaling step
-    steps = [('scale', StandardScaler()), ('clf', DecisionTreeClassifier())]
+    steps = [('scale', StandardScaler()), ('clf', DecisionTreeClassifier(class_weight='balanced'))]
     pipe = Pipeline(steps)
     pipe.name = 'Cart'
 
     # Define parameters to validate through grid CV
-    parameters = {}
+    parameters = {
+                'max_depth': [3, 4, 5, 6],
+                'min_samples_leaf': [0.04, 0.06, 0.08],
+                'max_features': [0.2, 0.4, 0.6, 0.8]
+                }
     return pipe, parameters
 
 
 def get_fine_tuning(output_classes, trainable_layers=0):
     model = KerasFineClassifier(build_fn=Classifiers.get_fine_tuning)
-    parameters = {  # Build paramters
+    parameters = {  # Build parameters
         'architecture': 'InceptionV3',
         # Parameters for fit
         'epochs': 50,
@@ -58,7 +63,6 @@ def get_fine_tuning(output_classes, trainable_layers=0):
 
 
 def transfer_learning(original_inputs, folder):
-
     # Advanced parameters
     nb_cpu = LocalParameters.get_cpu_number()
     validation = LocalParameters.get_validation()
@@ -90,7 +94,6 @@ def transfer_learning(original_inputs, folder):
         process.begin(inner_cv=validation, n_jobs=nb_cpu, scoring=scoring)
 
         for extractor, model in combinations:
-
             # Name experiment and filter data
             inputs = original_inputs.copy_and_change(filter_groups)
             inputs.name = f'{extractor[0]}_{model[0]}'
@@ -134,7 +137,6 @@ def fine_tune(original_inputs, folder):
         process.begin(inner_cv=validation, n_jobs=nb_cpu, scoring=scoring)
 
         for layer in layers:
-
             inputs = original_inputs.copy_and_change(filter_groups)
             # Specify the name of experiment
             inputs.name = f'{layer[0]}'
@@ -145,14 +147,16 @@ def fine_tune(original_inputs, folder):
             inputs.build_folds()
 
             process.evaluate_step(inputs=inputs,
-                                  model=get_fine_tuning(output_classes=len(filter_datas['Label'])-1,  # Remove Unknown
+                                  model=get_fine_tuning(output_classes=len(filter_datas['Label']) - 1,  # Remove Unknown
                                                         trainable_layers=layer[1]))
         process.end()
 
 
 if __name__ == "__main__":
+    test = image.Reader().scan_folder('C:\\Users\\Romain\Data\\Skin\\Thumbnails')
     # Parameters
     current_file = Path(__file__)
+    LocalParameters.set_gpu()
     # Input patch
     image_inputs = DermatologyDataset.images(modality='Microscopy')
     image_types = ['Patch', 'Full']

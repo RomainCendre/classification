@@ -1,12 +1,15 @@
+
+
 import itertools
 import webbrowser
 from pathlib import Path
+
 from numpy import logspace
-from scipy.stats import randint as randint
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+
 from experiments.processes import Process
 from toolbox.core.builtin_models import Transforms
 from toolbox.core.parameters import BuiltInSettings, LocalParameters, DermatologyDataset
@@ -26,19 +29,17 @@ def get_linear_svm():
 
 def get_cart():
     # Add scaling step
-    steps = [('scale', StandardScaler()), ('clf', DecisionTreeClassifier(class_weight='balanced'))]
+    steps = [('scale', StandardScaler()), ('clf', DecisionTreeClassifier())]
     pipe = Pipeline(steps)
     pipe.name = 'Cart'
 
     # Define parameters to validate through grid CV
-    parameters = {'max_depth': [3, None],
-                  'max_features': randint(1, 9),
-                  'min_samples_leaf': randint(1, 9),
-                  'criterion': ['gini', 'entropy']}
+    parameters = {}
     return pipe, parameters
 
 
-def manual(original_inputs, folder):
+def multiscale(original_inputs, folder):
+
     # Advanced parameters
     nb_cpu = LocalParameters.get_cpu_number()
     validation = LocalParameters.get_validation()
@@ -69,6 +70,7 @@ def manual(original_inputs, folder):
         process.begin(inner_cv=validation, n_jobs=nb_cpu, scoring=scoring)
 
         for extractor, model in combinations:
+
             # Name experiment and filter data
             inputs = original_inputs.copy_and_change(filter_groups)
             inputs.name = f'{extractor[0]}_{model[0]}'
@@ -87,7 +89,7 @@ def manual(original_inputs, folder):
         process.end()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Parameters
     current_file = Path(__file__)
     # Input patch
@@ -99,7 +101,7 @@ if __name__ == '__main__':
     for image_type in image_types:
         inputs = image_inputs.sub_inputs({'Type': image_type})
         # Compute data
-        output = output_folder / image_type
+        output = output_folder/image_type
         output.mkdir(parents=True, exist_ok=True)
         manual(inputs, output)
 

@@ -38,55 +38,6 @@ def get_cart():
     return pipe, parameters
 
 
-def manual(original_inputs, folder):
-    # Advanced parameters
-    nb_cpu = LocalParameters.get_cpu_number()
-    validation = LocalParameters.get_validation()
-    settings = BuiltInSettings.get_default_dermatology()
-    scoring = LocalParameters.get_scorer()
-
-    # Statistics expected
-    statistics = LocalParameters.get_dermatology_statistics()
-
-    # Filters
-    filters = LocalParameters.get_dermatology_filters()
-
-    # Methods
-    methods = [('Wavelet', Transforms.get_image_dwt()),
-               ('Fourier', Transforms.get_image_fft()),
-               ('Spatial', Transforms.get_spatial())]
-
-    # Models
-    models = [('CART', get_cart()), ('LinearSVM', get_linear_svm())]
-
-    # Parameters combinations
-    combinations = list(itertools.product(methods, models))
-
-    # Browse combinations
-    for filter_name, filter_datas, filter_encoder, filter_groups in filters:
-
-        process = Process(output_folder=folder, name=filter_name, settings=settings, stats_keys=statistics)
-        process.begin(inner_cv=validation, n_jobs=nb_cpu, scoring=scoring)
-
-        for extractor, model in combinations:
-            # Name experiment and filter data
-            inputs = original_inputs.copy_and_change(filter_groups)
-            inputs.name = f'{extractor[0]}_{model[0]}'
-
-            # Filter datasets
-            inputs.set_filters(filter_datas)
-            inputs.set_encoders({'label': OrderedEncoder().fit(filter_encoder), 'group': LabelEncoder()})
-            inputs.build_folds()
-
-            # Extract features on datasets
-            process.checkpoint_step(inputs=inputs, model=extractor[1])
-
-            # Evaluate
-            process.evaluate_step(inputs=inputs, model=model[1])
-
-        process.end()
-
-
 if __name__ == '__main__':
     # Parameters
     current_file = Path(__file__)
