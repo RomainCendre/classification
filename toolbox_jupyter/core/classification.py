@@ -1,3 +1,5 @@
+import warnings
+
 import h5py
 from copy import deepcopy
 import numpy as np
@@ -5,19 +7,20 @@ from sklearn.model_selection import GridSearchCV, ParameterGrid, KFold, GroupKFo
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+import pandas as pd
 from toolbox.core.models import KerasBatchClassifier
-from toolbox.core.structures import Outputs
 
 
-class Tools:
+class Folds:
 
     @staticmethod
     def build_folds(dataframe, tags, split=5):
-        mandatory = ['data', 'label']
+        mandatory = ['datum', 'label']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception('Not a dict or missing tag: data, label.')
+            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+
         # Inputs
-        datas = dataframe[tags['data']]
+        data = dataframe[tags['datum']]
         labels = dataframe[tags['label']]
 
         # Rule to create folds
@@ -25,19 +28,19 @@ class Tools:
 
         # Make folds
         folds = np.zeros(len(labels), dtype=int)
-        current_folds = list(split_rule.split(X=datas, y=labels))
+        current_folds = list(split_rule.split(X=data, y=labels))
         for index, fold in enumerate(current_folds):
             folds[fold[1]] = index
         dataframe['Fold'] = folds.tolist()  # Add tests to folds
         return dataframe
 
     @staticmethod
-    def build_patients_folds(dataframe, tags, split=5):
-        mandatory = ['data', 'label', 'group']
+    def build_group_folds(dataframe, tags, split=5):
+        mandatory = ['datum', 'label', 'group']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception('Not a dict or missing tag: data, label, group.')
+            raise Exception(f'Not a dict or missing tag: {mandatory}.')
         # Inputs
-        datas = dataframe[tags['data']]
+        data = dataframe[tags['datum']]
         labels = dataframe[tags['label']]
         groups = dataframe[tags['group']]
 
@@ -46,48 +49,171 @@ class Tools:
 
         # Make folds
         folds = np.zeros(len(labels), dtype=int)
-        current_folds = list(split_rule.split(X=datas, y=labels, groups=groups))
+        current_folds = list(split_rule.split(X=data, y=labels, groups=groups))
         for index, fold in enumerate(current_folds):
             folds[fold[1]] = index
         dataframe['Fold'] = folds.tolist()  # Add
         return dataframe
 
-    @staticmethod
-    def fit(dataframe, tags, model):
-        mandatory = ['data', 'label']
-        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception('Not a dict or missing tag: data, label.')
-        model.fit(dataframe[tags['data']], y=dataframe[tags['label']])
-        return model
+
+class Classification:
 
     @staticmethod
-    def fit_and_transform(dataframe, tags, out, model):
-        mandatory = ['data']
-        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception('Not a dict or missing tag: data.')
+    def evaluate(dataframe, tags, out, model, mask=None):
+        if mask is None:
+            mask = [True] * len(dataframe.index)
 
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
 
+        # Check mandatory fields
+        mandatory = ['datum', 'label']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+
+        # Check valid labels, at least several classes
+        if not Classification.__check_labels(dataframe[mask], {'label': tags['label']}):
+            raise ValueError('Not enough unique labels where found, at least 2.')
+
+        # Encode labels to go from string to int
+        folds = dataframe['Fold']
+
+        for fold, test in enumerate(np.unique(folds)):
+
+            test_mask = folds == fold
+            print('Fold : {fold}'.format(fold=fold + 1))
+
+            # Check that current fold respect labels
+            if not Classification.__check_labels(dataframe[mask], {'label': tags['label']}, dataframe[~test_mask]):
+                warnings.warn(f'Invalid fold, missing labels for fold {fold+1}')
+                continue
+
+            # Clone model
+            fitted_model = deepcopy(model)
+            Classification.fit(dataframe[~test_mask], tags, fitted_model)
+            # Predict
+            Classification.predict(dataframe[test_mask], {'label': tags['datum']}, out, fitted_model)
+            Classification.predict_proba(dataframe[test_mask], {'label': tags['datum']}, out, fitted_model)
+
+        return dataframe
+
+    @staticmethod
+    def fit(dataframe, tags, model, mask=None):
+        # Check mandatory fields
+        mandatory = ['datum', 'label']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+
+        # Mask creation (see pandas view / copy mechanism)
+        if mask is None:
+            mask = [True] * len(dataframe.index)
+
+        # Check valid labels, at least several classes
+        if not Classification.__check_labels(dataframe[mask], {'label': tags['label']}):
+            raise ValueError('Not enough unique labels where found, at least 2.')
+
+        model.fit(dataframe[mask, tags['datum']], y=dataframe[mask, tags['label']])
+        return model
+
+    @staticmethod
+    def fit_and_transform(dataframe, tags, out, model, mask=None):
+        if mask is None:
+            mask = [True] * len(dataframe.index)
+        if 'Fold' not in dataframe:
+            raise Exception('Need to build fold.')
+
+        # Check mandatory fields
+        mandatory = ['datum']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+
+        # Mask creation (see pandas view / copy mechanism)
+        if mask is None:
+            mask = [True] * len(dataframe.index)
+
         folds = dataframe['Fold'].unique()
         for fold in folds:
             mask = dataframe['Fold'] == fold
-            fit_model = Tools.fit(dataframe[mask], tags, deepcopy(model))
-            dataframe.loc[mask, out] = Tools.transform(dataframe[mask], tags, out, fit_model)[out]
+            fitted_model = Classification.fit(dataframe[mask], tags, deepcopy(model))
+            dataframe.loc[mask, out] = Classification.transform(dataframe[mask], tags, out, fitted_model)[out]
         return dataframe
 
     @staticmethod
-    def evaluate(dataframe, tags, model):
-        mandatory = ['data', 'label']
-        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception('Not a dict or missing tag: data, label.')
+    def predict(dataframe, tags, out, model, mask=None):
+        # Check predict_proba field
+        if not hasattr(model, 'predict'):
+            warnings.warn('No method predict found.')
+            return
 
+        # Check mandatory fields
+        mandatory = ['datum']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+
+        # Mask creation (see pandas view / copy mechanism)
+        if mask is None:
+            mask = [True] * len(dataframe.index)
+
+        # Set de predict values
+        model.predict(dataframe['datum'])
 
     @staticmethod
-    def transform(dataframe, tags, out, model):
-        mandatory = ['data']
+    def predict_proba(dataframe, tags, out, model, mask=None):
+        # Check predict_proba field
+        if not hasattr(model, 'predict_proba'):
+            warnings.warn('No method predict_proba found.')
+            return
+
+        # Check mandatory fields
+        mandatory = ['datum']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception('Not a dict or missing tag: data.')
-        features = model.transform(dataframe[tags['data']].to_numpy())
-        dataframe[out] = [f for f in features]
+            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+
+        # Mask creation (see pandas view / copy mechanism)
+        if mask is None:
+            mask = [True] * len(dataframe.index)
+
+        # Set de predict probas values
+        model.predict_proba(dataframe[mask, 'datum'])
+
+    @staticmethod
+    def transform(dataframe, tags, model, out, mask=None):
+        # Check mandatory fields
+        mandatory = ['datum']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+
+        # Mask creation (see pandas view / copy mechanism)
+        if mask is None:
+            mask = [True] * len(dataframe.index)
+
+        # dataframe[out] = np.nan
+        features = model.transform(dataframe.loc[mask, tags['datum']].to_numpy())
+        dataframe.loc[mask, out] = pd.Series(features.tolist())
         return dataframe
+
+    @staticmethod
+    def __check_labels(dataframe, tags, mask_sub=None):
+        mandatory = ['label']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+
+        labels = dataframe[tags['label']]
+        if mask_sub is None:
+            return len(np.unique(labels)) > 1
+        return len(np.unique(labels)) > 1 and np.array_equal(np.unique(labels),
+                                                             np.unique(dataframe[mask_sub, tags['label']]))
+
+    @staticmethod
+    def __number_of_features(model):
+        if isinstance(model, Pipeline):
+            model = model.steps[-1][1]
+
+        if isinstance(model, SVC):
+            if model.kernel == 'rbf':
+                return model.support_vectors_.shape[1]
+            else:
+                return model.coef_.shape[1]
+        elif isinstance(model, DecisionTreeClassifier):
+            return model.n_features_
+        return 0
