@@ -37,7 +37,7 @@ class DataProjectorWriter:
 
         sess = K.get_session()
 
-        datas = inputs.get('data')
+        datas = inputs.get('datum')
         labels = inputs.get('label', encode=False)
 
         # Write data
@@ -302,7 +302,7 @@ class PCAProjection:
         self.pdf.close()
 
     def write_projection(self, inputs):
-        data = inputs.get('data')
+        data = inputs.get('datum')
         labels = inputs.get('label', encode=False)
         ulabels = np.unique(labels)
         pca = PCA(2, whiten=True)  # project to 2 dimensions

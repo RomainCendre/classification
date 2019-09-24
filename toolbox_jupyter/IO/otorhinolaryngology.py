@@ -35,7 +35,7 @@ class Reader:
         for x in range(Reader.COLUMN_FIRST, csv.shape[1]):
             spectrum = {'label': csv[Reader.ROW_LABEL, x],
                         'spectrum_id': x - Reader.COLUMN_FIRST}
-            spectrum.update({'data': csv[Reader.ROW_WAVELENGTH:csv.shape[0], x].astype("float"),
+            spectrum.update({'datum': csv[Reader.ROW_WAVELENGTH:csv.shape[0], x].astype("float"),
                              'wavelength': csv[Reader.ROW_WAVELENGTH:csv.shape[0], Reader.COLUMN_WAVELENGTH].astype(
                                  "float")})
             spectra.append(spectrum)
@@ -130,4 +130,4 @@ class Generator:
             data = indices
             label = 'Sain'
 
-        return pandas.DataFrame({'data': [data], 'wavelength': [wavelength], 'label': label})
+        return pandas.DataFrame({'datum': [data], 'wavelength': [wavelength], 'label': label})

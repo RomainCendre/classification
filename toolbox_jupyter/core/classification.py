@@ -60,9 +60,7 @@ class Classification:
 
     @staticmethod
     def evaluate(dataframe, tags, out, model, mask=None):
-        if mask is None:
-            mask = [True] * len(dataframe.index)
-
+        # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
 
@@ -70,6 +68,10 @@ class Classification:
         mandatory = ['datum', 'label']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Not a dict or missing tag: {mandatory}.')
+
+        # Mask creation (see pandas view / copy mechanism)
+        if mask is None:
+            mask = [True] * len(dataframe.index)
 
         # Check valid labels, at least several classes
         if not Classification.__check_labels(dataframe[mask], {'label': tags['label']}):
@@ -84,7 +86,7 @@ class Classification:
             print('Fold : {fold}'.format(fold=fold + 1))
 
             # Check that current fold respect labels
-            if not Classification.__check_labels(dataframe[mask], {'label': tags['label']}, dataframe[~test_mask]):
+            if not Classification.__check_labels(dataframe[mask], {'label': tags['label']}, ~test_mask):
                 warnings.warn(f'Invalid fold, missing labels for fold {fold+1}')
                 continue
 
@@ -202,7 +204,7 @@ class Classification:
         if mask_sub is None:
             return len(np.unique(labels)) > 1
         return len(np.unique(labels)) > 1 and np.array_equal(np.unique(labels),
-                                                             np.unique(dataframe[mask_sub, tags['label']]))
+                                                             np.unique(dataframe.loc[mask_sub, tags['label']]))
 
     @staticmethod
     def __number_of_features(model):
