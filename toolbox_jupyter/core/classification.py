@@ -81,7 +81,7 @@ class Classification:
         folds = dataframe['Fold']
 
         for fold, test in enumerate(np.unique(folds)):
-
+            # Create mask
             test_mask = folds == fold
             print('Fold : {fold}'.format(fold=fold + 1))
 
@@ -93,6 +93,7 @@ class Classification:
             # Clone model
             fitted_model = deepcopy(model)
             Classification.fit(dataframe, tags, fitted_model, ~test_mask)
+
             # Predict
             dataframe = Classification.predict(dataframe, {'datum': tags['datum']}, out, fitted_model, test_mask)
             dataframe = Classification.predict_proba(dataframe, {'datum': tags['datum']}, out, fitted_model, test_mask)
@@ -163,11 +164,12 @@ class Classification:
         # Mask creation (see pandas view / copy mechanism)
         if mask is None:
             mask = [True] * len(dataframe.index)
+        mask = pd.Series(mask)
 
         # Set de predict values
         data = np.array(dataframe.loc[mask, tags['datum']].to_list())
         predictions = model.predict(data)
-        dataframe.loc[mask, f'{out}_Predictions'] = pd.Series([f for f in predictions])
+        dataframe.loc[mask, f'{out}_Predictions'] = pd.Series([p for p in predictions], index=mask[mask==True].index)
         return dataframe
 
     @staticmethod
@@ -185,11 +187,12 @@ class Classification:
         # Mask creation (see pandas view / copy mechanism)
         if mask is None:
             mask = [True] * len(dataframe.index)
+        mask = pd.Series(mask)
 
         # Set de predict probas values
         data = np.array(dataframe.loc[mask, tags['datum']].to_list())
         probabilities = model.predict_proba(data)
-        dataframe.loc[mask, f'{out}_Probabilities'] = pd.Series([f for f in probabilities])
+        dataframe.loc[mask, f'{out}_Probabilities'] = pd.Series([p for p in probabilities], index=mask[mask==True].index)
         return dataframe
 
     @staticmethod
@@ -202,10 +205,11 @@ class Classification:
         # Mask creation (see pandas view / copy mechanism)
         if mask is None:
             mask = [True] * len(dataframe.index)
+        mask = pd.Series(mask)
 
         data = np.array(dataframe.loc[mask, tags['datum']].to_list())
         features = model.transform(data)
-        dataframe.loc[mask, out] = pd.Series([f for f in features])
+        dataframe.loc[mask, out] = pd.Series([f for f in features], index=mask[mask==True].index)
         return dataframe
 
     @staticmethod
