@@ -88,6 +88,11 @@ class Tools:
         if not Tools.__check_labels(dataframe[mask], {'label': tags['label']}):
             raise ValueError('Not enough unique labels where found, at least 2.')
 
+        # Out fields
+        out_preds = f'{out}_Predictions'
+        out_probas = f'{out}_Probabilities'
+        out_params = f'{out}_Parameters'
+
         # Browse folds
         folds = dataframe.loc[mask, 'Fold']
         for fold, test in enumerate(np.unique(folds)):
@@ -104,9 +109,12 @@ class Tools:
             fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), ~test_mask)
 
             # Predict
-            dataframe[mask] = Tools.predict(dataframe[mask], {'datum': tags['datum']}, out, fitted_model, test_mask)
-            dataframe[mask] = Tools.predict_proba(dataframe[mask], {'datum': tags['datum']}, out, fitted_model, test_mask)
-            dataframe[mask] = Tools.number_of_features(dataframe[mask], fitted_model, out, test_mask)
+            dataframe.loc[mask, out_preds] = \
+                Tools.predict(dataframe[mask], {'datum': tags['datum']}, out_preds, fitted_model, test_mask)[out_preds]
+            dataframe.loc[mask, out_probas] = \
+                Tools.predict_proba(dataframe[mask], {'datum': tags['datum']}, out_probas, fitted_model, test_mask)[out_probas]
+            dataframe.loc[mask, out_params] = \
+                Tools.number_of_features(dataframe[mask], fitted_model, out_params, test_mask)[out_params]
 
         return dataframe
 
@@ -162,7 +170,7 @@ class Tools:
 
     @staticmethod
     def number_of_features(dataframe, model, out, mask=None):
-        dataframe.loc[mask, f'{out}_Parameters'] = Tools.__number_of_features(model)
+        dataframe.loc[mask, out] = Tools.__number_of_features(model)
         return dataframe
 
     @staticmethod
@@ -185,7 +193,7 @@ class Tools:
         # Set de predict values
         data = np.array(dataframe.loc[mask, tags['datum']].to_list())
         predictions = model.predict(data)
-        dataframe.loc[mask, f'{out}_Predictions'] = pd.Series([p for p in predictions], index=mask[mask==True].index)
+        dataframe.loc[mask, out] = pd.Series([p for p in predictions], index=mask[mask==True].index)
         return dataframe
 
     @staticmethod
@@ -208,7 +216,7 @@ class Tools:
         # Set de predict probas values
         data = np.array(dataframe.loc[mask, tags['datum']].to_list())
         probabilities = model.predict_proba(data)
-        dataframe.loc[mask, f'{out}_Probabilities'] = pd.Series([p for p in probabilities], index=mask[mask==True].index)
+        dataframe.loc[mask, out] = pd.Series([p for p in probabilities], index=mask[mask==True].index)
         return dataframe
 
     @staticmethod
