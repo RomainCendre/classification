@@ -8,7 +8,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
-from toolbox.core.models import KerasBatchClassifier
 
 
 class Folds:
@@ -54,6 +53,17 @@ class Folds:
             folds[fold[1]] = index
         dataframe['Fold'] = folds.tolist()  # Add
         return dataframe
+
+
+class IO:
+
+    @staticmethod
+    def load(input_file, key):
+        pd.read_hdf(input_file, key)
+
+    @staticmethod
+    def save(dataframe, save, key):
+        dataframe.to_hdf(save, key)
 
 
 class Tools:
