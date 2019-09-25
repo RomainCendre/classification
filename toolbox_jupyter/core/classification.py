@@ -94,8 +94,8 @@ class Classification:
             fitted_model = deepcopy(model)
             Classification.fit(dataframe, tags, fitted_model, ~test_mask)
             # Predict
-            Classification.predict(dataframe[test_mask], {'datum': tags['datum']}, out, fitted_model)
-            Classification.predict_proba(dataframe[test_mask], {'datum': tags['datum']}, out, fitted_model)
+            dataframe = Classification.predict(dataframe, {'datum': tags['datum']}, out, fitted_model, test_mask)
+            dataframe = Classification.predict_proba(dataframe, {'datum': tags['datum']}, out, fitted_model, test_mask)
 
         return dataframe
 
