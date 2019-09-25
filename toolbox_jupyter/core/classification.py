@@ -160,7 +160,9 @@ class Classification:
 
         # Set de predict values
         data = np.array(dataframe.loc[mask, tags['datum']].to_list())
-        model.predict(data)
+        predictions = model.predict(data)
+        dataframe.loc[mask, f'{out}_Predictions'] = pd.Series([f for f in predictions])
+        return dataframe
 
     @staticmethod
     def predict_proba(dataframe, tags, out, model, mask=None):
@@ -180,7 +182,9 @@ class Classification:
 
         # Set de predict probas values
         data = np.array(dataframe.loc[mask, tags['datum']].to_list())
-        model.predict_proba(data)
+        probabilities = model.predict_proba(data)
+        dataframe.loc[mask, f'{out}_Probabilities'] = pd.Series([f for f in probabilities])
+        return dataframe
 
     @staticmethod
     def transform(dataframe, tags, model, out, mask=None):
