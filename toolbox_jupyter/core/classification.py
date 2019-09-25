@@ -139,13 +139,13 @@ class Tools:
         return model
 
     @staticmethod
-    def fit_and_transform(dataframe, tags, out, model, mask=None):
+    def fit_transform(dataframe, tags, model, out, mask=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
 
         # Check mandatory fields
-        mandatory = ['datum']
+        mandatory = ['datum', 'label']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
@@ -154,18 +154,12 @@ class Tools:
             mask = [True] * len(dataframe.index)
         mask = pd.Series(mask)
 
-        # Browse folds
-        folds = dataframe.loc[mask, 'Fold']
-        for fold, test in enumerate(np.unique(folds)):
-            # Create mask
-            test_mask = folds == fold
-            print('Fold : {fold}'.format(fold=fold + 1))
+        # Clone model
+        fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), mask)
 
-            # Clone model
-            fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), ~test_mask)
+        # Transform
+        dataframe.loc[mask, out] = Tools.transform(dataframe[mask], {'datum': tags['datum']}, fitted_model, out)[out]
 
-            # Transform
-            dataframe[mask] = Tools.transform(dataframe[mask], tags, out, fitted_model)[out]
         return dataframe
 
     @staticmethod
