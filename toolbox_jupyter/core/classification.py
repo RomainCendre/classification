@@ -159,7 +159,8 @@ class Classification:
             mask = [True] * len(dataframe.index)
 
         # Set de predict values
-        model.predict(dataframe['datum'])
+        data = np.array(dataframe.loc[mask, tags['datum']].to_list())
+        model.predict(data)
 
     @staticmethod
     def predict_proba(dataframe, tags, out, model, mask=None):
@@ -178,7 +179,8 @@ class Classification:
             mask = [True] * len(dataframe.index)
 
         # Set de predict probas values
-        model.predict_proba(dataframe[mask, 'datum'])
+        data = np.array(dataframe.loc[mask, tags['datum']].to_list())
+        model.predict_proba(data)
 
     @staticmethod
     def transform(dataframe, tags, model, out, mask=None):
