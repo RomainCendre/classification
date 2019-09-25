@@ -56,7 +56,7 @@ class Folds:
         return dataframe
 
 
-class Classification:
+class Tools:
 
     @staticmethod
     def evaluate(dataframe, tags, out, model, mask=None):
@@ -74,7 +74,7 @@ class Classification:
             mask = [True] * len(dataframe.index)
 
         # Check valid labels, at least several classes
-        if not Classification.__check_labels(dataframe[mask], {'label': tags['label']}):
+        if not Tools.__check_labels(dataframe[mask], {'label': tags['label']}):
             raise ValueError('Not enough unique labels where found, at least 2.')
 
         # Encode labels to go from string to int
@@ -86,18 +86,18 @@ class Classification:
             print('Fold : {fold}'.format(fold=fold + 1))
 
             # Check that current fold respect labels
-            if not Classification.__check_labels(dataframe[mask], {'label': tags['label']}, ~test_mask):
+            if not Tools.__check_labels(dataframe[mask], {'label': tags['label']}, ~test_mask):
                 warnings.warn(f'Invalid fold, missing labels for fold {fold+1}')
                 continue
 
             # Clone model
             fitted_model = deepcopy(model)
-            Classification.fit(dataframe, tags, fitted_model, ~test_mask)
+            Tools.fit(dataframe, tags, fitted_model, ~test_mask)
 
             # Predict
-            dataframe = Classification.predict(dataframe, {'datum': tags['datum']}, out, fitted_model, test_mask)
-            dataframe = Classification.predict_proba(dataframe, {'datum': tags['datum']}, out, fitted_model, test_mask)
-            dataframe = Classification.number_of_features(dataframe, fitted_model, out, test_mask)
+            dataframe = Tools.predict(dataframe, {'datum': tags['datum']}, out, fitted_model, test_mask)
+            dataframe = Tools.predict_proba(dataframe, {'datum': tags['datum']}, out, fitted_model, test_mask)
+            dataframe = Tools.number_of_features(dataframe, fitted_model, out, test_mask)
 
         return dataframe
 
@@ -113,7 +113,7 @@ class Classification:
             mask = [True] * len(dataframe.index)
 
         # Check valid labels, at least several classes
-        if not Classification.__check_labels(dataframe[mask], {'label': tags['label']}):
+        if not Tools.__check_labels(dataframe[mask], {'label': tags['label']}):
             raise ValueError('Not enough unique labels where found, at least 2.')
 
         data = np.array(dataframe.loc[mask, tags['datum']].to_list())
@@ -140,13 +140,13 @@ class Classification:
         folds = dataframe['Fold'].unique()
         for fold in folds:
             mask = dataframe['Fold'] == fold
-            fitted_model = Classification.fit(dataframe[mask], tags, deepcopy(model))
-            dataframe.loc[mask, out] = Classification.transform(dataframe[mask], tags, out, fitted_model)[out]
+            fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model))
+            dataframe.loc[mask, out] = Tools.transform(dataframe[mask], tags, out, fitted_model)[out]
         return dataframe
 
     @staticmethod
     def number_of_features(dataframe, model, out, mask=None):
-        dataframe.loc[mask, f'{out}_Parameters'] = Classification.__number_of_features(model)
+        dataframe.loc[mask, f'{out}_Parameters'] = Tools.__number_of_features(model)
         return dataframe
 
     @staticmethod
