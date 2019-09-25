@@ -23,7 +23,11 @@ class Reader:
             except OSError:
                 print('Patient {}'.format(subdir))
 
-        return pandas.concat(datas, sort=False, ignore_index=True).drop(columns='Path')
+        dataframe = pandas.concat(datas, sort=False, ignore_index=True).drop(columns='Path')
+        dataframe = dataframe[~(dataframe['Label']=='Draw')].reset_index(drop=True)  # Remove unused images
+        dataframe['Pathologic'] = ~(dataframe['Label']=='Normal')  # Set new label
+        dataframe['Malignant'] = (dataframe['Label']=='Malignant')  # Set new label
+        return dataframe
 
     @staticmethod
     def scan_subfolder(subdir, parameters={}):

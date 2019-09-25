@@ -10,6 +10,41 @@ from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 
 
+class Data:
+
+    @staticmethod
+    def collapse(self, filters, on, filters_collapse, on_collapse, data_tag=None):
+        pd.options.mode.chained_assignment = None
+        if data_tag is None:
+            data_tag = self.tags['datum']
+
+        # Filters
+        filters.update(self.filters)
+        filters_collapse.update(self.filters)
+
+        # Query
+        query = self.to_query(filters)
+        query_collapse = self.to_query(filters_collapse)
+
+        # Data
+        data = self.data.query(query)
+        data_collapse = self.data.query(query_collapse)
+
+        # Collapse data
+        rows = []
+        for name, group in data.groupby(on):
+            # Get features by group
+            raw_row = group.iloc[0]
+            group_collapse = data_collapse[data_collapse[on_collapse] == name]
+            raw_row[data_tag] = np.array(group_collapse[data_tag].tolist())
+            rows.append(raw_row)
+
+        # Now set new data
+        input = copy(self)
+        input.data = pd.DataFrame(rows)
+        return input
+
+
 class Folds:
 
     @staticmethod
