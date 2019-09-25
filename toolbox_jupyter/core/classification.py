@@ -67,19 +67,19 @@ class Tools:
         # Check mandatory fields
         mandatory = ['datum', 'label']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Mask creation (see pandas view / copy mechanism)
         if mask is None:
             mask = [True] * len(dataframe.index)
+        mask = pd.Series(mask)
 
         # Check valid labels, at least several classes
         if not Tools.__check_labels(dataframe[mask], {'label': tags['label']}):
             raise ValueError('Not enough unique labels where found, at least 2.')
 
-        # Encode labels to go from string to int
-        folds = dataframe['Fold']
-
+        # Browse folds
+        folds = dataframe.loc[mask, 'Fold']
         for fold, test in enumerate(np.unique(folds)):
             # Create mask
             test_mask = folds == fold
@@ -91,13 +91,12 @@ class Tools:
                 continue
 
             # Clone model
-            fitted_model = deepcopy(model)
-            Tools.fit(dataframe, tags, fitted_model, ~test_mask)
+            fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), ~test_mask)
 
             # Predict
-            dataframe = Tools.predict(dataframe, {'datum': tags['datum']}, out, fitted_model, test_mask)
-            dataframe = Tools.predict_proba(dataframe, {'datum': tags['datum']}, out, fitted_model, test_mask)
-            dataframe = Tools.number_of_features(dataframe, fitted_model, out, test_mask)
+            dataframe[mask] = Tools.predict(dataframe[mask], {'datum': tags['datum']}, out, fitted_model, test_mask)
+            dataframe[mask] = Tools.predict_proba(dataframe[mask], {'datum': tags['datum']}, out, fitted_model, test_mask)
+            dataframe[mask] = Tools.number_of_features(dataframe[mask], fitted_model, out, test_mask)
 
         return dataframe
 
@@ -106,7 +105,7 @@ class Tools:
         # Check mandatory fields
         mandatory = ['datum', 'label']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Mask creation (see pandas view / copy mechanism)
         if mask is None:
@@ -123,25 +122,32 @@ class Tools:
 
     @staticmethod
     def fit_and_transform(dataframe, tags, out, model, mask=None):
-        if mask is None:
-            mask = [True] * len(dataframe.index)
+        # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
 
         # Check mandatory fields
         mandatory = ['datum']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Mask creation (see pandas view / copy mechanism)
         if mask is None:
             mask = [True] * len(dataframe.index)
+        mask = pd.Series(mask)
 
-        folds = dataframe['Fold'].unique()
-        for fold in folds:
-            mask = dataframe['Fold'] == fold
-            fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model))
-            dataframe.loc[mask, out] = Tools.transform(dataframe[mask], tags, out, fitted_model)[out]
+        # Browse folds
+        folds = dataframe.loc[mask, 'Fold']
+        for fold, test in enumerate(np.unique(folds)):
+            # Create mask
+            test_mask = folds == fold
+            print('Fold : {fold}'.format(fold=fold + 1))
+
+            # Clone model
+            fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), ~test_mask)
+
+            # Transform
+            dataframe[mask] = Tools.transform(dataframe[mask], tags, out, fitted_model)[out]
         return dataframe
 
     @staticmethod
@@ -159,7 +165,7 @@ class Tools:
         # Check mandatory fields
         mandatory = ['datum']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Mask creation (see pandas view / copy mechanism)
         if mask is None:
@@ -182,7 +188,7 @@ class Tools:
         # Check mandatory fields
         mandatory = ['datum']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Mask creation (see pandas view / copy mechanism)
         if mask is None:
@@ -200,7 +206,7 @@ class Tools:
         # Check mandatory fields
         mandatory = ['datum']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Mask creation (see pandas view / copy mechanism)
         if mask is None:
@@ -216,7 +222,7 @@ class Tools:
     def __check_labels(dataframe, tags, mask_sub=None):
         mandatory = ['label']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         labels = dataframe[tags['label']]
         if mask_sub is None:
