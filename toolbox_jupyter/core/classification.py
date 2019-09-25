@@ -92,10 +92,10 @@ class Classification:
 
             # Clone model
             fitted_model = deepcopy(model)
-            Classification.fit(dataframe[~test_mask], tags, fitted_model)
+            Classification.fit(dataframe, tags, fitted_model, ~test_mask)
             # Predict
-            Classification.predict(dataframe[test_mask], {'label': tags['datum']}, out, fitted_model)
-            Classification.predict_proba(dataframe[test_mask], {'label': tags['datum']}, out, fitted_model)
+            Classification.predict(dataframe[test_mask], {'datum': tags['datum']}, out, fitted_model)
+            Classification.predict_proba(dataframe[test_mask], {'datum': tags['datum']}, out, fitted_model)
 
         return dataframe
 
@@ -114,7 +114,9 @@ class Classification:
         if not Classification.__check_labels(dataframe[mask], {'label': tags['label']}):
             raise ValueError('Not enough unique labels where found, at least 2.')
 
-        model.fit(dataframe[mask, tags['datum']], y=dataframe[mask, tags['label']])
+        data = np.array(dataframe.loc[mask, tags['datum']].to_list())
+        labels = np.array(dataframe.loc[mask, tags['label']].to_list())
+        model.fit(data, y=labels)
         return model
 
     @staticmethod
@@ -189,9 +191,9 @@ class Classification:
         if mask is None:
             mask = [True] * len(dataframe.index)
 
-        # dataframe[out] = np.nan
-        features = model.transform(dataframe.loc[mask, tags['datum']].to_numpy())
-        dataframe.loc[mask, out] = pd.Series(features.tolist())
+        data = np.array(dataframe.loc[mask, tags['datum']].to_list())
+        features = model.transform(data)
+        dataframe.loc[mask, out] = pd.Series([f for f in features])
         return dataframe
 
     @staticmethod
