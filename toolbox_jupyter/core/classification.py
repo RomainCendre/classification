@@ -96,6 +96,7 @@ class Classification:
             # Predict
             dataframe = Classification.predict(dataframe, {'datum': tags['datum']}, out, fitted_model, test_mask)
             dataframe = Classification.predict_proba(dataframe, {'datum': tags['datum']}, out, fitted_model, test_mask)
+            dataframe = Classification.number_of_features(dataframe, fitted_model, out, test_mask)
 
         return dataframe
 
@@ -140,6 +141,11 @@ class Classification:
             mask = dataframe['Fold'] == fold
             fitted_model = Classification.fit(dataframe[mask], tags, deepcopy(model))
             dataframe.loc[mask, out] = Classification.transform(dataframe[mask], tags, out, fitted_model)[out]
+        return dataframe
+
+    @staticmethod
+    def number_of_features(dataframe, model, out, mask=None):
+        dataframe.loc[mask, f'{out}_Parameters'] = Classification.__number_of_features(model)
         return dataframe
 
     @staticmethod
