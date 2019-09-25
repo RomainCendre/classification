@@ -59,7 +59,7 @@ class IO:
 
     @staticmethod
     def load(input_file, key):
-        pd.read_hdf(input_file, key)
+        return pd.read_hdf(input_file, key)
 
     @staticmethod
     def save(dataframe, save, key):
