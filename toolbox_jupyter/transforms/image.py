@@ -63,8 +63,8 @@ class DWTImageTransform(BaseEstimator, TransformerMixin):
 
 class DWTGGDImageTransform(BaseEstimator, TransformerMixin):
 
-    def __init__(self, wavelets='db4', scale=1, mean=False):
-        self.mean = mean
+    def __init__(self, wavelets='db4', scale=1, parameter='both'):
+        self.parameter = parameter
         self.scale = scale
         self.wavelets = wavelets
 
@@ -103,10 +103,13 @@ class DWTGGDImageTransform(BaseEstimator, TransformerMixin):
         return np.array(features)
 
     def get_coefficients(self, x):
-        params = sstats.gennorm.fit(x)
-        beta = params[0]  # Shape
-        alpha = params[2]  # Scale
-        return [alpha, beta]
+        shape, loc, scale = sstats.gennorm.fit(x)
+        if self.parameter == 'both':
+            return [scale, shape]
+        elif self.parameter == 'beta' or self.parameter == 'shape':
+            return [shape]
+        else:
+            return [scale]
 
 
 class HaralickImageTransform(BaseEstimator, TransformerMixin):
