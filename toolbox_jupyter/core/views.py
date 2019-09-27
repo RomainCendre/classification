@@ -1,19 +1,13 @@
+import markups
+import pickle
 from collections import Counter
 from pathlib import Path
-
-import markups
-import pandas
-import pickle
 from PIL import Image, ImageDraw
-import matplotlib as mpl
 from matplotlib import pyplot
-from keras import backend as K
 from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.metrics import auc, roc_curve, classification_report
-from tensorboard.plugins import projector
-import tensorflow
 
 
 class ViewTools:
@@ -26,10 +20,10 @@ class ViewTools:
         pyplot.close()
 
 
-class Statistics:
+class Views:
 
     @staticmethod
-    def display(inputs, keys):
+    def statistics(inputs, keys, name=None):
         figure, axes = pyplot.subplots(ncols=len(keys), figsize=(21, 7))
         # Browse each kind of parameter
         for index, key in enumerate(keys):
@@ -43,10 +37,36 @@ class Statistics:
             axes[index].pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
             axes[index].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
         figure.suptitle(f'Samples {len(inputs)}')
+        if name:
+            figure.suptitle(name)
         return figure
 
     @staticmethod
-    def rocs(inputs, encoder, tags, settings):
+    def pca_projection(inputs, tags, settings, name=None):
+        # Check mandatory fields
+        mandatory = ['datum', 'label']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        # Inputs
+        labels = inputs.get('label', encode=False)
+        ulabels = np.unique(labels)
+
+        # Compute PCA
+        pca = PCA(n_components=2, whiten=True)  # project to 2 dimensions
+        projected = pca.fit_transform(inputs.get('datum'))
+        figure = pyplot.figure()
+        for label in ulabels:
+            pyplot.scatter(projected[labels == label, 0], projected[labels == label, 1],
+                           c=np.array(settings.get_color(label)), alpha=0.5, label=label, edgecolor='none')
+        pyplot.axis('off')
+        pyplot.legend(loc='lower right')
+        if name:
+            figure.suptitle(name)
+        return figure
+
+    @staticmethod
+    def receiver_operator_curves(inputs, encoder, tags, settings, name=None):
         # Check mandatory fields
         mandatory = ['label_encode', 'result']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -79,7 +99,13 @@ class Statistics:
                 ylabel='True Positive Rate (Sensitivity)',
                 title=title)
         axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
+        if name:
+            figure.suptitle(name)
         return figure
+
+
+
+
 
     @staticmethod
     def write_report(self, use_std=True, path=None):
@@ -99,7 +125,6 @@ class Statistics:
         else:
             with open(path, mode='w', encoding='utf8') as text_file:
                 text_file.write("%s" % mk_report.get_whole_html())
-
 
 
     def report_scores(self, result, use_std=True):
@@ -176,84 +201,6 @@ class Statistics:
             predictions = result.get_from_key(key='Prediction', filters=filter_by, flatten=True)
         return classification_report(result.decode('label', labels),
                                      result.decode('label', predictions), output_dict=True)
-
-
-class DataProjectorWriter:
-
-    # Have to improve this tool, see callbacks.py to get clues
-    @staticmethod
-    def project_data(inputs, output_folder):
-        # Check backend type
-        if not K.backend() == 'tensorflow':
-            return
-
-        # Check output folder
-        output_folder = Path(output_folder)
-        output_folder.mkdir(exist_ok=True)
-
-        # Write a batch to easily launch it
-        DataProjectorWriter.write_batch(output_folder)
-
-        sess = K.get_session()
-
-        datas = inputs.get('datum')
-        labels = inputs.get('label', encode=False)
-
-        # Write data
-        data_path = output_folder/'data.ckpt'
-        tf_data = tensorflow.Variable(datas)
-        saver = tensorflow.train.Saver([tf_data])
-        sess.run(tf_data.initializer)
-        saver.save(sess, data_path)
-
-        # Write label as metadata
-        metadata_path = output_folder/'metadata.tsv'
-        np.savetxt(metadata_path, labels, delimiter='\t', fmt='%s')
-
-        config = projector.ProjectorConfig()
-        # One can add multiple embeddings.
-        embedding = config.embeddings.add()
-        embedding.tensor_name = tf_data.name
-        # Link this tensor to its metadata(Labels) file
-        embedding.metadata_path = metadata_path
-        # Saves a config file that TensorBoard will read during startup.
-        projector.visualize_embeddings(tensorflow.summary.FileWriter(output_folder), config)
-
-    @staticmethod
-    def write_batch(output_folder):
-        file = open(output_folder/'tb_launch.bat', "w")
-        file.write('tensorboard --logdir={}'.format("./"))
-        file.close()
-
-
-class PCAProjection:
-    def __init__(self, settings, output_folder, name):
-        # Check output folder
-        output_folder = Path(output_folder)
-        output_folder.mkdir(exist_ok=True)
-        # Fill properties
-        self.settings = settings
-        self.pdf = PdfPages(output_folder/'{name}_pca.pdf'.format(name=name))
-
-    def end(self):
-        self.pdf.close()
-
-    def write_projection(self, inputs):
-        data = inputs.get('datum')
-        labels = inputs.get('label', encode=False)
-        ulabels = np.unique(labels)
-        pca = PCA(2, whiten=True)  # project to 2 dimensions
-        projected = pca.fit_transform(data)
-        figure = pyplot.figure()
-        for label in ulabels:
-            pyplot.scatter(projected[labels == label, 0], projected[labels == label, 1],
-                           c=np.array(self.settings.get_color(label)), alpha=0.5, label=label, edgecolor='none')
-        pyplot.xlabel('component 1')
-        pyplot.ylabel('component 2')
-        pyplot.legend(loc='lower right')
-        figure.suptitle(inputs.name)
-        self.pdf.savefig(figure)
-        pyplot.close()
 
 
 # class VisualizationWriter:
