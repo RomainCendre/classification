@@ -35,13 +35,13 @@ class ORLDataset:
     def test_spectras():
         generator = otorhinolaryngology.Generator((4, 7), 30)
         return Spectra(data=generator.generate_study(),
-                       tags={'data': 'data', 'label': 'label', 'group': 'Reference',
+                       tags={'datum': 'datum', 'label': 'label', 'group': 'Reference',
                              'reference': 'Reference_spectrum', 'group_label': 'pathologie'})
 
     @staticmethod
     def __spectras(files):
         data = pd.concat([otorhinolaryngology.Reader().read_table(file) for file in files], sort=True)
-        return Spectra(data=data, tags={'data': 'data', 'label': 'label', 'group': 'Reference',
+        return Spectra(data=data, tags={'datum': 'datum', 'label': 'label', 'group': 'Reference',
                                         'reference': 'Reference_spectrum', 'group_label': 'pathologie'})
 
 
@@ -104,11 +104,11 @@ class DermatologyDataset:
         if folder is None:
             generator = dermatology.Generator((5, 10), 20)
             inputs = Inputs(data=generator.generate_study(),
-                            tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
+                            tags={'datum': 'Full_Path', 'label': 'Label', 'group': 'ID',
                                   'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
         else:
             inputs = Inputs(data=DermatologyDataset.__scan(folder, patches=True, modality=modality),
-                            tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
+                            tags={'datum': 'Full_Path', 'label': 'Label', 'group': 'ID',
                                   'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
         inputs.set_working_folder(work_folder)
         return inputs
@@ -121,7 +121,7 @@ class DermatologyDataset:
         else:
             dataframe = DermatologyDataset.__scan(folder, patches=False, modality=modality)
         inputs = Inputs(data=DermatologyDataset.__to_multi(dataframe, coefficients, work_folder),
-                        tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
+                        tags={'datum': 'Full_Path', 'label': 'Label', 'group': 'ID',
                               'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
         inputs.set_working_folder(work_folder)
         return inputs
@@ -134,7 +134,7 @@ class DermatologyDataset:
         else:
             dataframe = DermatologyDataset.__scan(folder, patches=True, modality=modality)
         inputs = Inputs(data=DermatologyDataset.__to_patchify(dataframe, size, overlap, work_folder),
-                        tags={'data': 'Full_Path', 'label': 'Label', 'group': 'ID',
+                        tags={'datum': 'Full_Path', 'label': 'Label', 'group': 'ID',
                               'reference': 'Reference', 'group_label': 'Binary_Diagnosis'})
         inputs.set_working_folder(work_folder)
         return inputs

@@ -114,7 +114,7 @@ class Inputs(Data):
 
     def build_folds(self, by_patients=True):
         # Data
-        datas = self.get('data')
+        datas = self.get('datum')
         # Labels
         labels = self.get('label')
         # References
@@ -141,7 +141,7 @@ class Inputs(Data):
     def collapse(self, filters, on, filters_collapse, on_collapse, data_tag=None):
         pd.options.mode.chained_assignment = None
         if data_tag is None:
-            data_tag = self.tags['data']
+            data_tag = self.tags['datum']
 
         # Filters
         filters.update(self.filters)
@@ -283,7 +283,7 @@ class Spectra(Inputs):
             size: The size of average window.
 
         """
-        self.data['data'] = self.data['data'].apply(lambda x: np.correlate(x, np.ones(size) / size, mode='same'))
+        self.data['datum'] = self.data['datum'].apply(lambda x: np.correlate(x, np.ones(size) / size, mode='same'))
 
     def apply_scaling(self, method='default'):
         """This method allow to normalize spectra.
@@ -292,13 +292,13 @@ class Spectra(Inputs):
                 method(:obj:'str') : The kind of method of scaling ('default', 'max', 'minmax' or 'robust')
             """
         if method == 'max':
-            self.data['data'] = self.data['data'].apply(lambda x: preprocessing.maxabs_scale(x))
+            self.data['datum'] = self.data['datum'].apply(lambda x: preprocessing.maxabs_scale(x))
         elif method == 'minmax':
-            self.data['data'] = self.data['data'].apply(lambda x: preprocessing.minmax_scale(x))
+            self.data['datum'] = self.data['datum'].apply(lambda x: preprocessing.minmax_scale(x))
         elif method == 'robust':
-            self.data['data'] = self.data['data'].apply(lambda x: preprocessing.robust_scale(x))
+            self.data['datum'] = self.data['datum'].apply(lambda x: preprocessing.robust_scale(x))
         else:
-            self.data['data'] = self.data['data'].apply(lambda x: preprocessing.scale(x))
+            self.data['datum'] = self.data['datum'].apply(lambda x: preprocessing.scale(x))
 
     def change_wavelength(self, wavelength):
         """This method allow to change wavelength scale and interpolate along new one.
@@ -307,11 +307,11 @@ class Spectra(Inputs):
             wavelength(:obj:'array' of :obj:'float'): The new wavelength to fit.
 
         """
-        self.data['data'] = self.data.apply(lambda x: np.interp(wavelength, x['wavelength'], x['data']), axis=1)
+        self.data['datum'] = self.data.apply(lambda x: np.interp(wavelength, x['wavelength'], x['datum']), axis=1)
         self.data['wavelength'] = self.data['wavelength'].apply(lambda x: wavelength)
 
     def integrate(self):
-        self.data['data'] = self.data.apply(lambda x: [0, np.trapz(x['data'], x['wavelength'])], axis=1)
+        self.data['datum'] = self.data.apply(lambda x: [0, np.trapz(x['datum'], x['wavelength'])], axis=1)
 
     def norm_patient_by_healthy(self):
         query = self.to_query(self.filters)
@@ -326,10 +326,10 @@ class Spectra(Inputs):
             if len(row_ref) == 0:
                 data.drop(group.index)
                 continue
-            mean = np.mean(row_ref.iloc[0]['data'])
-            std = np.std(row_ref.iloc[0]['data'])
+            mean = np.mean(row_ref.iloc[0]['datum'])
+            std = np.std(row_ref.iloc[0]['datum'])
             for index, current in group.iterrows():
-                data.iat[index, data.columns.get_loc('data')] = (current['data'] - mean) / std
+                data.iat[index, data.columns.get_loc('datum')] = (current['datum'] - mean) / std
 
     def norm_patient(self):
         query = self.to_query(self.filters)
@@ -340,20 +340,20 @@ class Spectra(Inputs):
 
         for name, group in data.groupby(self.tags['group']):
             # Get features by group
-            group_data = np.array([current['data'] for index, current in group.iterrows()])
+            group_data = np.array([current['datum'] for index, current in group.iterrows()])
             mean = np.mean(group_data)
             std = np.std(group_data)
             for index, current in group.iterrows():
-                data.iat[index, data.columns.get_loc('data')] = (current['data'] - mean) / std
+                data.iat[index, data.columns.get_loc('datum')] = (current['datum'] - mean) / std
 
     def ratios(self):
         for name, current in self.data.iterrows():
             wavelength = current['wavelength']
-            data_1 = current['data'][np.logical_and(540 < wavelength, wavelength < 550)]
-            data_2 = current['data'][np.logical_and(570 < wavelength, wavelength < 580)]
+            data_1 = current['datum'][np.logical_and(540 < wavelength, wavelength < 550)]
+            data_2 = current['datum'][np.logical_and(570 < wavelength, wavelength < 580)]
             data_1 = np.mean(data_1)
             data_2 = np.mean(data_2)
-            self.data.iloc[name, self.data.columns.get_loc('data')] = data_1/data_2
+            self.data.iloc[name, self.data.columns.get_loc('datum')] = data_1/data_2
 
 
 class Outputs(Data):

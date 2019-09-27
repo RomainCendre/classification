@@ -67,7 +67,7 @@ class Classifier:
          Returns:
 
         """
-        datas = inputs.get('data')
+        datas = inputs.get('datum')
         labels = inputs.get('label')
         groups = inputs.get('group')
         folds = inputs.get('fold')
@@ -134,7 +134,7 @@ class Classifier:
 
     def fit(self, inputs):
         # Extract needed data
-        datas = inputs.get('data')
+        datas = inputs.get('datum')
         labels = inputs.get('label')
         groups = inputs.get('group')
 
@@ -189,7 +189,7 @@ class Classifier:
             features = self.__feature_extraction(prefix, inputs)
 
         # Update input
-        inputs.update(prefix, features, references, 'data')
+        inputs.update(prefix, features, references, 'datum')
 
     def __feature_extraction(self, prefix, inputs):
         # Now browse data
@@ -199,7 +199,7 @@ class Classifier:
         if hasattr(self.__model, 'need_fit') and self.__model.need_fit:
             features = self.__feature_extraction_fit(inputs)
         else:
-            datas = inputs.get('data')
+            datas = inputs.get('datum')
             labels = inputs.get('label')
             unique_labels = unique(labels)
             features = Classifier.__feature_extraction_simple(self.__model, datas, unique_labels)
@@ -207,7 +207,7 @@ class Classifier:
         return array(features)
 
     def __feature_extraction_fit(self, inputs):
-        datas = inputs.get('data')
+        datas = inputs.get('datum')
         labels = inputs.get('label')
         unique_labels = unique(labels)
         groups = inputs.get('group')
@@ -250,7 +250,7 @@ class Classifier:
         else:
             params_grid = ParameterGrid(self.__params)
             if len(params_grid) == 1:
-                best_params = list(params_grid)[0]
+                best_params = list(params__check_labels_grid)[0]
             else:
                 # Now fit, but find first hyper parameters
                 grid_search = GridSearchCV(estimator=model, param_grid=self.__params, cv=self.__inner_cv,
