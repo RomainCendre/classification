@@ -23,16 +23,16 @@ class Statistics:
         figure, axes = pyplot.subplots(ncols=len(keys), figsize=(21, 7))
         # Browse each kind of parameter
         for index, key in enumerate(keys):
-            if not inputs.is_valid_keys(keys=[key]):
+            axes[index].set_title(key)
+            axes[index].axis('off')
+            if key not in inputs.columns:
                 print('Key {key} is missing from data.'.format(key=key))
                 continue
 
-            elements = inputs.get_from_key(key=key)
-            counter = Counter(list(elements))
+            counter = Counter(list(inputs[key]))
             axes[index].pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
             axes[index].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-            axes[index].set_title(key)
-        figure.suptitle(f'{inputs.name} (Samples {inputs.get_number_samples()})')
+        figure.suptitle(f'Samples {len(inputs)}')
 
     @staticmethod
     def write(inputs, keys, out_file):
