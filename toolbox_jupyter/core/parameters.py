@@ -271,7 +271,35 @@ class Dermatology:
                  ['Rest', 'Malignant'], {'Label': (['Normal', 'Benign'], 'Rest')})]
 
 
-class BuiltInSettings:
+class Settings:
+
+    def __init__(self, data=None):
+        if data is None:
+            self.data = {}
+        else:
+            self.data = data
+
+    def get_color(self, key):
+        default_color = (0, 0, 0)
+        colors = self.data.get('colors', None)
+        if colors is None:
+            return default_color
+        return colors.get(key, default_color)
+
+    def get_line(self, key):
+        lines = self.data.get('lines', None)
+        if lines is None:
+            return None
+        return lines.get(key, None)
+
+    def is_in_data(self, check):
+        for key, value in check.items():
+            if key not in self.data or self.data[key] not in value:
+                return False
+        return True
+
+    def update(self, data):
+        self.data.update(data)
 
     @staticmethod
     def get_default_orl():

@@ -46,7 +46,7 @@ class Statistics:
         return figure
 
     @staticmethod
-    def rocs(inputs, encoder, tags):
+    def rocs(inputs, encoder, tags, settings):
         # Check mandatory fields
         mandatory = ['label_encode', 'result']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -59,14 +59,16 @@ class Statistics:
 
         figure, axe = pyplot.subplots(ncols=1, figsize=(10, 10))
         # Plot luck
-        axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='black', label='Luck', alpha=.8)
+        axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color=settings.get_color('Luck'), label='Luck', alpha=.8)
         title = ''
 
         # Browse each label
-        for positive_class in unique:
-            fpr, tpr, threshold = roc_curve(labels, probabilities[:, positive_class], pos_label=positive_class)
-            axe.plot(fpr, tpr, lw=2, alpha=.8, color='black',
-                     label='ROC {label} (AUC = {auc:.2f})'.format(label=encoder.inverse_transform(positive_class), auc=auc(fpr, tpr)))
+        for positive_index in unique:
+            positive_class = encoder.inverse_transform(positive_index)[0]
+            fpr, tpr, threshold = roc_curve(labels, probabilities[:, positive_index], pos_label=positive_index)
+            axe.plot(fpr, tpr, lw=2, alpha=.8, color=settings.get_color(positive_class),
+                     label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr),
+                                                                  **settings.get_line(positive_class)))
             # Switch depend on the mode of display
             title = 'Receiver operating characteristic'
 
