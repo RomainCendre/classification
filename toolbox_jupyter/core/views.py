@@ -16,6 +16,16 @@ from tensorboard.plugins import projector
 import tensorflow
 
 
+class ViewTools:
+
+    @staticmethod
+    def write(plot, out_file):
+        save_to = PdfPages(out_file)
+        save_to.savefig(plot)
+        save_to.close()
+        pyplot.close()
+
+
 class Statistics:
 
     @staticmethod
@@ -33,99 +43,43 @@ class Statistics:
             axes[index].pie(list(counter.values()), labels=list(counter.keys()), autopct='%1.1f%%', startangle=90)
             axes[index].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
         figure.suptitle(f'Samples {len(inputs)}')
+        return figure
 
     @staticmethod
-    def write(inputs, keys, out_file):
-        save_to = PdfPages(out_file)
-        save_to.savefig(Statistics.display(inputs, keys))
-        save_to.close()
-        pyplot.close()
+    def rocs(inputs, tags):
+        # Check mandatory fields
+        mandatory = ['label', 'result']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
+        # Data
+        labels = inputs[tags['label']]
+        unique = np.unique(inputs[tags['label']])
+        probabilities = inputs[f'{tags["result"]}_Probabilities']
 
-class DataProjectorWriter:
+        figure, axe = pyplot.subplots(ncols=1, figsize=(10, 10))
+        # Plot luck
+        axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color='black', label='Luck', alpha=.8)
+        title = ''
 
-    # Have to improve this tool, see callbacks.py to get clues
-    @staticmethod
-    def project_data(inputs, output_folder):
-        # Check backend type
-        if not K.backend() == 'tensorflow':
-            return
+        # Browse each label
+        for positive_class in unique:
+            fpr, tpr, threshold = roc_curve(labels, probabilities, pos_label=positive_index)
+            axe.plot(fpr, tpr, lw=2, alpha=.8, color='black',
+                     label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr)))
+            # Switch depend on the mode of display
+            title = 'Receiver operating characteristic'
 
-        # Check output folder
-        output_folder = Path(output_folder)
-        output_folder.mkdir(exist_ok=True)
-
-        # Write a batch to easily launch it
-        DataProjectorWriter.write_batch(output_folder)
-
-        sess = K.get_session()
-
-        datas = inputs.get('datum')
-        labels = inputs.get('label', encode=False)
-
-        # Write data
-        data_path = output_folder/'data.ckpt'
-        tf_data = tensorflow.Variable(datas)
-        saver = tensorflow.train.Saver([tf_data])
-        sess.run(tf_data.initializer)
-        saver.save(sess, data_path)
-
-        # Write label as metadata
-        metadata_path = output_folder/'metadata.tsv'
-        np.savetxt(metadata_path, labels, delimiter='\t', fmt='%s')
-
-        config = projector.ProjectorConfig()
-        # One can add multiple embeddings.
-        embedding = config.embeddings.add()
-        embedding.tensor_name = tf_data.name
-        # Link this tensor to its metadata(Labels) file
-        embedding.metadata_path = metadata_path
-        # Saves a config file that TensorBoard will read during startup.
-        projector.visualize_embeddings(tensorflow.summary.FileWriter(output_folder), config)
+        # Now set title and legend
+        axe.set(adjustable='box',
+                aspect='equal',
+                xlabel='False Positive Rate (1-Specificity)',
+                ylabel='True Positive Rate (Sensitivity)',
+                title=title)
+        axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
+        return figure
 
     @staticmethod
-    def write_batch(output_folder):
-        file = open(output_folder/'tb_launch.bat', "w")
-        file.write('tensorboard --logdir={}'.format("./"))
-        file.close()
-
-
-
-
-
-class ResultWriter:
-
-    def __init__(self, results, settings):
-        self.results = results
-        if not isinstance(self.results, list):
-            self.results = [self.results]
-        self.settings = settings
-        mpl.use('agg')
-
-    def write_results(self, output_folder, name, use_std=True):
-        # Check output folder
-        output_folder = Path(output_folder)
-        output_folder.mkdir(exist_ok=True)
-
-        self.write_report(use_std=use_std, path=output_folder/'{name}_report.html'.format(name=name))
-        self.write_roc(path=output_folder/'{name}_rocs.pdf'.format(name=name))
-        self.write_misclassified(path=output_folder/'{name}_misclassified.csv'.format(name=name))
-
-    def write_misclassified(self, path=None):
-        for result in self.results:
-            if not result.is_valid_keys(['Label', 'Prediction', 'Reference']):
-                print('Missing tag for misclassification report.')
-                return
-
-            labels = result.decode('label', np.concatenate(result.get_from_key(key='Label'), axis=0))
-            predictions = result.decode('label', np.concatenate(result.get_from_key(key='Prediction'), axis=0))
-            references = np.concatenate(result.get_from_key(key='Reference'), axis=0)
-            misclassified = [index for index, (i, j) in enumerate(zip(labels, predictions)) if i != j]
-            data = {'paths': references[misclassified],
-                    'labels': labels[misclassified],
-                    'predictions': predictions[misclassified]}
-            pandas.DataFrame(data).to_csv(path_or_buf=path, index=False)
-
     def write_report(self, use_std=True, path=None):
         report = ''
         for result in self.results:
@@ -144,51 +98,7 @@ class ResultWriter:
             with open(path, mode='w', encoding='utf8') as text_file:
                 text_file.write("%s" % mk_report.get_whole_html())
 
-    def write_roc(self, path):
 
-        with PdfPages(path) as pdf:
-            for result in self.results:
-                if not result.is_valid_keys(['Label', 'Prediction', 'Probability']):
-                    print('Missing tag for Roc Curves report.')
-                    return
-
-                positives_indices = result.get_unique_from_key('Label')
-                # Labels
-                labels = result.get_from_key(key='Label')
-                labels = np.concatenate(labels, axis=0)
-                # Probabilities for drawing
-                probabilities = result.get_from_key(key='Probability')
-                probabilities = np.concatenate(probabilities, axis=0)
-
-                figure, axe = pyplot.subplots(ncols=1, figsize=(10, 10))
-                # Plot luck
-                axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color=self.settings.get_color('Luck'), label='Luck', alpha=.8)
-                title = ''
-
-                # Browse each label
-                for positive_index in positives_indices:
-                    positive_class = result.decode('label', positive_index)
-                    fpr, tpr, threshold = roc_curve(labels,
-                                                    probabilities[:, positive_index],
-                                                    pos_label=positive_index)
-                    axe.plot(fpr, tpr, lw=2, alpha=.8, color=self.settings.get_color(positive_class),
-                             label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr)),
-                             **self.settings.get_line(positive_class))
-
-                    # Switch depend on the mode of display
-                    title = 'Receiver operating characteristic'
-
-                # Now set title and legend
-                axe.set(adjustable='box',
-                        aspect='equal',
-                        xlabel='False Positive Rate (1-Specificity)',
-                        ylabel='True Positive Rate (Sensitivity)',
-                        title=title)
-                axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
-
-                figure.suptitle(result.name)
-                pdf.savefig(figure)
-                pyplot.close()
 
     def report_scores(self, result, use_std=True):
         dict_report = self.__get_report_values(result=result, use_std=use_std)
@@ -264,6 +174,54 @@ class ResultWriter:
             predictions = result.get_from_key(key='Prediction', filters=filter_by, flatten=True)
         return classification_report(result.decode('label', labels),
                                      result.decode('label', predictions), output_dict=True)
+
+
+class DataProjectorWriter:
+
+    # Have to improve this tool, see callbacks.py to get clues
+    @staticmethod
+    def project_data(inputs, output_folder):
+        # Check backend type
+        if not K.backend() == 'tensorflow':
+            return
+
+        # Check output folder
+        output_folder = Path(output_folder)
+        output_folder.mkdir(exist_ok=True)
+
+        # Write a batch to easily launch it
+        DataProjectorWriter.write_batch(output_folder)
+
+        sess = K.get_session()
+
+        datas = inputs.get('datum')
+        labels = inputs.get('label', encode=False)
+
+        # Write data
+        data_path = output_folder/'data.ckpt'
+        tf_data = tensorflow.Variable(datas)
+        saver = tensorflow.train.Saver([tf_data])
+        sess.run(tf_data.initializer)
+        saver.save(sess, data_path)
+
+        # Write label as metadata
+        metadata_path = output_folder/'metadata.tsv'
+        np.savetxt(metadata_path, labels, delimiter='\t', fmt='%s')
+
+        config = projector.ProjectorConfig()
+        # One can add multiple embeddings.
+        embedding = config.embeddings.add()
+        embedding.tensor_name = tf_data.name
+        # Link this tensor to its metadata(Labels) file
+        embedding.metadata_path = metadata_path
+        # Saves a config file that TensorBoard will read during startup.
+        projector.visualize_embeddings(tensorflow.summary.FileWriter(output_folder), config)
+
+    @staticmethod
+    def write_batch(output_folder):
+        file = open(output_folder/'tb_launch.bat', "w")
+        file.write('tensorboard --logdir={}'.format("./"))
+        file.close()
 
 
 class PCAProjection:

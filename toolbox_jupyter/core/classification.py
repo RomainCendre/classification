@@ -175,10 +175,6 @@ class Tools:
 
     @staticmethod
     def fit_transform(dataframe, tags, model, out, mask=None):
-        # Fold needed for evaluation
-        if 'Fold' not in dataframe:
-            raise Exception('Need to build fold.')
-
         # Check mandatory fields
         mandatory = ['datum', 'label']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
