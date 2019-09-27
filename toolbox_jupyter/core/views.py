@@ -49,12 +49,12 @@ class Views:
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Inputs
-        labels = inputs.get('label', encode=False)
+        labels = inputs[tags['label']]
         ulabels = np.unique(labels)
 
         # Compute PCA
         pca = PCA(n_components=2, whiten=True)  # project to 2 dimensions
-        projected = pca.fit_transform(inputs.get('datum'))
+        projected = pca.fit_transform(tags['datum'])
         figure = pyplot.figure()
         for label in ulabels:
             pyplot.scatter(projected[labels == label, 0], projected[labels == label, 1],
@@ -63,6 +63,8 @@ class Views:
         pyplot.legend(loc='lower right')
         if name:
             figure.suptitle(name)
+        else:
+            figure.suptitle(tags['datum'])
         return figure
 
     @staticmethod
