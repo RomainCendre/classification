@@ -198,6 +198,24 @@ class Tools:
         return dataframe
 
     @staticmethod
+    def misclassified(inputs, tags):
+        # Check mandatory fields
+        mandatory = ['datum', 'label', 'result']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        # Prediction tag
+        tag_pred = f'{tags["result"]}_Predictions'
+
+        # Mask
+        mask = (inputs[tags['label']] == inputs[tag_pred])
+        inputs = inputs[mask]
+        data = {'datum': inputs[tags['datum']],
+                'labels': inputs[tags['label']],
+                'predictions': inputs[tag_pred]}
+        return pd.DataFrame(data)
+
+    @staticmethod
     def number_of_features(dataframe, model, out, mask=None):
         dataframe.loc[mask, out] = Tools.__number_of_features(model)
         return dataframe
