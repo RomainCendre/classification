@@ -3,7 +3,7 @@ import warnings
 import h5py
 from copy import deepcopy
 import numpy as np
-from sklearn.model_selection import GridSearchCV, ParameterGrid, KFold, StratifiedKFold
+from sklearn.model_selection import GridSearchCV, ParameterGrid, GroupKFold, StratifiedKFold
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
