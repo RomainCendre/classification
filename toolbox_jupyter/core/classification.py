@@ -63,7 +63,7 @@ class Folds:
         # Make folds
         folds = np.zeros(len(labels), dtype=int)
         current_folds = list(split_rule.split(X=data, y=labels))
-        for index, fold in enumerate(current_folds):
+        for index, fold in enumerate(current_folds, 1):
             folds[fold[1]] = index
         dataframe['Fold'] = folds.tolist()  # Add tests to folds
         return dataframe
@@ -104,7 +104,7 @@ class IO:
 class Tools:
 
     @staticmethod
-    def evaluate(dataframe, tags, out, model, mask=None):
+    def evaluate(dataframe, tags, model, out, mask=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -130,20 +130,21 @@ class Tools:
 
         # Browse folds
         folds = dataframe.loc[mask, 'Fold']
-        for fold, test in enumerate(np.unique(folds)):
+        for fold in np.unique(folds):
             # Create mask
             test_mask = folds == fold
-            print('Fold : {fold}'.format(fold=fold + 1))
+            print(f'Fold {fold} as test.')
 
             # Check that current fold respect labels
             if not Tools.__check_labels(dataframe[mask], {'label': tags['label']}, ~test_mask):
-                warnings.warn(f'Invalid fold, missing labels for fold {fold+1}')
+                warnings.warn(f'Invalid fold, missing labels for fold {fold}')
                 continue
 
             # Clone model
             fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), ~test_mask)
+            # Predict Train
 
-            # Predict
+            # Predict Test
             dataframe.loc[mask, out_preds] = \
                 Tools.predict(dataframe[mask], {'datum': tags['datum']}, out_preds, fitted_model, test_mask)[out_preds]
             dataframe.loc[mask, out_probas] = \
