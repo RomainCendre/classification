@@ -3,7 +3,7 @@ import warnings
 import h5py
 from copy import deepcopy
 import numpy as np
-from sklearn.model_selection import GridSearchCV, ParameterGrid, KFold, GroupKFold
+from sklearn.model_selection import GridSearchCV, ParameterGrid, KFold, StratifiedKFold
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
@@ -49,16 +49,16 @@ class Folds:
 
     @staticmethod
     def build_folds(dataframe, tags, split=5):
-        mandatory = ['datum', 'label']
+        mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Not a dict or missing tag: {mandatory}.')
 
         # Inputs
         data = dataframe[tags['datum']]
-        labels = dataframe[tags['label']]
+        labels = dataframe[tags['label_encode']]
 
         # Rule to create folds
-        split_rule = KFold(n_splits=split)
+        split_rule = StratifiedKFold(n_splits=split)
 
         # Make folds
         folds = np.zeros(len(labels), dtype=int)
@@ -70,12 +70,12 @@ class Folds:
 
     @staticmethod
     def build_group_folds(dataframe, tags, split=5):
-        mandatory = ['datum', 'label', 'group']
+        mandatory = ['datum', 'label_encode', 'group']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Not a dict or missing tag: {mandatory}.')
         # Inputs
         data = dataframe[tags['datum']]
-        labels = dataframe[tags['label']]
+        labels = dataframe[tags['label_encode']]
         groups = dataframe[tags['group']]
 
         # Rule to create folds
@@ -110,7 +110,7 @@ class Tools:
             raise Exception('Need to build fold.')
 
         # Check mandatory fields
-        mandatory = ['datum', 'label']
+        mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
@@ -120,7 +120,7 @@ class Tools:
         mask = pd.Series(mask)
 
         # Check valid labels, at least several classes
-        if not Tools.__check_labels(dataframe[mask], {'label': tags['label']}):
+        if not Tools.__check_labels(dataframe[mask], {'label_encode': tags['label_encode']}):
             raise ValueError('Not enough unique labels where found, at least 2.')
 
         # Out fields
@@ -131,12 +131,17 @@ class Tools:
         # Browse folds
         folds = dataframe.loc[mask, 'Fold']
         for fold in np.unique(folds):
+            # Out fields
+            fold_preds = f'{out_preds}_{fold}'
+            fold_probas = f'{out_probas}_{fold}'
+            fold_params = f'{out_params}_{fold}'
+
             # Create mask
             test_mask = folds == fold
             print(f'Fold {fold} as test.')
 
             # Check that current fold respect labels
-            if not Tools.__check_labels(dataframe[mask], {'label': tags['label']}, ~test_mask):
+            if not Tools.__check_labels(dataframe[mask], {'label_encode': tags['label_encode']}, ~test_mask):
                 warnings.warn(f'Invalid fold, missing labels for fold {fold}')
                 continue
 
@@ -145,19 +150,16 @@ class Tools:
             # Predict Train
 
             # Predict Test
-            dataframe.loc[mask, out_preds] = \
-                Tools.predict(dataframe[mask], {'datum': tags['datum']}, out_preds, fitted_model, test_mask)[out_preds]
-            dataframe.loc[mask, out_probas] = \
-                Tools.predict_proba(dataframe[mask], {'datum': tags['datum']}, out_probas, fitted_model, test_mask)[out_probas]
-            dataframe.loc[mask, out_params] = \
-                Tools.number_of_features(dataframe[mask], fitted_model, out_params, test_mask)[out_params]
+            dataframe[fold_preds] = Tools.predict(dataframe[mask], {'datum': tags['datum']}, fold_preds, fitted_model)[fold_preds]
+            dataframe[fold_probas] = Tools.predict_proba(dataframe[mask], {'datum': tags['datum']}, fold_probas, fitted_model)[fold_probas]
+            dataframe[fold_params] = Tools.number_of_features(dataframe[mask], fitted_model, fold_params)[fold_params]
 
         return dataframe
 
     @staticmethod
     def fit(dataframe, tags, model, mask=None):
         # Check mandatory fields
-        mandatory = ['datum', 'label']
+        mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
@@ -166,18 +168,18 @@ class Tools:
             mask = [True] * len(dataframe.index)
 
         # Check valid labels, at least several classes
-        if not Tools.__check_labels(dataframe[mask], {'label': tags['label']}):
+        if not Tools.__check_labels(dataframe[mask], {'label_encode': tags['label_encode']}):
             raise ValueError('Not enough unique labels where found, at least 2.')
 
         data = np.array(dataframe.loc[mask, tags['datum']].to_list())
-        labels = np.array(dataframe.loc[mask, tags['label']].to_list())
+        labels = np.array(dataframe.loc[mask, tags['label_encode']].to_list())
         model.fit(data, y=labels)
         return model
 
     @staticmethod
     def fit_transform(dataframe, tags, model, out, mask=None):
         # Check mandatory fields
-        mandatory = ['datum', 'label']
+        mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
@@ -197,7 +199,7 @@ class Tools:
     @staticmethod
     def misclassified(inputs, tags):
         # Check mandatory fields
-        mandatory = ['datum', 'label', 'result']
+        mandatory = ['datum', 'label_encode', 'result']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
@@ -205,15 +207,19 @@ class Tools:
         tag_pred = f'{tags["result"]}_Predictions'
 
         # Mask
-        mask = (inputs[tags['label']] == inputs[tag_pred])
+        mask = (inputs[tags['label_encode']] == inputs[tag_pred])
         inputs = inputs[mask]
         data = {'datum': inputs[tags['datum']],
-                'labels': inputs[tags['label']],
+                'labels': inputs[tags['label_encode']],
                 'predictions': inputs[tag_pred]}
         return pd.DataFrame(data)
 
     @staticmethod
     def number_of_features(dataframe, model, out, mask=None):
+        # Mask creation (see pandas view / copy mechanism)
+        if mask is None:
+            mask = [True] * len(dataframe.index)
+        mask = pd.Series(mask)
         dataframe.loc[mask, out] = Tools.__number_of_features(model)
         return dataframe
 
@@ -282,15 +288,15 @@ class Tools:
 
     @staticmethod
     def __check_labels(dataframe, tags, mask_sub=None):
-        mandatory = ['label']
+        mandatory = ['label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
-        labels = dataframe[tags['label']]
+        labels = dataframe[tags['label_encode']]
         if mask_sub is None:
             return len(np.unique(labels)) > 1
         return len(np.unique(labels)) > 1 and np.array_equal(np.unique(labels),
-                                                             np.unique(dataframe.loc[mask_sub, tags['label']]))
+                                                             np.unique(dataframe.loc[mask_sub, tags['label_encode']]))
 
     @staticmethod
     def __number_of_features(model):
