@@ -19,6 +19,7 @@ class ORL:
         input_folders = [location / 'Patients.csv', location / 'Temoins.csv']
         return ORL.__spectra(input_folders)
 
+
     @staticmethod
     def get_test_spectra():
         generator = otorhinolaryngology.Generator((4, 7), 30)
@@ -26,7 +27,8 @@ class ORL:
 
     @staticmethod
     def __spectra(files):
-        return pd.concat([otorhinolaryngology.Reader().read_table(file) for file in files], sort=True)
+        spectra = pd.concat([otorhinolaryngology.Reader().read_table(file) for file in files], sort=True)
+        return otorhinolaryngology.Reader.change_wavelength(spectra, {'datum': 'Datum', 'wavelength': 'Wavelength'}, np.arange(start=445, stop=962, step=1))
 
     @staticmethod
     def get_filters():
