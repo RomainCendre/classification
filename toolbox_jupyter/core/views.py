@@ -80,7 +80,8 @@ class Views:
         figure = pyplot.figure()
         for label in ulabels:
             pyplot.scatter(projected[labels == label, 0], projected[labels == label, 1],
-                           c=np.array(settings.get_color(label)), alpha=0.5, label=label, edgecolor='none')
+                           c=np.expand_dims(np.array(settings.get_color(label)), axis=0),
+                           alpha=0.5, label=label, edgecolor='none')
         pyplot.axis('off')
         pyplot.legend(loc='lower right')
         if name:
