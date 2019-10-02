@@ -38,7 +38,7 @@ class ORL:
 
     @staticmethod
     def get_statistics_keys():
-        return ['pathologie', 'operateur', 'provenance', 'label']
+        return ['Pathology', 'Practitioner', 'Location', 'Label']
 
 
 class Dermatology:

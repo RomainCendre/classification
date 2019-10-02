@@ -26,7 +26,7 @@ from toolbox_jupyter.transforms.label import OrderedEncoder
 from toolbox_jupyter.transforms.image import DWTImageTransform, DWTGGDImageTransform, FourierImageTransform, SpatialImageTransform
 inputs = ORL.get_spectra()
 settings = Settings.get_default_orl()
-ViewTools.write(ORLViews.mean_spectra(inputs, {'datum':'Datum', 'label':'Label', 'wavelength':'Wavelength'}, settings), 'C:\\Users\\Romain\\Desktop\\test.pdf')
+ViewTools.write(ORLViews.mean_and_deviation(inputs, {'datum':'Datum', 'label':'Label', 'wavelength':'Wavelength'}, settings), 'C:\\Users\\Romain\\Desktop\\test.pdf')
 
 #
 # from scipy.stats import randint as randint
