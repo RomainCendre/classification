@@ -212,7 +212,7 @@ class Views:
 class ORLViews:
 
     @staticmethod
-    def lineplot(inputs, tags):
+    def lineplot(inputs, tags, settings):
         # Check mandatory fields
         mandatory = ['datum', 'wavelength', 'label']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -225,9 +225,9 @@ class ORLViews:
 
         for label in unique_labels:
             fig, ax = pyplot.subplots(figsize=(8, 4))
-            ax.plot(wavelength, data[labels == label].mean(axis=0), alpha=0.5, color='red', label='cv', linewidth=1.0)
+            ax.plot(wavelength, data[labels == label].mean(axis=0), alpha=1, color=settings.get_color(label), label=label, linewidth=1.0)
             ax.fill_between(wavelength, data[labels == label].mean(axis=0) - data.std(axis=0),
-                            data.mean(axis=0) + data.std(axis=0), color='#888888', alpha=0.4)
+                            data.mean(axis=0) + data.std(axis=0), color=settings.get_color(label), alpha=0.4)
 # class VisualizationWriter:
 #
 #     def __init__(self, model, preprocess=None):
