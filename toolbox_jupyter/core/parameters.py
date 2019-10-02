@@ -13,11 +13,11 @@ from toolbox_jupyter.IO import otorhinolaryngology, dermatology
 class ORL:
 
     @staticmethod
-    def get_spectra():
+    def get_spectra(wavelength):
         home_path = Path().home()
         location = home_path / 'Data/Neck/'
         input_folders = [location / 'Patients.csv', location / 'Temoins.csv']
-        return ORL.__spectra(input_folders)
+        return ORL.__spectra(input_folders, wavelength)
 
 
     @staticmethod
@@ -26,9 +26,9 @@ class ORL:
         return generator.generate_study()
 
     @staticmethod
-    def __spectra(files):
+    def __spectra(files, wavelength):
         spectra = pd.concat([otorhinolaryngology.Reader().read_table(file) for file in files], sort=True)
-        return otorhinolaryngology.Reader.change_wavelength(spectra, {'datum': 'Datum', 'wavelength': 'Wavelength'}, np.arange(start=445, stop=962, step=1))
+        return otorhinolaryngology.Reader.change_wavelength(spectra, {'datum': 'Datum', 'wavelength': 'Wavelength'}, wavelength)
 
     @staticmethod
     def get_filters():
