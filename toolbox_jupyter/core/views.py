@@ -133,7 +133,7 @@ class Views:
         return figure
 
     @staticmethod
-    def report(inputs, tags, encode, is_train_mode=False, name=''):
+    def report(inputs, tags, encode, is_train_mode=False):
         # Fold needed for evaluation
         if 'Fold' not in inputs:
             raise Exception('Need to build fold.')
@@ -172,9 +172,7 @@ class Views:
         # Mean score
         report = pandas.DataFrame(classification_report(predictions[:, 0], predictions[:, 1],
                                   output_dict=True, target_names=encode.map_list)).transpose()
-        report = report.apply(lambda x: pandas.DataFrame(x).apply(lambda y: Views.__format_std(x, y, scores), axis=1))
-        report.iloc[0, 0] = name
-        return report
+        return report.apply(lambda x: pandas.DataFrame(x).apply(lambda y: Views.__format_std(x, y, scores), axis=1))
 
     @staticmethod
     def statistics(inputs, keys, name=None):
