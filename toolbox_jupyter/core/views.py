@@ -9,6 +9,7 @@ from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 from sklearn.metrics import auc, roc_curve, classification_report
 
 
@@ -64,7 +65,7 @@ class ViewTools:
 class Views:
 
     @staticmethod
-    def pca_projection(inputs, tags, settings, name=None):
+    def projection(inputs, tags, settings, mode='PCA', name=None):
         # Check mandatory fields
         mandatory = ['datum', 'label']
         if not isinstance(tags, dict) or not all(elem in tags.keys() for elem in mandatory):
@@ -74,9 +75,13 @@ class Views:
         labels = inputs[tags['label']]
         ulabels = np.unique(labels)
 
-        # Compute PCA
-        pca = PCA(n_components=2, whiten=True)  # project to 2 dimensions
-        projected = pca.fit_transform(np.array(inputs[tags['datum']].tolist()))
+        # Compute
+        if mode == 'PCA':
+            method = PCA(n_components=2, whiten=True)  # project to 2 dimensions
+        else:
+            method = TSNE(n_components=2)
+
+        projected = method.fit_transform(np.array(inputs[tags['datum']].tolist()))
         figure = pyplot.figure()
         for label in ulabels:
             pyplot.scatter(projected[labels == label, 0], projected[labels == label, 1],
@@ -168,12 +173,7 @@ class Views:
         # Mean score
         report = pandas.DataFrame(classification_report(predictions[:, 0], predictions[:, 1],
                                   output_dict=True, target_names=encode.map_list)).transpose()
-        return report.apply(lambda x: pandas.DataFrame(x).apply(lambda y: Views.format_std(x, y, scores), axis=1))
-
-    @staticmethod
-    def format_std(x, y, scores):
-        std = np.std([score[y.name][x.name] for score in scores])
-        return f'{y[x.name]:0.2f}±{std:0.2f}'
+        return report.apply(lambda x: pandas.DataFrame(x).apply(lambda y: Views.__format_std(x, y, scores), axis=1))
 
     @staticmethod
     def statistics(inputs, keys, name=None):
@@ -193,6 +193,11 @@ class Views:
         if name:
             figure.suptitle(name)
         return figure
+
+    @staticmethod
+    def __format_std(x, y, scores):
+        std = np.std([score[y.name][x.name] for score in scores])
+        return f'{y[x.name]:0.2f}±{std:0.2f}'
 
     def __parameters(self, result):
         unique_folds = result.get_unique_from_key('Fold')
