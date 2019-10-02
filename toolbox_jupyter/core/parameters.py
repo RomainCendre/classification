@@ -305,8 +305,8 @@ class Settings:
 
     @staticmethod
     def get_default_orl():
-        colors = dict(Cancer=(1, 0, 0), Precancer=(0.5, 0.5, 0), Sain=(0, 1, 0), Pathology=(0.75, 0.75, 0),
-                      Rest=(0.25, 0.25, 0), Luck=(0, 0, 1))
+        colors = dict(Cancer=(0.93, 0.5, 0.2), Precancer=(1, 0.75, 0), Sain=(0.44, 0.68, 0.28),
+                      Pathology=(0.75, 0.75, 0), Rest=(0.90, 0.47, 0), Luck=(0, 0, 1))
         lines = {'Cancer': {'linestyle': '-'},
                  'Precancer': {'linestyle': '-.'},
                  'Sain': {'linestyle': ':'},
