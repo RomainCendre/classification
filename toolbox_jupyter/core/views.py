@@ -1,3 +1,5 @@
+import pandas
+
 import markups
 import pickle
 from collections import Counter
@@ -9,30 +11,6 @@ import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.metrics import auc, roc_curve, classification_report
 
-
-class ViewTools:
-
-    @staticmethod
-    def print_report(report):
-        headers = ['Labels', 'Precision', 'Recall', 'F1-score', 'Support']
-        longest_last_line_heading = 'weighted avg'
-        width = len(longest_last_line_heading)
-        head_fmt = u'{:>{width}s} ' + u' {:>9}' * len(headers)
-        string_report = head_fmt.format(u'', *headers, width=width)
-        string_report += u'\n\n'
-        row_fmt = u'{:>{width}s} ' * 4 + u' {:>9}\n'
-        for row in report.keys():
-            values = [row, *list(report[row].values())]
-            string_report += row_fmt.format(*values, width=width)
-        string_report += u'\n'
-        print(string_report)
-
-    @staticmethod
-    def write(plot, out_file):
-        save_to = PdfPages(out_file)
-        save_to.savefig(plot)
-        save_to.close()
-        pyplot.close()
 
 
 class Patchs:
@@ -68,6 +46,19 @@ class Patchs:
                 draw.rectangle(center, fill=color)
                 # draw.rectangle((start, end), outline="white")
             image.save(output_folder / '{ref}_{lab}.png'.format(ref=reference, lab=label[0]))
+
+
+class ViewTools:
+
+    @staticmethod
+    def write(data, out_file):
+        if isinstance(data, pandas.DataFrame):
+            data.to_csv(out_file, index=True)
+        else:
+            save_to = PdfPages(out_file)
+            save_to.savefig(data)
+            save_to.close()
+            pyplot.close()
 
 
 class Views:
@@ -174,16 +165,14 @@ class Views:
             scores.append(classification_report(data[:, 0], data[:, 1], output_dict=True, target_names=encode.map_list))
 
         # Mean score
-        report = classification_report(predictions[:, 0], predictions[:, 1],
-                                       output_dict=True, target_names=encode.map_list)
+        report = pandas.DataFrame(classification_report(predictions[:, 0], predictions[:, 1],
+                                  output_dict=True, target_names=encode.map_list)).transpose()
+        return report.apply(lambda x: pandas.DataFrame(x).apply(lambda y: Views.format_std(x, y, scores), axis=1))
 
-        # Browse reference dict
-        for label, val in report.items():
-            for metrics in val.keys():
-                values = [score[label][metrics] for score in scores if label in score.keys()]
-                report[label][metrics] = '{mean:0.2f}±{std:0.2f}'.format(mean=report[label][metrics],
-                                                                         std=np.std(values))
-        return report
+    @staticmethod
+    def format_std(x, y, scores):
+        std = np.std([score[y.name][x.name] for score in scores])
+        return f'{y[x.name]:0.2f}±{std:0.2f}'
 
     @staticmethod
     def statistics(inputs, keys, name=None):
