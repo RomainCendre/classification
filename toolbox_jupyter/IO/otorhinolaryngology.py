@@ -83,8 +83,8 @@ class Reader:
         mandatory = ['datum', 'wavelength']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Not a dict or missing tag: {mandatory}.')
-        inputs[tags['datum']] = inputs[tags['datum']].apply(lambda x: np.interp(wavelength, x[tags['wavelength']], x[tags['datum']]), axis=1)
-        inputs[tags['wavelength']] = inputs[tags['wavelength']].apply(lambda x: wavelength)
+        inputs[tags['datum']] = inputs.apply(lambda x: np.interp(wavelength, x[tags['wavelength']], x[tags['datum']]), axis=1)
+        inputs[tags['wavelength']] = inputs[tags['wavelength']] = wavelength
         return inputs
 
 
