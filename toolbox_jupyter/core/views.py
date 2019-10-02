@@ -67,7 +67,7 @@ class Views:
     def pca_projection(inputs, tags, settings, name=None):
         # Check mandatory fields
         mandatory = ['datum', 'label']
-        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+        if not isinstance(tags, dict) or not all(elem in tags.keys() for elem in mandatory):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Inputs
@@ -76,7 +76,7 @@ class Views:
 
         # Compute PCA
         pca = PCA(n_components=2, whiten=True)  # project to 2 dimensions
-        projected = pca.fit_transform(tags['datum'])
+        projected = pca.fit_transform(np.array(inputs[tags['datum']].tolist()))
         figure = pyplot.figure()
         for label in ulabels:
             pyplot.scatter(projected[labels == label, 0], projected[labels == label, 1],
