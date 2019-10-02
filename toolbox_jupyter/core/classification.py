@@ -1,9 +1,7 @@
 import warnings
-
-import h5py
 from copy import deepcopy
 import numpy as np
-from sklearn.model_selection import GridSearchCV, ParameterGrid, GroupKFold, StratifiedKFold
+from sklearn.model_selection import GridSearchCV, ParameterGrid, GroupKFold, StratifiedKFold, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
@@ -104,7 +102,7 @@ class IO:
 class Tools:
 
     @staticmethod
-    def evaluate(dataframe, tags, model, out, mask=None):
+    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -126,6 +124,7 @@ class Tools:
         # Out fields
         out_preds = f'{out}_Predictions'
         out_probas = f'{out}_Probabilities'
+        out_features = f'{out}_Features'
         out_params = f'{out}_Parameters'
 
         # Browse folds
@@ -134,11 +133,12 @@ class Tools:
             # Out fields
             fold_preds = f'{out_preds}_{fold}'
             fold_probas = f'{out_probas}_{fold}'
+            fold_features = f'{out_features}_{fold}'
             fold_params = f'{out_params}_{fold}'
 
             # Create mask
             test_mask = folds == fold
-            print(f'Fold {fold} as test.')
+            print(f'Fold {fold} performed...')
 
             # Check that current fold respect labels
             if not Tools.__check_labels(dataframe[mask], {'label_encode': tags['label_encode']}, ~test_mask):
@@ -146,18 +146,19 @@ class Tools:
                 continue
 
             # Clone model
-            fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), ~test_mask)
-            # Predict Train
+            fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), mask=~test_mask,
+                                     grid=grid, distribution=distribution)
 
-            # Predict Test
+            # Predict
             dataframe[fold_preds] = Tools.predict(dataframe[mask], {'datum': tags['datum']}, fold_preds, fitted_model)[fold_preds]
             dataframe[fold_probas] = Tools.predict_proba(dataframe[mask], {'datum': tags['datum']}, fold_probas, fitted_model)[fold_probas]
-            dataframe[fold_params] = Tools.number_of_features(dataframe[mask], fitted_model, fold_params)[fold_params]
+            dataframe[fold_features] = Tools.number_of_features(dataframe[mask], fitted_model, fold_params)[fold_params]
+            dataframe[fold_params] = [fitted_model.best_params] * len(dataframe)
 
         return dataframe
 
     @staticmethod
-    def fit(dataframe, tags, model, mask=None):
+    def fit(dataframe, tags, model, mask=None, grid=None, distribution=None):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -173,11 +174,26 @@ class Tools:
 
         data = np.array(dataframe.loc[mask, tags['datum']].to_list())
         labels = np.array(dataframe.loc[mask, tags['label_encode']].to_list())
-        model.fit(data, y=labels)
-        return model
+
+        if grid is not None:
+            grid_search = GridSearchCV(model, param_grid=grid, cv=2)
+            grid_search.fit(data, y=labels)
+            model = grid_search.best_estimator_
+            model.best_params = grid_search.best_params_
+            return model
+        elif distribution is not None:
+            random_search = RandomizedSearchCV(model, param_distributions=distribution, cv=2)
+            random_search.fit(data, y=labels)
+            model = random_search.best_estimator_
+            model.best_params = random_search.best_params_
+            return model
+        else:
+            model.fit(data, y=labels)
+            model.best_params = {}
+            return model
 
     @staticmethod
-    def fit_transform(dataframe, tags, model, out, mask=None):
+    def fit_transform(dataframe, tags, model, out, mask=None, grid=None, distribution=None):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -189,7 +205,7 @@ class Tools:
         mask = pd.Series(mask)
 
         # Clone model
-        fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), mask)
+        fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), mask=mask, grid=None, distribution=None)
 
         # Transform
         dataframe.loc[mask, out] = Tools.transform(dataframe[mask], {'datum': tags['datum']}, fitted_model, out)[out]
