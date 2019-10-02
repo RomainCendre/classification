@@ -208,6 +208,26 @@ class Views:
             params.append((best_params, features_number))
         return params
 
+
+class ORLViews:
+
+    @staticmethod
+    def lineplot(inputs, tags):
+        # Check mandatory fields
+        mandatory = ['datum', 'wavelength', 'label']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        data = np.array(inputs[tags['datum']].tolist())
+        wavelength = np.array(inputs[tags['wavelength']].tolist())[0]
+        labels = inputs[tags['label']]
+        unique_labels = np.unique(labels)
+
+        for label in unique_labels:
+            fig, ax = pyplot.subplots(figsize=(8, 4))
+            ax.plot(wavelength, data[labels == label].mean(axis=0), alpha=0.5, color='red', label='cv', linewidth=1.0)
+            ax.fill_between(wavelength, data[labels == label].mean(axis=0) - data.std(axis=0),
+                            data.mean(axis=0) + data.std(axis=0), color='#888888', alpha=0.4)
 # class VisualizationWriter:
 #
 #     def __init__(self, model, preprocess=None):
