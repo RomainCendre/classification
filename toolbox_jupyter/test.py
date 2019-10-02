@@ -1,4 +1,7 @@
 import sys
+
+from toolbox_jupyter.transforms.signals import FilterTransform
+
 sys.path.append('/home/rcendre/classification')
 import os
 import sys
@@ -22,10 +25,11 @@ from toolbox_jupyter.core.views import Views, ViewTools, ORLViews
 from toolbox_jupyter.IO import image
 from toolbox_jupyter.models.builtin import Applications
 from toolbox_jupyter.transforms.transforms import PredictorTransform
-from toolbox_jupyter.transforms.label import OrderedEncoder
-from toolbox_jupyter.transforms.image import DWTImageTransform, DWTGGDImageTransform, FourierImageTransform, SpatialImageTransform
+from toolbox_jupyter.transforms.labels import OrderedEncoder
+from toolbox_jupyter.transforms.images import DWTImageTransform, DWTGGDImageTransform, FourierImageTransform, SpatialImageTransform
 inputs = ORL.get_spectra()
 settings = Settings.get_default_orl()
+Tools.transform(inputs, {'datum': 'Datum'}, FilterTransform(5), 'Mean')
 ViewTools.write(ORLViews.mean_and_deviation(inputs, {'datum':'Datum', 'label':'Label', 'wavelength':'Wavelength'}, settings), 'C:\\Users\\Romain\\Desktop\\test.pdf')
 
 #
