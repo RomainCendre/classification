@@ -33,10 +33,10 @@ class Reader:
         spectra = []
         # Build spectrum
         for x in range(Reader.COLUMN_FIRST, csv.shape[1]):
-            spectrum = {'label': csv[Reader.ROW_LABEL, x],
-                        'spectrum_id': x - Reader.COLUMN_FIRST}
-            spectrum.update({'datum': csv[Reader.ROW_WAVELENGTH:csv.shape[0], x].astype("float"),
-                             'wavelength': csv[Reader.ROW_WAVELENGTH:csv.shape[0], Reader.COLUMN_WAVELENGTH].astype(
+            spectrum = {'Label': csv[Reader.ROW_LABEL, x],
+                        'IDSpectrum': x - Reader.COLUMN_FIRST}
+            spectrum.update({'Datum': csv[Reader.ROW_WAVELENGTH:csv.shape[0], x].astype("float"),
+                             'Wavelength': csv[Reader.ROW_WAVELENGTH:csv.shape[0], Reader.COLUMN_WAVELENGTH].astype(
                                  "float")})
             spectra.append(spectrum)
         return pandas.DataFrame(spectra)
@@ -67,7 +67,7 @@ class Reader:
 
             patient_datas['Reference_spectrum'] = patient_datas.apply(
                 lambda row: '{reference}_{spectrum}'.format(reference=row['Reference'],
-                                                            spectrum=row['spectrum_id']), axis=1)
+                                                            spectrum=row['IDSpectrum']), axis=1)
             spectra.append(patient_datas)
         return pandas.concat(spectra, sort=False, ignore_index=True)
 
