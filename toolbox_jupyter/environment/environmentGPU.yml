@@ -1,4 +1,4 @@
-name: SkinGPU
+name: ResearchGPU
 channels:
   - defaults
 dependencies:
@@ -11,6 +11,7 @@ dependencies:
   - pandas=0.24.2
   - pytables=3.5.2
   - python=3.6.7
+  - scikit-image-0.15.0
   - scikit-learn=0.20.1
   - tensorboard=1.12.0
   - tensorflow=1.12.0
