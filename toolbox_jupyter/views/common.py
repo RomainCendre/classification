@@ -98,7 +98,7 @@ class Views:
         unique = np.unique(inputs[tags['label_encode']])
         probabilities = np.array(inputs[f'{tags["result"]}_Probabilities'].to_list())
 
-        figure, axe = pyplot.subplots(ncols=1, figsize=(10, 10))
+        figure, axe = pyplot.subplots()
         # Plot luck
         axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color=settings.get_color('Luck'), label='Luck', alpha=.8)
         title = ''
@@ -168,7 +168,7 @@ class Views:
 
     @staticmethod
     def statistics(inputs, keys, name=None):
-        figure, axes = pyplot.subplots(ncols=len(keys), figsize=(21, 7))
+        figure, axes = pyplot.subplots(ncols=len(keys))
         # Browse each kind of parameter
         for index, key in enumerate(keys):
             axes[index].set_title(key)
