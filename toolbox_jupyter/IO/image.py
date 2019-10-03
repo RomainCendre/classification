@@ -28,6 +28,6 @@ class Reader:
         for image_type in Reader.images_types:
             paths = list(subdir.glob(f'*.{image_type}'))
             images.extend([str(path) for path in paths])
-        sub_frame = pandas.DataFrame({'Data': images})
+        sub_frame = pandas.DataFrame({'Datum': images})
         sub_frame['Label'] = subdir.stem
         return sub_frame
