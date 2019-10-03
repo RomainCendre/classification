@@ -12,6 +12,10 @@ from sklearn.metrics import auc, roc_curve, classification_report
 class ViewTools:
 
     @staticmethod
+    def plot_size(size):
+        pyplot.rcParams["figure.figsize"] = size
+
+    @staticmethod
     def write(data, out_file):
         if isinstance(data, pandas.DataFrame):
             data.to_csv(out_file, index=True)
