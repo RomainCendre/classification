@@ -67,7 +67,10 @@ class Reader:
                 lambda row: '{reference}_{spectrum}'.format(reference=row['Reference'],
                                                             spectrum=row['ID_Spectrum']), axis=1)
             spectra.append(patient_datas)
-        return pandas.concat(spectra, sort=False, ignore_index=True)
+        dataframe = pandas.concat(spectra, sort=False, ignore_index=True)
+        dataframe['Pathological'] = ~(dataframe['Label'] == 'Sain')  # Set new label
+        dataframe['Cancer'] = (dataframe['Label'] == 'Cancer')  # Set new label
+        return dataframe
 
     @staticmethod
     def change_wavelength(inputs, tags, wavelength):
