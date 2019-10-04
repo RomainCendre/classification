@@ -15,7 +15,7 @@ class ImagesViews:
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Inputs
-        histograms = np.array(inputs[tags['datum']].apply(Views.__get_histogram).tolist())
+        histograms = np.array(inputs[tags['datum']].apply(ImagesViews.__get_histogram).tolist())
         labels = np.array(inputs[tags['label']].tolist())
         ulabels = np.unique(labels)
         bins = np.arange(histograms.shape[1])
