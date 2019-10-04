@@ -36,8 +36,7 @@ class Reader:
             spectrum = {'Label': csv[Reader.ROW_LABEL, x],
                         'ID_Spectrum': x - Reader.COLUMN_FIRST}
             spectrum.update({'Datum': csv[Reader.ROW_WAVELENGTH:csv.shape[0], x].astype("float"),
-                             'Wavelength': csv[Reader.ROW_WAVELENGTH:csv.shape[0], Reader.COLUMN_WAVELENGTH].astype(
-                                 "float")})
+                             'Wavelength': csv[Reader.ROW_WAVELENGTH:csv.shape[0], Reader.COLUMN_WAVELENGTH].astype("float")})
             spectra.append(spectrum)
         return pandas.DataFrame(spectra)
 
@@ -86,6 +85,25 @@ class Reader:
         inputs[tags['datum']] = inputs.apply(lambda x: np.interp(wavelength, x[tags['wavelength']], x[tags['datum']]), axis=1)
         inputs[tags['wavelength']] = [wavelength] * len(inputs)
         return inputs
+
+    @staticmethod
+    def remove_negative(inputs, tags):
+        """This method allow to change wavelength scale and interpolate along new one.
+
+        Args:
+            wavelength(:obj:'array' of :obj:'float'): The new wavelength to fit.
+
+        """
+        mandatory = ['datum']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+        inputs[tags['datum']] = inputs.apply(lambda x: Reader.__numpy_remove_negative(x[tags['datum']]), axis=1)
+        return inputs
+
+    @staticmethod
+    def __numpy_remove_negative(x):
+        x[x < 0] = 0
+        return x
 
 
 class Generator:

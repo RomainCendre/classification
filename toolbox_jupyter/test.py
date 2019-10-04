@@ -7,15 +7,15 @@ from toolbox_jupyter.transforms.signals import FilterTransform
 sys.path.append('/home/rcendre/classification')
 from toolbox_jupyter.core.classification import Tools
 from toolbox_jupyter.core.parameters import ORL, Settings
-from toolbox_jupyter.views.common import ViewTools
-from toolbox_jupyter.views.signals import ORLViews
+from toolbox_jupyter.views.common import ViewsTools
+from toolbox_jupyter.views.signals import SignalsViews
 
 inputs = ORL.get_spectra(np.arange(start=445, stop=962, step=1))
 label_encoder = OrderedEncoder().fit(['Sain', 'Precancer', 'Cancer'])
 inputs = Tools.transform(inputs, {'datum': 'Label'}, label_encoder, 'LabelEncode')
 settings = Settings.get_default_orl()
 Tools.transform(inputs, {'datum': 'Datum'}, FilterTransform(5), 'Mean')
-ViewTools.write(ORLViews.variables(inputs, {'datum':'Datum', 'label_encode':'Label'}, settings), 'C:\\Users\\Romain\\Desktop\\test.pdf')
+ViewsTools.write(SignalsViews.variables(inputs, {'datum':'Datum', 'label_encode':'Label'}, settings), 'C:\\Users\\Romain\\Desktop\\test.pdf')
 
 #
 # from scipy.stats import randint as randint

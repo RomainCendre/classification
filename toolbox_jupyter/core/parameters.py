@@ -28,7 +28,9 @@ class ORL:
     @staticmethod
     def __spectra(files, wavelength):
         spectra = pd.concat([otorhinolaryngology.Reader().read_table(file) for file in files], sort=True)
-        return otorhinolaryngology.Reader.change_wavelength(spectra, {'datum': 'Datum', 'wavelength': 'Wavelength'}, wavelength)
+        spectra = otorhinolaryngology.Reader.change_wavelength(spectra, {'datum': 'Datum', 'wavelength': 'Wavelength'}, wavelength)
+        spectra = otorhinolaryngology.Reader.remove_negative(spectra, {'datum': 'Datum'})
+        return spectra
 
     @staticmethod
     def get_filters():

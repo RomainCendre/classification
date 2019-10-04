@@ -36,28 +36,21 @@ class DistributionImageTransform(BaseEstimator, TransformerMixin):
         features = []
         for index, data in enumerate(x):
             image = np.array(Image.open(data).convert('L'))
-            coefficients = []
-            for scale in range(0, self.scale + 1):
-                cA, (cH, cV, cD) = pywt.dwt2(image, self.wavelets)
-                image = cA
-                directions = []
-                # Squeeze first scale
-                if not scale == 0:
-                    directions.extend([cH, cV, cD])
-                # Concatenate last image
-                if scale == (self.scale - 1):
-                    directions.append(image)
-                # Compute coefficients
-                coefficients.extend([DWTImageTransform.get_coefficients(direction) for direction in directions])
-            features.append(np.array(coefficients).flatten())
+            # Compute coefficients
+            features.append(np.array(self.__get_coefficients(image.flatten())).flatten())
         return np.array(features)
 
-    @staticmethod
-    def get_coefficients(x):
-        squared = x ** 2
-        sum_quared = sum(sum(squared))
-        entropy = sstats.entropy(squared.flatten() / sum_quared)
-        return [np.sum(squared) / x.size, entropy, np.std(x)]
+    def __get_coefficients(self, x):
+        shape, loc, scale = sstats.gengamma.fit(x)
+        # Concatenate coefficients
+        coefficients = []
+        if 'alpha' in self.coefficients:
+            coefficients.append(shape)
+        if 'beta' in self.coefficients:
+            coefficients.append(shape)
+        if 'gamma' in self.coefficients:
+            coefficients.append(shape)
+        return coefficients
 
 
 class DWTImageTransform(BaseEstimator, TransformerMixin):

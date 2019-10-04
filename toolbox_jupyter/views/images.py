@@ -32,9 +32,7 @@ class ImagesViews:
                             color=settings.get_color(label), label=label)
                 pyplot.fill_between(bins, histograms[labels == label].mean(axis=0) - histograms.std(axis=0),
                                     histograms.mean(axis=0) + histograms.std(axis=0), color=settings.get_color(label), alpha=0.1)
-        axe.set(xlabel='Intensities',
-                ylabel='Occurrences',
-                title='Histogram')
+        axe.set(xlabel='Intensities', ylabel='Occurrences', title='Histogram')
         axe.legend(loc='lower right')
         return figure
 
