@@ -7,6 +7,59 @@ from scipy import stats as sstats
 from sklearn.base import BaseEstimator, TransformerMixin
 
 
+class DistributionImageTransform(BaseEstimator, TransformerMixin):
+
+    def __init__(self, distribution='GGD', coefficients=['alpha', 'beta', 'gamma']):
+        self.distribution = distribution
+        self.coefficients = coefficients
+
+    def fit(self, x, y=None):
+        """
+        This should fit this transformer, but DWT doesn't need to fit to train data
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+        """
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        """
+        This method is the main part of this transformer.
+        Return a wavelet transform, as specified mode.
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+             copy (:obj): Not used.
+        """
+        features = []
+        for index, data in enumerate(x):
+            image = np.array(Image.open(data).convert('L'))
+            coefficients = []
+            for scale in range(0, self.scale + 1):
+                cA, (cH, cV, cD) = pywt.dwt2(image, self.wavelets)
+                image = cA
+                directions = []
+                # Squeeze first scale
+                if not scale == 0:
+                    directions.extend([cH, cV, cD])
+                # Concatenate last image
+                if scale == (self.scale - 1):
+                    directions.append(image)
+                # Compute coefficients
+                coefficients.extend([DWTImageTransform.get_coefficients(direction) for direction in directions])
+            features.append(np.array(coefficients).flatten())
+        return np.array(features)
+
+    @staticmethod
+    def get_coefficients(x):
+        squared = x ** 2
+        sum_quared = sum(sum(squared))
+        entropy = sstats.entropy(squared.flatten() / sum_quared)
+        return [np.sum(squared) / x.size, entropy, np.std(x)]
+
+
 class DWTImageTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, wavelets='db4', scale=1, mean=False):

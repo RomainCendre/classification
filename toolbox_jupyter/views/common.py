@@ -1,63 +1,14 @@
 import pandas
+import numpy as np
 from collections import Counter
 from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
-import numpy as np
-import skimage
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.metrics import auc, roc_curve, classification_report
 
 
-class ViewTools:
-
-    @staticmethod
-    def plot_size(size):
-        pyplot.rcParams["figure.figsize"] = size
-
-    @staticmethod
-    def write(data, out_file):
-        if isinstance(data, pandas.DataFrame):
-            data.to_csv(out_file, index=True)
-        else:
-            save_to = PdfPages(out_file)
-            save_to.savefig(data)
-            save_to.close()
-            pyplot.close()
-
-
 class Views:
-
-    @staticmethod
-    def histogram(inputs, tags, settings, mode='default'):
-        # Check mandatory fields
-        mandatory = ['datum', 'label']
-        if not isinstance(tags, dict) or not all(elem in tags.keys() for elem in mandatory):
-            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
-
-        # Inputs
-        histograms = np.array(inputs[tags['datum']].apply(Views.__get_histogram).tolist())
-        labels = np.array(inputs[tags['label']].tolist())
-        ulabels = np.unique(labels)
-        bins = np.arange(histograms.shape[1])
-
-        # Now browse right histograms
-        figure, axe = pyplot.subplots()
-        for label in ulabels:
-            if mode == 'default':
-                pyplot.bar(bins, np.mean(histograms[labels == label, :], axis=0).astype('int'),
-                           color=np.expand_dims(np.array(settings.get_color(label)), axis=0),
-                           alpha=0.5, label=label)
-            else:
-                pyplot.plot(bins, np.mean(histograms[labels == label, :], axis=0).astype('int'),
-                            color=settings.get_color(label), label=label)
-                pyplot.fill_between(bins, histograms[labels == label].mean(axis=0) - histograms.std(axis=0),
-                                    histograms.mean(axis=0) + histograms.std(axis=0), color=settings.get_color(label), alpha=0.1)
-        axe.set(xlabel='Intensities',
-                ylabel='Occurrences',
-                title='Histogram')
-        axe.legend(loc='lower right')
-        return figure
 
     @staticmethod
     def projection(inputs, tags, settings, mode='PCA', name=None):
@@ -190,10 +141,6 @@ class Views:
         return figure
 
     @staticmethod
-    def __get_histogram(x):
-        return skimage.exposure.histogram(skimage.io.imread(x).flatten(), source_range='dtype')[0]
-
-    @staticmethod
     def __format_std(x, y, scores):
         std = np.std([score[y.name][x.name] for score in scores])
         return f'{y[x.name]:0.2f}±{std:0.2f}'
@@ -207,6 +154,23 @@ class Views:
             features_number = str(result.get_from_key(key='FeaturesNumber', filters=filter_by)[0])
             params.append((best_params, features_number))
         return params
+
+
+class ViewsTools:
+
+    @staticmethod
+    def plot_size(size):
+        pyplot.rcParams["figure.figsize"] = size
+
+    @staticmethod
+    def write(data, out_file):
+        if isinstance(data, pandas.DataFrame):
+            data.to_csv(out_file, index=True)
+        else:
+            save_to = PdfPages(out_file)
+            save_to.savefig(data)
+            save_to.close()
+            pyplot.close()
 
 # class VisualizationWriter:
 #
