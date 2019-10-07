@@ -32,7 +32,7 @@ simple_pca = Pipeline([('pca', PCA(n_components=0.95)),
 grid_pca = {'clf__C': np.geomspace(0.01, 100, 5).tolist()}
 inputs = Tools.evaluate(inputs, {'datum': 'Scale', 'label_encode': 'LabelEncode'}, simple_pca, 'PCA_SVM', grid=grid_pca)
 Views.details(inputs, {'result': 'PCA_SVM'})
-# inputs = Tools.transform(inputs, {'datum': 'Normalize'}, DWTTransform(mode='db6', segment_length=80), 'DWT')
+Views.report(ViewsTools.get_data_as(inputs, 'PCA_SVM'), {'label_encode': 'LabelEncode', 'prediction': 'PCA_SVM'}, label_encoder)
 
 ViewsTools.write(SignalsViews.variables(inputs, {'datum':'Datum', 'label_encode':'Label'}, settings), 'C:\\Users\\Romain\\Desktop\\test.pdf')
 

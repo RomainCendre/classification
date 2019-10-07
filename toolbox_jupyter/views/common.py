@@ -34,18 +34,6 @@ class Views:
         return pandas.DataFrame(data)
 
     @staticmethod
-    def __parameters(result):
-        unique_folds = result.get_unique_from_key('Fold')
-        params = []
-        for fold in unique_folds:
-            filter_by = {'Fold': [fold]}
-            best_params = str(result.get_from_key(key='BestParams', filters=filter_by)[0])
-            features_number = str(result.get_from_key(key='FeaturesNumber', filters=filter_by)[0])
-            params.append((best_params, features_number))
-        return params
-
-
-    @staticmethod
     def projection(inputs, tags, settings, mode='PCA', name=None):
         # Check mandatory fields
         mandatory = ['datum', 'label']
@@ -125,36 +113,21 @@ class Views:
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
-        # Prediction tag
-        tag_pred = f'{tags["prediction"]}_Predictions'
+        # Inputs
+        labels = np.array(inputs[tags['label_encode']].tolist())
+        predictions = np.array(inputs[f'{tags["prediction"]}_Predictions'].tolist())
+        folds = np.array(inputs['Fold'].tolist())
 
-        # Folds array
-        folds = inputs['Fold']
-        predictions = None
+        # Mean score
+        report = pandas.DataFrame(classification_report(labels, predictions, output_dict=True, target_names=encode.map_list)).transpose()
+        # Std score
         scores = []
         for fold in np.unique(folds):
             # Create mask
             mask = folds == fold
-            if is_train_mode:
-                mask = ~mask
-
-            # Inputs
-            data = inputs[mask]
-            data = np.array([data[tags['label_encode']], data[f'{tag_pred}_{fold}']]).transpose()
-
-            # Remind data for mean
-            if predictions is None:
-                predictions = data
-            else:
-                predictions = np.concatenate((predictions, data))
-
-            # Scores fold
-            scores.append(classification_report(data[:, 0], data[:, 1], output_dict=True, target_names=encode.map_list))
-
-        # Mean score
-        report = pandas.DataFrame(classification_report(predictions[:, 0], predictions[:, 1],
-                                                        output_dict=True, target_names=encode.map_list)).transpose()
-        return report.apply(lambda x: pandas.DataFrame(x).apply(lambda y: Views.__format_std(x, y, scores), axis=1))
+            scores.append(classification_report(labels[mask], predictions[mask], output_dict=True, target_names=encode.map_list))
+        report = report.apply(lambda x: pandas.DataFrame(x).apply(lambda y: Views.__format_std(x, y, scores), axis=1))
+        return report
 
     @staticmethod
     def statistics(inputs, keys, name=None):
@@ -184,6 +157,41 @@ class Views:
 class ViewsTools:
 
     @staticmethod
+    def get_data_as(inputs, out_tag, is_train_mode=False):
+        # Fold needed for evaluation
+        if 'Fold' not in inputs:
+            raise Exception('Need to build fold.')
+
+        # Out fields
+        out_preds = f'{out_tag}_Predictions'
+        out_probas = f'{out_tag}_Probabilities'
+        out_features = f'{out_tag}_Features'
+        out_params = f'{out_tag}_Parameters'
+
+        # Folds array
+        data = []
+        folds = inputs['Fold']
+        for fold in np.unique(folds):
+            # Create mask
+            mask = folds == fold
+            if is_train_mode:
+                mask = ~mask
+
+            # Manage data
+            current = inputs[mask]
+            current[out_preds] = current[f'{out_preds}_{fold}']
+            current[out_probas] = current[f'{out_probas}_{fold}']
+            current[out_features] = current[f'{out_features}_{fold}']
+            current[out_params] = current[f'{out_params}_{fold}']
+
+            # Inputs
+            data.append(current)
+        # Build dataframe and purge useless
+        dataframe = pandas.concat(data)
+        # dataframe.drop()
+        return dataframe
+
+    @staticmethod
     def plot_size(size):
         pyplot.rcParams["figure.figsize"] = size
 
@@ -196,57 +204,3 @@ class ViewsTools:
             save_to.savefig(data)
             save_to.close()
             pyplot.close()
-
-# class VisualizationWriter:
-#
-#     def __init__(self, model, preprocess=None):
-#         self.model = model
-#         self.preprocess = preprocess
-#
-#     def __get_activation_map(self, seed_input, predict, image):
-#         if image.ndim == 2:
-#             image = repeat(image[:, :, newaxis], 3, axis=2)
-#
-#         grads = visualize_cam(self.model, len(self.model.layers) - 1, filter_indices=predict, seed_input=seed_input,
-#                               backprop_modifier='guided')
-#
-#         jet_heatmap = uint8(cm.jet(grads)[..., :3] * 255)
-#         return overlay(jet_heatmap, image)
-#
-#     def write_activations_maps(self, inputs, output_folder):
-#
-#         # Activation dir
-#         activation_dir = join(output_folder, 'Activation/')
-#         if not exists(activation_dir):
-#             makedirs(activation_dir)
-#
-#         # Check for model type, will be changed in future
-#         if not isinstance(self.model, KerasBatchClassifier):
-#             return
-#
-#         # Extract data for fit
-#         paths = inputs.get_datas()
-#         labels = inputs.get_labels()
-#         ulabels = inputs.get_unique_labels()
-#
-#         # Prepare data
-#         generator = ResourcesGenerator(preprocessing_function=self.preprocess)
-#         valid_generator = generator.flow_from_paths(paths, labels, batch_size=1, shuffle=False)
-#
-#         # Folds storage
-#         for index in arange(len(valid_generator)):
-#             x, y = valid_generator[index]
-#
-#             for label_index in ulabels:
-#                 dir_path = join(activation_dir, inputs.decode('label', label_index))
-#                 if not exists(dir_path):
-#                     makedirs(dir_path)
-#
-#                 file_path = join(dir_path, '{number}.png'.format(number=index))
-#
-#                 try:
-#                     activation = self.__get_activation_map(seed_input=x, predict=label_index,
-#                                                            image=load_img(paths[index]))
-#                     imsave(file_path, activation)
-#                 except:
-#                     print('Incompatible model or trouble occurred.')
