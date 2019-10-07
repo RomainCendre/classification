@@ -11,6 +11,41 @@ from sklearn.metrics import auc, roc_curve, classification_report
 class Views:
 
     @staticmethod
+    def details(inputs, tags):
+        # Fold needed for evaluation
+        if 'Fold' not in inputs:
+            raise Exception('Need to build fold.')
+
+        # Check mandatory fields
+        mandatory = ['result']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        # Tags
+        features = f'{tags["result"]}_Features'
+        parameters = f'{tags["result"]}_Parameters'
+
+        unique_folds = np.unique(inputs['Fold'])
+        data = {'Fold': [], 'Features': [], 'Parameters': []}
+        for fold in unique_folds:
+            data['Fold'].append(fold)
+            data['Features'].append(int(inputs.at[0, f'{features}_{fold}'][0]))
+            data['Parameters'].append(inputs.at[0, f'{parameters}_{fold}'][0])
+        return pandas.DataFrame(data)
+
+    @staticmethod
+    def __parameters(result):
+        unique_folds = result.get_unique_from_key('Fold')
+        params = []
+        for fold in unique_folds:
+            filter_by = {'Fold': [fold]}
+            best_params = str(result.get_from_key(key='BestParams', filters=filter_by)[0])
+            features_number = str(result.get_from_key(key='FeaturesNumber', filters=filter_by)[0])
+            params.append((best_params, features_number))
+        return params
+
+
+    @staticmethod
     def projection(inputs, tags, settings, mode='PCA', name=None):
         # Check mandatory fields
         mandatory = ['datum', 'label']
@@ -144,16 +179,6 @@ class Views:
     def __format_std(x, y, scores):
         std = np.std([score[y.name][x.name] for score in scores])
         return f'{y[x.name]:0.2f}±{std:0.2f}'
-
-    def __parameters(self, result):
-        unique_folds = result.get_unique_from_key('Fold')
-        params = []
-        for fold in unique_folds:
-            filter_by = {'Fold': [fold]}
-            best_params = str(result.get_from_key(key='BestParams', filters=filter_by)[0])
-            features_number = str(result.get_from_key(key='FeaturesNumber', filters=filter_by)[0])
-            params.append((best_params, features_number))
-        return params
 
 
 class ViewsTools:
