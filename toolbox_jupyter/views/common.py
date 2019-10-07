@@ -103,7 +103,7 @@ class Views:
         return figure
 
     @staticmethod
-    def report(inputs, tags, encode, is_train_mode=False):
+    def report(inputs, tags, encode):
         # Fold needed for evaluation
         if 'Fold' not in inputs:
             raise Exception('Need to build fold.')
@@ -157,7 +157,7 @@ class Views:
 class ViewsTools:
 
     @staticmethod
-    def get_data_as(inputs, out_tag, is_train_mode=False):
+    def data_as(inputs, out_tag, as_train=False):
         # Fold needed for evaluation
         if 'Fold' not in inputs:
             raise Exception('Need to build fold.')
@@ -174,7 +174,7 @@ class ViewsTools:
         for fold in np.unique(folds):
             # Create mask
             mask = folds == fold
-            if is_train_mode:
+            if as_train:
                 mask = ~mask
 
             # Manage data
