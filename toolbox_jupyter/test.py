@@ -15,7 +15,7 @@ from toolbox_jupyter.core.parameters import ORL, Settings
 from toolbox_jupyter.views.common import Views, ViewsTools
 from toolbox_jupyter.views.signals import SignalsViews
 
-inputs = ORL.get_spectra(np.arange(start=445, stop=962, step=1))
+inputs = ORL.get_spectra(np.arange(start=440, stop=960, step=1))
 label_encoder = OrderedEncoder().fit(['Sain', 'Precancer', 'Cancer'])
 inputs = Tools.transform(inputs, {'datum': 'Label'}, label_encoder, 'LabelEncode')
 group_encoder = LabelEncoder().fit(inputs['Reference'])
@@ -32,7 +32,7 @@ simple_pca = Pipeline([('pca', PCA(n_components=0.95)),
 grid_pca = {'clf__C': np.geomspace(0.01, 100, 5).tolist()}
 inputs = Tools.evaluate(inputs, {'datum': 'Scale', 'label_encode': 'LabelEncode'}, simple_pca, 'PCA_SVM', grid=grid_pca)
 Views.details(inputs, {'result': 'PCA_SVM'})
-Views.report(ViewsTools.get_data_as(inputs, 'PCA_SVM'), {'label_encode': 'LabelEncode', 'prediction': 'PCA_SVM'}, label_encoder)
+SignalsViews.variables(inputs, {'label_encode': 'LabelEncode', 'prediction': 'PCA_SVM'})
 
 ViewsTools.write(SignalsViews.variables(inputs, {'datum':'Datum', 'label_encode':'Label'}, settings), 'C:\\Users\\Romain\\Desktop\\test.pdf')
 

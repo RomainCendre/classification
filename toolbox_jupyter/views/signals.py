@@ -60,7 +60,7 @@ class SignalsViews:
         return figure
 
     @staticmethod
-    def variables(inputs, tags, title='Mean and Deviation'):
+    def analysis(inputs, tags, title='Chi 2'):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
