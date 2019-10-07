@@ -9,7 +9,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 class DistributionImageTransform(BaseEstimator, TransformerMixin):
 
-    def __init__(self, distribution='GGD', coefficients=['alpha', 'beta', 'gamma']):
+    def __init__(self, distribution='GGD', coefficients=['a', 'c', 'loc', 'scale']):
         self.distribution = distribution
         self.coefficients = coefficients
 
@@ -41,15 +41,17 @@ class DistributionImageTransform(BaseEstimator, TransformerMixin):
         return np.array(features)
 
     def __get_coefficients(self, x):
-        shape, loc, scale = sstats.gengamma.fit(x)
+        a, c, loc, scale = sstats.gengamma.fit(x)
         # Concatenate coefficients
         coefficients = []
-        if 'alpha' in self.coefficients:
-            coefficients.append(shape)
-        if 'beta' in self.coefficients:
-            coefficients.append(shape)
-        if 'gamma' in self.coefficients:
-            coefficients.append(shape)
+        if 'a' in self.coefficients:
+            coefficients.append(a)
+        if 'c' in self.coefficients:
+            coefficients.append(c)
+        if 'loc' in self.coefficients:
+            coefficients.append(loc)
+        if 'scale' in self.coefficients:
+            coefficients.append(scale)
         return coefficients
 
 

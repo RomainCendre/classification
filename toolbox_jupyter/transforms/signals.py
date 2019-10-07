@@ -1,4 +1,5 @@
 import numpy as np
+from pywt import dwt
 from scipy.signal import medfilt
 from sklearn import preprocessing
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -39,6 +40,54 @@ class ScaleTransform(BaseEstimator, TransformerMixin):
             return np.apply_along_axis((lambda x: preprocessing.scale(x)), 1, x)
 
 
+class DWTTransform(BaseEstimator, TransformerMixin):
+    """Class that manage a DWT Transform
+
+     This class is made the same way as sklearn transform to be fit in a Pipe
+
+     Attributes:
+         mode (:obj:'str'): A mode for DWT extraction.
+
+     """
+
+    def __init__(self, mode='db1', segment=-1):
+        """Make an initialisation of DWTTransform object.
+
+        Take a string that represent extraction mode, default use 'db1'
+
+        Args:
+             mode (:obj:'str'): The mode as string.
+        """
+        self.mode = mode
+        self.segment = segment
+
+    def fit(self, x, y=None):
+        """
+        This should fit this transformer, but DWT doesn't need to fit to train data
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+        """
+        return self
+
+    def transform(self, x):
+        """
+        This method is the main part of this transformer.
+        Return a wavelet transform, as specified mode.
+
+        Args:
+             x (:obj): Not used.
+        """
+        features = None
+        spectrum_length = x.shape[1]
+        for start in range(0, spectrum_length, self.segment):
+            approx, _ = dwt(x[:, start:start+self.segment], self.mode)
+            if features is None:
+                features = approx
+            else:
+                features = np.concatenate((features, approx), axis=1)
+        return features
 
     #
     # @staticmethod

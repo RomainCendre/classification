@@ -16,49 +16,6 @@ class ArgMaxTransform(BaseEstimator, TransformerMixin):
         return x.argmax(axis=1)
 
 
-class DWTTransform(BaseEstimator, TransformerMixin):
-    """Class that manage a DWT Transform
-
-     This class is made the same way as sklearn transform to be fit in a Pipe
-
-     Attributes:
-         mode (:obj:'str'): A mode for DWT extraction.
-
-     """
-
-    def __init__(self, mode='db1', segment_length=-1):
-        """Make an initialisation of DWTTransform object.
-
-        Take a string that represent extraction mode, default use 'db1'
-
-        Args:
-             mode (:obj:'str'): The mode as string.
-        """
-        self.mode = mode
-        self.segment_length = segment_length
-
-    def fit(self, x, y=None):
-        """
-        This should fit this transformer, but DWT doesn't need to fit to train data
-
-        Args:
-             x (:obj): Not used.
-             y (:obj): Not used.
-        """
-        return self
-
-    def transform(self, x):
-        """
-        This method is the main part of this transformer.
-        Return a wavelet transform, as specified mode.
-
-        Args:
-             x (:obj): Not used.
-        """
-        (cA, _) = dwt(x, self.mode)
-        return cA
-
-
 class FlattenTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, axis=False):
