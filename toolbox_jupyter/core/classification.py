@@ -82,7 +82,7 @@ class Folds:
         # Make folds
         folds = np.zeros(len(labels), dtype=int)
         current_folds = list(split_rule.split(X=data, y=labels, groups=groups))
-        for index, fold in enumerate(current_folds):
+        for index, fold in enumerate(current_folds, 1):
             folds[fold[1]] = index
         dataframe['Fold'] = folds.tolist()  # Add
         return dataframe
