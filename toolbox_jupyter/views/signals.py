@@ -7,6 +7,83 @@ from sklearn.feature_selection import SelectKBest, chi2, f_classif
 class SignalsViews:
 
     @staticmethod
+    def analysis(inputs, tags, size=1, scale=None, mode='Chi 2'):
+        # Check mandatory fields
+        mandatory = ['datum', 'wavelength', 'label_encode']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        # Inputs
+        data = np.array(inputs[tags['datum']].tolist())
+        data = np.mean(data.reshape(len(data), -1, size), axis=2)
+        labels = inputs[tags['label_encode']]
+        wavelength = np.array(inputs[tags['wavelength']].tolist())[0]
+        wavelength = np.mean(wavelength.reshape(-1, size), axis=1)
+
+        # Compute p_values
+        if mode == 'Anova':
+            kbest = SelectKBest(f_classif, k='all').fit(data, labels)
+        else:
+            kbest = SelectKBest(chi2, k='all').fit(data, labels)
+
+        # Scale pvalues
+        p_values = kbest.pvalues_
+        if scale == 'log':
+            p_values = np.log(p_values)
+
+        # Display values
+        figure, axe = pyplot.subplots()
+        axe.bar(wavelength, p_values)
+
+        # Now set title and legend
+        axe.set(xlabel=tags['wavelength'],
+                ylabel='P-values',
+                title=f'P-values {mode} {scale}')
+        # axe.legend(loc='upper left')
+        return figure
+
+    @staticmethod
+    def analysis_relation(inputs, tags, relation='div', size=1, scale=None, mode='Chi 2'):
+        # Check mandatory fields
+        mandatory = ['datum', 'wavelength', 'label_encode']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        # Inputs
+        labels = inputs[tags['label_encode']]
+        data = np.array(inputs[tags['datum']].tolist())
+        data = np.mean(data.reshape(data.shape[0], -1, size), axis=2)
+        if relation == 'div':
+            data = ((np.expand_dims(data, axis=1)+1) / (np.expand_dims(data, axis=2)+1))
+        else:
+            data = (np.expand_dims(data, axis=1) * np.expand_dims(data, axis=2))
+
+        wavelength = np.array(inputs[tags['wavelength']].tolist())[0]
+        wavelength = np.mean(wavelength.reshape(-1, size), axis=1)
+
+        # Compute p_values, need to reshape to fit 2D, then go back to original
+        if mode == 'Anova':
+            kbest = SelectKBest(f_classif, k='all').fit(data.reshape(data.shape[0], -1), labels)
+        else:
+            kbest = SelectKBest(chi2, k='all').fit(data.reshape(data.shape[0], -1), labels)
+
+        # Scale pvalues
+        p_values = kbest.pvalues_.reshape(data.shape[1:])
+        if scale == 'log':
+            p_values = np.log(p_values)
+
+        # Display values
+        figure, axe = pyplot.subplots()
+        cmap = axe.matshow(p_values, cmap=pyplot.cm.get_cmap('plasma'),
+                           extent=[min(wavelength), max(wavelength), max(wavelength), min(wavelength)])
+        # Now set title and legend
+        figure.colorbar(cmap)
+        axe.set(xlabel=tags['wavelength'],
+                ylabel=tags['wavelength'],
+                title=f'P-values {mode} {scale}')
+        return figure
+
+    @staticmethod
     def histogram(inputs, tags, settings, mode='default'):
         # Check mandatory fields
         mandatory = ['datum', 'label']
@@ -57,85 +134,6 @@ class SignalsViews:
                 ylabel=tags['datum'],
                 title=title)
         axe.legend(loc='lower right')
-        return figure
-
-    @staticmethod
-    def analysis(inputs, tags, size=1, scale=None, mode='Chi 2'):
-        # Check mandatory fields
-        mandatory = ['datum', 'wavelength', 'label_encode']
-        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
-
-        # Inputs
-        data = np.array(inputs[tags['datum']].tolist())
-        data = np.mean(data.reshape(len(data), -1, size), axis=2)
-        labels = inputs[tags['label_encode']]
-        wavelength = np.array(inputs[tags['wavelength']].tolist())[0]
-        wavelength = np.mean(wavelength.reshape(-1, size), axis=1)
-
-        # Compute p_values
-        if mode == 'Anova':
-            kbest = SelectKBest(f_classif, k='all').fit(data, labels)
-        else:
-            kbest = SelectKBest(chi2, k='all').fit(data, labels)
-
-        # Scale pvalues
-        if scale == 'log':
-            p_values = np.log(kbest.pvalues_)
-        else:
-            p_values = kbest.pvalues_
-
-        # Display values
-        figure, axe = pyplot.subplots()
-        axe.bar(wavelength, p_values)
-
-        # Now set title and legend
-        axe.set(xlabel=tags['wavelength'],
-                ylabel='P-values',
-                title=f'P-values {mode} {scale}')
-        # axe.legend(loc='upper left')
-        return figure
-
-    @staticmethod
-    def analysis_ratio(inputs, tags, relation='div', size=1, scale=None, mode='Chi 2'):
-        # Check mandatory fields
-        mandatory = ['datum', 'wavelength', 'label_encode']
-        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
-
-        # Inputs
-        labels = inputs[tags['label_encode']]
-        data = np.array(inputs[tags['datum']].tolist())
-        data = np.mean(data.reshape(data.shape[0], -1, size), axis=2)
-        if relation == 'div':
-            data = ((np.expand_dims(data, axis=1)+1) / (np.expand_dims(data, axis=2)+1))
-        else:
-            data = (np.expand_dims(data, axis=1) * np.expand_dims(data, axis=2))
-
-        wavelength = np.array(inputs[tags['wavelength']].tolist())[0]
-        wavelength = np.mean(wavelength.reshape(-1, size), axis=1)
-
-        # Compute p_values, need to reshape to fit 2D, then go back to original
-        if mode == 'Anova':
-            kbest = SelectKBest(f_classif, k='all').fit(data.reshape(data.shape[0], -1), labels)
-        else:
-            kbest = SelectKBest(chi2, k='all').fit(data.reshape(data.shape[0], -1), labels)
-
-        # Scale pvalues
-        if scale == 'log':
-            p_values = np.log(kbest.pvalues_)
-        else:
-            p_values = kbest.pvalues_
-
-        # Display values
-        figure, axe = pyplot.subplots()
-        colormap = pyplot.cm.get_cmap('plasma')
-        temp = axe.matshow(p_values, cmap=colormap, extent=[min(wavelength), max(wavelength), max(wavelength), min(wavelength)])
-        # Now set title and legend
-        figure.colorbar(temp)
-        axe.set(xlabel=tags['wavelength'],
-                ylabel=tags['wavelength'],
-                title=f'P-values {mode} {scale}')
         return figure
 
     @staticmethod
