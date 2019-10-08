@@ -33,10 +33,10 @@ class Reader:
         spectra = []
         # Build spectrum
         for x in range(Reader.COLUMN_FIRST, csv.shape[1]):
-            spectrum = {'Label': csv[Reader.ROW_LABEL, x],
+            spectrum = {'Diagnosis': csv[Reader.ROW_LABEL, x],
                         'ID_Spectrum': x - Reader.COLUMN_FIRST}
-            spectrum.update({'Datum': csv[Reader.ROW_WAVELENGTH:csv.shape[0], x].astype("float"),
-                             'Wavelength': csv[Reader.ROW_WAVELENGTH:csv.shape[0], Reader.COLUMN_WAVELENGTH].astype("float")})
+            spectrum.update({'Datum': csv[Reader.ROW_WAVELENGTH:csv.shape[0], x].astype('float'),
+                             'Wavelength': csv[Reader.ROW_WAVELENGTH:csv.shape[0], Reader.COLUMN_WAVELENGTH].astype('float')})
             spectra.append(spectrum)
         return pandas.DataFrame(spectra)
 
@@ -67,8 +67,8 @@ class Reader:
                                                             spectrum=row['ID_Spectrum']), axis=1)
             spectra.append(patient_datas)
         dataframe = pandas.concat(spectra, sort=False, ignore_index=True)
-        dataframe['Pathological'] = ~(dataframe['Label'] == 'Sain')  # Set new label
-        dataframe['Cancer'] = (dataframe['Label'] == 'Cancer')  # Set new label
+        dataframe['Pathological'] = ~(dataframe['Diagnosis'] == 'Sain')  # Set new label
+        dataframe['Malignant'] = (dataframe['Diagnosis'] == 'Cancer')  # Set new label
         return dataframe
 
     @staticmethod
