@@ -40,7 +40,7 @@ class Reader:
             spectra.append(spectrum)
         return pandas.DataFrame(spectra)
 
-    def read_table(self, table_path):
+    def read_table(self, table_paths):
         """Read a specific file that map meta data and spectrum files
 
         Args:
@@ -50,22 +50,24 @@ class Reader:
             A spectra object.
         """
         # Read csv
-        meta_patient = pandas.read_csv(table_path, dtype=str).fillna('')
-        meta_patient['Reference'] = meta_patient.apply(lambda row: '{id}_{patient}'.format(id=row['Identifier'], patient=row['Patient']), axis=1)
         spectra = []
-        for ind, row in meta_patient.iterrows():
-            current_file = row['File']
-            if not current_file:
-                continue
+        for table_path in table_paths:
+            meta_patient = pandas.read_csv(table_path, dtype=str).fillna('')
+            meta_patient['Reference'] = meta_patient.apply(lambda row: '{id}_{patient}'.format(id=row['Identifier'], patient=row['Patient']), axis=1)
+            for ind, row in meta_patient.iterrows():
+                current_file = row['File']
+                if not current_file:
+                    continue
 
-            patient_datas = Reader.read_file(table_path.parent / table_path.stem / current_file)
-            patient_datas['Reference'] = row['Reference']
-            patient_datas = patient_datas.merge(meta_patient, on='Reference')
+                patient_datas = Reader.read_file(table_path.parent / table_path.stem / current_file)
+                patient_datas['Category'] = table_path.stem
+                patient_datas['Reference'] = row['Reference']
+                patient_datas = patient_datas.merge(meta_patient, on='Reference')
 
-            patient_datas['Ref_Spectrum'] = patient_datas.apply(
-                lambda row: '{reference}_{spectrum}'.format(reference=row['Reference'],
-                                                            spectrum=row['ID_Spectrum']), axis=1)
-            spectra.append(patient_datas)
+                patient_datas['Ref_Spectrum'] = patient_datas.apply(
+                    lambda row: '{reference}_{spectrum}'.format(reference=row['Reference'],
+                                                                spectrum=row['ID_Spectrum']), axis=1)
+                spectra.append(patient_datas)
         dataframe = pandas.concat(spectra, sort=False, ignore_index=True)
         # Set pathological label
         dataframe['Pathological'] = dataframe['Diagnosis']
