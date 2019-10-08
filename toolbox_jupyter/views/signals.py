@@ -2,6 +2,9 @@ import skimage
 import numpy as np
 from matplotlib import pyplot
 from sklearn.feature_selection import SelectKBest, chi2, f_classif
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 
 class SignalsViews:
