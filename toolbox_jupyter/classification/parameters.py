@@ -308,11 +308,11 @@ class Settings:
     @staticmethod
     def get_default_orl():
         colors = dict(Cancer=(0.93, 0.5, 0.2), Precancer=(1, 0.75, 0), Sain=(0.44, 0.68, 0.28),
-                      Pathology=(0.75, 0.75, 0), Rest=(0.90, 0.47, 0), Luck=(0, 0, 1))
+                      Pathological=(0.75, 0.75, 0), Rest=(0.90, 0.47, 0), Luck=(0, 0, 1))
         lines = {'Cancer': {'linestyle': '-'},
                  'Precancer': {'linestyle': '-.'},
                  'Sain': {'linestyle': ':'},
-                 'Pathology': {'linestyle': ':'},
+                 'Pathological': {'linestyle': ':'},
                  'Rest': {'linestyle': '-.'},
                  'Luck': {'linestyle': '--'}}
         return Settings({'colors': colors, 'lines': lines})
@@ -320,11 +320,11 @@ class Settings:
     @staticmethod
     def get_default_dermatology():
         colors = dict(Malignant=(0.93, 0.5, 0.2), Benign=(1, 0.75, 0), Normal=(0.44, 0.68, 0.28),
-                      Pathology=(0.75, 0.75, 0), Rest=(0.90, 0.47, 0), Luck=(0, 0, 1), Draw=(1, 0.25, 0.25))
+                      Pathological=(0.75, 0.75, 0), Rest=(0.90, 0.47, 0), Luck=(0, 0, 1), Draw=(1, 0.25, 0.25))
         lines = {'Malignant': {'linestyle': '-'},
                  'Benign': {'linestyle': '-.'},
                  'Normal': {'linestyle': '-'},
-                 'Pathology': {'linestyle': ':'},
+                 'Pathological': {'linestyle': ':'},
                  'Rest': {'linestyle': '-.'},
                  'Luck': {'linestyle': '--'}}
         return Settings({'colors': colors, 'lines': lines})

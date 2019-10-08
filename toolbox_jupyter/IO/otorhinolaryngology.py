@@ -67,8 +67,14 @@ class Reader:
                                                             spectrum=row['ID_Spectrum']), axis=1)
             spectra.append(patient_datas)
         dataframe = pandas.concat(spectra, sort=False, ignore_index=True)
-        dataframe['Pathological'] = ~(dataframe['Diagnosis'] == 'Sain')  # Set new label
-        dataframe['Malignant'] = (dataframe['Diagnosis'] == 'Cancer')  # Set new label
+        # Set pathological label
+        dataframe['Pathological'] = dataframe['Diagnosis']
+        mask = ~(dataframe['Diagnosis'] == 'Sain')
+        dataframe.loc[mask, 'Pathological'] = 'Pathological'  # Set new label
+        # Set malignant label
+        dataframe['Malignant'] = dataframe['Diagnosis']
+        mask = ~(dataframe['Diagnosis'] == 'Cancer')  # Set new label
+        dataframe.loc[mask, 'Malignant'] = 'Rest'
         return dataframe
 
     @staticmethod
