@@ -60,7 +60,7 @@ class SignalsViews:
         return figure
 
     @staticmethod
-    def analysis(inputs, tags, size=1, mode='Chi 2'):
+    def analysis(inputs, tags, size=1, scale=None, mode='Chi 2'):
         # Check mandatory fields
         mandatory = ['datum', 'wavelength', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -79,19 +79,25 @@ class SignalsViews:
         else:
             kbest = SelectKBest(chi2, k='all').fit(data, labels)
 
+        # Scale pvalues
+        if scale == 'log':
+            p_values = np.log(kbest.pvalues_)
+        else:
+            p_values = kbest.pvalues_
+
         # Display values
         figure, axe = pyplot.subplots()
-        axe.bar(wavelength, kbest.pvalues_)
+        axe.bar(wavelength, p_values)
 
         # Now set title and legend
         axe.set(xlabel=tags['wavelength'],
                 ylabel='P-values',
-                title=mode)
+                title=f'P-values {mode} {scale}')
         # axe.legend(loc='upper left')
         return figure
 
     @staticmethod
-    def analysis_ratio(inputs, tags, relation='div', size=1, mode='Chi 2'):
+    def analysis_ratio(inputs, tags, relation='div', size=1, scale=None, mode='Chi 2'):
         # Check mandatory fields
         mandatory = ['datum', 'wavelength', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -114,7 +120,12 @@ class SignalsViews:
             kbest = SelectKBest(f_classif, k='all').fit(data.reshape(data.shape[0], -1), labels)
         else:
             kbest = SelectKBest(chi2, k='all').fit(data.reshape(data.shape[0], -1), labels)
-        p_values = np.log(kbest.pvalues_.reshape(data.shape[1:]))
+
+        # Scale pvalues
+        if scale == 'log':
+            p_values = np.log(kbest.pvalues_)
+        else:
+            p_values = kbest.pvalues_
 
         # Display values
         figure, axe = pyplot.subplots()
@@ -124,7 +135,7 @@ class SignalsViews:
         figure.colorbar(temp)
         axe.set(xlabel=tags['wavelength'],
                 ylabel=tags['wavelength'],
-                title=mode)
+                title=f'P-values {mode} {scale}')
         return figure
 
     @staticmethod
