@@ -17,13 +17,13 @@ class Views:
             raise Exception('Need to build fold.')
 
         # Check mandatory fields
-        mandatory = ['result']
+        mandatory = ['eval']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Tags
-        features = f'{tags["result"]}_Features'
-        parameters = f'{tags["result"]}_Parameters'
+        features = f'{tags["eval"]}_Features'
+        parameters = f'{tags["eval"]}_Parameters'
 
         unique_folds = np.unique(inputs['Fold'])
         data = {'Fold': [], 'Features': [], 'Parameters': []}
@@ -67,14 +67,14 @@ class Views:
     @staticmethod
     def receiver_operator_curves(inputs, encoder, tags, settings, name=None):
         # Check mandatory fields
-        mandatory = ['label_encode', 'result']
+        mandatory = ['label_encode', 'eval']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Data
         labels = np.array(inputs[tags['label_encode']].to_list())
         unique = np.unique(inputs[tags['label_encode']])
-        probabilities = np.array(inputs[f'{tags["result"]}_Probabilities'].to_list())
+        probabilities = np.array(inputs[f'{tags["eval"]}_Probabilities'].to_list())
 
         figure, axe = pyplot.subplots()
         # Plot luck
@@ -109,13 +109,13 @@ class Views:
             raise Exception('Need to build fold.')
 
         # Check mandatory fields
-        mandatory = ['label_encode', 'prediction']
+        mandatory = ['label_encode', 'eval']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Inputs
         labels = np.array(inputs[tags['label_encode']].tolist())
-        predictions = np.array(inputs[f'{tags["prediction"]}_Predictions'].tolist())
+        predictions = np.array(inputs[f'{tags["eval"]}_Predictions'].tolist())
         folds = np.array(inputs['Fold'].tolist())
 
         # Mean score
