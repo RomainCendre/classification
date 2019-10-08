@@ -176,13 +176,13 @@ class Tools:
         labels = np.array(dataframe.loc[mask, tags['label_encode']].to_list())
 
         if grid is not None:
-            grid_search = GridSearchCV(model, param_grid=grid, cv=2)
+            grid_search = GridSearchCV(model, param_grid=grid, cv=2, iid=False)
             grid_search.fit(data, y=labels)
             model = grid_search.best_estimator_
             model.best_params = grid_search.best_params_
             return model
         elif distribution is not None:
-            random_search = RandomizedSearchCV(model, param_distributions=distribution, cv=2)
+            random_search = RandomizedSearchCV(model, param_distributions=distribution, cv=2, iid=False)
             random_search.fit(data, y=labels)
             model = random_search.best_estimator_
             model.best_params = random_search.best_params_
