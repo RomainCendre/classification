@@ -26,7 +26,8 @@ inputs = Tools.transform(inputs, {'datum': 'Mean'}, ScaleTransform(), 'Scale')
 inputs = Tools.transform(inputs, {'datum': 'Scale'}, DWTTransform(mode='db6', segment=80), 'DWT')
 
 inputs = Folds.build_group_folds(inputs, {'datum': 'Datum', 'label_encode': 'LabelEncode', 'group': 'GroupEncode'}, 4)
-
+ViewsTools.write(SignalsViews.analysis(inputs,  {'datum': 'Scale', 'wavelength': 'Wavelength', 'label_encode': 'Label'}, mode='Anova',), 'C:\\Users\\Romain\\Desktop\\analysis.pdf')
+ViewsTools.write(SignalsViews.analysis_ratio(inputs,  {'datum': 'Scale', 'wavelength': 'Wavelength', 'label_encode': 'Label'}, mode='Anova'), 'C:\\Users\\Romain\\Desktop\\analysis_ratio.pdf')
 simple_pca = Pipeline([('pca', PCA(n_components=0.95)),
                        ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
 grid_pca = {'clf__C': np.geomspace(0.01, 100, 5).tolist()}
