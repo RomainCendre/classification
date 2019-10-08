@@ -10,8 +10,8 @@ from toolbox_jupyter.transforms.labels import OrderedEncoder
 from toolbox_jupyter.transforms.signals import DWTTransform, FilterTransform, ScaleTransform
 
 sys.path.append('/home/rcendre/classification')
-from toolbox_jupyter.core.classification import Tools, Folds
-from toolbox_jupyter.core.parameters import ORL, Settings
+from toolbox_jupyter.classification.common import Tools, Folds
+from toolbox_jupyter.classification.parameters import ORL, Settings
 from toolbox_jupyter.views.common import Views, ViewsTools
 from toolbox_jupyter.views.signals import SignalsViews
 
@@ -37,9 +37,9 @@ SignalsViews.variables(inputs, {'label_encode': 'LabelEncode', 'prediction': 'PC
 
 ViewsTools.write(SignalsViews.variables(inputs, {'datum':'Datum', 'label_encode':'Label'}, settings), 'C:\\Users\\Romain\\Desktop\\test.pdf')
 
-# from toolbox.core.transforms import OrderedEncoder
-# from toolbox_jupyter.core.classification import Folds, Tools
-# from toolbox_jupyter.core.parameters import Dermatology, Settings
+# from toolbox.classification.transforms import OrderedEncoder
+# from toolbox_jupyter.classification.classification import Folds, Tools
+# from toolbox_jupyter.classification.parameters import Dermatology, Settings
 # from toolbox_jupyter.models.builtin import Applications
 # from toolbox_jupyter.IO import images
 # from toolbox_jupyter.transforms.common import PredictorTransform
