@@ -178,14 +178,13 @@ class ViewsTools:
                 mask = ~mask
 
             # Manage data
-            current = inputs[mask]
-            current[out_preds] = current[f'{out_preds}_{fold}']
-            current[out_probas] = current[f'{out_probas}_{fold}']
-            current[out_features] = current[f'{out_features}_{fold}']
-            current[out_params] = current[f'{out_params}_{fold}']
+            inputs.loc[mask, out_preds] = inputs.loc[mask, f'{out_preds}_{fold}']
+            inputs.loc[mask, out_probas] = inputs.loc[mask, f'{out_probas}_{fold}']
+            inputs.loc[mask, out_features] = inputs.loc[mask, f'{out_features}_{fold}']
+            inputs.loc[mask, out_params] = inputs.loc[mask, f'{out_params}_{fold}']
 
             # Inputs
-            data.append(current)
+            data.append(inputs[mask])
         # Build dataframe and purge useless
         dataframe = pandas.concat(data)
         # dataframe.drop()

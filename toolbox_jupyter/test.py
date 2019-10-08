@@ -26,16 +26,12 @@ inputs = Tools.transform(inputs, {'datum': 'Mean'}, ScaleTransform(), 'Scale')
 inputs = Tools.transform(inputs, {'datum': 'Scale'}, DWTTransform(mode='db6', segment=80), 'DWT')
 
 inputs = Folds.build_group_folds(inputs, {'datum': 'Datum', 'label_encode': 'LabelEncode', 'group': 'GroupEncode'}, 4)
-ViewsTools.write(SignalsViews.analysis(inputs,  {'datum': 'Datum', 'wavelength': 'Wavelength', 'label_encode': 'Label'}, mode='Anova'), 'C:\\Users\\Romain\\Desktop\\analysis.pdf')
-ViewsTools.write(SignalsViews.analysis_relation(inputs,  {'datum': 'Datum', 'wavelength': 'Wavelength', 'label_encode': 'Label'}, mode='Anova', scale='log'), 'C:\\Users\\Romain\\Desktop\\analysis_ratio.pdf')
 simple_pca = Pipeline([('pca', PCA(n_components=0.95)),
                        ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
 grid_pca = {'clf__C': np.geomspace(0.01, 100, 5).tolist()}
 inputs = Tools.evaluate(inputs, {'datum': 'Scale', 'label_encode': 'LabelEncode'}, simple_pca, 'PCA_SVM', grid=grid_pca)
 Views.details(inputs, {'result': 'PCA_SVM'})
-SignalsViews.variables(inputs, {'label_encode': 'LabelEncode', 'prediction': 'PCA_SVM'})
-
-ViewsTools.write(SignalsViews.variables(inputs, {'datum':'Datum', 'label_encode':'Label'}, settings), 'C:\\Users\\Romain\\Desktop\\test.pdf')
+Views.report(ViewsTools.data_as(inputs, 'PCA_SVM'), {'label_encode': 'LabelEncode', 'prediction': 'PCA_SVM'}, label_encoder)
 
 # from toolbox.classification.transforms import OrderedEncoder
 # from toolbox_jupyter.classification.classification import Folds, Tools
