@@ -110,7 +110,6 @@ class SignalsViews:
         wavelength = np.mean(wavelength.reshape(-1, size), axis=1)
 
         # Compute p_values, need to reshape to fit 2D, then go back to original
-        # Compute p_values
         if mode == 'Anova':
             kbest = SelectKBest(f_classif, k='all').fit(data.reshape(data.shape[0], -1), labels)
         else:
