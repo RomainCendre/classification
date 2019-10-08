@@ -72,9 +72,9 @@ class Reader:
         mask = ~(dataframe['Diagnosis'] == 'Sain')
         dataframe.loc[mask, 'Pathological'] = 'Pathological'  # Set new label
         # Set malignant label
-        dataframe['Malignant'] = dataframe['Diagnosis']
+        dataframe['Cancerous'] = dataframe['Diagnosis']
         mask = ~(dataframe['Diagnosis'] == 'Cancer')  # Set new label
-        dataframe.loc[mask, 'Malignant'] = 'Rest'
+        dataframe.loc[mask, 'Cancerous'] = 'Rest'
         return dataframe
 
     @staticmethod
