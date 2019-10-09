@@ -7,22 +7,23 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
 
 from toolbox_jupyter.transforms.labels import OrderedEncoder
-from toolbox_jupyter.transforms.signals import DWTTransform, FilterTransform, ScaleTransform
+from toolbox_jupyter.transforms.signals import DWTTransform, FilterTransform, ScaleTransform, RatioTransform
 
 sys.path.append('/home/rcendre/classification')
 from toolbox_jupyter.classification.common import Tools, Folds
 from toolbox_jupyter.classification.parameters import ORL, Settings
 from toolbox_jupyter.views.common import Views, ViewsTools
 from toolbox_jupyter.views.signals import SignalsViews
-
-inputs = ORL.get_spectra(np.arange(start=440, stop=960, step=1))
-label_encoder = OrderedEncoder().fit(['Sain', 'Precancer', 'Cancer'])
-inputs = Tools.transform(inputs, {'datum': 'Label'}, label_encoder, 'LabelEncode')
-group_encoder = LabelEncoder().fit(inputs['Reference'])
-inputs = Tools.transform(inputs, {'datum': 'Reference'}, group_encoder, 'GroupEncode')
-settings = Settings.get_default_orl()
+wavelength = np.arange(start=440, stop=960, step=1)
+inputs = ORL.get_spectra(wavelength)
+# label_encoder = OrderedEncoder().fit(['Sain', 'Precancer', 'Cancer'])
+# inputs = Tools.transform(inputs, {'datum': 'Label'}, label_encoder, 'LabelEncode')
+# group_encoder = LabelEncoder().fit(inputs['Reference'])
+# inputs = Tools.transform(inputs, {'datum': 'Reference'}, group_encoder, 'GroupEncode')
+# settings = Settings.get_default_orl()
 inputs = Tools.transform(inputs, {'datum': 'Datum'}, FilterTransform(5), 'Mean')
 inputs = Tools.transform(inputs, {'datum': 'Mean'}, ScaleTransform(), 'Scale')
+inputs = Tools.transform(inputs, {'datum': 'Mean'}, RatioTransform(ratios=[(540, 575), (545, 575)], wavelength=wavelength), 'Ratios')
 inputs = Tools.transform(inputs, {'datum': 'Scale'}, DWTTransform(mode='db6', segment=80), 'DWT')
 
 inputs = Folds.build_group_folds(inputs, {'datum': 'Datum', 'label_encode': 'LabelEncode', 'group': 'GroupEncode'}, 4)

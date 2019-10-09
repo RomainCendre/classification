@@ -21,6 +21,28 @@ class FilterTransform(BaseEstimator, TransformerMixin):
             np.apply_along_axis((lambda x: medfilt(x, self.size)), 1, x)
 
 
+class RatioTransform(BaseEstimator, TransformerMixin):
+
+    def __init__(self, ratios, wavelength):
+        wavelength = list(wavelength)
+        index_ratios = []
+        for ratio in ratios:
+          index_ratios.append((wavelength.index(ratio[0]), wavelength.index(ratio[1])))
+        self.index_ratios = index_ratios
+
+    def fit(self, x, y=None):
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        features = np.zeros((x.shape[0], len(self.index_ratios)))
+        for index, index_ratio in enumerate(self.index_ratios):
+            features[:, index] = x[:, index_ratio[0]]/x[:, index_ratio[1]]
+        features[features == -np.inf] = 0
+        features[features == np.inf] = 0
+        features[np.isnan(features)] = 0
+        return features
+
+
 class ScaleTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, method='default'):
