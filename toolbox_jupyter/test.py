@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
 
 from toolbox_jupyter.transforms.labels import OrderedEncoder
-from toolbox_jupyter.transforms.signals import DWTTransform, FilterTransform, ScaleTransform, RatioTransform
+from toolbox_jupyter.transforms.signals import FilterTransform, ScaleTransform, FittingTransform
 
 sys.path.append('/home/rcendre/classification')
 from toolbox_jupyter.classification.common import Tools, Folds
@@ -23,8 +23,8 @@ inputs = ORL.get_spectra(wavelength)
 # settings = Settings.get_default_orl()
 inputs = Tools.transform(inputs, {'datum': 'Datum'}, FilterTransform(5), 'Mean')
 inputs = Tools.transform(inputs, {'datum': 'Mean'}, ScaleTransform(), 'Scale')
-inputs = Tools.transform(inputs, {'datum': 'Mean'}, RatioTransform(ratios=[(540, 575), (545, 575)], wavelength=wavelength), 'Ratios')
-inputs = Tools.transform(inputs, {'datum': 'Scale'}, DWTTransform(mode='db6', segment=80), 'DWT')
+fit = FittingTransform().fit(np.array(inputs['Scale'].tolist()))
+inputs = Tools.transform(inputs, {'datum': 'Scale'}, fit, 'Fit')
 
 inputs = Folds.build_group_folds(inputs, {'datum': 'Datum', 'label_encode': 'LabelEncode', 'group': 'GroupEncode'}, 4)
 simple_pca = Pipeline([('pca', PCA(n_components=0.95)),
