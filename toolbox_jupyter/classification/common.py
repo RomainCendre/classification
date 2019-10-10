@@ -155,7 +155,7 @@ class Tools:
             dataframe[fold_features] = Tools.number_of_features(dataframe[mask], fitted_model, fold_params)[fold_params]
             dataframe[fold_params] = [fitted_model.best_params] * len(dataframe)
 
-        print(f'Achieved!', end='\r')
+        print(f'Evaluation achieved!', end='\r')
         return dataframe
 
     @staticmethod

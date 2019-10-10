@@ -203,7 +203,17 @@ class ViewsTools:
 
     @staticmethod
     def dataframe_renderer(dataframe, title):
-        return ViewsTools.DataframeStyler(dataframe).render(table_title=title)
+        if ~isinstance(dataframe, list) and ~isinstance(title, list):
+            return ViewsTools.DataframeStyler(dataframe).render(table_title=title)
+
+        # Check both are lists
+        if not type(dataframe) == type(title) or not len(dataframe) == len(title):
+            raise Exception('Types are inconsistents.')
+
+        html = ''
+        for df, tit in zip(dataframe, title):
+            html += ViewsTools.DataframeStyler(df).render(table_title=tit)+'<br/>'
+        return html
 
     @staticmethod
     def plot_size(size):
