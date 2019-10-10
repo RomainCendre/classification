@@ -138,7 +138,7 @@ class Tools:
 
             # Create mask
             test_mask = folds == fold
-            print(f'Fold {fold} performed...')
+            print(f'Fold {fold} performed...', end='\r')
 
             # Check that current fold respect labels
             if not Tools.__check_labels(dataframe[mask], {'label_encode': tags['label_encode']}, ~test_mask):
@@ -155,6 +155,7 @@ class Tools:
             dataframe[fold_features] = Tools.number_of_features(dataframe[mask], fitted_model, fold_params)[fold_params]
             dataframe[fold_params] = [fitted_model.best_params] * len(dataframe)
 
+        print(f'Achieved!', end='\r')
         return dataframe
 
     @staticmethod
