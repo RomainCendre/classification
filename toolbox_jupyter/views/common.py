@@ -1,6 +1,10 @@
+from pathlib import Path
+
 import pandas
 import numpy as np
 from collections import Counter
+from jinja2 import Environment, ChoiceLoader, FileSystemLoader
+from pandas.io.formats.style import Styler
 from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
 from sklearn.decomposition import PCA
@@ -156,6 +160,13 @@ class Views:
 
 class ViewsTools:
 
+    class DataframeStyler(Styler):
+        env = Environment(loader=ChoiceLoader([
+                                    FileSystemLoader(searchpath=str(Path(__file__).parent/'templates')),
+                                    Styler.loader,  # the default
+                                    ]))
+        template = env.get_template('dataframe.tpl')
+
     @staticmethod
     def data_as(inputs, out_tag, as_train=False):
         # Fold needed for evaluation
@@ -189,6 +200,10 @@ class ViewsTools:
         dataframe = pandas.concat(data)
         # dataframe.drop()
         return dataframe
+
+    @staticmethod
+    def dataframe_renderer(dataframe, title):
+        return ViewsTools.DataframeStyler(dataframe).render(table_title=title)
 
     @staticmethod
     def plot_size(size):
