@@ -203,7 +203,7 @@ class ViewsTools:
 
     @staticmethod
     def dataframe_renderer(dataframe, title):
-        if ~isinstance(dataframe, list) and ~isinstance(title, list):
+        if not isinstance(dataframe, list) and not isinstance(title, list):
             return ViewsTools.DataframeStyler(dataframe).render(table_title=title)
 
         # Check both are lists
