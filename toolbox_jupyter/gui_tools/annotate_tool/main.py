@@ -3,9 +3,8 @@ from pathlib import Path
 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
-
-from toolbox.core.parameters import BuiltInSettings
 from toolbox.gui_tools.annotate_tool.sources.gui import QPatchExtractor
+from toolbox_jupyter.classification.parameters import Settings
 
 if __name__ == '__main__':
 
@@ -16,8 +15,7 @@ if __name__ == '__main__':
     pathologies = ['Normal', 'Benign', 'Malignant', 'Draw']
     home_path = Path().home()
     input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
-    viewer = QPatchExtractor(input_folder, pathologies,
-                             settings=BuiltInSettings.get_default_dermatology())
+    viewer = QPatchExtractor(input_folder, pathologies, settings=Settings.get_default_dermatology())
 
     # Show the viewer and run the application.
     viewer.show()
