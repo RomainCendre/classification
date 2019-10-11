@@ -5,7 +5,7 @@ from pathlib import Path
 from PyQt5 import QtWidgets
 from natsort import natsorted
 from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QRect, QPropertyAnimation, pyqtProperty, QEvent
-from PyQt5.QtGui import QImage, QPixmap, QColor, QPen, QBrush, QKeySequence
+from PyQt5.QtGui import QImage, QPixmap, QColor, QPen, QBrush, QKeySequence, QIcon
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWindow, QWidget, QLabel, \
     QSpinBox, QGraphicsRectItem, QProgressBar, QVBoxLayout, \
     QTableWidget, QTabWidget, QTableWidgetItem, QAbstractItemView, QGraphicsItemGroup, QComboBox, QGroupBox, QAction
@@ -85,22 +85,27 @@ class QPatchExtractor(QMainWindow):
         self.setCentralWidget(global_widget)
 
     def __init_shortcuts(self):
+        icon_folder = Path(__file__).parent.parent / 'images'
         # Navigation
         navigate = self.menuBar().addMenu('&Navigate')
         # Image related
         action = navigate.addAction('Previous Image')
         action.setShortcut(QKeySequence(Qt.CTRL+Qt.Key_Left))
+        action.setIcon(QIcon(str(icon_folder/'sarrow_left.png')))
         action.triggered.connect(lambda: self.change_image(-1))
         action = navigate.addAction('Next Image')
         action.setShortcut(QKeySequence(Qt.CTRL+Qt.Key_Right))
+        action.setIcon(QIcon(str(icon_folder/'sarrow_right.png')))
         action.triggered.connect(lambda: self.change_image(1))
         # Patient related
         navigate.addSeparator()
         action = navigate.addAction('Previous Patient')
         action.setShortcut(QKeySequence(Qt.CTRL+Qt.Key_Down))
+        action.setIcon(QIcon(str(icon_folder/'darrow_left.png')))
         action.triggered.connect(lambda: self.change_patient(-1))
         action = navigate.addAction('Next Patient')
         action.setShortcut(QKeySequence(Qt.CTRL+Qt.Key_Up))
+        action.setIcon(QIcon(str(icon_folder/'darrow_right.png')))
         action.triggered.connect(lambda: self.change_patient(1))
 
         # Pathologies
