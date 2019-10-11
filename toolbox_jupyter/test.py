@@ -23,7 +23,7 @@ inputs = ORL.get_spectra(wavelength)
 # settings = Settings.get_default_orl()
 inputs = Tools.transform(inputs, {'datum': 'Datum'}, FilterTransform(5), 'Mean')
 inputs = Tools.transform(inputs, {'datum': 'Mean'}, ScaleTransform(), 'Scale')
-ViewsTools.dataframe_renderer(inputs, title='Testing')
+ViewsTools.dataframe_renderer([inputs, inputs], title=['Train', 'Testing'])
 fit = FittingTransform().fit(np.array(inputs['Scale'].tolist()))
 inputs = Tools.transform(inputs, {'datum': 'Scale'}, fit, 'Fit')
 
