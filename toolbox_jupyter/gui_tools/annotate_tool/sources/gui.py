@@ -357,6 +357,11 @@ class QLabelWidget(QWidget):
         self.default_value = len(pathologies) - 1
         self.init_gui()
 
+    def eventFilter(self, object, event):
+        if event.type() == QEvent.KeyPress or event.type() == QEvent.KeyRelease:
+            return True
+        return False
+
     def change_mode(self, index):
         self.update_color(index)
         self.change_label.emit(self.pathologies[index])
@@ -367,6 +372,7 @@ class QLabelWidget(QWidget):
     def init_gui(self):
         # Then build annotation tool
         self.table = QTableWidget()
+        self.table.installEventFilter(self)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
