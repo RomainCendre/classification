@@ -1,12 +1,14 @@
+from copy import copy
+
 import pandas as pd
 from pathlib import Path
 from PyQt5 import QtWidgets
 from natsort import natsorted
-from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QRect, QPropertyAnimation, pyqtProperty
-from PyQt5.QtGui import QImage, QPixmap, QColor, QPen, QBrush
+from PyQt5.QtCore import Qt, QRectF, pyqtSignal, QRect, QPropertyAnimation, pyqtProperty, QEvent
+from PyQt5.QtGui import QImage, QPixmap, QColor, QPen, QBrush, QKeySequence
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGridLayout, QMainWindow, QWidget, QLabel, \
     QSpinBox, QGraphicsRectItem, QProgressBar, QVBoxLayout, \
-    QTableWidget, QTabWidget, QTableWidgetItem, QAbstractItemView, QGraphicsItemGroup, QComboBox, QGroupBox
+    QTableWidget, QTabWidget, QTableWidgetItem, QAbstractItemView, QGraphicsItemGroup, QComboBox, QGroupBox, QAction
 from toolbox.IO import dermatology
 
 
@@ -30,6 +32,7 @@ class QPatchExtractor(QMainWindow):
         self.pathologies = pathologies
         self.settings = settings
         self.__init_gui()
+        self.__init_shortcuts()
         # Init the state
         self.change_patient(0)
 
@@ -54,8 +57,6 @@ class QPatchExtractor(QMainWindow):
         parent_layout.addWidget(self.image_bar)
         # Build image viewer
         self.viewer = QtImageViewer()
-        self.viewer.grabKeyboard()
-        self.viewer.keyPressed.connect(self.key_pressed)
         self.viewer.leftMouseButtonPressed.connect(self.click_event)
         self.viewer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         # Build annotate component
@@ -70,6 +71,7 @@ class QPatchExtractor(QMainWindow):
         self.patch_widget.changed_mode.connect(self.viewer.change_mouse_color)
         self.patch_widget.set_value(250)
         self.patch_widget.send_key(0)
+        self.patch_widget.delete_patch.connect(self.delete_patch)
         self.annotate_widget.currentChanged.connect(self.change_mode)
         self.annotate_widget.addTab(self.label_widget, 'Labels')
         self.annotate_widget.addTab(self.patch_widget, 'Patchs')
@@ -82,9 +84,57 @@ class QPatchExtractor(QMainWindow):
         global_layout.addWidget(self.annotate_widget, 2, 0)
         self.setCentralWidget(global_widget)
 
+    def __init_shortcuts(self):
+        # Navigation
+        navigate = self.menuBar().addMenu('&Navigate')
+        # Image related
+        action = navigate.addAction('Previous Image')
+        action.setShortcut(QKeySequence(Qt.CTRL+Qt.Key_Left))
+        action.triggered.connect(lambda: self.change_image(-1))
+        action = navigate.addAction('Next Image')
+        action.setShortcut(QKeySequence(Qt.CTRL+Qt.Key_Right))
+        action.triggered.connect(lambda: self.change_image(1))
+        # Patient related
+        navigate.addSeparator()
+        action = navigate.addAction('Previous Patient')
+        action.setShortcut(QKeySequence(Qt.CTRL+Qt.Key_Down))
+        action.triggered.connect(lambda: self.change_patient(-1))
+        action = navigate.addAction('Next Patient')
+        action.setShortcut(QKeySequence(Qt.CTRL+Qt.Key_Up))
+        action.triggered.connect(lambda: self.change_patient(1))
+
+        # Pathologies
+        # pathologies = self.menuBar().addMenu('&Pathologies')
+        # for index, pathology in enumerate(self.pathologies):
+        #     action = pathologies.addAction(pathology)
+        #     action.setShortcut(QKeySequence(str(index)))
+        #     action.triggered.connect(lambda: self.send_control(0))
+        # SHitty life
+        pathologies = self.menuBar().addMenu('&Pathologies')
+        action = pathologies.addAction('Normal')
+        action.setShortcut(QKeySequence(Qt.Key_0))
+        action.triggered.connect(lambda: self.send_control(0))
+        action = pathologies.addAction('Benign')
+        action.setShortcut(QKeySequence(Qt.Key_1))
+        action.triggered.connect(lambda: self.send_control(1))
+        action = pathologies.addAction('Malignant')
+        action.setShortcut(QKeySequence(Qt.Key_2))
+        action.triggered.connect(lambda: self.send_control(2))
+        action = pathologies.addAction('Draw')
+        action.setShortcut(QKeySequence(Qt.Key_3))
+        action.triggered.connect(lambda: self.send_control(3))
+
     def change_image(self, move):
-        if self.images is None or len(self.images) == 0 or move is None:
+        if self.images is None or len(self.images) == 0:  #No images found
             self.image_index = 0
+        elif move == 'first':
+            self.image_index = 0
+        elif move == 'last':
+            self.image_index = len(self.images)-1
+        elif 0 > self.image_index + move:
+            self.change_patient(-1, 'last')
+        elif len(self.images) <= self.image_index + move:
+            self.change_patient(1, 'first')
         else:
             self.image_index = (self.image_index + move) % len(self.images)
         # Open patches
@@ -112,7 +162,7 @@ class QPatchExtractor(QMainWindow):
         else:
             self.viewer.change_mouse_state(True)
 
-    def change_patient(self, move):
+    def change_patient(self, move, image='first'):
         # Start by closing previous df
         self.close_images()
         self.close_patches()
@@ -123,7 +173,7 @@ class QPatchExtractor(QMainWindow):
         # Open new df
         self.open_patient_and_images()
         self.update_patient()
-        self.reset_image()
+        self.change_image(image)
 
     def click_event(self, x, y):
         # Actions depend on mode
@@ -210,20 +260,6 @@ class QPatchExtractor(QMainWindow):
     def get_patient_folder(self):
         return self.patients_directories[self.patient_index]
 
-    def key_pressed(self, key):
-        # Action that move image of a patient
-        if key == Qt.Key_Left:
-            self.change_image(-1)
-        elif key == Qt.Key_Right:
-            self.change_image(1)
-        # Action that move patient
-        elif key == Qt.Key_Up:
-            self.change_patient(1)
-        elif key == Qt.Key_Down:
-            self.change_patient(-1)
-        elif Qt.Key_0 <= key <= Qt.Key_9 or Qt.Key_Delete:
-            self.tool_controls(key)
-
     def open_patient_and_images(self):
         self.patient = dermatology.Reader.read_patient_file(self.get_patient_folder())
         self.images = dermatology.Reader.read_images_file(self.get_patient_folder(), modality='Microscopy')
@@ -235,17 +271,11 @@ class QPatchExtractor(QMainWindow):
         self.patches = dermatology.Reader.read_patches_file(self.get_patient_folder(),
                                                             modality='Microscopy')
 
-    def reset_image(self):
-        self.change_image(None)
-
-    def tool_controls(self, key):
+    def send_control(self, key):
         if self.get_mode() == QPatchExtractor.LABEL:
-            self.label_widget.send_key(key - Qt.Key_0)
+            self.label_widget.send_key(key)
         else:
-            if key == Qt.Key_Delete:
-                self.delete_patch()
-            else:
-                self.patch_widget.send_key(key - Qt.Key_0)
+            self.patch_widget.send_key(key)
 
     def update_image(self):
         self.image_bar.setValue(self.image_index)
@@ -336,12 +366,11 @@ class QLabelWidget(QWidget):
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.setRowCount(len(self.pathologies))
-        self.table.setColumnCount(3)
-        self.table.setHorizontalHeaderLabels(('Keyboard Shortcut', 'Name', 'Total'))
-        # Keyboard + Label
+        self.table.setColumnCount(2)
+        self.table.setHorizontalHeaderLabels(('Name', 'Total'))
+        # Label
         for index, label in enumerate(self.pathologies):
-            self.table.setItem(index, 0, QTableWidgetItem('Numpad {index}'.format(index=index)))
-            self.table.setItem(index, 1, QTableWidgetItem('{label}'.format(label=label)))
+            self.table.setItem(index, 0, QTableWidgetItem('{label}'.format(label=label)))
         self.table.resizeColumnsToContents()
         hheader = self.table.horizontalHeader()
         hheader.setStretchLastSection(True)
@@ -376,7 +405,7 @@ class QLabelWidget(QWidget):
                 value = 0
             else:
                 value = values.get(label, 0)
-            self.table.setItem(index, 2, QTableWidgetItem('{value}'.format(value=value)))
+            self.table.setItem(index, 1, QTableWidgetItem('{value}'.format(value=value)))
 
     def send_key(self, key):
         if key < 0 or key >= len(self.pathologies):
@@ -397,6 +426,7 @@ class QPatchWidget(QWidget):
     changed_patch_size = pyqtSignal(int)
     changed_patch_selection = pyqtSignal(int)
     changed_mode = pyqtSignal(QColor)
+    delete_patch = pyqtSignal()
 
     def __init__(self, parent, pathologies, settings):
         super(QPatchWidget, self).__init__(parent)
@@ -523,6 +553,8 @@ class QPatchWidget(QWidget):
     def send_key(self, key):
         if key < self.mode.count():
             self.mode.setCurrentIndex(key)
+        elif key == self.mode.count():
+            self.delete_patch.emit()
 
     def send_image(self, image):
         self.patient.setText(F'Patient: ')
