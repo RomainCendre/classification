@@ -1,7 +1,5 @@
 import numpy as np
-
 import os
-
 from keras.utils import Sequence
 from keras_preprocessing import get_keras_submodule
 from keras_preprocessing.image import Iterator, ImageDataGenerator, load_img, img_to_array, array_to_img

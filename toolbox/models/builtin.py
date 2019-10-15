@@ -4,8 +4,8 @@ from keras import applications
 from keras import Sequential, Model
 from sklearn.dummy import DummyClassifier
 from sklearn.pipeline import Pipeline
-from toolbox.core.layers import RandomLayer
-from toolbox.core.models import KerasBatchClassifier
+from toolbox.models.layers import RandomLayer
+from toolbox.models.models import KerasBatchClassifier
 
 
 class Applications:

@@ -10,7 +10,7 @@ from numpy import hstack
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import accuracy_score
 from sklearn.utils.multiclass import unique_labels
-from toolbox.core.generators import ResourcesGenerator
+from toolbox.models.generators import ResourcesGenerator
 
 
 # Decision taking based on predictions
