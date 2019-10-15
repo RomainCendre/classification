@@ -48,8 +48,9 @@ class Dermatology:
     @staticmethod
     def images(modality=None):
         home_path = Path().home()
-        input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
-        return Dermatology.__images(input_folder, modality)
+        location = home_path / 'Data/Skin/'
+        input_folders = [location / 'Elisa.csv', location / 'JeanLuc.csv']
+        return Dermatology.__images(input_folders, modality)
 
     @staticmethod
     def multiresolution(coefficients, modality=None):
@@ -115,7 +116,7 @@ class Dermatology:
     @staticmethod
     def __scan(folder_path, patches=True, modality=None):
         # Browse data
-        return dermatology.Reader().scan_folder(folder_path, parameters={'patches': patches, 'modality': modality})
+        return dermatology.Reader().read_table(folder_path, parameters={'patches': patches, 'modality': modality})
 
     @staticmethod
     def __to_multi(dataframe, coefficients, work_folder):
