@@ -3,7 +3,7 @@ from pathlib import Path
 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
-from guis.annotate_tool.sources import QPatchExtractor
+from guis.annotate_tool.sources.gui import QPatchExtractor
 from toolbox.classification.parameters import Settings
 
 if __name__ == '__main__':
