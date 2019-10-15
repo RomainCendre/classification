@@ -12,7 +12,7 @@ class Reader:
 
     def read_table(self, table_paths, parameters={}):
         # Read csv
-        datas = []
+        data = []
         for table_path in table_paths:
             meta_patient = pandas.read_csv(table_path, dtype=str).fillna('')
             for ind, row in meta_patient.iterrows():
@@ -23,12 +23,12 @@ class Reader:
                     continue
 
                 # Read patient data
-                patient_datas = Reader.read_patient(current_folder)
-                patient_datas = patient_datas.join(pandas.DataFrame(row).transpose()).ffill()
-                datas.append(patient_datas)
+                patient_data = Reader.read_patient(current_folder)
+                patient_data['ID'] = row['ID']
+                data.append(patient_data.set_index('ID').join(pandas.DataFrame(row).transpose().set_index('ID')))
 
         # Merge all data
-        dataframe = pandas.concat(datas, sort=False, ignore_index=True).drop(columns='Path')
+        dataframe = pandas.concat(data, sort=False, ignore_index=True).drop(columns='Path')
         # Set pathological label
         dataframe = dataframe[~(dataframe['Label'] == 'Draw')].reset_index(drop=True)  # Remove unused images
         dataframe['Pathological'] = ~(dataframe['Label'] == 'Normal')  # Set new label
