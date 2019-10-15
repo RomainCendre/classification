@@ -1,3 +1,4 @@
+import warnings
 import numpy as np
 import pandas as pandas
 import pyocr
@@ -9,93 +10,74 @@ from natsort import index_natsorted, order_by_index
 
 class Reader:
 
-    def scan_folder(self, folder_path, parameters={}):
-        # Go through pathlib
-        folder_path = Path(folder_path)
-        if not folder_path.is_dir():
-            raise ValueError('{folder} not a folder'.format(folder=folder_path))
-
-        # Browse subdirectories
+    def read_table(self, table_paths, parameters={}):
+        # Read csv
         datas = []
-        for subdir in folder_path.iterdir():
-            try:
-                datas.append(self.scan_subfolder(subdir, parameters))
-            except OSError:
-                print('Patient {}'.format(subdir))
+        for table_path in table_paths:
+            meta_patient = pandas.read_csv(table_path, dtype=str).fillna('')
+            for ind, row in meta_patient.iterrows():
+                # Parse patient directory
+                current_folder = table_path.parent/'Patients'/row['ID']
+                if not current_folder or not current_folder.is_dir():
+                    warnings.warn(f'Folder {str(current_folder)} not found.')
+                    continue
 
+                # Read patient data
+                patient_datas = Reader.read_patient(current_folder)
+                patient_datas = patient_datas.join(pandas.DataFrame(row).transpose()).ffill()
+                datas.append(patient_datas)
+
+        # Merge all data
         dataframe = pandas.concat(datas, sort=False, ignore_index=True).drop(columns='Path')
+        # Set pathological label
         dataframe = dataframe[~(dataframe['Label'] == 'Draw')].reset_index(drop=True)  # Remove unused images
-        dataframe = dataframe.rename(columns={'Full_Path': 'Datum'})  # Rename column
         dataframe['Pathological'] = ~(dataframe['Label'] == 'Normal')  # Set new label
         dataframe['Malignant'] = (dataframe['Label'] == 'Malignant')  # Set new label
         return dataframe
 
     @staticmethod
-    def scan_subfolder(subdir, parameters={}):
+    def read_patient(subdir, parameters={}):
         # Read patient and images data
-        metas = Reader.read_patient_file(subdir)
-        metas = metas.drop(columns='ID_JLP', errors='ignore')
-        images = Reader.read_images_file(subdir, modality=parameters.get('modality', None))
+        images = Reader.read_data_file(subdir, 'images', modality=parameters.get('modality', None))
         images = images.drop(columns='Depth(um)', errors='ignore')
 
         # Patch filter
         if parameters.get('patches', True):
-            patches = Reader.read_patches_file(subdir, modality=parameters.get('modality', None))
+            patches = Reader.read_data_file(subdir, 'patches', modality=parameters.get('modality', None))
         else:
             patches = None
 
         # Merge both
-        images['ID'] = metas['ID'][0]
-        images = images.merge(metas)
-        images['Reference'] = images.apply(
-            lambda row: '{patient}_{image}_F'.format(patient=row['ID'], image=row.name), axis=1)
+        images['Reference'] = images.apply(lambda row: f'{subdir.stem}_{row.name}_F', axis=1)
         images['Source'] = images['Reference']
 
         if patches is not None:
-            patches['ID'] = metas['ID'][0]
-            patches = patches.merge(metas)
-            patches['Reference'] = patches.apply(
-                lambda row: '{patient}_{image}_P'.format(patient=row['ID'], image=row.name), axis=1)
-            patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0],
-                                              axis=1)
-        return pandas.concat([images, patches], sort=False)
+            patches['Reference'] = patches.apply(lambda row: f'{subdir.stem}_{row.name}_P', axis=1)
+            patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0], axis=1)
+        return pandas.concat([images, patches], sort=False, ignore_index=True)
 
     @staticmethod
-    def read_images_file(subdir, modality=None):
+    def read_data_file(subdir, ftype='images', modality=None):
         # Patient file
-        images_file = subdir/'images.csv'
-        # Folder name
-        folder_name = subdir.name
-        # Read csv and add tag for path
-        images = pandas.read_csv(images_file, dtype=str)
-        if len(images) == 0:
-            return None
-        images = images.reindex(index=order_by_index(images.index, index_natsorted(images.Path)))
-        images['Full_Path'] = images.apply(lambda row: str(subdir/row['Modality']/row['Path']), axis=1)
-        images['Type'] = 'Full'
-        images['Reference2'] = images.apply(
-            lambda row: Reader.filter_str('{id}_{image}'.format(id=folder_name, image=row['Path'])), axis=1)
-        if modality is not None:
-            images = images[images.Modality == modality]
-        return images
-
-    @staticmethod
-    def read_patches_file(subdir, modality=None):
-        # Patient file
-        patch_file = subdir/'patches.csv'
-        if not patch_file.is_file():
+        data_file = subdir/f'{ftype}.csv'
+        if not data_file.is_file():
             return None
 
         # Read csv and add tag for path
-        patches = pandas.read_csv(patch_file, dtype=str)
-        if len(patches) == 0:
+        data = pandas.read_csv(data_file, dtype=str)
+        if len(data) == 0:
             return None
-        # Customize patch table
-        patches['Full_Path'] = patches.apply(lambda row: str(subdir/'patches'/row['Path']), axis=1)
-        patches['Type'] = 'Patch'
+        data = data.reindex(index=order_by_index(data.index, index_natsorted(data.Path)))
+        if ftype == 'images':
+            data['Type'] = 'Full'
+            data['Datum'] = data.apply(lambda row: str(subdir/row['Modality']/row['Path']), axis=1)
+        else:
+            data['Type'] = 'Patch'
+            data['Datum'] = data.apply(lambda row: str(subdir/'patches'/row['Path']), axis=1)
+
         if modality is not None:
-            patches = patches[patches.Modality == modality]
-        return patches
+            data = data[data.Modality == modality]
+        return data
 
     @staticmethod
     def read_patient_file(folder_path):
