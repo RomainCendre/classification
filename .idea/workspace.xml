@@ -1,13 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" description="self.table.setStyleSheet('QTableView{selection-bac..." line="388" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Update parameters for project.">
+    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Update annotation tool.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/core/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox_jupyter/core/classification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/devs/autoencoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/devs/autoencoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/dermatology/devs/variational_autoencoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/dermatology/devs/variational_autoencoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/settings/jupyter_server/launch.sh" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/settings/jupyter_server/launch.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/IO/dermatology.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/dermatology.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/IO/writers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/guis/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/builtin_models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/classification.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/generators.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/classification/generators.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/layers.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/models/layers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/parameters.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/structures.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/core/transforms.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/environment/environment.yml" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/environment/environment.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/guis/annotate_tool/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/guis/annotate_tool/sources/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/images/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/guis/annotate_tool/images/icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/launch.bat" beforeDir="false" afterPath="$PROJECT_DIR$/guis/annotate_tool/launch.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/classification/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/tools/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/tools/tensorboard.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/IO/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/transforms/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/IO/dermatology.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/IO/images.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/images.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/IO/otorhinolaryngology.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/views/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/classification/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/classification/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/classification/common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/classification/generators.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/classification/parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/classification/parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/Microscopy/Benign.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/Microscopy/Malignant.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/Microscopy/Normal.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/images.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/patches.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/patches/0.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/patches/1.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/patches/2.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/patches/3.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/patches/4.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/patches/5.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/patches/6.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/patches/7.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/1/patient.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/Microscopy/Benign.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/Microscopy/Malignant.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/Microscopy/Normal.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/images.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/patches.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/patches/0.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/patches/1.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/patches/2.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/patches/3.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/patches/4.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/patches/5.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/patches/6.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/patches/7.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/Test/2/patient.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/microscopy/basics/Full_benign.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/microscopy/basics/Full_healthy.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/microscopy/basics/Full_malignant.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/microscopy/basics/Patch_benign.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/microscopy/basics/Patch_healthy.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/data_test/dermatology/microscopy/basics/Patch_malignant.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/environment/deploy.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/environment/environment.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/environment/environmentGPU.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/gui_tools/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/images/darrow_left.png" beforeDir="false" afterPath="$PROJECT_DIR$/guis/annotate_tool/images/darrow_left.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/images/darrow_right.png" beforeDir="false" afterPath="$PROJECT_DIR$/guis/annotate_tool/images/darrow_right.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/images/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/images/sarrow_left.png" beforeDir="false" afterPath="$PROJECT_DIR$/guis/annotate_tool/images/sarrow_left.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/images/sarrow_right.png" beforeDir="false" afterPath="$PROJECT_DIR$/guis/annotate_tool/images/sarrow_right.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/launch.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/guis/annotate_tool/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/sources/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/sources/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/guis/annotate_tool/sources/gui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/models/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/models/builtin.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/models/builtin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/models/layers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/models/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/transforms/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/transforms/at_most.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/transforms/at_most.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/transforms/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/transforms/common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/transforms/images.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/transforms/images.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/transforms/labels.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/transforms/labels.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/transforms/signals.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/transforms/signals.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/views/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/views/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/views/common.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/views/images.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/views/images.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/views/signals.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/views/signals.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox_jupyter/views/templates/dataframe.tpl" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/views/templates/dataframe.tpl" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,12 +114,13 @@
     <SUITE FILE_PATH="coverage/classification$gui.coverage" NAME="gui Coverage Results" MODIFIED="1564491253767" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources" />
     <SUITE FILE_PATH="coverage/classification$multiscale_features.coverage" NAME="multiscale_features Coverage Results" MODIFIED="1562166368435" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
     <SUITE FILE_PATH="coverage/classification$test_experiments.coverage" NAME="test_experiments Coverage Results" MODIFIED="1559894677583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
-    <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1568904715964" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool" />
+    <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1569920487823" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool" />
     <SUITE FILE_PATH="coverage/classification$score_level.coverage" NAME="score_level Coverage Results" MODIFIED="1557316745744" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$Unittests_for_test_experiments_TestMicroscopySliding_test_features.coverage" NAME="Unittests for test_experiments.TestMicroscopySliding.test_features Coverage Results" MODIFIED="1568387943943" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$Unittests_for_test_experiments_TestMicroscopyWhole_test_manual.coverage" NAME="Unittests for test_experiments.TestMicroscopyWhole.test_manual Coverage Results" MODIFIED="1568629880760" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$features_level.coverage" NAME="features_level Coverage Results" MODIFIED="1559638826584" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$descriptors.coverage" NAME="descriptors Coverage Results" MODIFIED="1566558109613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
+    <SUITE FILE_PATH="coverage/classification$views.coverage" NAME="views Coverage Results" MODIFIED="1570021917103" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox_jupyter/core" />
     <SUITE FILE_PATH="coverage/classification$test_patch_decision.coverage" NAME="test_patch_decision Coverage Results" MODIFIED="1556864411525" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/classification$classification.coverage" NAME="classification Coverage Results" MODIFIED="1558448673939" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/core" />
     <SUITE FILE_PATH="coverage/classification$multiscale_decisions.coverage" NAME="multiscale_decisions Coverage Results" MODIFIED="1562316868107" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
@@ -35,11 +131,11 @@
     <SUITE FILE_PATH="coverage/classification$b_manual.coverage" NAME="b_manual Coverage Results" MODIFIED="1568356404248" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
     <SUITE FILE_PATH="coverage/classification$decisions_level.coverage" NAME="decisions_level Coverage Results" MODIFIED="1560771913303" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window" />
     <SUITE FILE_PATH="coverage/classification$transferlearning.coverage" NAME="transferlearning Coverage Results" MODIFIED="1566558213857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy" />
-    <SUITE FILE_PATH="coverage/classification$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1565089113524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool" />
+    <SUITE FILE_PATH="coverage/classification$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1571059346864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool" />
     <SUITE FILE_PATH="coverage/classification$temp.coverage" NAME="temp Coverage Results" MODIFIED="1564754098396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/gui_tools/patchifier/sources" />
     <SUITE FILE_PATH="coverage/classification$Unittests_for_test_experiments_TestMicroscopyWhole_test_transfer_learning.coverage" NAME="Unittests for test_experiments.TestMicroscopyWhole.test_transfer_learning Coverage Results" MODIFIED="1565100432395" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$decisions_level__1_.coverage" NAME="decisions_level (1) Coverage Results" MODIFIED="1560425324590" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/sliding_window_semisupervised" />
-    <SUITE FILE_PATH="coverage/classification$test.coverage" NAME="test Coverage Results" MODIFIED="1568994319735" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox_jupyter" />
+    <SUITE FILE_PATH="coverage/classification$test.coverage" NAME="test Coverage Results" MODIFIED="1570692264140" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox_jupyter" />
     <SUITE FILE_PATH="coverage/classification$Unittests_for_test_experiments_TestMicroscopyWhole_test_descriptors.coverage" NAME="Unittests for test_experiments.TestMicroscopyWhole.test_descriptors Coverage Results" MODIFIED="1565163388875" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
     <SUITE FILE_PATH="coverage/classification$simple__1_.coverage" NAME="simple (1) Coverage Results" MODIFIED="1557824978247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/otorhinolaryngology" />
     <SUITE FILE_PATH="coverage/classification$Unittests_in_test_experiments_py.coverage" NAME="Unittests in test_experiments.py Coverage Results" MODIFIED="1568367847026" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
@@ -59,34 +155,69 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/toolbox_jupyter/core/classification.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/toolbox/views/common.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+            <state relative-caret-position="3298">
+              <caret line="205" column="46" selection-start-line="205" selection-start-column="43" selection-end-line="205" selection-end-column="46" />
               <folding>
-                <element signature="e#1#12#0" expanded="true" />
+                <element signature="e#0#24#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+        <entry file="file://$PROJECT_DIR$/guis/annotate_tool/launch.bat">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1836">
-              <caret column="15" lean-forward="true" selection-start-column="15" selection-end-line="1" selection-end-column="25" />
+            <state relative-caret-position="51">
+              <caret line="3" column="5" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox_jupyter/test.py">
+        <entry file="file://$PROJECT_DIR$/guis/annotate_tool/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
+            <state relative-caret-position="51">
+              <caret line="3" column="29" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy_old/descriptors.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="612">
+              <caret line="48" column="38" selection-start-line="48" selection-start-column="38" selection-end-line="48" selection-end-column="38" />
               <folding>
-                <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#0#16#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/experiments/settings/cluster_local/config_cluster.sh">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/experiments/settings/cluster_local/send_data.bat">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="4" column="26" selection-start-line="4" selection-start-column="26" selection-end-line="4" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/guis/annotate_tool/sources/gui.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="5950">
+              <caret line="361" column="23" selection-start-line="361" selection-start-column="23" selection-end-line="361" selection-end-column="23" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -103,26 +234,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>read_patches_file</find>
-      <find>send_pat</find>
-      <find>get_im</find>
-      <find>read</find>
-      <find>self.data</find>
-      <find>self.patches</find>
-      <find>self.pa</find>
-      <find>self.patch</find>
-      <find>close_patches</find>
-      <find>close_images</find>
-      <find>drop</find>
-      <find>ref_to_images</find>
-      <find>compute_microscopy</find>
-      <find>update_color</find>
-      <find>change_image_label</find>
-      <find>Full</find>
-      <find>__images</find>
-      <find>temporary_folder</find>
-      <find>__scoring</find>
-      <find>process.begin(inner_cv=validation, n_jobs=nb_cpu, scoring='f1')</find>
       <find>print(</find>
       <find>scoring='f1'</find>
       <find>misvm</find>
@@ -133,10 +244,32 @@
       <find>send_patches</find>
       <find>size</find>
       <find>copy</find>
+      <find>data</find>
+      <find>'data'</find>
+      <find>__check_labels</find>
+      <find>index</find>
+      <find>self.mean</find>
+      <find>fold</find>
+      <find>__get_report_values</find>
+      <find>classification_report</find>
+      <find>'label'</find>
+      <find>apply</find>
+      <find>subplots</find>
+      <find>geomspace</find>
+      <find>concatenate</find>
+      <find>report</find>
+      <find>Label</find>
+      <find>hist</find>
+      <find>fit</find>
+      <find>key_pressed</find>
+      <find>send_key</find>
+      <find>QPatchWidget</find>
     </findStrings>
     <replaceStrings>
       <replace />
       <replace>'</replace>
+      <replace>'datum'</replace>
+      <replace>'label_encode'</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -149,42 +282,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/transferlearning.py" />
-        <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
-        <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/descriptors.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/1_descriptors.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/1_deep.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/2_descriptors.py" />
-        <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/b_descriptors.py" />
-        <option value="$PROJECT_DIR$/experiments/cluster_ub/send_data.bat" />
-        <option value="$PROJECT_DIR$/toolbox/core/transforms.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/c_multiscale.py" />
-        <option value="$PROJECT_DIR$/experiments/test_experiments.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/d_features.py" />
-        <option value="$PROJECT_DIR$/experiments/cluster_ub/config_cluster.sh" />
-        <option value="$PROJECT_DIR$/experiments/cluster_ub/deep.job" />
-        <option value="$PROJECT_DIR$/experiments/processes.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/b_manual.py" />
-        <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/devs/a_simple_descriptors.py" />
-        <option value="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/launch.sh" />
-        <option value="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/launch.bat" />
-        <option value="$PROJECT_DIR$/experiments/settings/cluster_local/send_data.bat" />
-        <option value="$PROJECT_DIR$/experiments/settings/cluster_ub/send_data.bat" />
-        <option value="$PROJECT_DIR$/experiments/settings/spyder_server/get.sh" />
-        <option value="$PROJECT_DIR$/experiments/settings/spyder_server/configure.sh" />
-        <option value="$PROJECT_DIR$/experiments/settings/spyder_server/launch.sh" />
         <option value="$PROJECT_DIR$/experiments/settings/spyder_server/get_configurations.sh" />
         <option value="$PROJECT_DIR$/experiments/settings/spyder_server/gui.bat" />
         <option value="$PROJECT_DIR$/experiments/settings/spyder_server/get_configurations.bat" />
         <option value="$PROJECT_DIR$/experiments/settings/spyder_server/ssh_conf.py" />
         <option value="$PROJECT_DIR$/experiments/settings/jupyter_server/configure.sh" />
-        <option value="$PROJECT_DIR$/experiments/settings/jupyter_server/launch.sh" />
-        <option value="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/core/structures.py" />
-        <option value="$PROJECT_DIR$/toolbox_jupyter/IO/dermatology.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/core/transforms.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/core/transforms/image_transforms.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/core/transforms/label_transforms.py" />
@@ -195,19 +298,49 @@
         <option value="$PROJECT_DIR$/toolbox_jupyter/transforms/transforms.py" />
         <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/models/builtin.py" />
-        <option value="$PROJECT_DIR$/toolbox_jupyter/IO/image.py" />
         <option value="$PROJECT_DIR$/toolbox/core/parameters.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/transforms/label.py" />
+        <option value="$PROJECT_DIR$/toolbox/core/classification.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/IO/writers.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/transforms/image.py" />
+        <option value="$PROJECT_DIR$/experiments/settings/cluster_local/send_data.bat" />
+        <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
+        <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/core/views.py" />
+        <option value="$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/transforms/orl.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/views/patches.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/environment/environment.yml" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/environment/environmentGPU.yml" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/IO/dermatology.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/IO/image.py" />
+        <option value="$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/views/images.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/core/parameters.py" />
-        <option value="$PROJECT_DIR$/toolbox_jupyter/test.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/transforms/images.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/transforms/common.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/models/models.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/views/signals.py" />
         <option value="$PROJECT_DIR$/toolbox_jupyter/core/classification.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/classification/parameters.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/transforms/signals.py" />
+        <option value="$PROJECT_DIR$/experiments/settings/jupyter_server/launch.sh" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/views/templates/dataframe.tpl" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/classification/common.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/test.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/views/common.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/IO/otorhinolaryngology.py" />
+        <option value="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/main.py" />
+        <option value="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/sources/gui.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1545" />
-    <option name="y" value="285" />
-    <option name="width" value="1440" />
-    <option name="height" value="774" />
+    <option name="x" value="-2570" />
+    <option name="y" value="-370" />
+    <option name="width" value="2579" />
+    <option name="height" value="1409" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -224,80 +357,12 @@
             <path>
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
               <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-              <item name="dermatology" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-              <item name="dermatology" type="462c0819:PsiDirectoryNode" />
-              <item name="microscopy" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-              <item name="otorhinolaryngology" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-              <item name="settings" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-              <item name="settings" type="462c0819:PsiDirectoryNode" />
-              <item name="cluster_local" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="experiments" type="462c0819:PsiDirectoryNode" />
-              <item name="settings" type="462c0819:PsiDirectoryNode" />
-              <item name="cluster_ub" type="462c0819:PsiDirectoryNode" />
+              <item name="guis" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="classification" type="b2602c69:ProjectViewProjectNode" />
               <item name="classification" type="462c0819:PsiDirectoryNode" />
               <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox_jupyter" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox_jupyter" type="462c0819:PsiDirectoryNode" />
-              <item name="core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox_jupyter" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox_jupyter" type="462c0819:PsiDirectoryNode" />
-              <item name="transforms" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -308,25 +373,25 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/experiments/cluster_ub" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox_jupyter\gui_tools\annotate_tool\images" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox_jupyter\views" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox_jupyter\models" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox_jupyter" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox_jupyter\core\transforms" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox_jupyter\core\transforms" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\settings\jupyter_server" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\microscopy" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\cluster_ub" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\cluster_local" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox_jupyter\models" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox_jupyter" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox_jupyter\core\transforms" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\settings" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\experiments\dermatology\devs" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -341,7 +406,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.main (1)">
     <configuration name="a_deep" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -356,6 +421,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="classification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -408,43 +495,35 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for test_experiments.TestMicroscopySliding.test_features" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="views" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/experiments" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/toolbox_jupyter/core" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_experiments.TestMicroscopySliding.test_features&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Unittests for test_experiments.TestMicroscopyWhole.test_manual" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <module name="classification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/experiments" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_experiments.TestMicroscopyWhole.test_manual&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <option name="SCRIPT_NAME" value="C:\Users\Romain\PycharmProjects\classification\toolbox_jupyter\views\common.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main (1)" />
         <item itemvalue="Python.test" />
-        <item itemvalue="Python.a_deep" />
+        <item itemvalue="Python.views" />
         <item itemvalue="Python.main" />
-        <item itemvalue="Python tests.Unittests for test_experiments.TestMicroscopyWhole.test_manual" />
-        <item itemvalue="Python tests.Unittests for test_experiments.TestMicroscopySliding.test_features" />
+        <item itemvalue="Python.a_deep" />
       </list>
     </recent_temporary>
   </component>
@@ -539,352 +618,362 @@
       <workItem from="1568809356955" duration="5536000" />
       <workItem from="1568874105276" duration="5704000" />
       <workItem from="1568898810807" duration="4949000" />
-      <workItem from="1568960463178" duration="25166000" />
+      <workItem from="1568960463178" duration="27095000" />
+      <workItem from="1569227550897" duration="71026000" />
+      <workItem from="1569913116415" duration="54020000" />
+      <workItem from="1570092282326" duration="21939000" />
+      <workItem from="1570427180564" duration="22957000" />
+      <workItem from="1570513707955" duration="31221000" />
+      <workItem from="1570686169480" duration="6532000" />
+      <workItem from="1570781709828" duration="13339000" />
+      <workItem from="1571031888019" duration="578000" />
+      <workItem from="1571033021944" duration="1968000" />
+      <workItem from="1571118937608" duration="900000" />
     </task>
-    <task id="LOCAL-00200" summary="Update current procedures.">
-      <created>1568281085276</created>
-      <option name="number" value="00200" />
-      <option name="presentableId" value="LOCAL-00200" />
+    <task id="LOCAL-00293" summary="Update ORL stuff to be consistent.">
+      <created>1570017860667</created>
+      <option name="number" value="00293" />
+      <option name="presentableId" value="LOCAL-00293" />
       <option name="project" value="LOCAL" />
-      <updated>1568281085276</updated>
+      <updated>1570017860667</updated>
     </task>
-    <task id="LOCAL-00201" summary="Update Transform module (remove unused lib)">
-      <created>1568281534284</created>
-      <option name="number" value="00201" />
-      <option name="presentableId" value="LOCAL-00201" />
+    <task id="LOCAL-00294" summary="Fix change wavelength function.">
+      <created>1570018219648</created>
+      <option name="number" value="00294" />
+      <option name="presentableId" value="LOCAL-00294" />
       <option name="project" value="LOCAL" />
-      <updated>1568281534284</updated>
+      <updated>1570018219648</updated>
     </task>
-    <task id="LOCAL-00202" summary="Add parents creation in new procedures.">
-      <created>1568281608435</created>
-      <option name="number" value="00202" />
-      <option name="presentableId" value="LOCAL-00202" />
+    <task id="LOCAL-00295" summary="Fix wavelength interp.">
+      <created>1570018353054</created>
+      <option name="number" value="00295" />
+      <option name="presentableId" value="LOCAL-00295" />
       <option name="project" value="LOCAL" />
-      <updated>1568281608435</updated>
+      <updated>1570018353054</updated>
     </task>
-    <task id="LOCAL-00203" summary="Remove unwanted value extraction in procedure (imtype)">
-      <created>1568281877295</created>
-      <option name="number" value="00203" />
-      <option name="presentableId" value="LOCAL-00203" />
+    <task id="LOCAL-00296" summary="Add ORL views.">
+      <created>1570020741612</created>
+      <option name="number" value="00296" />
+      <option name="presentableId" value="LOCAL-00296" />
       <option name="project" value="LOCAL" />
-      <updated>1568281877295</updated>
+      <updated>1570020741612</updated>
     </task>
-    <task id="LOCAL-00204" summary="Fix inputs in procedures.">
-      <created>1568297437811</created>
-      <option name="number" value="00204" />
-      <option name="presentableId" value="LOCAL-00204" />
+    <task id="LOCAL-00297" summary="Fix orl method.">
+      <created>1570020861069</created>
+      <option name="number" value="00297" />
+      <option name="presentableId" value="LOCAL-00297" />
       <option name="project" value="LOCAL" />
-      <updated>1568297437811</updated>
+      <updated>1570020861069</updated>
     </task>
-    <task id="LOCAL-00205" summary="New update on UB server settings.">
-      <created>1568299761756</created>
-      <option name="number" value="00205" />
-      <option name="presentableId" value="LOCAL-00205" />
+    <task id="LOCAL-00298" summary="Fix mean view for ORL.">
+      <created>1570022102836</created>
+      <option name="number" value="00298" />
+      <option name="presentableId" value="LOCAL-00298" />
       <option name="project" value="LOCAL" />
-      <updated>1568299761756</updated>
+      <updated>1570022102836</updated>
     </task>
-    <task id="LOCAL-00206" summary="Update sub input creation.">
-      <created>1568301182946</created>
-      <option name="number" value="00206" />
-      <option name="presentableId" value="LOCAL-00206" />
+    <task id="LOCAL-00299" summary="Update ORL tags.">
+      <created>1570023191507</created>
+      <option name="number" value="00299" />
+      <option name="presentableId" value="LOCAL-00299" />
       <option name="project" value="LOCAL" />
-      <updated>1568301182946</updated>
+      <updated>1570023191507</updated>
     </task>
-    <task id="LOCAL-00207" summary="Update job (mispell resource)">
-      <created>1568301599079</created>
-      <option name="number" value="00207" />
-      <option name="presentableId" value="LOCAL-00207" />
+    <task id="LOCAL-00300" summary="Add transforms for signals.">
+      <created>1570031225095</created>
+      <option name="number" value="00300" />
+      <option name="presentableId" value="LOCAL-00300" />
       <option name="project" value="LOCAL" />
-      <updated>1568301599079</updated>
+      <updated>1570031225095</updated>
     </task>
-    <task id="LOCAL-00208" summary="Update folder output + Remove duplicate of main">
-      <created>1568356835917</created>
-      <option name="number" value="00208" />
-      <option name="presentableId" value="LOCAL-00208" />
+    <task id="LOCAL-00301" summary="Paremeter for wavelength.">
+      <created>1570031729567</created>
+      <option name="number" value="00301" />
+      <option name="presentableId" value="LOCAL-00301" />
       <option name="project" value="LOCAL" />
-      <updated>1568356835917</updated>
+      <updated>1570031729567</updated>
     </task>
-    <task id="LOCAL-00209" summary="Adding compute methods.">
-      <created>1568357221165</created>
-      <option name="number" value="00209" />
-      <option name="presentableId" value="LOCAL-00209" />
+    <task id="LOCAL-00302" summary="Remove unused tool directory.">
+      <created>1570083880571</created>
+      <option name="number" value="00302" />
+      <option name="presentableId" value="LOCAL-00302" />
       <option name="project" value="LOCAL" />
-      <updated>1568357221165</updated>
+      <updated>1570083880571</updated>
     </task>
-    <task id="LOCAL-00210" summary="Adding fix for GPU.">
-      <created>1568357822121</created>
-      <option name="number" value="00210" />
-      <option name="presentableId" value="LOCAL-00210" />
+    <task id="LOCAL-00303" summary="Move viewer files.">
+      <created>1570084132045</created>
+      <option name="number" value="00303" />
+      <option name="presentableId" value="LOCAL-00303" />
       <option name="project" value="LOCAL" />
-      <updated>1568357822121</updated>
+      <updated>1570084132045</updated>
     </task>
-    <task id="LOCAL-00211" summary="Adding fix for GPU.">
-      <created>1568357987688</created>
-      <option name="number" value="00211" />
-      <option name="presentableId" value="LOCAL-00211" />
+    <task id="LOCAL-00304" summary="Adding a histogram representation.">
+      <created>1570095098320</created>
+      <option name="number" value="00304" />
+      <option name="presentableId" value="LOCAL-00304" />
       <option name="project" value="LOCAL" />
-      <updated>1568357987688</updated>
+      <updated>1570095098322</updated>
     </task>
-    <task id="LOCAL-00212" summary="Adding fix for GPU.">
-      <created>1568367992702</created>
-      <option name="number" value="00212" />
-      <option name="presentableId" value="LOCAL-00212" />
+    <task id="LOCAL-00305" summary="Remove fix sized.">
+      <created>1570095805227</created>
+      <option name="number" value="00305" />
+      <option name="presentableId" value="LOCAL-00305" />
       <option name="project" value="LOCAL" />
-      <updated>1568367992702</updated>
+      <updated>1570095805227</updated>
     </task>
-    <task id="LOCAL-00213" summary="Adding procedure for merging bag of features.">
-      <created>1568386563391</created>
-      <option name="number" value="00213" />
-      <option name="presentableId" value="LOCAL-00213" />
+    <task id="LOCAL-00306" summary="Add setting of plot size.">
+      <created>1570095867886</created>
+      <option name="number" value="00306" />
+      <option name="presentableId" value="LOCAL-00306" />
       <option name="project" value="LOCAL" />
-      <updated>1568386563391</updated>
+      <updated>1570095867886</updated>
     </task>
-    <task id="LOCAL-00214" summary="Fix GPU???">
-      <created>1568472725302</created>
-      <option name="number" value="00214" />
-      <option name="presentableId" value="LOCAL-00214" />
+    <task id="LOCAL-00307" summary="Change inputs.">
+      <created>1570110132819</created>
+      <option name="number" value="00307" />
+      <option name="presentableId" value="LOCAL-00307" />
       <option name="project" value="LOCAL" />
-      <updated>1568472725302</updated>
+      <updated>1570110132819</updated>
     </task>
-    <task id="LOCAL-00215" summary="Update config cluster.">
-      <created>1568476031186</created>
-      <option name="number" value="00215" />
-      <option name="presentableId" value="LOCAL-00215" />
+    <task id="LOCAL-00308" summary="Change Data to Datum.">
+      <created>1570114644585</created>
+      <option name="number" value="00308" />
+      <option name="presentableId" value="LOCAL-00308" />
       <option name="project" value="LOCAL" />
-      <updated>1568476031186</updated>
+      <updated>1570114644585</updated>
     </task>
-    <task id="LOCAL-00216" summary="Update gui, fix deletion bug.">
-      <created>1568624052102</created>
-      <option name="number" value="00216" />
-      <option name="presentableId" value="LOCAL-00216" />
+    <task id="LOCAL-00309" summary="Manage all naming conventions, add features function.">
+      <created>1570169940843</created>
+      <option name="number" value="00309" />
+      <option name="presentableId" value="LOCAL-00309" />
       <option name="project" value="LOCAL" />
-      <updated>1568624052102</updated>
+      <updated>1570169940843</updated>
     </task>
-    <task id="LOCAL-00217" summary="Use RandomSearch instead of GridSearch.">
-      <created>1568625728917</created>
-      <option name="number" value="00217" />
-      <option name="presentableId" value="LOCAL-00217" />
+    <task id="LOCAL-00310" summary="Fix some elements from images transformations.">
+      <created>1570171496108</created>
+      <option name="number" value="00310" />
+      <option name="presentableId" value="LOCAL-00310" />
       <option name="project" value="LOCAL" />
-      <updated>1568625728917</updated>
+      <updated>1570171496108</updated>
     </task>
-    <task id="LOCAL-00218" summary="Undo - Use RandomSearch instead of GridSearch.">
-      <created>1568631091186</created>
-      <option name="number" value="00218" />
-      <option name="presentableId" value="LOCAL-00218" />
+    <task id="LOCAL-00311" summary="Add distribution method.">
+      <created>1570190218895</created>
+      <option name="number" value="00311" />
+      <option name="presentableId" value="LOCAL-00311" />
       <option name="project" value="LOCAL" />
-      <updated>1568631091186</updated>
+      <updated>1570190218895</updated>
     </task>
-    <task id="LOCAL-00219" summary="Adding a shortcut bat file.">
-      <created>1568712532691</created>
-      <option name="number" value="00219" />
-      <option name="presentableId" value="LOCAL-00219" />
+    <task id="LOCAL-00312" summary="Move some class and reproduce Ahmed algorithm">
+      <created>1570430453667</created>
+      <option name="number" value="00312" />
+      <option name="presentableId" value="LOCAL-00312" />
       <option name="project" value="LOCAL" />
-      <updated>1568712532691</updated>
+      <updated>1570430453667</updated>
     </task>
-    <task id="LOCAL-00220" summary="Adding some automatic way for resolving user dir.">
-      <created>1568712717078</created>
-      <option name="number" value="00220" />
-      <option name="presentableId" value="LOCAL-00220" />
+    <task id="LOCAL-00313" summary="Add details function.">
+      <created>1570437175114</created>
+      <option name="number" value="00313" />
+      <option name="presentableId" value="LOCAL-00313" />
       <option name="project" value="LOCAL" />
-      <updated>1568712717078</updated>
+      <updated>1570437175114</updated>
     </task>
-    <task id="LOCAL-00221" summary="Adding spyder configuration files.">
-      <created>1568796488205</created>
-      <option name="number" value="00221" />
-      <option name="presentableId" value="LOCAL-00221" />
+    <task id="LOCAL-00314" summary="Update the way views are provided.">
+      <created>1570441886611</created>
+      <option name="number" value="00314" />
+      <option name="presentableId" value="LOCAL-00314" />
       <option name="project" value="LOCAL" />
-      <updated>1568796488205</updated>
+      <updated>1570441886611</updated>
     </task>
-    <task id="LOCAL-00222" summary="Adding some spyder local configuration for GUI.">
-      <created>1568801016429</created>
-      <option name="number" value="00222" />
-      <option name="presentableId" value="LOCAL-00222" />
+    <task id="LOCAL-00315" summary="Change names.">
+      <created>1570445034504</created>
+      <option name="number" value="00315" />
+      <option name="presentableId" value="LOCAL-00315" />
       <option name="project" value="LOCAL" />
-      <updated>1568801016429</updated>
+      <updated>1570445034504</updated>
     </task>
-    <task id="LOCAL-00223" summary="Adding some spyder local configuration for GUI.">
-      <created>1568810562362</created>
-      <option name="number" value="00223" />
-      <option name="presentableId" value="LOCAL-00223" />
+    <task id="LOCAL-00316" summary="Fix index from group labels.">
+      <created>1570449807598</created>
+      <option name="number" value="00316" />
+      <option name="presentableId" value="LOCAL-00316" />
       <option name="project" value="LOCAL" />
-      <updated>1568810562376</updated>
+      <updated>1570449807598</updated>
     </task>
-    <task id="LOCAL-00224" summary="Adding jupyter server configuration.">
-      <created>1568815948777</created>
-      <option name="number" value="00224" />
-      <option name="presentableId" value="LOCAL-00224" />
+    <task id="LOCAL-00317" summary="Add some improvements.">
+      <created>1570457374394</created>
+      <option name="number" value="00317" />
+      <option name="presentableId" value="LOCAL-00317" />
       <option name="project" value="LOCAL" />
-      <updated>1568815948777</updated>
+      <updated>1570457374394</updated>
     </task>
-    <task id="LOCAL-00225" summary="Adding some check on patchs number by patients.">
-      <created>1568879916291</created>
-      <option name="number" value="00225" />
-      <option name="presentableId" value="LOCAL-00225" />
+    <task id="LOCAL-00318" summary="Adding visualization of pvalues.">
+      <created>1570526513244</created>
+      <option name="number" value="00318" />
+      <option name="presentableId" value="LOCAL-00318" />
       <option name="project" value="LOCAL" />
-      <updated>1568879916292</updated>
+      <updated>1570526513245</updated>
     </task>
-    <task id="LOCAL-00226" summary="Adding folder fork for jupyter.">
-      <created>1568902186584</created>
-      <option name="number" value="00226" />
-      <option name="presentableId" value="LOCAL-00226" />
+    <task id="LOCAL-00319" summary="Remove useless line.">
+      <created>1570526576268</created>
+      <option name="number" value="00319" />
+      <option name="presentableId" value="LOCAL-00319" />
       <option name="project" value="LOCAL" />
-      <updated>1568902186584</updated>
+      <updated>1570526576268</updated>
     </task>
-    <task id="LOCAL-00227" summary="Adding folder browser.">
-      <created>1568903622320</created>
-      <option name="number" value="00227" />
-      <option name="presentableId" value="LOCAL-00227" />
+    <task id="LOCAL-00320" summary="Change display.">
+      <created>1570527226689</created>
+      <option name="number" value="00320" />
+      <option name="presentableId" value="LOCAL-00320" />
       <option name="project" value="LOCAL" />
-      <updated>1568903622320</updated>
+      <updated>1570527226689</updated>
     </task>
-    <task id="LOCAL-00228" summary="Fix image extraction.">
-      <created>1568905046435</created>
-      <option name="number" value="00228" />
-      <option name="presentableId" value="LOCAL-00228" />
+    <task id="LOCAL-00321" summary="Fix analysis.">
+      <created>1570527671503</created>
+      <option name="number" value="00321" />
+      <option name="presentableId" value="LOCAL-00321" />
       <option name="project" value="LOCAL" />
-      <updated>1568905046435</updated>
+      <updated>1570527671503</updated>
     </task>
-    <task id="LOCAL-00229" summary="Organize Transformations">
-      <created>1568962077294</created>
-      <option name="number" value="00229" />
-      <option name="presentableId" value="LOCAL-00229" />
+    <task id="LOCAL-00322" summary="Remove warning from sklearn.">
+      <created>1570538161276</created>
+      <option name="number" value="00322" />
+      <option name="presentableId" value="LOCAL-00322" />
       <option name="project" value="LOCAL" />
-      <updated>1568962077295</updated>
+      <updated>1570538161276</updated>
     </task>
-    <task id="LOCAL-00230" summary="Rename Fourier">
-      <created>1568962171954</created>
-      <option name="number" value="00230" />
-      <option name="presentableId" value="LOCAL-00230" />
+    <task id="LOCAL-00323" summary="Add iid to False (remove warn).">
+      <created>1570538979126</created>
+      <option name="number" value="00323" />
+      <option name="presentableId" value="LOCAL-00323" />
       <option name="project" value="LOCAL" />
-      <updated>1568962171954</updated>
+      <updated>1570538979126</updated>
     </task>
-    <task id="LOCAL-00231" summary="Add init and move transforms">
-      <created>1568962254973</created>
-      <option name="number" value="00231" />
-      <option name="presentableId" value="LOCAL-00231" />
+    <task id="LOCAL-00324" summary="Refactor name for classification tools.">
+      <created>1570543005700</created>
+      <option name="number" value="00324" />
+      <option name="presentableId" value="LOCAL-00324" />
       <option name="project" value="LOCAL" />
-      <updated>1568962254973</updated>
+      <updated>1570543005700</updated>
     </task>
-    <task id="LOCAL-00232" summary="Fix some bug due to renaming">
-      <created>1568962431205</created>
-      <option name="number" value="00232" />
-      <option name="presentableId" value="LOCAL-00232" />
+    <task id="LOCAL-00325" summary="Update function that separate train and test.">
+      <created>1570545055566</created>
+      <option name="number" value="00325" />
+      <option name="presentableId" value="LOCAL-00325" />
       <option name="project" value="LOCAL" />
-      <updated>1568962431205</updated>
+      <updated>1570545055566</updated>
     </task>
-    <task id="LOCAL-00233" summary="Move transforms location.">
-      <created>1568962862478</created>
-      <option name="number" value="00233" />
-      <option name="presentableId" value="LOCAL-00233" />
+    <task id="LOCAL-00326" summary="Change tag for eval.">
+      <created>1570545326725</created>
+      <option name="number" value="00326" />
+      <option name="presentableId" value="LOCAL-00326" />
       <option name="project" value="LOCAL" />
-      <updated>1568962862478</updated>
+      <updated>1570545326725</updated>
     </task>
-    <task id="LOCAL-00234" summary="Manage transforms.">
-      <created>1568963911836</created>
-      <option name="number" value="00234" />
-      <option name="presentableId" value="LOCAL-00234" />
+    <task id="LOCAL-00327" summary="Rename Label column as Diagnosis">
+      <created>1570546474457</created>
+      <option name="number" value="00327" />
+      <option name="presentableId" value="LOCAL-00327" />
       <option name="project" value="LOCAL" />
-      <updated>1568963911836</updated>
+      <updated>1570546474457</updated>
     </task>
-    <task id="LOCAL-00235" summary="Update the lib.">
-      <created>1568970948579</created>
-      <option name="number" value="00235" />
-      <option name="presentableId" value="LOCAL-00235" />
+    <task id="LOCAL-00328" summary="Update ORL dataframe labels.">
+      <created>1570547727423</created>
+      <option name="number" value="00328" />
+      <option name="presentableId" value="LOCAL-00328" />
       <option name="project" value="LOCAL" />
-      <updated>1568970948579</updated>
+      <updated>1570547727423</updated>
     </task>
-    <task id="LOCAL-00236" summary="Developpement on TL function.">
-      <created>1568973153719</created>
-      <option name="number" value="00236" />
-      <option name="presentableId" value="LOCAL-00236" />
+    <task id="LOCAL-00329" summary="Change Malignant to Cancerous.">
+      <created>1570547915815</created>
+      <option name="number" value="00329" />
+      <option name="presentableId" value="LOCAL-00329" />
       <option name="project" value="LOCAL" />
-      <updated>1568973153719</updated>
+      <updated>1570547915815</updated>
     </task>
-    <task id="LOCAL-00237" summary="Update parameters for project.">
-      <created>1568977441190</created>
-      <option name="number" value="00237" />
-      <option name="presentableId" value="LOCAL-00237" />
+    <task id="LOCAL-00330" summary="Add ORL transform file.">
+      <created>1570550855984</created>
+      <option name="number" value="00330" />
+      <option name="presentableId" value="LOCAL-00330" />
       <option name="project" value="LOCAL" />
-      <updated>1568977441191</updated>
+      <updated>1570550855984</updated>
     </task>
-    <task id="LOCAL-00238" summary="Update parameters for project.">
-      <created>1568978127216</created>
-      <option name="number" value="00238" />
-      <option name="presentableId" value="LOCAL-00238" />
+    <task id="LOCAL-00331" summary="Add ratio transform.">
+      <created>1570624815598</created>
+      <option name="number" value="00331" />
+      <option name="presentableId" value="LOCAL-00331" />
       <option name="project" value="LOCAL" />
-      <updated>1568978127216</updated>
+      <updated>1570624815598</updated>
     </task>
-    <task id="LOCAL-00239" summary="Update parameters for project.">
-      <created>1568978251983</created>
-      <option name="number" value="00239" />
-      <option name="presentableId" value="LOCAL-00239" />
+    <task id="LOCAL-00332" summary="Adding a fitting distribution transform.">
+      <created>1570629318833</created>
+      <option name="number" value="00332" />
+      <option name="presentableId" value="LOCAL-00332" />
       <option name="project" value="LOCAL" />
-      <updated>1568978251983</updated>
+      <updated>1570629318833</updated>
     </task>
-    <task id="LOCAL-00240" summary="Update whole new toolbox.">
-      <created>1568979717266</created>
-      <option name="number" value="00240" />
-      <option name="presentableId" value="LOCAL-00240" />
+    <task id="LOCAL-00333" summary="Rendering for dataframe">
+      <created>1570689228059</created>
+      <option name="number" value="00333" />
+      <option name="presentableId" value="LOCAL-00333" />
       <option name="project" value="LOCAL" />
-      <updated>1568979717266</updated>
+      <updated>1570689228059</updated>
     </task>
-    <task id="LOCAL-00241" summary="Adding fold tool.">
-      <created>1568984437996</created>
-      <option name="number" value="00241" />
-      <option name="presentableId" value="LOCAL-00241" />
+    <task id="LOCAL-00334" summary="Update logs ways for evaluate.">
+      <created>1570691031848</created>
+      <option name="number" value="00334" />
+      <option name="presentableId" value="LOCAL-00334" />
       <option name="project" value="LOCAL" />
-      <updated>1568984437996</updated>
+      <updated>1570691031848</updated>
     </task>
-    <task id="LOCAL-00242" summary="Update fold functions">
-      <created>1568984681819</created>
-      <option name="number" value="00242" />
-      <option name="presentableId" value="LOCAL-00242" />
+    <task id="LOCAL-00335" summary="Can print several DF.">
+      <created>1570691751837</created>
+      <option name="number" value="00335" />
+      <option name="presentableId" value="LOCAL-00335" />
       <option name="project" value="LOCAL" />
-      <updated>1568984681819</updated>
+      <updated>1570691751837</updated>
     </task>
-    <task id="LOCAL-00243" summary="Update parameters.">
-      <created>1568984806316</created>
-      <option name="number" value="00243" />
-      <option name="presentableId" value="LOCAL-00243" />
+    <task id="LOCAL-00336" summary="Multiple array management">
+      <created>1570692318413</created>
+      <option name="number" value="00336" />
+      <option name="presentableId" value="LOCAL-00336" />
       <option name="project" value="LOCAL" />
-      <updated>1568984806316</updated>
+      <updated>1570692318413</updated>
     </task>
-    <task id="LOCAL-00244" summary="Update fold functions.">
-      <created>1568985704069</created>
-      <option name="number" value="00244" />
-      <option name="presentableId" value="LOCAL-00244" />
+    <task id="LOCAL-00337" summary="Change main file.">
+      <created>1570784480302</created>
+      <option name="number" value="00337" />
+      <option name="presentableId" value="LOCAL-00337" />
       <option name="project" value="LOCAL" />
-      <updated>1568985704069</updated>
+      <updated>1570784480302</updated>
     </task>
-    <task id="LOCAL-00245" summary="Update fold function.">
-      <created>1568986469868</created>
-      <option name="number" value="00245" />
-      <option name="presentableId" value="LOCAL-00245" />
+    <task id="LOCAL-00338" summary="Update annotation tool.">
+      <created>1570799756273</created>
+      <option name="number" value="00338" />
+      <option name="presentableId" value="LOCAL-00338" />
       <option name="project" value="LOCAL" />
-      <updated>1568986469868</updated>
+      <updated>1570799756273</updated>
     </task>
-    <task id="LOCAL-00246" summary="Add transform methods.">
-      <created>1568988771366</created>
-      <option name="number" value="00246" />
-      <option name="presentableId" value="LOCAL-00246" />
+    <task id="LOCAL-00339" summary="Change navigation tools.">
+      <created>1570801045916</created>
+      <option name="number" value="00339" />
+      <option name="presentableId" value="LOCAL-00339" />
       <option name="project" value="LOCAL" />
-      <updated>1568988771366</updated>
+      <updated>1570801045916</updated>
     </task>
-    <task id="LOCAL-00247" summary="Update transform method.">
-      <created>1568989308288</created>
-      <option name="number" value="00247" />
-      <option name="presentableId" value="LOCAL-00247" />
+    <task id="LOCAL-00340" summary="Update GUI.">
+      <created>1570801607148</created>
+      <option name="number" value="00340" />
+      <option name="presentableId" value="LOCAL-00340" />
       <option name="project" value="LOCAL" />
-      <updated>1568989308288</updated>
+      <updated>1570801607148</updated>
     </task>
-    <task id="LOCAL-00248" summary="Transform everything in one pass.">
-      <created>1568991403299</created>
-      <option name="number" value="00248" />
-      <option name="presentableId" value="LOCAL-00248" />
+    <task id="LOCAL-00341" summary="Remove keyboard interaction for QLabel.">
+      <created>1570802390658</created>
+      <option name="number" value="00341" />
+      <option name="presentableId" value="LOCAL-00341" />
       <option name="project" value="LOCAL" />
-      <updated>1568991403299</updated>
+      <updated>1570802390658</updated>
     </task>
-    <option name="localTasksCounter" value="249" />
+    <option name="localTasksCounter" value="342" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -920,7 +1009,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="791449000" />
+    <option name="totallyTimeSpent" value="1017858000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -933,16 +1022,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.88257575" visible="true" weight="0.095404595" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.88257575" visible="true" weight="0.17432567" />
       <window_info id="Structure" order="1" sideWeight="0.11742424" side_tool="true" weight="0.12537463" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3279678" />
       <window_info anchor="bottom" id="Message" order="1" />
       <window_info anchor="bottom" id="Find" order="2" sideWeight="0.497003" weight="0.2977867" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.45704296" weight="0.27867204" />
-      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.6253746" visible="true" weight="0.23440644" />
+      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.45704296" weight="0.1971831" />
+      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.6253746" weight="0.34004024" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" weight="0.10764588" />
@@ -956,7 +1044,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="right" id="SciView" order="3" visible="true" weight="0.4030969" />
+      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.106393605" />
       <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
@@ -1004,32 +1092,32 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Adding spyder configuration files." />
-    <MESSAGE value="Adding some spyder local configuration for GUI." />
-    <MESSAGE value="Adding jupyter server configuration." />
-    <MESSAGE value="Adding some check on patchs number by patients." />
-    <MESSAGE value="Adding folder fork for jupyter." />
-    <MESSAGE value="Adding folder browser." />
-    <MESSAGE value="Fix image extraction." />
-    <MESSAGE value="Organize Transformations" />
-    <MESSAGE value="Rename Fourier" />
-    <MESSAGE value="Add init and move transforms" />
-    <MESSAGE value="Fix some bug due to renaming" />
-    <MESSAGE value="Move transforms location." />
-    <MESSAGE value="Manage transforms." />
-    <MESSAGE value="Update the lib." />
-    <MESSAGE value="Developpement on TL function." />
-    <MESSAGE value="Update parameters for project." />
-    <MESSAGE value="Update whole new toolbox." />
-    <MESSAGE value="Adding fold tool." />
-    <MESSAGE value="Update fold functions" />
-    <MESSAGE value="Update parameters." />
-    <MESSAGE value="Update fold functions." />
-    <MESSAGE value="Update fold function." />
-    <MESSAGE value="Add transform methods." />
-    <MESSAGE value="Update transform method." />
-    <MESSAGE value="Transform everything in one pass." />
-    <option name="LAST_COMMIT_MESSAGE" value="Transform everything in one pass." />
+    <MESSAGE value="Add some improvements." />
+    <MESSAGE value="Adding visualization of pvalues." />
+    <MESSAGE value="Remove useless line." />
+    <MESSAGE value="Change display." />
+    <MESSAGE value="Fix analysis." />
+    <MESSAGE value="Remove warning from sklearn." />
+    <MESSAGE value="Add iid to False (remove warn)." />
+    <MESSAGE value="Refactor name for classification tools." />
+    <MESSAGE value="Update function that separate train and test." />
+    <MESSAGE value="Change tag for eval." />
+    <MESSAGE value="Rename Label column as Diagnosis" />
+    <MESSAGE value="Update ORL dataframe labels." />
+    <MESSAGE value="Change Malignant to Cancerous." />
+    <MESSAGE value="Add ORL transform file." />
+    <MESSAGE value="Add ratio transform." />
+    <MESSAGE value="Adding a fitting distribution transform." />
+    <MESSAGE value="Rendering for dataframe" />
+    <MESSAGE value="Update logs ways for evaluate." />
+    <MESSAGE value="Can print several DF." />
+    <MESSAGE value="Multiple array management" />
+    <MESSAGE value="Change main file." />
+    <MESSAGE value="Update annotation tool." />
+    <MESSAGE value="Change navigation tools." />
+    <MESSAGE value="Update GUI." />
+    <MESSAGE value="Remove keyboard interaction for QLabel." />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove keyboard interaction for QLabel." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1045,9 +1133,9 @@
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/toolbox/core/classification.py</url>
-          <line>257</line>
-          <option name="timeStamp" value="14" />
+          <url>file://$PROJECT_DIR$/toolbox/test.py</url>
+          <line>26</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1062,454 +1150,444 @@
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
       <expression>
-        <expression-string>dataframe[mask] = Tools.transform(dataframe[mask], tags, out, fit_model)</expression-string>
+        <expression-string>self.tablekeyboardSearch = lambda search: print('no')</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>Tools.transform(dataframe[mask], tags, out, fit_model)</expression-string>
+        <expression-string>event.key()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>Tools.transform(dataframe[mask], tags, fit_model)</expression-string>
+        <expression-string>ViewsTools.dataframe_renderer(inputs, title='Testing')</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>Tools.fit(dataframe[mask], tags, deepcopy(model))</expression-string>
+        <expression-string>env.get_template('dataframe.tpl')</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>dataframe['Fold']==fold</expression-string>
+        <expression-string>env.get_template(str(Path(__file__).parent/'templates'/'dataframe.tpl'))</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>dataframe['Fold'==fold]</expression-string>
+        <expression-string>str(Path(__file__).parent/'templates'/'dataframe.tpl')</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>dataframe['Fold'] = folds.tolist()  #</expression-string>
+        <expression-string>env.get_template(str(Path(__file__).parent/'dataframe.tpl'))</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>folds.tolist()</expression-string>
+        <expression-string>env.get_template(str(Path(__file__).parent()/'dataframe.tpl'))</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>for index, fold in enumerate(current_folds):
-            folds[fold[1]] = index</expression-string>
+        <expression-string>env.get_template(str(Path(__file__)/'dataframe.tpl'))</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy_old/sliding_features.py">
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/compat/_optional.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="606">
-          <caret line="49" lean-forward="true" selection-start-line="49" selection-end-line="63" selection-end-column="27" />
+        <state relative-caret-position="528">
+          <caret line="108" column="26" lean-forward="true" selection-start-line="108" selection-start-column="26" selection-end-line="108" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/frame.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="2949" selection-start-line="2949" selection-end-line="2949" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/copy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="137" selection-start-line="137" selection-end-line="137" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/IO/writers.py" />
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/generic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="5178" selection-start-line="5178" selection-end-line="5178" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/matplotlib/pyplot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-335">
+          <caret line="1216" selection-start-line="1216" selection-end-line="1216" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/transforms/labels.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="21" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="21" />
           <folding>
-            <element signature="e#0#16#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy_old/multiscale_features.py">
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/sklearn/metrics/classification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="80" column="17" lean-forward="true" selection-start-line="80" selection-start-column="17" selection-end-line="80" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="277">
+          <caret line="1573" column="23" selection-start-line="1573" selection-start-column="19" selection-end-line="1573" selection-end-column="23" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/settings/cluster_ub/clean.sh">
+    <entry file="file://$PROJECT_DIR$/toolbox/IO/writers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/d_features.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1547">
-          <caret line="101" selection-start-line="101" selection-end-line="101" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/settings/cluster_ub/deep.job">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="2" selection-start-line="17" selection-start-column="2" selection-end-line="17" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/sklearn/model_selection/_search.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="113" selection-start-line="113" selection-end-line="113" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/b_manual.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="56" column="46" selection-start-line="56" selection-start-column="46" selection-end-line="56" selection-end-column="46" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/devs/a_simple_descriptors.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="782">
-          <caret line="58" selection-start-line="58" selection-end-line="58" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/launch.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/settings/cluster_ub/config_cluster.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/settings/cluster_ub/send_data.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/settings/spyder_server/launch.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="34" selection-start-line="1" selection-start-column="34" selection-end-line="1" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/settings/cluster_local/config_cluster.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/settings/spyder_server/get_configurations.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="48" selection-start-column="8" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/settings/spyder_server/ssh_conf.py" />
-    <entry file="file://$PROJECT_DIR$/experiments/settings/spyder_server/configure.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="28" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/settings/spyder_server/gui.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="27" selection-start-column="27" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/settings/jupyter_server/launch.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/settings/jupyter_server/configure.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="24" lean-forward="true" selection-start-line="4" selection-start-column="24" selection-end-line="5" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="465" selection-start-line="465" selection-end-line="465" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/IO/writers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="650">
+          <caret line="235" column="34" selection-start-line="235" selection-start-column="30" selection-end-line="235" selection-end-column="34" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/core/structures.py" />
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/IO/dermatology.py">
+    <entry file="file://$PROJECT_DIR$/experiments/settings/cluster_ub/send_data.bat">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="33" lean-forward="true" selection-end-line="389" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="51">
+          <caret line="3" column="40" lean-forward="true" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="40" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/settings/cluster_local/send_data.bat">
+    <entry file="file://$PROJECT_DIR$/toolbox/environment/environment.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="3" selection-start-line="1" selection-end-line="1" selection-end-column="133" />
+        <state relative-caret-position="170">
+          <caret line="10" column="23" lean-forward="true" selection-start-line="10" selection-start-column="23" selection-end-line="11" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/processes.py">
+    <entry file="file://$PROJECT_DIR$/toolbox/environment/environmentGPU.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="20" column="8" lean-forward="true" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/test_experiments.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="867">
-          <caret line="51" selection-start-line="51" selection-end-line="51" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/core/builtin_models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1428">
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/at_most.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
-          <folding>
-            <element signature="e#0#37#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/core/generators.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/IO/otorhinolaryngology.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1060">
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/models/layers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/models/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/label.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="39" selection-start-line="39" selection-end-line="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/builtin_models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="62" selection-start-line="62" selection-end-line="68" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="50" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/frame.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="2949" selection-start-line="2949" selection-end-line="2949" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="999" selection-start-line="999" selection-end-line="999" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/models/builtin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="45" column="44" selection-start-line="45" selection-start-column="44" selection-end-line="45" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/generators.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="887">
-          <caret line="119" selection-start-line="119" selection-end-line="119" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/IO/image.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="28" column="20" lean-forward="true" selection-start-line="28" selection-start-column="20" selection-end-line="28" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/transforms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="116" selection-start-line="116" selection-end-line="116" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="104" column="18" selection-start-line="104" selection-start-column="18" selection-end-line="104" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5712">
-          <caret line="336" column="6" selection-start-line="336" selection-start-column="6" selection-end-line="336" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/core/parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2057">
-          <caret line="8" column="49" selection-start-line="8" selection-start-column="49" selection-end-line="8" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/PIL/Image.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="2614" selection-start-line="2614" selection-end-line="2614" />
+        <state relative-caret-position="221">
+          <caret line="13" column="2" selection-start-line="13" selection-start-column="2" selection-end-line="13" selection-end-column="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/toolbox/core/structures.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="562">
-          <caret line="77" column="47" lean-forward="true" selection-start-line="77" selection-start-column="47" selection-end-line="77" selection-end-column="57" />
+        <state relative-caret-position="612">
+          <caret line="355" column="84" lean-forward="true" selection-start-line="278" selection-start-column="5" selection-end-line="355" selection-end-column="84" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/transforms/image.py">
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/core/series.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="38" selection-start-line="38" selection-end-line="38" />
+        <state relative-caret-position="247">
+          <caret line="4041" selection-start-line="4041" selection-end-line="4041" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="992">
+          <caret line="70" column="41" lean-forward="true" selection-start-line="70" selection-start-column="41" selection-end-line="70" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/numpy/core/numeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="881" column="4" selection-start-line="881" selection-start-column="4" selection-end-line="881" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/environment/environmentGPU.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="14" selection-start-column="6" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/imageio/core/request.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="239" selection-start-line="239" selection-end-line="239" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/skimage/io/_io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="60" selection-start-line="60" selection-end-line="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/numpy/lib/shape_base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5848">
+          <caret line="356" selection-start-line="356" selection-end-line="356" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/environment/environment.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="14" selection-start-column="6" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/IO/images.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/otorhinolaryngology/simple.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/views/patches.py" />
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/scipy/stats/_distn_infrastructure.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="912">
+          <caret line="2199" column="20" selection-start-line="2199" selection-start-column="16" selection-end-line="2199" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/transforms/common.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/models/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="31" column="31" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="308" selection-start-line="308" selection-end-line="308" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/sklearn/feature_selection/univariate_selection.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="114" selection-start-line="114" selection-end-line="114" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/views/signals.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2193">
+          <caret line="133" column="108" selection-start-line="133" selection-start-column="108" selection-end-line="133" selection-end-column="108" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/test.py">
+    <entry file="file://$PROJECT_DIR$/toolbox/transforms/signals.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
+        <state relative-caret-position="204">
+          <caret line="19" column="30" selection-start-line="19" selection-start-column="30" selection-end-line="19" selection-end-column="30" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/core/classification.py">
+    <entry file="file://$PROJECT_DIR$/experiments/settings/jupyter_server/configure.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1836">
-          <caret column="15" lean-forward="true" selection-start-column="15" selection-end-line="1" selection-end-column="25" />
+        <state relative-caret-position="136">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox_jupyter/core/classification.py">
+    <entry file="file://$PROJECT_DIR$/experiments/settings/jupyter_server/launch.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+        <state relative-caret-position="68">
+          <caret line="4" column="35" selection-start-line="4" selection-start-column="35" selection-end-line="4" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/views/images.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="782">
+          <caret line="50" column="29" selection-start-line="50" selection-start-column="29" selection-end-line="50" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/pandas/io/formats/style.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="112" column="4" selection-start-line="112" selection-start-column="4" selection-end-line="112" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/transforms/images.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="153" column="46" selection-start-line="153" selection-start-column="43" selection-end-line="153" selection-end-column="46" />
           <folding>
-            <element signature="e#1#12#0" expanded="true" />
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/views/templates/dataframe.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="1" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5767">
+          <caret line="25" column="17" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/IO/otorhinolaryngology.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1224">
+          <caret line="99" lean-forward="true" selection-start-line="99" selection-end-line="99" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/classification/common.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="693">
+          <caret line="157" column="28" selection-start-line="157" selection-start-column="28" selection-end-line="157" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/classification/parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="277" column="14" selection-start-line="277" selection-start-column="6" selection-end-line="277" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/guis/annotate_tool/sources/gui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="137" column="13" lean-forward="true" selection-end-line="771" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/views/common.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3298">
+          <caret line="205" column="46" selection-start-line="205" selection-start-column="43" selection-end-line="205" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/guis/annotate_tool/launch.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="5" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/settings/cluster_local/config_cluster.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/settings/cluster_local/send_data.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="26" selection-start-line="4" selection-start-column="26" selection-end-line="4" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/guis/annotate_tool/sources/gui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5950">
+          <caret line="361" column="23" selection-start-line="361" selection-start-column="23" selection-end-line="361" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/guis/annotate_tool/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="29" selection-start-line="3" selection-start-column="29" selection-end-line="3" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toolbox/core/parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="328" column="56" lean-forward="true" selection-start-line="328" selection-start-column="56" selection-end-line="328" selection-end-column="56" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/experiments/dermatology/microscopy_old/descriptors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="48" column="38" selection-start-line="48" selection-start-column="38" selection-end-line="48" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
           </folding>
         </state>
       </provider>

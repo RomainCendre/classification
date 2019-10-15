@@ -6,14 +6,14 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
 
-from toolbox_jupyter.transforms.labels import OrderedEncoder
-from toolbox_jupyter.transforms.signals import FilterTransform, ScaleTransform, FittingTransform
+from toolbox.transforms.labels import OrderedEncoder
+from toolbox.transforms.signals import FilterTransform, ScaleTransform, FittingTransform
 
 sys.path.append('/home/rcendre/classification')
-from toolbox_jupyter.classification.common import Tools, Folds
-from toolbox_jupyter.classification.parameters import ORL, Settings
-from toolbox_jupyter.views.common import Views, ViewsTools
-from toolbox_jupyter.views.signals import SignalsViews
+from toolbox.classification.common import Tools, Folds
+from toolbox.classification.parameters import ORL, Settings
+from toolbox.views.common import Views, ViewsTools
+from toolbox.views.signals import SignalsViews
 wavelength = np.arange(start=440, stop=960, step=1)
 inputs = ORL.get_spectra(wavelength)
 # label_encoder = OrderedEncoder().fit(['Sain', 'Precancer', 'Cancer'])
@@ -36,12 +36,12 @@ Views.details(inputs, {'result': 'PCA_SVM'})
 Views.report(ViewsTools.data_as(inputs, 'PCA_SVM'), {'label_encode': 'LabelEncode', 'prediction': 'PCA_SVM'}, label_encoder)
 
 # from toolbox.classification.transforms import OrderedEncoder
-# from toolbox_jupyter.classification.classification import Folds, Tools
-# from toolbox_jupyter.classification.parameters import Dermatology, Settings
-# from toolbox_jupyter.models.builtin import Applications
-# from toolbox_jupyter.IO import images
-# from toolbox_jupyter.transforms.common import PredictorTransform
-# from toolbox_jupyter.transforms.images import DWTImageTransform, DistributionImageTransform
+# from toolbox.classification.classification import Folds, Tools
+# from toolbox.classification.parameters import Dermatology, Settings
+# from toolbox.models.builtin import Applications
+# from toolbox.IO import images
+# from toolbox.transforms.common import PredictorTransform
+# from toolbox.transforms.images import DWTImageTransform, DistributionImageTransform
 #
 # # Inputs
 # statistics = Dermatology.get_statistics_keys()

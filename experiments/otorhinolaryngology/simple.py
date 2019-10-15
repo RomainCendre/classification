@@ -4,7 +4,6 @@ from pathlib import Path
 from numpy import geomspace
 from numpy.ma import arange
 from sklearn.decomposition import PCA
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.svm import SVC

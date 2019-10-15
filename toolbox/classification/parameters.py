@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 from sklearn.metrics import f1_score, make_scorer
-from toolbox_jupyter.IO import otorhinolaryngology, dermatology
+from toolbox.IO import otorhinolaryngology, dermatology
 
 
 class ORL:

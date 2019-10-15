@@ -55,7 +55,7 @@ def get_inputs():
     image_inputs.set_filters(patch_filter)
 
     # Data from microscopy_old
-    x = image_inputs.get('data')
+    x = image_inputs.get('datum')
     y = image_inputs.get('label')
     groups = image_inputs.get('group')
     train, test = next(GroupKFold(2).split(x, y, groups))

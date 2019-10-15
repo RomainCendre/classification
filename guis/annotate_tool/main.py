@@ -3,8 +3,8 @@ from pathlib import Path
 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
-from toolbox_jupyter.gui_tools.annotate_tool.sources.gui import QPatchExtractor
-from toolbox_jupyter.classification.parameters import Settings
+from guis.annotate_tool.sources import QPatchExtractor
+from toolbox.classification.parameters import Settings
 
 if __name__ == '__main__':
 
