@@ -9,7 +9,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 class DistributionImageTransform(BaseEstimator, TransformerMixin):
 
-    def __init__(self, distribution='GGD', coefficients=['a', 'c', 'loc', 'scale']):
+    def __init__(self, distribution=sstats.gengamma, coefficients=['beta', 'loc', 'scale']):
         self.distribution = distribution
         self.coefficients = coefficients
 
@@ -37,17 +37,16 @@ class DistributionImageTransform(BaseEstimator, TransformerMixin):
         for index, data in enumerate(x):
             image = np.array(Image.open(data).convert('L'))
             # Compute coefficients
-            features.append(np.array(self.__get_coefficients(image.flatten())).flatten())
+            hist, bin_edges = np.histogram(image.flatten())
+            features.append(np.array(self.__get_coefficients(hist)).flatten())
         return np.array(features)
 
     def __get_coefficients(self, x):
-        a, c, loc, scale = sstats.gengamma.fit(x)
+        beta, loc, scale = self.distribution.fit(x)
         # Concatenate coefficients
         coefficients = []
-        if 'a' in self.coefficients:
-            coefficients.append(a)
-        if 'c' in self.coefficients:
-            coefficients.append(c)
+        if 'beta' in self.coefficients:
+            coefficients.append(beta)
         if 'loc' in self.coefficients:
             coefficients.append(loc)
         if 'scale' in self.coefficients:
@@ -151,7 +150,8 @@ class DWTGGDImageTransform(BaseEstimator, TransformerMixin):
         return np.array(features)
 
     def get_coefficients(self, x):
-        shape, loc, scale = sstats.gennorm.fit(x)
+        hist, bin_edges = np.histogram(x.flatten(), bins=10)
+        shape, loc, scale = sstats.gennorm.fit(hist)
         if self.parameter == 'both':
             return [scale, shape]
         elif self.parameter == 'beta' or self.parameter == 'shape':

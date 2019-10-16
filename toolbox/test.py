@@ -1,3 +1,39 @@
+import sys
+import numpy as np
+import time
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import LabelEncoder
+from sklearn.svm import SVC
+from toolbox.transforms.labels import OrderedEncoder
+from toolbox.transforms.signals import FilterTransform, ScaleTransform, FittingTransform, FittingTransform2
+
+sys.path.append('/home/rcendre/classification')
+from toolbox.classification.common import Tools, Folds
+from toolbox.classification.parameters import ORL, Settings
+from toolbox.views.common import Views, ViewsTools
+from toolbox.views.signals import SignalsViews
+wavelength = np.arange(start=440, stop=960, step=1)
+inputs = ORL.get_spectra(wavelength)
+inputs = Tools.transform(inputs, {'datum': 'Datum'}, FilterTransform(5), 'Mean')
+inputs = Tools.transform(inputs, {'datum': 'Mean'}, ScaleTransform(), 'Scale')
+ViewsTools.dataframe_renderer(inputs, title='Testing')
+t = time.time()
+fit = FittingTransform2().fit(np.array(inputs['Scale'].tolist()))
+inputs = Tools.transform(inputs, {'datum': 'Scale'}, fit, 'Fit')
+# do stuff
+print(time.time() - t)
+
+inputs = Folds.build_group_folds(inputs, {'datum': 'Datum', 'label_encode': 'LabelEncode', 'group': 'GroupEncode'}, 4)
+simple_pca = Pipeline([('pca', PCA(n_components=0.95)),
+                       ('clf', SVC(kernel='linear', class_weight='balanced', probability=True))])
+grid_pca = {'clf__C': np.geomspace(0.01, 100, 5).tolist()}
+inputs = Tools.evaluate(inputs, {'datum': 'Scale', 'label_encode': 'LabelEncode'}, simple_pca, 'PCA_SVM', grid=grid_pca)
+Views.details(inputs, {'result': 'PCA_SVM'})
+Views.report(ViewsTools.data_as(inputs, 'PCA_SVM'), {'label_encode': 'LabelEncode', 'prediction': 'PCA_SVM'}, label_encoder)
+
+import time
 from toolbox.transforms.labels import OrderedEncoder
 from toolbox.classification.common import Folds, Tools
 from toolbox.classification.parameters import Dermatology, Settings
@@ -22,6 +58,8 @@ extraction = DistributionImageTransform()
 inputs = Tools.transform(inputs, {'datum': 'Datum'}, extraction, 'Distribution')
 
 transfer = PredictorTransform(Applications.get_transfer_tuning())
+
+
 
 # CART
 cart = Pipeline([('scale', StandardScaler()), ('clf', DecisionTreeClassifier(class_weight='balanced'))])
