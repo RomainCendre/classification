@@ -9,7 +9,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 class DistributionImageTransform(BaseEstimator, TransformerMixin):
 
-    def __init__(self, distribution=sstats.gengamma, coefficients=['beta', 'loc', 'scale']):
+    def __init__(self, distribution=sstats.gennorm, coefficients=['beta', 'loc', 'scale']):
         self.distribution = distribution
         self.coefficients = coefficients
 
