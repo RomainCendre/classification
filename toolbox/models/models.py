@@ -214,8 +214,7 @@ class KerasBatchClassifier(KerasClassifier):
         all_params.update({'batch_size': 1})
 
         # Create generator for validation
-        params_valid = {'preprocessing_function': all_params.get('preprocessing_function', None)}
-        valid = self.create_generator(X=X, params=params_valid)
+        valid = self.create_generator(X=X, params=all_params)
 
         # Get arguments for predict
         params_pred = self.filter_params(all_params, Sequential.predict_generator)
