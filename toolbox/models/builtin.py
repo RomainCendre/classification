@@ -42,7 +42,7 @@ class Applications:
             return applications.inception_v3.preprocess_input
 
     @staticmethod
-    def get_transfer_tuning(architecture='InceptionV3'):
+    def get_transfer_learning(architecture='InceptionV3'):
         extractor_params = {'architecture': architecture,
                             'pooling': 'avg',
                             'preprocessing_function': Applications.get_preprocessing_application(architecture=architecture)}
