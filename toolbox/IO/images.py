@@ -6,7 +6,8 @@ class Reader:
 
     images_types = ['png', 'bmp']
 
-    def scan_folder(self, folder_path):
+    @staticmethod
+    def scan_folder(folder_path):
         # Go through pathlib
         folder_path = Path(folder_path)
         if not folder_path.is_dir():
@@ -16,7 +17,7 @@ class Reader:
         datas = []
         for subdir in folder_path.iterdir():
             try:
-                datas.append(self.scan_subfolder(subdir))
+                datas.append(Reader.scan_subfolder(subdir))
             except OSError:
                 print('Patient {}'.format(subdir))
 
