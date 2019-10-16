@@ -14,8 +14,9 @@ if __name__ == '__main__':
     app.setWindowIcon(QIcon(str(icon_path)))
     pathologies = ['Normal', 'Benign', 'Malignant', 'Draw']
     home_path = Path().home()
-    input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
-    viewer = QPatchExtractor(input_folder, pathologies, settings=Settings.get_default_dermatology())
+    root_data = home_path/'Data/Skin/'
+    input_files = ['Elisa.csv', 'JeanLuc.csv']
+    viewer = QPatchExtractor(root_data, input_files, pathologies, settings=Settings.get_default_dermatology())
 
     # Show the viewer and run the application.
     viewer.show()

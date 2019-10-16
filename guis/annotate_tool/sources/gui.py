@@ -1,5 +1,3 @@
-from copy import copy
-
 import pandas as pd
 from pathlib import Path
 from PyQt5 import QtWidgets
@@ -18,19 +16,17 @@ class QPatchExtractor(QMainWindow):
     PATCH = 1
     BBOX = 2
 
-    def __init__(self, input_folder, pathologies, settings):
+    def __init__(self, data_root, patient_files, pathologies, settings):
         super(QPatchExtractor, self).__init__()
         self.patient_index = 0
         self.image_index = 0
         self.patch_index = 0
-        self.patient = None
         self.images = None
         self.patches = None
-        self.patients_directories = [str(path) for path in input_folder.iterdir()]
-        self.patients_directories = natsorted(self.patients_directories)
-        self.patients_directories = [Path(path) for path in self.patients_directories]
         self.pathologies = pathologies
         self.settings = settings
+        # Set root and metas
+        self.load_root_and_metas(data_root, patient_files)
         self.__init_gui()
         self.__init_shortcuts()
         # Init the state
@@ -45,7 +41,7 @@ class QPatchExtractor(QMainWindow):
         self.patient_bar.setAlignment(Qt.AlignCenter)
         self.patient_bar.setStyleSheet('QProgressBar {border: 2px solid grey;border-radius: 5px;}'
                                        'QProgressBar::chunk {background-color: #bff88b;width: 20px;}')
-        self.patient_bar.setRange(0, len(self.patients_directories))
+        self.patient_bar.setRange(0, len(self.metas))
         self.patient_bar.setTextVisible(True)
         parent_layout.addWidget(self.patient_bar)
         # Build image progress bar
@@ -171,12 +167,11 @@ class QPatchExtractor(QMainWindow):
         # Start by closing previous df
         self.close_images()
         self.close_patches()
-        self.close_patient()
         # Change patient
-        length = len(self.patients_directories)
+        length = len(self.metas)
         self.patient_index = (self.patient_index + move) % length
         # Open new df
-        self.open_patient_and_images()
+        self.open_images()
         self.update_patient()
         self.change_image(image)
 
@@ -197,13 +192,9 @@ class QPatchExtractor(QMainWindow):
             self.patches.drop(columns=['Full_Path', 'Type'], errors='ignore').to_csv(self.get_patient_folder()/'patches.csv', index=False)
         self.patches = None
 
-    def close_patient(self):
-        self.patient = None
-
     def closeEvent(self, event):
         self.close_images()
         self.close_patches()
-        self.close_patient()
         super().closeEvent(event)
 
     def delete_patch(self):
@@ -262,19 +253,24 @@ class QPatchExtractor(QMainWindow):
                                  int(row['Width']), self.get_color(row['Label'])))
         return patches_draw
 
-    def get_patient_folder(self):
-        return self.patients_directories[self.patient_index]
+    def get_patient_attributes(self, attribute):
+        return self.metas.loc[self.patient_index, attribute]
 
-    def open_patient_and_images(self):
-        self.patient = dermatology.Reader.read_patient_file(self.get_patient_folder())
-        self.images = dermatology.Reader.read_images_file(self.get_patient_folder(), modality='Microscopy')
-        if self.patient is None or len(self.patient) == 0:
-            return
-        self.patient = self.patient.iloc[0]
+    def get_patient_folder(self):
+        return self.root/self.metas.loc[self.patient_index, 'ID']
+
+    def open_images(self):
+        self.images = dermatology.Reader.read_data_file(self.get_patient_folder(), ftype='images', modality='Microscopy')
 
     def open_patches(self):
-        self.patches = dermatology.Reader.read_patches_file(self.get_patient_folder(),
-                                                            modality='Microscopy')
+        self.patches = dermatology.Reader.read_data_file(self.get_patient_folder(), ftype='patches', modality='Microscopy')
+
+    def load_root_and_metas(self, root, patient_files):
+        patients = []
+        for file in patient_files:
+            patients.append(pd.read_csv(root/file))
+        self.root = root / 'Patients'
+        self.metas = pd.concat(patients, sort=False, ignore_index=True)
 
     def send_control(self, key):
         if self.get_mode() == QPatchExtractor.LABEL:
@@ -285,7 +281,7 @@ class QPatchExtractor(QMainWindow):
     def update_image(self):
         self.image_bar.setValue(self.image_index)
         self.image_bar.setFormat(str(self.get_image().get('Path', '')))
-        self.viewer.loadImage(Path(self.get_image().get('Full_Path', '')))
+        self.viewer.loadImage(Path(self.get_image().get('Datum', '')))
 
     def update_patch(self):
         self.patch_widget.send_patches(self.patches, self.get_patches())
@@ -293,12 +289,9 @@ class QPatchExtractor(QMainWindow):
 
     def update_patient(self):
         self.patient_bar.setValue(self.patient_index)
-        if self.patient is None:
-            id, diagnosis, bdiagnosis = 'NA', 'NA', 'NA'
-        else:
-            id = self.patient.get('ID', 'NA')
-            diagnosis = self.patient.get('Diagnosis', 'NA')
-            bdiagnosis = self.patient.get('Binary_Diagnosis', 'NA')
+        id = self.get_patient_attributes('ID')
+        diagnosis = self.get_patient_attributes('Diagnosis')
+        bdiagnosis = self.get_patient_attributes('Binary_Diagnosis')
         self.patient_bar.setFormat(F'Patient: {id} - Pathology: {diagnosis}({bdiagnosis})')
         self.label_widget.send_images(self.images)
         # Update image
@@ -569,7 +562,7 @@ class QPatchWidget(QWidget):
 
     def send_image(self, image):
         self.patient.setText(F'Patient: ')
-        self.image.setText(F'Image: {image["Label"]}')
+        self.image.setText(F'Image: {image.get("Label")}')
 
     def send_patches(self, global_patches, patches):
         self.fill_global_patches(global_patches)
