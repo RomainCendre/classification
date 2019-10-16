@@ -33,8 +33,8 @@ class Views:
         data = {'Fold': [], 'Features': [], 'Parameters': []}
         for fold in unique_folds:
             data['Fold'].append(fold)
-            data['Features'].append(int(inputs.at[0, f'{features}_{fold}'][0]))
-            data['Parameters'].append(inputs.at[0, f'{parameters}_{fold}'][0])
+            data['Features'].append(int(inputs.at[0, f'{features}_{fold}']))
+            data['Parameters'].append(inputs.at[0, f'{parameters}_{fold}'])
         return pandas.DataFrame(data)
 
     @staticmethod
