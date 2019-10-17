@@ -38,6 +38,24 @@ class Views:
         return pandas.DataFrame(data)
 
     @staticmethod
+    def misclassified(inputs, tags):
+        # Check mandatory fields
+        mandatory = ['datum', 'label_encode', 'result']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        # Prediction tag
+        tag_pred = f'{tags["result"]}_Predictions'
+
+        # Mask
+        mask = (inputs[tags['label_encode']] == inputs[tag_pred])
+        inputs = inputs[mask]
+        data = {'datum': inputs[tags['datum']],
+                'labels': inputs[tags['label_encode']],
+                'predictions': inputs[tag_pred]}
+        return pandas.DataFrame(data)
+
+    @staticmethod
     def projection(inputs, tags, settings, mode='PCA', name=None):
         # Check mandatory fields
         mandatory = ['datum', 'label']
