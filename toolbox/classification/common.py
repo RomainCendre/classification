@@ -102,7 +102,7 @@ class IO:
 class Tools:
 
     @staticmethod
-    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None):
+    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None, cpu=-1):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -147,7 +147,7 @@ class Tools:
 
             # Clone model
             fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), mask=~test_mask,
-                                     grid=grid, distribution=distribution, unbalanced=unbalanced)
+                                     grid=grid, distribution=distribution, unbalanced=unbalanced, cpu=cpu)
 
             # Predict
             dataframe[fold_preds] = Tools.predict(dataframe[mask], {'datum': tags['datum']}, fold_preds, fitted_model)[fold_preds]
@@ -159,7 +159,7 @@ class Tools:
         return dataframe
 
     @staticmethod
-    def fit(dataframe, tags, model, mask=None, grid=None, distribution=None, unbalanced=None):
+    def fit(dataframe, tags, model, mask=None, grid=None, distribution=None, unbalanced=None, cpu=-1):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -183,13 +183,13 @@ class Tools:
                 Exception(f'Expected valid unbalanced property {unbalanced}.')
 
         if grid is not None:
-            grid_search = GridSearchCV(model, param_grid=grid, cv=2, iid=False)
+            grid_search = GridSearchCV(model, param_grid=grid, cv=2, iid=False, n_jobs=cpu)
             grid_search.fit(data, y=labels)
             model = grid_search.best_estimator_
             model.best_params = grid_search.best_params_
             return model
         elif distribution is not None:
-            random_search = RandomizedSearchCV(model, param_distributions=distribution, cv=2, iid=False)
+            random_search = RandomizedSearchCV(model, param_distributions=distribution, cv=2, iid=False, n_jobs=cpu)
             random_search.fit(data, y=labels)
             model = random_search.best_estimator_
             model.best_params = random_search.best_params_
@@ -200,7 +200,7 @@ class Tools:
             return model
 
     @staticmethod
-    def fit_transform(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None):
+    def fit_transform(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None, cpu=-1):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -213,7 +213,7 @@ class Tools:
 
         # Clone model
         fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), mask=mask, grid=grid,
-                                 distribution=distribution, unbalanced=unbalanced)
+                                 distribution=distribution, unbalanced=unbalanced, cpu=cpu)
 
         # Transform
         dataframe.loc[mask, out] = Tools.transform(dataframe[mask], {'datum': tags['datum']}, fitted_model, out)[out]
