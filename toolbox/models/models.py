@@ -284,6 +284,10 @@ class KerasBatchClassifier(KerasClassifier):
         res.update(override)
         return res
 
+    def summary(self):
+        self.init_model()
+        self.model.summary()
+
 
 class KerasFineClassifier(KerasBatchClassifier):
 
