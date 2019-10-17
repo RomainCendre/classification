@@ -6,6 +6,7 @@ dependencies:
   - joblib=0.13.2
   - keras=2.2.4
   - keras-gpu=2.2.4
+  - imbalanced-learn=0.5.0
   - matplotlib=3.0.2
   - natsort=6.0.0
   - pandas=0.24.2

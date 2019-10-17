@@ -20,7 +20,7 @@ inputs = Tools.transform(inputs, {'datum': 'Datum'}, FilterTransform(5), 'Mean')
 inputs = Tools.transform(inputs, {'datum': 'Mean'}, ScaleTransform(), 'Scale')
 ViewsTools.dataframe_renderer(inputs, title='Testing')
 t = time.time()
-fit = FittingTransform2().fit(np.array(inputs['Scale'].tolist()))
+fit = FittingTransform().fit(np.array(inputs['Scale'].tolist()))
 inputs = Tools.transform(inputs, {'datum': 'Scale'}, fit, 'Fit')
 # do stuff
 print(time.time() - t)

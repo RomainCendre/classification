@@ -1,7 +1,7 @@
 import warnings
 from copy import deepcopy
 import numpy as np
-from sklearn.model_selection import GridSearchCV, ParameterGrid, GroupKFold, StratifiedKFold, RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV, GroupKFold, StratifiedKFold, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
@@ -102,7 +102,7 @@ class IO:
 class Tools:
 
     @staticmethod
-    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None):
+    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -147,7 +147,7 @@ class Tools:
 
             # Clone model
             fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), mask=~test_mask,
-                                     grid=grid, distribution=distribution)
+                                     grid=grid, distribution=distribution, unbalanced=unbalanced)
 
             # Predict
             dataframe[fold_preds] = Tools.predict(dataframe[mask], {'datum': tags['datum']}, fold_preds, fitted_model)[fold_preds]
@@ -159,7 +159,7 @@ class Tools:
         return dataframe
 
     @staticmethod
-    def fit(dataframe, tags, model, mask=None, grid=None, distribution=None):
+    def fit(dataframe, tags, model, mask=None, grid=None, distribution=None, unbalanced=None):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -175,6 +175,12 @@ class Tools:
 
         data = np.array(dataframe.loc[mask, tags['datum']].to_list())
         labels = np.array(dataframe.loc[mask, tags['label_encode']].to_list())
+
+        if unbalanced is not None:
+            if callable(getattr(unbalanced, 'fit_resample', None)):
+                data, labels = unbalanced.fit_resample(data, labels)
+            else:
+                Exception(f'Expected valid unbalanced property {unbalanced}.')
 
         if grid is not None:
             grid_search = GridSearchCV(model, param_grid=grid, cv=2, iid=False)
@@ -194,7 +200,7 @@ class Tools:
             return model
 
     @staticmethod
-    def fit_transform(dataframe, tags, model, out, mask=None, grid=None, distribution=None):
+    def fit_transform(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -206,7 +212,8 @@ class Tools:
         mask = pd.Series(mask)
 
         # Clone model
-        fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), mask=mask, grid=None, distribution=None)
+        fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), mask=mask, grid=grid,
+                                 distribution=distribution, unbalanced=unbalanced)
 
         # Transform
         dataframe.loc[mask, out] = Tools.transform(dataframe[mask], {'datum': tags['datum']}, fitted_model, out)[out]
