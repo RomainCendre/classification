@@ -1,6 +1,7 @@
 name: Research
 channels:
   - defaults
+  - conda-forge
 dependencies:
   - joblib=0.13.2
   - keras=2.2.4

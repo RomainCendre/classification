@@ -1,6 +1,7 @@
 name: ResearchGPU
 channels:
   - defaults
+  - conda-forge
 dependencies:
   - _tflow_select=2.1.0=gpu
   - joblib=0.13.2
