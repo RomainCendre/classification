@@ -110,9 +110,8 @@ class Views:
             axe.plot(fpr, tpr, lw=2, alpha=.8, color=settings.get_color(positive_class),
                      label='ROC {label} (AUC = {auc:.2f})'.format(label=positive_class, auc=auc(fpr, tpr),
                                                                   **settings.get_line(positive_class)))
-            # Switch depend on the mode of display
-            title = 'Receiver operating characteristic'
-
+        # Switch depend on the mode of display
+        title = f'{tags["eval"]} - Receiver operating characteristic'
         # Now set title and legend
         axe.set(adjustable='box',
                 aspect='equal',
