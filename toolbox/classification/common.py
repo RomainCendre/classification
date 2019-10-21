@@ -1,12 +1,13 @@
 import warnings
 from copy import deepcopy
 import numpy as np
+from pandas.errors import PerformanceWarning
 from sklearn.model_selection import GridSearchCV, GroupKFold, StratifiedKFold, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
-
+warnings.filterwarnings("ignore", category=PerformanceWarning)
 
 class Data:
 
