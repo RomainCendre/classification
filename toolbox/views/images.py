@@ -3,9 +3,24 @@ import numpy as np
 from pathlib import Path
 from matplotlib import pyplot
 from PIL import Image, ImageDraw
+import matplotlib.pyplot as plt
+import skimage as sk
+from sklearn.preprocessing import normalize
 
 
 class ImagesViews:
+
+    @staticmethod
+    def svm_activation_map(path, extractor, model):
+        # model suppose to be svm
+        image = sk.io.imread(path)
+        features = extractor.transform([path])
+
+        heatmap = np.squeeze((model.coef_ * features), axis=0)
+        heatmap = np.resize(np.squeeze(normalize(np.expand_dims(heatmap.ravel(), axis=0), norm='max'), axis=0),
+                               heatmap.shape)
+        heatmap = np.sum(heatmap, axis=2)
+        return ImagesViews.__add(np.array(image), heatmap)
 
     @staticmethod
     def histogram(inputs, tags, settings, mode='default'):
@@ -35,6 +50,26 @@ class ImagesViews:
         axe.set(xlabel='Intensities', ylabel='Occurrences', title='Histogram')
         axe.legend(loc='lower right')
         return figure
+
+    @staticmethod
+    def __add(image, heat_map, alpha=0.6, cmap='viridis', axis='on', verbose=False):
+
+        height = image.shape[0]
+        width = image.shape[1]
+
+        # resize heat map
+        heat_map_resized = sk.transform.resize(heat_map, (height, width))
+
+        # normalize heat map
+        max_value = np.max(heat_map_resized)
+        min_value = np.min(heat_map_resized)
+        normalized_heat_map = (heat_map_resized - min_value) / (max_value - min_value)
+
+        # display
+        plt.imshow(image)
+        plt.imshow(255 * normalized_heat_map, alpha=alpha, cmap=cmap)
+        plt.axis(axis)
+        plt.show()
 
     @staticmethod
     def __get_histogram(x):
