@@ -11,12 +11,22 @@ from sklearn.preprocessing import normalize
 class ImagesViews:
 
     @staticmethod
-    def svm_activation_map(path, extractor, model):
-        # model suppose to be svm
-        image = sk.io.imread(path)
-        features = extractor.transform([path])
+    def svm_activation_map(inputs, tags, extractor, model, index=0):
+        # Check mandatory fields
+        mandatory = ['datum', 'label_encode']
+        if not isinstance(tags, dict) or not all(elem in tags.keys() for elem in mandatory):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
-        heatmap = np.squeeze((model.coef_ * features), axis=0)
+        # Coeffcients
+        coefficients = model.coef_
+
+        # model suppose to be svm
+        data = inputs.loc[index, tags['datum']]
+        image = sk.io.imread(data)
+        features = extractor.transform([data])
+
+        labels = inputs.loc[index, tags['label_encode']]
+        heatmap = np.squeeze((coefficients[labels] * features), axis=0)
         heatmap = np.resize(np.squeeze(normalize(np.expand_dims(heatmap.ravel(), axis=0), norm='max'), axis=0),
                                heatmap.shape)
         heatmap = np.sum(heatmap, axis=2)
@@ -52,7 +62,7 @@ class ImagesViews:
         return figure
 
     @staticmethod
-    def __add(image, heat_map, alpha=0.6, cmap='viridis', axis='on', verbose=False):
+    def __add(image, heat_map, alpha=0.6, cmap='viridis'):
 
         height = image.shape[0]
         width = image.shape[1]
@@ -68,7 +78,7 @@ class ImagesViews:
         # display
         plt.imshow(image)
         plt.imshow(255 * normalized_heat_map, alpha=alpha, cmap=cmap)
-        plt.axis(axis)
+        plt.axis('off')
         plt.show()
 
     @staticmethod
