@@ -3,6 +3,7 @@ import numpy as np
 from copy import deepcopy
 from keras import Sequential, Model
 from keras.callbacks import EarlyStopping
+from keras.engine.saving import load_model
 from keras.optimizers import SGD
 from keras.utils.generic_utils import has_arg, to_list
 from keras.wrappers.scikit_learn import KerasClassifier
@@ -287,6 +288,12 @@ class KerasBatchClassifier(KerasClassifier):
     def summary(self):
         self.init_model()
         self.model.summary()
+
+    def save(self, path):
+        self.model.save(path)
+
+    def load(self, path):
+        self.model = load_model(path)
 
 
 class KerasFineClassifier(KerasBatchClassifier):
