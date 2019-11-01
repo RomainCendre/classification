@@ -251,7 +251,8 @@ class KerasBatchClassifier(KerasClassifier):
         params_init = deepcopy(self.sk_params)
         params_init.update(params)
         if prediction_mode:
-            generator = ResourcesGenerator()
+            # Data need to be preprocessed
+            generator = ResourcesGenerator(preprocessing_function=params.get('preprocessing_function', None))
         else:
             params_init = self.filter_params(params_init, ResourcesGenerator.__init__)
             generator = ResourcesGenerator(**params_init)
