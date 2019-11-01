@@ -264,7 +264,7 @@ class KerasBatchClassifier(KerasClassifier):
 
         if prediction_mode:
             params_flow.update({'shuffle': False})
-            params_flow.update({'batch_size': 1})
+            # params_flow.update({'batch_size': 1})
 
         if y is not None:
             return generator.flow_from_paths(X, y, **params_flow)
