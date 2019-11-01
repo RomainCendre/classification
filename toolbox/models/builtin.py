@@ -50,7 +50,7 @@ class Applications:
 
 
     @staticmethod
-    def get_fine_tuning(output_classes, last_layer, architecture='InceptionV3'):
+    def get_fine_tuning(output_classes, trained_layer, extractor_layer, architecture='InceptionV3'):
 
         def fine_tune_model():
             # We get the deep extractor part as include_top is false
@@ -64,7 +64,8 @@ class Applications:
             return Model(inputs=base_model.inputs, outputs=predictions)
 
         extractor_params = {'epochs': 50,
-                            'trainable_layers': last_layer,
+                            'extractor_layer': extractor_layer,
+                            'trainable_layer': trained_layer,
                             'preprocessing_function': Applications.get_preprocessing_application(architecture=architecture)}
 
         return KerasFineClassifier(fine_tune_model, **extractor_params)

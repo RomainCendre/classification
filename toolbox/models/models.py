@@ -301,25 +301,23 @@ class KerasFineClassifier(KerasBatchClassifier):
             ValueError: if any member of `params` is not a valid argument.
         """
         local_param = deepcopy(params)
-        if 'trainable_layers' in local_param:
-            local_param.pop('trainable_layers')
-        if 'extractor_layers' in local_param:
-            local_param.pop('extractor_layers')
+        if 'trainable_layer' in local_param:
+            local_param.pop('trainable_layer')
+        if 'extractor_layer' in local_param:
+            local_param.pop('extractor_layer')
         super().check_params(local_param)
 
-    def fit(self, X, y, callbacks=[], X_validation=None, y_validation=None, **kwargs):
+    def fit(self, X, y, callbacks=[], X_validation=None, y_validation=None, **params):
         self.init_model(y)
 
         # Get arguments for predict
-        params_fit = deepcopy(self.sk_params)
-        params_fit.update(kwargs)
-        params_fit = self.filter_params(params_fit, Sequential.fit_generator)
+        all_params = deepcopy(self.sk_params)
+        all_params.update(params)
+        params_fit = self.filter_params(all_params, Sequential.fit_generator)
 
         # Get generator
-        train = self.create_generator(X=X, y=y, params=kwargs)
+        train = self.create_generator(X=X, y=y, params=params)
         validation = None
-        # No transformation allowed for prediction
-        params = {'preprocessing_function': kwargs.get('preprocessing_function', None)}
         if X_validation is not None:
             validation = self.create_generator(X=X_validation, y=y_validation, params=params)
 
@@ -335,7 +333,7 @@ class KerasFineClassifier(KerasBatchClassifier):
                                                 callbacks=[EarlyStopping(monitor='loss', patience=5)],
                                                 class_weight=train.get_weights(), **params_fit)
 
-        trainable_layer = kwargs.get('trainable_layers', 0)
+        trainable_layer = params.get('trainable_layer', 0)
         for layer in self.model.layers[trainable_layer:]:
             layer.trainable = True
 
@@ -351,7 +349,7 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         return self.history
 
-    def predict_proba(self, X, **params):
+    def transform(self, X, **params):
         self.init_model()
 
         # Define some local arguments
