@@ -324,7 +324,8 @@ class KerasFineClassifier(KerasBatchClassifier):
         # first: train only the top layers (which were randomly initialized)
         # i.e. freeze all convolutional InceptionV3 layers
         for layer in self.model.layers:
-            layer.trainable = False
+            if 'prediction' not in layer.name:
+                layer.trainable = False
 
         # compile the model (should be done *after* setting layers to non-trainable)
         self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])

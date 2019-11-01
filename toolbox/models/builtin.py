@@ -58,9 +58,9 @@ class Applications:
 
             x = base_model.output
             # let's add a fully-connected layer
-            x = Dense(1024, activation='relu')(x)
+            x = Dense(1024, activation='relu', name='prediction_1')(x)
             # and a logistic layer -- let's say we have 200 classes
-            predictions = Dense(output_classes, activation='softmax')(x)
+            predictions = Dense(output_classes, activation='softmax', name='prediction_2')(x)
             return Model(inputs=base_model.inputs, outputs=predictions)
 
         extractor_params = {'epochs': 50,
