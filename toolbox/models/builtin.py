@@ -5,7 +5,7 @@ from keras import Sequential, Model
 from sklearn.dummy import DummyClassifier
 from sklearn.pipeline import Pipeline
 from toolbox.models.layers import RandomLayer
-from toolbox.models.models import KerasBatchClassifier
+from toolbox.models.models import KerasBatchClassifier, KerasFineClassifier
 
 
 class Applications:
@@ -50,18 +50,25 @@ class Applications:
 
 
     @staticmethod
-    def get_fine_tuning(output_classes, architecture='InceptionV3'):
+    def get_fine_tuning(output_classes, last_layer, architecture='InceptionV3'):
 
-        # We get the deep extractor part as include_top is false
-        base_model = Applications.get_application(architecture, pooling='avg')
+        def fine_tune_model():
+            # We get the deep extractor part as include_top is false
+            base_model = Applications.get_application(architecture, pooling='avg')
 
-        x = base_model.output
-        # let's add a fully-connected layer
-        x = Dense(1024, activation='relu')(x)
-        # and a logistic layer -- let's say we have 200 classes
-        predictions = Dense(output_classes, activation='softmax')(x)
+            x = base_model.output
+            # let's add a fully-connected layer
+            x = Dense(1024, activation='relu')(x)
+            # and a logistic layer -- let's say we have 200 classes
+            predictions = Dense(output_classes, activation='softmax')(x)
+            return Model(inputs=base_model.inputs, outputs=predictions)
 
-        return Model(inputs=base_model.inputs, outputs=predictions)
+        extractor_params = {'architecture': architecture,
+                            'epochs': 50,
+                            'trainable_layers': last_layer,
+                            'preprocessing_function': Applications.get_preprocessing_application(architecture=architecture)}
+
+        return KerasFineClassifier(fine_tune_model, **extractor_params)
 
     @staticmethod
     def get_dummy_deep(output_classes):
