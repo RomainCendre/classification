@@ -189,7 +189,7 @@ class KerasBatchClassifier(KerasClassifier):
         train = self.create_generator(X=X, y=y, params=params)
         validation = None
         if X_validation is not None:
-            validation = self.create_generator(X=X_validation, y=y_validation, params=params)
+            validation = self.create_generator(X=X_validation, y=y_validation, params=params, prediction_mode=True)
 
         if not self.model._is_compiled:
             tr_x, tr_y = train[0]
@@ -211,11 +211,9 @@ class KerasBatchClassifier(KerasClassifier):
         # Define some local arguments
         all_params = deepcopy(self.sk_params)
         all_params.update(params)
-        all_params.update({'shuffle': False})
-        all_params.update({'batch_size': 1})
 
         # Create generator for validation
-        valid = self.create_generator(X=X, params=all_params)
+        valid = self.create_generator(X=X, params=all_params, prediction_mode=True)
 
         # Get arguments for predict
         params_pred = self.filter_params(all_params, Sequential.predict_generator)
@@ -228,16 +226,14 @@ class KerasBatchClassifier(KerasClassifier):
         return probs
 
     def score(self, X, y, **params):
+        self.init_model()
 
         # Define some local arguments
         all_params = deepcopy(self.sk_params)
         all_params.update(params)
-        all_params.update({'shuffle': False})
-        all_params.update({'batch_size': 1})
 
         # Create generator for validation
-        params_valid = {'preprocessing_function': all_params.get('preprocessing_function', None)}
-        valid = self.create_generator(X=X, params=params_valid)
+        valid = self.create_generator(X=X, params=all_params, prediction_mode=True)
 
         # Get arguments for fit
         params_eval = self.filter_params(all_params, Sequential.evaluate_generator)
@@ -250,17 +246,25 @@ class KerasBatchClassifier(KerasClassifier):
                          'You should pass `metrics=["accuracy"]` to '
                          'the `model.compile()` method.')
 
-    def create_generator(self, X, y=None, params={}):
+    def create_generator(self, X, y=None, params={}, prediction_mode=False):
         # Init generator
         params_init = deepcopy(self.sk_params)
         params_init.update(params)
-        params_init = self.filter_params(params_init, ResourcesGenerator.__init__)
-        generator = ResourcesGenerator(**params_init)
+        if prediction_mode:
+            generator = ResourcesGenerator()
+        else:
+            params_init = self.filter_params(params_init, ResourcesGenerator.__init__)
+            generator = ResourcesGenerator(**params_init)
 
         # Create iterator
         params_flow = deepcopy(self.sk_params)
         params_flow.update(params)
         params_flow = self.filter_params(params_flow, ResourcesGenerator.flow_from_paths)
+
+        if prediction_mode:
+            params_flow.update({'shuffle': False})
+            params_flow.update({'batch_size': 1})
+
         if y is not None:
             return generator.flow_from_paths(X, y, **params_flow)
         else:
@@ -326,7 +330,7 @@ class KerasFineClassifier(KerasBatchClassifier):
         train = self.create_generator(X=X, y=y, params=params)
         validation = None
         if X_validation is not None:
-            validation = self.create_generator(X=X_validation, y=y_validation, params=params)
+            validation = self.create_generator(X=X_validation, y=y_validation, params=params, prediction_mode=True)
 
         # first: train only the top layers (which were randomly initialized)
         # i.e. freeze all convolutional InceptionV3 layers
@@ -363,15 +367,9 @@ class KerasFineClassifier(KerasBatchClassifier):
         # Define some local arguments
         all_params = deepcopy(self.sk_params)
         all_params.update(params)
-        all_params.update({'shuffle': False})
-        all_params.update({'batch_size': 1})
 
         # Create generator for validation
-        params_valid = {'preprocessing_function': all_params.get('preprocessing_function', None)}
-        valid = self.create_generator(X=X, params=params_valid)
-
-        # Get arguments for predict
-        params_pred = self.filter_params(all_params, Sequential.predict_generator)
+        valid = self.create_generator(X=X, params=all_params, prediction_mode=True)
 
         # Predict!
         extractor_layers = all_params.get('extractor_layers', None)
@@ -380,6 +378,8 @@ class KerasFineClassifier(KerasBatchClassifier):
         else:
             model = Model(self.model.inputs, self.model.layers[extractor_layers].output)
 
+        # Get arguments for predict
+        params_pred = self.filter_params(all_params, Sequential.predict_generator)
         probs = model.predict_generator(generator=valid, **params_pred)
 
         # check if binary classification
