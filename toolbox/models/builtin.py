@@ -63,8 +63,7 @@ class Applications:
             predictions = Dense(output_classes, activation='softmax')(x)
             return Model(inputs=base_model.inputs, outputs=predictions)
 
-        extractor_params = {'architecture': architecture,
-                            'epochs': 50,
+        extractor_params = {'epochs': 50,
                             'trainable_layers': last_layer,
                             'preprocessing_function': Applications.get_preprocessing_application(architecture=architecture)}
 
