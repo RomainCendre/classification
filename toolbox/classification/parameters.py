@@ -163,7 +163,7 @@ class Dermatology:
 
             # Create patch informations
             meta = dict()
-            meta.update({'Full_Path': str(filepath)})
+            meta.update({'Datum': str(filepath)})
             meta.update({'Multi_Index': index})
             meta.update({'Coefficient': coefficient})
             meta.update({'Reference': '{ref}_{index}_M'.format(ref=reference, index=index)})
@@ -213,7 +213,7 @@ class Dermatology:
 
             # Create patch informations
             meta = dict()
-            meta.update({'Full_Path': str(filepath)})
+            meta.update({'Datum': str(filepath)})
             meta.update({'Window_Index': int(index)})
             meta.update({'Label': 'Unknown'})
             start = location[0, 0]
