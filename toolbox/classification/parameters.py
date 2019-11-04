@@ -65,10 +65,12 @@ class Dermatology:
     @staticmethod
     def sliding_images(size, overlap, modality=None):
         home_path = Path().home()
-        input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
+        location = home_path / 'Data/Skin/'
+        input_folders = [location / 'Elisa.csv', location / 'JeanLuc.csv']
+        # Create temporary folder
         work_folder = home_path / '.research'
         work_folder.mkdir(exist_ok=True)
-        return Dermatology.__sliding_images(input_folder, work_folder, size, overlap, modality)
+        return Dermatology.__sliding_images(input_folders, work_folder, size, overlap, modality)
 
     @staticmethod
     def test_images(modality=None):
@@ -105,7 +107,7 @@ class Dermatology:
     @staticmethod
     def __sliding_images(folder, work_folder, size, overlap, modality):
         dataframe = Dermatology.__images(folder, modality=modality, patches=False)
-        return Dermatology.__to_patchify(dataframe, size, overlap, work_folder)
+        return Dermatology.__to_patch(dataframe, size, overlap, work_folder)
 
     @staticmethod
     def __scan(folder_path, patches=True, modality=None):
@@ -128,17 +130,17 @@ class Dermatology:
         return pd.concat(multis_data, sort=False)
 
     @staticmethod
-    def __to_patchify(dataframe, size, overlap, work_folder):
+    def __to_patch(dataframe, size, overlap, work_folder):
         # Browse data
         images = dataframe[dataframe.Type == 'Full']
         patches = dataframe[dataframe.Type == 'Patch']
 
         # Get into patches
         windows_data = [patches]
-        DermatologyDataset.__print_progress_bar(0, len(dataframe), prefix='Progress:')
+        Dermatology.__print_progress_bar(0, len(dataframe), prefix='Progress:')
         for index, (df_index, data) in zip(np.arange(len(images.index)), images.iterrows()):
-            DermatologyDataset.__print_progress_bar(index, len(images), prefix='Progress:')
-            windows = DermatologyDataset.__patchify(data['Full_Path'], data['Reference'], size, overlap, work_folder)
+            Dermatology.__print_progress_bar(index, len(images), prefix='Progress:')
+            windows = Dermatology.__patchify(data['Datum'], data['Reference'], size, overlap, work_folder)
             windows['Type'] = 'Instance'
             windows = pd.concat([windows, pd.DataFrame(data).T], sort=False)
             windows = windows.fillna(data)
