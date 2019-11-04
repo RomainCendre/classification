@@ -158,9 +158,9 @@ class Tools:
             if path is not None:
                 file = path / f'{out}_{fold}.hdf5'
                 if isinstance(fitted_model, KerasBatchClassifier):
-                    fitted_model.save(file)
+                    fitted_model.save(str(file))
                 else:
-                    pickle.dumps(fitted_model, file)
+                    pickle.dumps(fitted_model, str(file))
 
             # Predict
             dataframe[fold_preds] = Tools.predict(dataframe[mask], {'datum': tags['datum']}, fold_preds, fitted_model)[fold_preds]
