@@ -127,7 +127,7 @@ class Dermatology:
             multi = multi.fillna(data)
             multis_data.append(multi)
 
-        return pd.concat(multis_data, sort=False)
+        return pd.concat(multis_data, sort=False, ignore_index=True)
 
     @staticmethod
     def __to_patch(dataframe, size, overlap, work_folder):
@@ -146,7 +146,7 @@ class Dermatology:
             windows = windows.fillna(data)
             windows_data.append(windows)
 
-        return pd.concat(windows_data, sort=False)
+        return pd.concat(windows_data, sort=False, ignore_index=True)
 
     @staticmethod
     def __multi_resolution(filename, reference, coefficients, work_folder):

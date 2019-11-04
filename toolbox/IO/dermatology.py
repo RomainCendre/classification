@@ -152,7 +152,7 @@ class Generator:
             data = toolbox_path/'data_test/dermatology'/modality/synthetics/'{type}_healthy.bmp'.format(type=type)
             label = 'Normal'
 
-        return pandas.Series({'Full_Path': str(data), 'Path': data.name,
+        return pandas.Series({'Datum': str(data), 'Path': data.name,
                               'Label': label, 'Modality': 'Microscopy', 'Type': type})
 
 
