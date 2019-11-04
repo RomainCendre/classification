@@ -23,7 +23,7 @@ class Reader:
                     continue
 
                 # Read patient data
-                patient_data = Reader.read_patient(current_folder)
+                patient_data = Reader.read_patient(current_folder, parameters)
                 patient_data['ID'] = row['ID']
                 patient_data = patient_data.set_index('ID').join(pandas.DataFrame(row).transpose().set_index('ID'))
                 patient_data = patient_data.reset_index()

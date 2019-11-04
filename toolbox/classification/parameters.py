@@ -53,12 +53,14 @@ class Dermatology:
         return Dermatology.__images(input_folders, modality)
 
     @staticmethod
-    def multiresolution(coefficients, modality=None):
+    def multiple_resolution(coefficients, modality=None):
         home_path = Path().home()
-        input_folder = home_path / 'Data/Skin/Saint_Etienne/Patients'
+        location = home_path / 'Data/Skin/'
+        input_folders = [location / 'Elisa.csv', location / 'JeanLuc.csv']
+        # Create temporary folder
         work_folder = home_path / '.research'
         work_folder.mkdir(exist_ok=True)
-        return Dermatology.__multi_images(input_folder, work_folder, coefficients, modality)
+        return Dermatology.__multi_images(input_folders, work_folder, coefficients, modality)
 
     @staticmethod
     def sliding_images(size, overlap, modality=None):
@@ -87,30 +89,22 @@ class Dermatology:
         return Dermatology.__sliding_images(None, work_folder, size, overlap, modality)
 
     @staticmethod
-    def __images(folder, modality):
+    def __images(folder, modality, patches=True):
         if folder is None:
             generator = dermatology.Generator((5, 10), 20)
-            inputs = generator.generate_study()
+            dataframe = generator.generate_study(patches=patches)
         else:
-            inputs = Dermatology.__scan(folder, patches=True, modality=modality)
-        return inputs
+            dataframe = Dermatology.__scan(folder, patches=patches, modality=modality)
+        return dataframe
 
     @staticmethod
     def __multi_images(folder, work_folder, coefficients, modality):
-        if folder is None:
-            generator = dermatology.Generator((5, 10), 20)
-            dataframe = generator.generate_study(patches=False)
-        else:
-            dataframe = Dermatology.__scan(folder, patches=False, modality=modality)
+        dataframe = Dermatology.__images(folder, modality=modality, patches=False)
         return Dermatology.__to_multi(dataframe, coefficients, work_folder)
 
     @staticmethod
     def __sliding_images(folder, work_folder, size, overlap, modality):
-        if folder is None:
-            generator = dermatology.Generator((5, 10), 20)
-            dataframe = generator.generate_study()
-        else:
-            dataframe = Dermatology.__scan(folder, patches=True, modality=modality)
+        dataframe = Dermatology.__images(folder, modality=modality, patches=False)
         return Dermatology.__to_patchify(dataframe, size, overlap, work_folder)
 
     @staticmethod
@@ -124,9 +118,8 @@ class Dermatology:
         multis_data = []
         Dermatology.__print_progress_bar(0, len(dataframe), prefix='Progress:')
         for index, (df_index, data) in zip(np.arange(len(dataframe.index)), dataframe.iterrows()):
-            DermatologyDataset.__print_progress_bar(index, len(dataframe), prefix='Progress:')
-            multi = DermatologyDataset.__multi_resolution(data['Full_Path'], data['Reference'], coefficients,
-                                                          work_folder)
+            Dermatology.__print_progress_bar(index, len(dataframe), prefix='Progress:')
+            multi = Dermatology.__multi_resolution(data['Datum'], data['Reference'], coefficients, work_folder)
             multi['Type'] = 'Instance'
             multi = pd.concat([multi, pd.DataFrame(data).T], sort=False)
             multi = multi.fillna(data)
