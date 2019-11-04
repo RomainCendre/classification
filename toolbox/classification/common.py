@@ -8,44 +8,27 @@ from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
-
 from toolbox.models.models import KerasBatchClassifier
-
 warnings.filterwarnings("ignore", category=PerformanceWarning)
+
 
 class Data:
 
     @staticmethod
-    def collapse(self, filters, on, filters_collapse, on_collapse, data_tag=None):
-        pd.options.mode.chained_assignment = None
-        if data_tag is None:
-            data_tag = self.tags['datum']
-
-        # Filters
-        filters.update(self.filters)
-        filters_collapse.update(self.filters)
-
-        # Query
-        query = self.to_query(filters)
-        query_collapse = self.to_query(filters_collapse)
-
-        # Data
-        data = self.data.query(query)
-        data_collapse = self.data.query(query_collapse)
+    def collapse(df1, on_tag_1, target_tag, df2, on_tag_2, datum_tag):
+        output = df1.copy().reset_index(drop=True)
 
         # Collapse data
-        rows = []
-        for name, group in data.groupby(on):
+        if target_tag not in df1:
+            output[target_tag] = [[]] * len(output)
+
+        for index, row in output.iterrows():
             # Get features by group
-            raw_row = group.iloc[0]
-            group_collapse = data_collapse[data_collapse[on_collapse] == name]
-            raw_row[data_tag] = np.array(group_collapse[data_tag].tolist())
-            rows.append(raw_row)
+            group_collapse = df2[df2[on_tag_2] == row[on_tag_1]]
+            output.at[index, target_tag] = np.array(group_collapse[datum_tag].tolist())
 
         # Now set new data
-        input = copy(self)
-        input.data = pd.DataFrame(rows)
-        return input
+        return output
 
 
 class Folds:
