@@ -50,7 +50,7 @@ class ImagesViews:
         data = inputs.loc[index, tags['datum']]
         label = inputs.loc[index, tags['label_encode']]
         image = utils.load_img(data)
-        if len(image) != 3:
+        if len(image.shape) == 2:
             image = np.stack((image,) * 3, axis=-1)
 
         # Activation map
@@ -65,7 +65,7 @@ class ImagesViews:
         plt.show()
 
     @staticmethod
-    def deep_saliency_map(inputs, tags, network, layer, modifier=None, index=0):
+    def deep_saliency_map(inputs, tags, network, modifier=None, index=0):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in tags.keys() for elem in mandatory):
@@ -78,12 +78,11 @@ class ImagesViews:
         data = inputs.loc[index, tags['datum']]
         label = inputs.loc[index, tags['label_encode']]
         image = utils.load_img(data)
-        if len(image) != 3:
+        if len(image.shape) == 2:
             image = np.stack((image,) * 3, axis=-1)
 
         # Saliency map
         plt.figure()
-        # 20 is the imagenet index corresponding to `ouzel`
         grads = visualize_saliency(network, layer_idx, filter_indices=label,
                                    seed_input=image, backprop_modifier=modifier)
         # Lets overlay the heatmap onto original image.
