@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import skimage as sk
 from sklearn.preprocessing import normalize
 from vis.utils import utils
-from vis.visualization import overlay, visualize_cam
+from vis.visualization import overlay, visualize_cam, visualize_saliency
 
 
 class ImagesViews:
@@ -61,6 +61,33 @@ class ImagesViews:
         # Lets overlay the heatmap onto original image.
         jet_heatmap = np.uint8(cm.jet(grads)[..., :3] * 255)
         plt.imshow(overlay(jet_heatmap, image))
+        plt.axis('off')
+        plt.show()
+
+    @staticmethod
+    def deep_saliency_map(inputs, tags, network, layer, modifier=None, index=0):
+        # Check mandatory fields
+        mandatory = ['datum', 'label_encode']
+        if not isinstance(tags, dict) or not all(elem in tags.keys() for elem in mandatory):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        # Layer access
+        layer_idx = -1  # Use last instead utils.find_layer_idx(network, 'fc1000')
+
+        # Read image
+        data = inputs.loc[index, tags['datum']]
+        label = inputs.loc[index, tags['label_encode']]
+        image = utils.load_img(data)
+        if len(image) != 3:
+            image = np.stack((image,) * 3, axis=-1)
+
+        # Saliency map
+        plt.figure()
+        # 20 is the imagenet index corresponding to `ouzel`
+        grads = visualize_saliency(network, layer_idx, filter_indices=label,
+                                   seed_input=image, backprop_modifier=modifier)
+        # Lets overlay the heatmap onto original image.
+        plt.imshow(grads, cmap='jet')
         plt.axis('off')
         plt.show()
 
