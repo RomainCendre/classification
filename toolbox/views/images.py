@@ -1,12 +1,14 @@
 import skimage
 import numpy as np
 from pathlib import Path
-from matplotlib import pyplot
 from PIL import Image, ImageDraw
+from matplotlib import pyplot
+import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import skimage as sk
 from sklearn.preprocessing import normalize
-
+from vis.utils import utils
+from vis.visualization import overlay, visualize_cam
 
 class ImagesViews:
 
@@ -22,7 +24,7 @@ class ImagesViews:
 
         # model suppose to be svm
         data = inputs.loc[index, tags['datum']]
-        image = sk.io.imread(data)
+        image = utils.load_img(data)
         features = extractor.transform([data])
 
         labels = inputs.loc[index, tags['label_encode']]
@@ -31,6 +33,33 @@ class ImagesViews:
                                heatmap.shape)
         heatmap = np.sum(heatmap, axis=2)
         return ImagesViews.__add(np.array(image), heatmap)
+
+    @staticmethod
+    def deep_activation_map(inputs, tags, network, layer, modifier=None, index=0):
+        # Check mandatory fields
+        mandatory = ['datum', 'label_encode']
+        if not isinstance(tags, dict) or not all(elem in tags.keys() for elem in mandatory):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        # Layer access
+        layer_idx = -1  # Use last instead utils.find_layer_idx(network, 'fc1000')
+        penultimate_layer = utils.find_layer_idx(network, layer)
+
+        # Data read
+        data = inputs.loc[index, tags['datum']]
+        image = utils.load_img(data)
+
+        # Activation map
+        plt.figure()
+        # 20 is the imagenet index corresponding to `ouzel`
+        grads = visualize_cam(network, layer_idx, filter_indices=20,
+                              seed_input=image, penultimate_layer_idx=penultimate_layer,
+                              backprop_modifier=modifier)
+        # Lets overlay the heatmap onto original image.
+        jet_heatmap = np.uint8(cm.jet(grads)[..., :3] * 255)
+        plt.imshow(overlay(jet_heatmap, image))
+        plt.axis('off')
+        plt.show()
 
     @staticmethod
     def histogram(inputs, tags, settings, mode='default'):
