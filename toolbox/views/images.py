@@ -10,6 +10,7 @@ from sklearn.preprocessing import normalize
 from vis.utils import utils
 from vis.visualization import overlay, visualize_cam
 
+
 class ImagesViews:
 
     @staticmethod
@@ -45,14 +46,16 @@ class ImagesViews:
         layer_idx = -1  # Use last instead utils.find_layer_idx(network, 'fc1000')
         penultimate_layer = utils.find_layer_idx(network, layer)
 
-        # Data read
+        # Read image
         data = inputs.loc[index, tags['datum']]
+        label = inputs.loc[index, tags['label_encode']]
         image = utils.load_img(data)
+        if len(image) != 3:
+            image = np.stack((image,) * 3, axis=-1)
 
         # Activation map
         plt.figure()
-        # 20 is the imagenet index corresponding to `ouzel`
-        grads = visualize_cam(network, layer_idx, filter_indices=20,
+        grads = visualize_cam(network, layer_idx, filter_indices=label,
                               seed_input=image, penultimate_layer_idx=penultimate_layer,
                               backprop_modifier=modifier)
         # Lets overlay the heatmap onto original image.

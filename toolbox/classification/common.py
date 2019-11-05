@@ -230,7 +230,7 @@ class Tools:
         # Check predict_proba field
         if not hasattr(model, 'predict'):
             warnings.warn('No method predict found.')
-            return
+            return pd.DataFrame({out: [np.nan] * len(dataframe.index)})
 
         # Check mandatory fields
         mandatory = ['datum']
@@ -253,7 +253,7 @@ class Tools:
         # Check predict_proba field
         if not hasattr(model, 'predict_proba'):
             warnings.warn('No method predict_proba found.')
-            return
+            return pd.DataFrame({out: [np.nan] * len(dataframe.index)})
 
         # Check mandatory fields
         mandatory = ['datum']
