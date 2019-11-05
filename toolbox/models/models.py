@@ -7,11 +7,29 @@ from keras.engine.saving import load_model
 from keras.optimizers import SGD
 from keras.utils.generic_utils import has_arg, to_list
 from keras.wrappers.scikit_learn import KerasClassifier
+from misvm import SIL
 from numpy import hstack
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.metrics import accuracy_score
 from sklearn.utils.multiclass import unique_labels
 from toolbox.models.generators import ResourcesGenerator
+from sklearn.preprocessing import minmax_scale
+
+
+class CustomSIL(SIL):
+
+    def fit(self, bags, y):
+        y = 2 * y - 1
+        super().fit(bags, y)
+
+    def predict(self, bags, instancePrediction = None):
+        return np.argmax(self.predict_proba(bags, instancePrediction), axis=1)
+
+    def predict_proba(self, bags, instancePrediction=None):
+        predictions = super().predict(bags, instancePrediction)
+        max_value = np.max(np.abs(predictions))
+        predictions = ((predictions/max_value)*0.5)+0.5
+        return np.array([1-predictions, predictions]).T
 
 
 # Decision taking based on predictions
