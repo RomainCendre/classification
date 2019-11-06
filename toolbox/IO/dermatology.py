@@ -17,13 +17,17 @@ class Reader:
             meta_patient = pandas.read_csv(table_path, dtype=str).fillna('')
             for ind, row in meta_patient.iterrows():
                 # Parse patient directory
-                current_folder = table_path.parent/'Patients'/row['ID']
+                current_folder = table_path.parent / 'Patients' / row['ID']
                 if not current_folder or not current_folder.is_dir():
                     warnings.warn(f'Folder {str(current_folder)} not found.')
                     continue
 
                 # Read patient data
                 patient_data = Reader.read_patient(current_folder, parameters)
+                # In case of there is no patches
+                if patient_data is None:
+                    continue
+
                 patient_data['ID'] = row['ID']
                 patient_data = patient_data.set_index('ID').join(pandas.DataFrame(row).transpose().set_index('ID'))
                 patient_data = patient_data.reset_index()
@@ -39,29 +43,37 @@ class Reader:
 
     @staticmethod
     def read_patient(subdir, parameters={}):
+        param_type = parameters.get('type', None)
+
         # Read patient and images data
         images = Reader.read_data_file(subdir, 'images', modality=parameters.get('modality', None))
         images = images.drop(columns='Depth(um)', errors='ignore')
+        patches = Reader.read_data_file(subdir, 'patches', modality=parameters.get('modality', None))
 
         # Patch filter
-        if parameters.get('patches', True):
-            patches = Reader.read_data_file(subdir, 'patches', modality=parameters.get('modality', None))
-        else:
-            patches = None
+        if images is not None:
+            images['Reference'] = images.apply(lambda row: f'{subdir.stem}_{row.name}_F', axis=1)
+            images['Source'] = images['Reference']
 
-        # Merge both
-        images['Reference'] = images.apply(lambda row: f'{subdir.stem}_{row.name}_F', axis=1)
-        images['Source'] = images['Reference']
+        # Only return images
+        if param_type == 'Full':
+            return images
 
-        if patches is not None:
+        if images is not None and patches is not None:
             patches['Reference'] = patches.apply(lambda row: f'{subdir.stem}_{row.name}_P', axis=1)
-            patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0], axis=1)
-        return pandas.concat([images, patches], sort=False, ignore_index=True)
+            patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0],
+                                              axis=1)
+
+        # Only return patches or both
+        if param_type == 'Patch':
+            return patches
+        else:
+            return pandas.concat([images, patches], sort=False, ignore_index=True)
 
     @staticmethod
     def read_data_file(subdir, ftype='images', modality=None):
         # Patient file
-        data_file = subdir/f'{ftype}.csv'
+        data_file = subdir / f'{ftype}.csv'
         if not data_file.is_file():
             return None
 
@@ -72,10 +84,10 @@ class Reader:
         data = data.reindex(index=order_by_index(data.index, index_natsorted(data.Path)))
         if ftype == 'images':
             data['Type'] = 'Full'
-            data['Datum'] = data.apply(lambda row: str(subdir/row['Modality']/row['Path']), axis=1)
+            data['Datum'] = data.apply(lambda row: str(subdir / row['Modality'] / row['Path']), axis=1)
         else:
             data['Type'] = 'Patch'
-            data['Datum'] = data.apply(lambda row: str(subdir/'patches'/row['Path']), axis=1)
+            data['Datum'] = data.apply(lambda row: str(subdir / 'patches' / row['Path']), axis=1)
 
         if modality is not None:
             data = data[data.Modality == modality]
@@ -84,7 +96,7 @@ class Reader:
     @staticmethod
     def read_patient_file(folder_path):
         # Patient file
-        return pandas.read_csv(folder_path/'patient.csv', dtype=str)
+        return pandas.read_csv(folder_path / 'patient.csv', dtype=str)
 
     @staticmethod
     def filter_str(my_string):
@@ -97,11 +109,11 @@ class Generator:
         self.nb_images = nb_images
         self.nb_patients = nb_patients
 
-    def generate_study(self, patches=True):
+    def generate_study(self, data_type=None):
         random_patient = list(np.random.randint(low=1, high=3, size=self.nb_patients))
         patients = []
         for index, random in enumerate(random_patient):
-            patient = self.generate_patient(random, patches)
+            patient = self.generate_patient(random, data_type)
             patient['ID'] = index
             patient['Reference'] = patient.apply(lambda row: '{patient}_{image}_F'.format(patient=row['ID'],
                                                                                           image=row.name), axis=1)
@@ -110,19 +122,20 @@ class Generator:
         patients = pandas.concat(patients, sort=False, ignore_index=True)
         return patients
 
-    def generate_patient(self, mode, patches):
+    def generate_patient(self, mode, data_type):
         random_data = list(np.random.randint(mode + 1, size=np.random.randint(self.nb_images[0], self.nb_images[1])))
         data = []
         # Full images
-        for index, random in enumerate(random_data):
-            datum = self.generate_image(random)
-            datum['ID_Image'] = index
-            datum['Diagnosis'] = 'LM/LMM'
-            datum.reindex(index=['ID_Image'])
-            data.append(datum)
+        if data_type == 'Full' or data_type is None:
+            for index, random in enumerate(random_data):
+                datum = self.generate_image(random)
+                datum['ID_Image'] = index
+                datum['Diagnosis'] = 'LM/LMM'
+                datum.reindex(index=['ID_Image'])
+                data.append(datum)
 
         # Patches images
-        if patches:
+        if data_type == 'Patch' or data_type is None:
             for index, random in enumerate(random_data):
                 datum = self.generate_image(random, type='Patch')
                 datum['ID_Image'] = index
@@ -143,13 +156,16 @@ class Generator:
         toolbox_path = Path(__file__).parent.parent
         synthetics = 'synthetics' if synthetic else 'basics'
         if mode == 2:
-            data = toolbox_path/'data_test/dermatology'/modality/synthetics/'{type}_malignant.bmp'.format(type=type)
+            data = toolbox_path / 'data_test/dermatology' / modality / synthetics / '{type}_malignant.bmp'.format(
+                type=type)
             label = 'Malignant'
         elif mode == 1:
-            data = toolbox_path/'data_test/dermatology'/modality/synthetics/'{type}_benign.bmp'.format(type=type)
+            data = toolbox_path / 'data_test/dermatology' / modality / synthetics / '{type}_benign.bmp'.format(
+                type=type)
             label = 'Benign'
         else:
-            data = toolbox_path/'data_test/dermatology'/modality/synthetics/'{type}_healthy.bmp'.format(type=type)
+            data = toolbox_path / 'data_test/dermatology' / modality / synthetics / '{type}_healthy.bmp'.format(
+                type=type)
             label = 'Normal'
 
         return pandas.Series({'Datum': str(data), 'Path': data.name,
@@ -171,17 +187,17 @@ class DataManager:
         if not root_folder.is_dir():
             raise ValueError('{folder} not a folder'.format(folder=root_folder))
 
-        self.table_file = root_folder/'Table.csv'
-        self.rcm_file = root_folder/'RCM.csv'
-        self.microscopy_folder = root_folder/'Microscopy'
-        self.dermoscopy_folder = root_folder/'Dermoscopy'
-        self.photography_folder = root_folder/'Photography'
+        self.table_file = root_folder / 'Table.csv'
+        self.rcm_file = root_folder / 'RCM.csv'
+        self.microscopy_folder = root_folder / 'Microscopy'
+        self.dermoscopy_folder = root_folder / 'Dermoscopy'
+        self.photography_folder = root_folder / 'Photography'
         self.labels = ['Malignant', 'Benign', 'Normal', 'Doubtful', 'Draw']
 
     def compute_dermoscopy(self, source_id, label, output_folder):
         # Check output folder
         output_folder = Path(output_folder)
-        output_folder = output_folder/'Dermoscopy'
+        output_folder = output_folder / 'Dermoscopy'
         output_folder.mkdir(exist_ok=True)
 
         # Browse source files
@@ -189,7 +205,7 @@ class DataManager:
         for source_file in self.dermoscopy_folder.glob('{id} (*.jpg'.format(id=source_id)):
             image = Image.open(source_file)
             width, height = image.size
-            output_file = output_folder/'{base}.bmp'.format(base=source_file.stem)
+            output_file = output_folder / '{base}.bmp'.format(base=source_file.stem)
             raw_image = Image.open(source_file)
             raw_image.save(output_file, "BMP")
             images.append({'Modality': 'Dermoscopy',
@@ -202,7 +218,7 @@ class DataManager:
     def compute_photography(self, source_id, label, output_folder):
         # Check output folder
         output_folder = Path(output_folder)
-        output_folder = output_folder/'Photography'
+        output_folder = output_folder / 'Photography'
         output_folder.mkdir(exist_ok=True)
 
         # Browse source files
@@ -210,7 +226,7 @@ class DataManager:
         for source_file in self.photography_folder.glob('{id} (*.jpg'.format(id=source_id)):
             image = Image.open(source_file)
             width, height = image.size
-            output_file = output_folder/'{base}.bmp'.format(base=source_file.stem)
+            output_file = output_folder / '{base}.bmp'.format(base=source_file.stem)
             raw_image = Image.open(source_file)
             raw_image.save(output_file, "BMP")
             images.append({'Modality': 'Photography',
@@ -223,7 +239,7 @@ class DataManager:
     def compute_microscopy(self, source_id, output_folder):
         # Check output folder
         output_folder = Path(output_folder)
-        output_folder = output_folder/'Microscopy'
+        output_folder = output_folder / 'Microscopy'
         output_folder.mkdir(exist_ok=True)
 
         # Read microscopy_old file for each patient
@@ -231,14 +247,14 @@ class DataManager:
 
         images = []
         microscopy_labels = rcm_data[rcm_data['ID_RCM'] == source_id]
-        microscopy_folder = self.microscopy_folder/source_id
+        microscopy_folder = self.microscopy_folder / source_id
         # Get all microscopy_old location
         remains_images = [str(file.relative_to(microscopy_folder)) for file in microscopy_folder.glob('**/*.bmp')]
         sorted_images = {'Draw': []}
         # Identify images and their label
         for ind, row_label in microscopy_labels.iterrows():
             # Browse different labels
-            for label in self.labels:# If label doesn't contains images
+            for label in self.labels:  # If label doesn't contains images
                 if pandas.isna(row_label[label]):
                     continue
                 referenced_images = DataManager.ref_to_images(row_label[label])
@@ -249,11 +265,11 @@ class DataManager:
         for label, images_references in sorted_images.items():
             for image_reference in images_references:
                 # Construct source and destination file path
-                source_file = microscopy_folder/image_reference
+                source_file = microscopy_folder / image_reference
                 if not source_file.is_file():
                     print('Not existing {source}'.format(source=source_file))
                     continue
-                output_file = output_folder/image_reference
+                output_file = output_folder / image_reference
                 output_file.parent.mkdir(parents=True, exist_ok=True)
 
                 # Open image
@@ -300,11 +316,12 @@ class DataManager:
             DataManager.print_progress_bar(index, nb_patients, prefix='Progress:')
 
             # Construct folder reference
-            output_patient = output_folder/row['ID']
+            output_patient = output_folder / row['ID']
             output_patient.mkdir(exist_ok=True)
 
             # Write patient meta
-            pandas.DataFrame([row.drop(id_modality, errors='ignore').to_dict()]).to_csv(output_patient/'patient.csv', index=False)
+            pandas.DataFrame([row.drop(id_modality, errors='ignore').to_dict()]).to_csv(output_patient / 'patient.csv',
+                                                                                        index=False)
 
             images = []
             if 'ID_Dermoscopy' in row.index:
@@ -319,7 +336,7 @@ class DataManager:
 
             # Write images list
             dataframe = pandas.DataFrame(images)
-            dataframe.to_csv(output_patient/'images.csv', index=False)
+            dataframe.to_csv(output_patient / 'images.csv', index=False)
 
     @staticmethod
     def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):

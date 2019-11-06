@@ -46,11 +46,11 @@ class ORL:
 class Dermatology:
 
     @staticmethod
-    def images(modality=None):
+    def images(modality=None, data_type=None):
         home_path = Path().home()
         location = home_path / 'Data/Skin/'
         input_folders = [location / 'Elisa.csv', location / 'JeanLuc.csv']
-        return Dermatology.__images(input_folders, modality)
+        return Dermatology.__images(input_folders, modality, data_type)
 
     @staticmethod
     def multiple_resolution(coefficients, modality=None):
@@ -91,12 +91,12 @@ class Dermatology:
         return Dermatology.__sliding_images(None, work_folder, size, overlap, modality)
 
     @staticmethod
-    def __images(folder, modality, patches=True):
+    def __images(folder, modality, data_type=None):
         if folder is None:
             generator = dermatology.Generator((5, 10), 20)
-            dataframe = generator.generate_study(patches=patches)
+            dataframe = generator.generate_study(data_type=data_type)
         else:
-            dataframe = Dermatology.__scan(folder, patches=patches, modality=modality)
+            dataframe = Dermatology.__scan(folder, data_type=data_type, modality=modality)
         return dataframe
 
     @staticmethod
@@ -110,9 +110,9 @@ class Dermatology:
         return Dermatology.__to_patch(dataframe, size, overlap, work_folder)
 
     @staticmethod
-    def __scan(folder_path, patches=True, modality=None):
+    def __scan(folder_path, data_type=None, modality=None):
         # Browse data
-        return dermatology.Reader().read_table(folder_path, parameters={'patches': patches, 'modality': modality})
+        return dermatology.Reader().read_table(folder_path, parameters={'type': data_type, 'modality': modality})
 
     @staticmethod
     def __to_multi(dataframe, coefficients, work_folder):
