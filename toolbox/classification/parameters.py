@@ -101,12 +101,12 @@ class Dermatology:
 
     @staticmethod
     def __multi_images(folder, work_folder, coefficients, modality):
-        dataframe = Dermatology.__images(folder, modality=modality, patches=False)
+        dataframe = Dermatology.__images(folder, modality=modality, data_type='Full')
         return Dermatology.__to_multi(dataframe, coefficients, work_folder)
 
     @staticmethod
     def __sliding_images(folder, work_folder, size, overlap, modality):
-        dataframe = Dermatology.__images(folder, modality=modality, patches=False)
+        dataframe = Dermatology.__images(folder, modality=modality)
         return Dermatology.__to_patch(dataframe, size, overlap, work_folder)
 
     @staticmethod
