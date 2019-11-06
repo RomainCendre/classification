@@ -255,14 +255,6 @@ class Dermatology:
         # Print New Line on Complete
         if iteration == total:
             print()
-        # percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
-        # filled_length = int(length * iteration // total)
-        # bar = fill * filled_length + '-' * (length - filled_length)
-        # # print(f'{prefix} |{bar}| {percent} {suffix}', end='\r')
-        # print(f'{percent} {suffix}', end='\r')
-        # # Print New Line on Complete
-        # if iteration == total:
-        #     print()
 
     @staticmethod
     def get_statistics_keys():
