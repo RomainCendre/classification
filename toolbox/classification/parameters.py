@@ -137,7 +137,6 @@ class Dermatology:
 
         # Get into patches
         windows_data = [patches]
-        Dermatology.__print_progress_bar(0, len(dataframe), prefix='Progress:')
         for index, (df_index, data) in zip(np.arange(len(images.index)), images.iterrows()):
             Dermatology.__print_progress_bar(index, len(images), prefix='Progress:')
             windows = Dermatology.__patchify(data['Datum'], data['Reference'], size, overlap, work_folder)
@@ -237,7 +236,7 @@ class Dermatology:
         return pd.DataFrame(metas)
 
     @staticmethod
-    def __print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█'):
+    def __print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', print_end='\r'):
         """
         Call in a loop to create terminal progress bar
         @params:
@@ -250,12 +249,20 @@ class Dermatology:
             fill        - Optional  : bar fill character (Str)
         """
         percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
-        filled_length = int(length * iteration // total)
-        bar = fill * filled_length + '-' * (length - filled_length)
-        print('\r{prefix} |{bar}| {percent} {suffix}\r'.format(prefix=prefix, bar=bar, percent=percent, suffix=suffix))
+        filledLength = int(length * iteration // total)
+        bar = fill * filledLength + '-' * (length - filledLength)
+        print(f'{prefix} |{bar}| {percent} {suffix}', end=print_end)
         # Print New Line on Complete
         if iteration == total:
             print()
+        # percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+        # filled_length = int(length * iteration // total)
+        # bar = fill * filled_length + '-' * (length - filled_length)
+        # # print(f'{prefix} |{bar}| {percent} {suffix}', end='\r')
+        # print(f'{percent} {suffix}', end='\r')
+        # # Print New Line on Complete
+        # if iteration == total:
+        #     print()
 
     @staticmethod
     def get_statistics_keys():
