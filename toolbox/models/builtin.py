@@ -18,7 +18,7 @@ class Applications:
         elif architecture == 'InceptionResNetV2':
             model = applications.InceptionResNetV2(weights='imagenet', include_top=False, pooling=pooling)
         elif architecture == 'NASNet':
-            model = applications.NASNetLarge(weights='imagenet', include_top=False, pooling=pooling)
+            model = applications.NASNetMobile(weights='imagenet', include_top=False, pooling=pooling)
         elif architecture == 'ResNet':
             model = applications.ResNet50(weights='imagenet', include_top=False, pooling=pooling)
         else:
