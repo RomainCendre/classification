@@ -178,6 +178,12 @@ class Tools:
             else:
                 Exception(f'Expected valid unbalanced property {unbalanced}.')
 
+        # Check for supervised stuff if in supervised mode
+        if not hasattr(model, 'is_semi'):
+            labelled = labels != -1
+            data = data[labelled]
+            labels = labels[labelled]
+
         if grid is not None:
             grid_search = GridSearchCV(model, param_grid=grid, cv=2, iid=False, n_jobs=cpu)
             grid_search.fit(data, y=labels)
