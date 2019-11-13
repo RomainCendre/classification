@@ -10,6 +10,7 @@ from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 from toolbox.models.models import KerasBatchClassifier
 warnings.filterwarnings("ignore", category=PerformanceWarning)
+pd.options.mode.chained_assignment = None
 
 
 class Data:
@@ -100,14 +101,15 @@ class Tools:
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
-        # Mask creation (see pandas view / copy mechanism)
-        if mask is None:
-            mask = [True] * len(dataframe.index)
-        mask = pd.Series(mask)
-
         # Check valid labels, at least several classes
-        if not Tools.__check_labels(dataframe[mask], {'label_encode': tags['label_encode']}):
+        if not Tools.__check_labels(dataframe, {'label_encode': tags['label_encode']}):
             raise ValueError('Not enough unique labels where found, at least 2.')
+
+        # Mask dataframe
+        if mask is None:
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
 
         # Out fields
         out_preds = f'{out}_Predictions'
@@ -116,7 +118,7 @@ class Tools:
         out_params = f'{out}_Parameters'
 
         # Browse folds
-        folds = dataframe.loc[mask, 'Fold']
+        folds = dataframe['Fold']
         for fold in np.unique(folds):
             # Out fields
             fold_preds = f'{out_preds}_{fold}'
@@ -129,12 +131,12 @@ class Tools:
             print(f'Fold {fold} performed...', end='\r')
 
             # Check that current fold respect labels
-            if not Tools.__check_labels(dataframe[mask], {'label_encode': tags['label_encode']}, ~test_mask):
+            if not Tools.__check_labels(dataframe[~test_mask], {'label_encode': tags['label_encode']}, ~test_mask):
                 warnings.warn(f'Invalid fold, missing labels for fold {fold}')
                 continue
 
             # Clone model
-            fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), mask=~test_mask,
+            fitted_model = Tools.fit(dataframe[~test_mask], tags, deepcopy(model),
                                      grid=grid, distribution=distribution, unbalanced=unbalanced, cpu=cpu)
 
             # Save if needed
@@ -146,31 +148,28 @@ class Tools:
                     pickle.dumps(fitted_model, str(file))
 
             # Predict
-            dataframe[fold_preds] = Tools.predict(dataframe[mask], {'datum': tags['datum']}, fold_preds, fitted_model)[fold_preds]
-            dataframe[fold_probas] = Tools.predict_proba(dataframe[mask], {'datum': tags['datum']}, fold_probas, fitted_model)[fold_probas]
-            dataframe[fold_features] = Tools.number_of_features(dataframe[mask], fitted_model, fold_params)[fold_params]
-            dataframe[fold_params] = [fitted_model.best_params] * len(dataframe)
+            Tools.predict(sub, {'datum': tags['datum']}, fold_preds, fitted_model, mask=test_mask)
+            Tools.predict_proba(sub, {'datum': tags['datum']}, fold_probas, fitted_model, mask=test_mask)
+            Tools.number_of_features(sub, fitted_model, fold_features, mask=test_mask)
+            Tools.__best_params(sub, fitted_model, fold_params, mask=test_mask)
 
+        if mask is not None:
+            dataframe[mask] = sub
         print(f'Evaluation achieved!', end='\r')
-        return dataframe
 
     @staticmethod
-    def fit(dataframe, tags, model, mask=None, grid=None, distribution=None, unbalanced=None, cpu=-1):
+    def fit(dataframe, tags, model, grid=None, distribution=None, unbalanced=None, cpu=-1):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
-        # Mask creation (see pandas view / copy mechanism)
-        if mask is None:
-            mask = [True] * len(dataframe.index)
-
         # Check valid labels, at least several classes
-        if not Tools.__check_labels(dataframe[mask], {'label_encode': tags['label_encode']}):
+        if not Tools.__check_labels(dataframe, {'label_encode': tags['label_encode']}):
             raise ValueError('Not enough unique labels where found, at least 2.')
 
-        data = np.array(dataframe.loc[mask, tags['datum']].to_list())
-        labels = np.array(dataframe.loc[mask, tags['label_encode']].to_list())
+        data = np.array(dataframe[tags['datum']].to_list())
+        labels = np.array(dataframe[tags['label_encode']].to_list())
 
         if unbalanced is not None:
             if callable(getattr(unbalanced, 'fit_resample', None)):
@@ -208,74 +207,156 @@ class Tools:
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
-        # Mask creation (see pandas view / copy mechanism)
+        # Mask dataframe
         if mask is None:
-            mask = [True] * len(dataframe.index)
-        mask = pd.Series(mask)
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
 
         # Clone model
-        fitted_model = Tools.fit(dataframe[mask], tags, deepcopy(model), mask=mask, grid=grid,
-                                 distribution=distribution, unbalanced=unbalanced, cpu=cpu)
+        fitted_model = Tools.fit(sub, tags, deepcopy(model), grid=grid, distribution=distribution, unbalanced=unbalanced, cpu=cpu)
 
         # Transform
-        dataframe.loc[mask, out] = Tools.transform(dataframe[mask], {'datum': tags['datum']}, fitted_model, out)[out]
+        sub[out] = Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out)[out]
 
-        return dataframe
+        if mask is not None:
+            dataframe[mask] = sub
+
+    @staticmethod
+    def fit_predict(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None, cpu=-1):
+        # Fold needed for evaluation
+        if 'Fold' not in dataframe:
+            raise Exception('Need to build fold.')
+
+        # Check mandatory fields
+        mandatory = ['datum', 'label_encode']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        # Check valid labels, at least several classes
+        if not Tools.__check_labels(dataframe, {'label_encode': tags['label_encode']}):
+            raise ValueError('Not enough unique labels where found, at least 2.')
+
+        # Out fields
+        out_preds = f'{out}_Predictions'
+        out_probas = f'{out}_Probabilities'
+
+        # Manage columns
+        if out_preds not in dataframe:
+            dataframe[out_preds] = np.nan
+        if out_probas not in dataframe:
+            dataframe[out_probas] = np.nan
+
+        # Mask dataframe
+        if mask is None:
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
+
+        # Browse folds
+        folds = sub['Fold']
+        for fold in np.unique(folds):
+            # Create mask
+            test_mask = folds == fold
+
+            # Check that current fold respect labels
+            if not Tools.__check_labels(sub[~test_mask], {'label_encode': tags['label_encode']}):
+                warnings.warn(f'Invalid fold, missing labels for fold {fold}')
+                continue
+
+            # Clone model
+            fitted_model = Tools.fit(sub[~test_mask], tags, model=deepcopy(model), grid=grid, distribution=distribution,
+                                     unbalanced=unbalanced, cpu=cpu)
+
+            # Fill new data
+            Tools.predict(sub, {'datum': tags['datum']}, out_preds, fitted_model, mask=test_mask)
+            Tools.predict_proba(sub, {'datum': tags['datum']}, out_probas, fitted_model, mask=test_mask)
+
+        if mask is not None:
+            dataframe[mask] = sub
 
     @staticmethod
     def number_of_features(dataframe, model, out, mask=None):
-        # Mask creation (see pandas view / copy mechanism)
+        # Create column if doesnt exist
+        if out not in dataframe:
+            dataframe[out] = np.nan
+
+        # Mask dataframe
         if mask is None:
-            mask = [True] * len(dataframe.index)
-        mask = pd.Series(mask)
-        dataframe.loc[mask, out] = Tools.__number_of_features(model)
-        return dataframe
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
+
+        sub[out] = Tools.__number_of_features(model)
+
+        if mask is not None:
+            dataframe[mask] = sub
 
     @staticmethod
     def predict(dataframe, tags, out, model, mask=None):
+        # Check mandatory fields
+        mandatory = ['datum']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        # Create column if doesnt exist
+        if out not in dataframe:
+            dataframe[out] = np.nan
+
+        # Mask dataframe
+        if mask is None:
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
+
         # Check predict_proba field
         if not hasattr(model, 'predict'):
             warnings.warn('No method predict found.')
-            return pd.DataFrame({out: [np.nan] * len(dataframe.index)})
-
-        # Check mandatory fields
-        mandatory = ['datum']
-        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
-
-        # Mask creation (see pandas view / copy mechanism)
-        if mask is None:
-            mask = [True] * len(dataframe.index)
-        mask = pd.Series(mask)
+            sub[out] = np.nan
+            if mask is not None:
+                dataframe[mask] = sub
+            return
 
         # Set de predict values
-        data = np.array(dataframe.loc[mask, tags['datum']].to_list())
+        data = np.array(sub[tags['datum']].to_list())
         predictions = model.predict(data)
-        dataframe.loc[mask, out] = pd.Series([p for p in predictions], index=mask[mask==True].index)
-        return dataframe
+        sub[out] = pd.Series([p for p in predictions], index=sub.index)
+
+        if mask is not None:
+            dataframe[mask] = sub
 
     @staticmethod
     def predict_proba(dataframe, tags, out, model, mask=None):
-        # Check predict_proba field
-        if not hasattr(model, 'predict_proba'):
-            warnings.warn('No method predict_proba found.')
-            return pd.DataFrame({out: [np.nan] * len(dataframe.index)})
-
         # Check mandatory fields
         mandatory = ['datum']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
-        # Mask creation (see pandas view / copy mechanism)
+        # Create column if doesnt exist
+        if out not in dataframe:
+            dataframe[out] = np.nan
+
+        # Mask dataframe
         if mask is None:
-            mask = [True] * len(dataframe.index)
-        mask = pd.Series(mask)
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
+
+        # Check predict_proba field
+        if not hasattr(model, 'predict_proba'):
+            warnings.warn('No method predict_proba found.')
+            sub[out] = np.nan
+            if mask is not None:
+                dataframe[mask] = sub
+            return
 
         # Set de predict probas values
-        data = np.array(dataframe.loc[mask, tags['datum']].to_list())
+        data = np.array(sub[tags['datum']].to_list())
         probabilities = model.predict_proba(data)
-        dataframe.loc[mask, out] = pd.Series([p for p in probabilities], index=mask[mask==True].index)
-        return dataframe
+        sub[out] = pd.Series([p for p in probabilities], index=sub.index)
+
+        if mask is not None:
+            dataframe[mask] = sub
 
     @staticmethod
     def transform(dataframe, tags, model, out, mask=None):
@@ -284,27 +365,56 @@ class Tools:
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
-        # Mask creation (see pandas view / copy mechanism)
-        if mask is None:
-            mask = [True] * len(dataframe.index)
-        mask = pd.Series(mask)
+        # Create column if doesnt exist
+        if out not in dataframe:
+            dataframe[out] = np.nan
 
-        data = np.array(dataframe.loc[mask, tags['datum']].to_list())
+        # Mask dataframe
+        if mask is None:
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
+
+        # Check predict_proba field
+        if not hasattr(model, 'transform'):
+            warnings.warn('No method predict_proba found.')
+            sub[out] = np.nan
+            if mask is not None:
+                dataframe[mask] = sub
+            return
+
+        data = np.array(sub[tags['datum']].to_list())
         features = model.transform(data)
-        dataframe.loc[mask, out] = pd.Series([f for f in features], index=mask[mask==True].index)
-        return dataframe
+        sub[out] = pd.Series([f for f in features], index=sub.index)
+
+        if mask is not None:
+            dataframe[mask] = sub
 
     @staticmethod
-    def __check_labels(dataframe, tags, mask_sub=None):
+    def __check_labels(dataframe, tags):
         mandatory = ['label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         labels = dataframe[tags['label_encode']]
-        if mask_sub is None:
-            return len(np.unique(labels)) > 1
-        return len(np.unique(labels)) > 1 and np.array_equal(np.unique(labels),
-                                                             np.unique(dataframe.loc[mask_sub, tags['label_encode']]))
+        return len(np.unique(labels)) > 1
+
+    @staticmethod
+    def __best_params(dataframe, model, out, mask=None):
+        # Create column if doesnt exist
+        if out not in dataframe:
+            dataframe[out] = np.nan
+
+        # Mask dataframe
+        if mask is None:
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
+
+        sub[out] = [model.best_params] * len(sub)
+
+        if mask is not None:
+            dataframe[mask] = sub
 
     @staticmethod
     def __number_of_features(model):
