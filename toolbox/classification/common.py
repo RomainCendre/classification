@@ -16,20 +16,31 @@ pd.options.mode.chained_assignment = None
 class Data:
 
     @staticmethod
-    def collapse(df1, on_tag_1, target_tag, df2, on_tag_2, datum_tag):
-        output = df1.copy().reset_index(drop=True)
+    def build_bags(dataframe, mask_1, on_tag_1, mask_2, on_tag_2, datum_tag, out_tag=None):
+        # Check elements
+        if on_tag_1 not in dataframe:
+            raise Exception(f'{on_tag_1} not in dataframe.')
+
+        if on_tag_2 not in dataframe:
+            raise Exception(f'{on_tag_2} not in dataframe.')
+
+        # Init target if doesn't set
+        if out_tag is None:
+            out_tag = datum_tag
 
         # Collapse data
-        if target_tag not in df1:
-            output[target_tag] = [[]] * len(output)
+        if out_tag not in dataframe:
+            dataframe[out_tag] = np.nan
 
-        for index, row in output.iterrows():
-            # Get features by group
-            group_collapse = df2[df2[on_tag_2] == row[on_tag_1]]
-            output.at[index, target_tag] = np.array(group_collapse[datum_tag].tolist())
+        # Mask dataframe
+        sub_1 = dataframe[mask_1]
+        sub_2 = dataframe[mask_2]
 
-        # Now set new data
-        return output
+        def bag_maker(row):
+            group_collapse = sub_2[sub_2[on_tag_2] == row[on_tag_1]]
+            return np.array(group_collapse[datum_tag].tolist())
+
+        dataframe.loc[mask_1, out_tag] = sub_1.apply(bag_maker, axis=1)
 
 
 class Folds:
@@ -90,6 +101,11 @@ class IO:
 
 class Tools:
 
+    FEATURES = 'Features'
+    PARAMETERS = 'Parameters'
+    PREDICTION = 'Prediction'
+    PROBABILITY = 'Probability'
+
     @staticmethod
     def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None, cpu=-1, path=None):
         # Fold needed for evaluation
@@ -112,10 +128,10 @@ class Tools:
             sub = dataframe[mask]
 
         # Out fields
-        out_preds = f'{out}_Predictions'
-        out_probas = f'{out}_Probabilities'
-        out_features = f'{out}_Features'
-        out_params = f'{out}_Parameters'
+        out_preds = f'{out}_{Tools.PREDICTION}'
+        out_probas = f'{out}_{Tools.PROBABILITY}'
+        out_features = f'{out}_{Tools.FEATURES}'
+        out_params = f'{out}_{Tools.PARAMETERS}'
 
         # Browse folds
         folds = dataframe['Fold']
@@ -131,7 +147,7 @@ class Tools:
             print(f'Fold {fold} performed...', end='\r')
 
             # Check that current fold respect labels
-            if not Tools.__check_labels(dataframe[~test_mask], {'label_encode': tags['label_encode']}, ~test_mask):
+            if not Tools.__check_labels(dataframe[~test_mask], {'label_encode': tags['label_encode']}):
                 warnings.warn(f'Invalid fold, missing labels for fold {fold}')
                 continue
 
@@ -238,8 +254,8 @@ class Tools:
             raise ValueError('Not enough unique labels where found, at least 2.')
 
         # Out fields
-        out_preds = f'{out}_Predictions'
-        out_probas = f'{out}_Probabilities'
+        out_preds = f'{out}_{Tools.PREDICTION}'
+        out_probas = f'{out}_{Tools.PROBABILITY}'
 
         # Manage columns
         if out_preds not in dataframe:
@@ -391,15 +407,6 @@ class Tools:
             dataframe[mask] = sub
 
     @staticmethod
-    def __check_labels(dataframe, tags):
-        mandatory = ['label_encode']
-        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
-
-        labels = dataframe[tags['label_encode']]
-        return len(np.unique(labels)) > 1
-
-    @staticmethod
     def __best_params(dataframe, model, out, mask=None):
         # Create column if doesnt exist
         if out not in dataframe:
@@ -415,6 +422,15 @@ class Tools:
 
         if mask is not None:
             dataframe[mask] = sub
+
+    @staticmethod
+    def __check_labels(dataframe, tags):
+        mandatory = ['label_encode']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        labels = dataframe[tags['label_encode']]
+        return len(np.unique(labels)) > 1
 
     @staticmethod
     def __number_of_features(model):
