@@ -121,20 +121,42 @@ class Tools:
         if not Tools.__check_labels(dataframe, {'label_encode': tags['label_encode']}):
             raise ValueError('Not enough unique labels where found, at least 2.')
 
-        # Mask dataframe
-        if mask is None:
-            sub = dataframe
-        else:
-            sub = dataframe[mask]
-
         # Out fields
         out_preds = f'{out}_{Tools.PREDICTION}'
         out_probas = f'{out}_{Tools.PROBABILITY}'
         out_features = f'{out}_{Tools.FEATURES}'
         out_params = f'{out}_{Tools.PARAMETERS}'
 
+        # Create missing fields
+        if mask is None:
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
+
+        folds = sub['Fold']
+        for fold in np.unique(folds):
+            # Out fields
+            fold_preds = f'{out_preds}_{fold}'
+            fold_probas = f'{out_probas}_{fold}'
+            fold_features = f'{out_features}_{fold}'
+            fold_params = f'{out_params}_{fold}'
+            if fold_preds not in dataframe:
+                dataframe[fold_preds] = np.nan
+            if fold_probas not in dataframe:
+                dataframe[fold_probas] = np.nan
+            if fold_features not in dataframe:
+                dataframe[fold_features] = np.nan
+            if fold_params not in dataframe:
+                dataframe[fold_params] = np.nan
+
+        # Mask dataframe
+        if mask is None:
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
+
         # Browse folds
-        folds = dataframe['Fold']
+        folds = sub['Fold']
         for fold in np.unique(folds):
             # Out fields
             fold_preds = f'{out_preds}_{fold}'
@@ -147,12 +169,12 @@ class Tools:
             print(f'Fold {fold} performed...', end='\r')
 
             # Check that current fold respect labels
-            if not Tools.__check_labels(dataframe[~test_mask], {'label_encode': tags['label_encode']}):
+            if not Tools.__check_labels(sub[~test_mask], {'label_encode': tags['label_encode']}):
                 warnings.warn(f'Invalid fold, missing labels for fold {fold}')
                 continue
 
             # Clone model
-            fitted_model = Tools.fit(dataframe[~test_mask], tags, deepcopy(model),
+            fitted_model = Tools.fit(sub[~test_mask], tags, deepcopy(model),
                                      grid=grid, distribution=distribution, unbalanced=unbalanced, cpu=cpu)
 
             # Save if needed
@@ -164,10 +186,10 @@ class Tools:
                     pickle.dumps(fitted_model, str(file))
 
             # Predict
-            Tools.predict(sub, {'datum': tags['datum']}, fold_preds, fitted_model, mask=test_mask)
-            Tools.predict_proba(sub, {'datum': tags['datum']}, fold_probas, fitted_model, mask=test_mask)
-            Tools.number_of_features(sub, fitted_model, fold_features, mask=test_mask)
-            Tools.__best_params(sub, fitted_model, fold_params, mask=test_mask)
+            Tools.predict(sub, {'datum': tags['datum']}, fold_preds, fitted_model)
+            Tools.predict_proba(sub, {'datum': tags['datum']}, fold_probas, fitted_model)
+            Tools.number_of_features(sub, fitted_model, fold_features)
+            Tools.__best_params(sub, fitted_model, fold_params)
 
         if mask is not None:
             dataframe[mask] = sub
