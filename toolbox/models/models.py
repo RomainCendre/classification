@@ -72,7 +72,7 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
             return self._get_predictions(x, self.thresholds)
 
     def predict_proba(self, x, y=None, copy=True):
-        return x
+        return self._get_decisions_probas(x)
 
     def _fit_dynamic_thresh(self, x, y):
         x_probas = self._get_decisions_probas(x)
