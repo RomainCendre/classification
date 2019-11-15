@@ -318,6 +318,7 @@ class Tools:
                 predict_mask = ~test_mask
 
             # Fill new data
+            Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out, mask=predict_mask)
             Tools.predict(sub, {'datum': tags['datum']}, out_preds, fitted_model, mask=predict_mask)
             Tools.predict_proba(sub, {'datum': tags['datum']}, out_probas, fitted_model, mask=predict_mask)
 
