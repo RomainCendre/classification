@@ -34,7 +34,7 @@ class CustomSIL(SIL):
 # Decision taking based on predictions
 class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
 
-    def __init__(self, mode='max', metric=None, prior_class_max=True):
+    def __init__(self, mode='max', metric=None, is_prior_max=True):
         # Check mandatory mode
         mandatory = ['at_least_one', 'dynamic_thresh', 'max']
         if mode not in mandatory:
@@ -47,7 +47,7 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
         else:
             self.metric = accuracy_score
 
-        self.is_prior_class_max = prior_class_max
+        self.is_prior_max = is_prior_max
 
         # Init to default values other properties
         self.number_labels = 0
@@ -77,7 +77,7 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
         probabilities = self.__get_probas(x)
         self.thresholds = np.zeros(self.number_labels)
 
-        if self.is_prior_class_max:
+        if self.is_prior_max:
             iterator = reversed(range(self.number_labels))
         else:
             iterator = range(self.number_labels)
@@ -102,7 +102,7 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
         return x_probas
 
     def __get_predictions_at_least_one(self, x):
-        if self.is_prior_class_max:
+        if self.is_prior_max:
             return np.amax(x, axis=1)
         else:
             return np.amin(x, axis=1)
@@ -113,7 +113,7 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
 
     def __get_prior_coefficients(self):
         coefficients = range(self.number_labels)
-        if not self.is_prior_class_max:
+        if not self.is_prior_max:
             coefficients = reversed(coefficients)
 
         return np.array(list(coefficients))
@@ -124,7 +124,7 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
 
 class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
-    def __init__(self, low='max', high='max', metric=None, prior_class_max=True, p_norm=None):
+    def __init__(self, low='max', high='max', metric=None, is_prior_max=True, p_norm=None):
         # Check mandatory mode
         mandatory = ['dynamic', 'max']
         if high not in mandatory:
@@ -141,7 +141,7 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
         else:
             self.metric = accuracy_score
 
-        self.is_prior_class_max = prior_class_max
+        self.is_prior_max = is_prior_max
 
         # Init to default values other properties
         self.number_labels = 0
@@ -158,7 +158,7 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
         probas = self.__get_probas(x)
         if self.high == 'max':
             return np.argmax(probas, axis=1)
-        else: #self.high == 'dynamic':
+        else:
             return self.__get_predictions_dynamic(probas, self.thresholds)
 
     def predict_proba(self, x, y=None, copy=True):
@@ -168,7 +168,7 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
         probabilities = self.__get_probas(x)
         self.thresholds = np.zeros(self.number_labels)
 
-        if self.is_prior_class_max:
+        if self.is_prior_max:
             iterator = reversed(range(self.number_labels))
         else:
             iterator = range(self.number_labels)
@@ -189,7 +189,7 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
         return np.argmax((x > thresholds) * self.__get_prior_coefficients(), axis=1)
 
     def __get_predictions_at_least_one(self, x):
-        if self.is_prior_class_max:
+        if self.is_prior_max:
             return np.amax(x, axis=1)
         else:
             return np.amin(x, axis=1)
@@ -199,7 +199,7 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
     def __get_prior_coefficients(self):
         coefficients = range(self.number_labels)
-        if not self.is_prior_class_max:
+        if not self.is_prior_max:
             coefficients = reversed(coefficients)
 
         return np.array(list(coefficients))
