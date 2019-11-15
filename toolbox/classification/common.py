@@ -122,8 +122,8 @@ class Tools:
             raise ValueError('Not enough unique labels where found, at least 2.')
 
         # Out fields
-        out_preds = f'{out}_{Tools.PREDICTION}'
-        out_probas = f'{out}_{Tools.PROBABILITY}'
+        out_predict = f'{out}_{Tools.PREDICTION}'
+        out_proba = f'{out}_{Tools.PROBABILITY}'
         out_features = f'{out}_{Tools.FEATURES}'
         out_params = f'{out}_{Tools.PARAMETERS}'
 
@@ -136,8 +136,8 @@ class Tools:
         folds = sub['Fold']
         for fold in np.unique(folds):
             # Out fields
-            fold_preds = f'{out_preds}_{fold}'
-            fold_probas = f'{out_probas}_{fold}'
+            fold_preds = f'{out_predict}_{fold}'
+            fold_probas = f'{out_proba}_{fold}'
             fold_features = f'{out_features}_{fold}'
             fold_params = f'{out_params}_{fold}'
             if fold_preds not in dataframe:
@@ -159,8 +159,8 @@ class Tools:
         folds = sub['Fold']
         for fold in np.unique(folds):
             # Out fields
-            fold_preds = f'{out_preds}_{fold}'
-            fold_probas = f'{out_probas}_{fold}'
+            fold_preds = f'{out_predict}_{fold}'
+            fold_probas = f'{out_proba}_{fold}'
             fold_features = f'{out_features}_{fold}'
             fold_params = f'{out_params}_{fold}'
 
@@ -186,8 +186,10 @@ class Tools:
                     pickle.dumps(fitted_model, str(file))
 
             # Predict
-            Tools.predict(sub, {'datum': tags['datum']}, fold_preds, fitted_model)
-            Tools.predict_proba(sub, {'datum': tags['datum']}, fold_probas, fitted_model)
+            if hasattr(model, 'predict'):
+                Tools.predict(sub, {'datum': tags['datum']}, fitted_model, fold_preds)
+            if hasattr(model, 'predict_proba'):
+                Tools.predict_proba(sub, {'datum': tags['datum']}, fitted_model, fold_probas)
             Tools.number_of_features(sub, fitted_model, fold_features)
             Tools.__best_params(sub, fitted_model, fold_params)
 

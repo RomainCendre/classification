@@ -84,11 +84,11 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
 
         for hierarchy in iterator:
             score = 0
-            potential_thresholds = np.sort(np.unique(probabilities[:, hierarchy]))
+            potential_thresholds = np.sort(np.unique(np.concatenate(([1, 0], probabilities[:, hierarchy]))))
             label = y == hierarchy
             probability = probabilities[:, hierarchy]
             for thresh in potential_thresholds:
-                threshed = probability > thresh
+                threshed = probability >= thresh
                 tmp_score = self.metric(label, threshed)
                 if tmp_score > score:
                     score = tmp_score
@@ -119,7 +119,7 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
         return np.array(list(coefficients))
 
     def __get_predictions_dynamic(self, x, thresholds):
-        return np.argmax((x > thresholds) * self.__get_prior_coefficients(), axis=1)
+        return np.argmax((x >= thresholds) * self.__get_prior_coefficients(), axis=1)
 
 
 class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
@@ -175,18 +175,15 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
         for hierarchy in iterator:
             score = 0
-            potential_thresholds = np.sort(np.unique(probabilities[:, hierarchy]))
+            potential_thresholds = np.sort(np.unique(np.concatenate(([1, 0], probabilities[:, hierarchy]))))
             label = y == hierarchy
             probability = probabilities[:, hierarchy]
             for thresh in potential_thresholds:
-                threshed = probability > thresh
+                threshed = probability >= thresh
                 tmp_score = self.metric(label, threshed)
                 if tmp_score > score:
                     score = tmp_score
                     self.thresholds[hierarchy] = thresh
-
-    def __get_predictions(self, x, thresholds):
-        return np.argmax((x > thresholds) * self.__get_prior_coefficients(), axis=1)
 
     def __get_predictions_at_least_one(self, x):
         if self.is_prior_max:
@@ -195,7 +192,7 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
             return np.amin(x, axis=1)
 
     def __get_predictions_dynamic(self, x, thresholds):
-        return np.argmax((x > thresholds) * self.__get_prior_coefficients(), axis=1)
+        return np.argmax((x >= thresholds) * self.__get_prior_coefficients(), axis=1)
 
     def __get_prior_coefficients(self):
         coefficients = range(self.number_labels)
