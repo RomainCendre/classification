@@ -10,7 +10,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.metrics import auc, roc_curve, classification_report
-
+from toolbox.classification.common import Tools
 
 class Views:
 
@@ -26,8 +26,8 @@ class Views:
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Tags
-        features = f'{tags["eval"]}_Features'
-        parameters = f'{tags["eval"]}_Parameters'
+        features = f'{tags["eval"]}_{Tools.FEATURES}'
+        parameters = f'{tags["eval"]}_{Tools.FEATURES}'
 
         unique_folds = np.unique(inputs['Fold'])
         data = {'Fold': [], 'Features': [], 'Parameters': []}
@@ -191,10 +191,10 @@ class ViewsTools:
             raise Exception('Need to build fold.')
 
         # Out fields
-        out_preds = f'{out_tag}_Predictions'
-        out_probas = f'{out_tag}_Probabilities'
-        out_features = f'{out_tag}_Features'
-        out_params = f'{out_tag}_Parameters'
+        out_preds = f'{out_tag}_{Tools.PREDICTION}'
+        out_probas = f'{out_tag}_{Tools.PROBABILITY}'
+        out_features = f'{out_tag}_{Tools.FEATURES}'
+        out_params = f'{out_tag}_{Tools.PARAMETERS}'
 
         # Folds array
         data = []
