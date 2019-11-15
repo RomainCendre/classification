@@ -124,9 +124,9 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
 
 class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
-    def __init__(self, mode='max', metric=None, prior_class_max=True):
+    def __init__(self, mode='average_max', metric=None, prior_class_max=True):
         # Check mandatory mode
-        mandatory = ['at_least_one', 'dynamic_thresh', 'max']
+        mandatory = ['at_least_one', 'max_dynamic', 'average_max']
         if mode not in mandatory:
             raise Exception(f'Expected modes: {mandatory}, but found: {mode}.')
 
@@ -151,10 +151,11 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
         return self
 
     def predict(self, x, y=None, copy=True):
-        if self.mode == 'max':
+        if self.mode == 'average_max':
             x = self._get_probas(x)
             return np.argmax(x, axis=1)
-        elif self.mode == 'at_least_one':
+        elif self.mode == 'max_dynamic':
+            np.max(x, axis=1)
             return self._get_predictions_at_least_one(x)
         elif self.mode == 'dynamic_thresh':
             x = self._get_probas(x)
@@ -162,6 +163,16 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
     def predict_proba(self, x, y=None, copy=True):
         return self._get_probas(x)
+
+    def _fit_dynamic_thresh(self, x, y):
+        probabilities = self._get_decisions_probas(x)
+        self.thresholds = np.zeros(self.number_labels)
+
+    def _get_predictions_at_least_one(self, x):
+        if self.is_prior_class_max:
+            return np.amax(x, axis=1)
+        else:
+            return np.amin(x, axis=1)
 
     def _get_probas(self, x):
         return np.mean(x, axis=1)
@@ -171,7 +182,7 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
     def _get_prior_coefficients(self):
         coefficients = range(self.number_labels)
-        if self.is_prior_class_max:
+        if not self.is_prior_class_max:
             coefficients = reversed(coefficients)
 
         return np.array(list(coefficients))

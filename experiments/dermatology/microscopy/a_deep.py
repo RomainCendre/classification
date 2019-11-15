@@ -9,7 +9,7 @@ from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 
 from experiments.processes import Process
-from toolbox.core.builtin_models import Transforms, Classifiers
+from toolbox.models.builtin_models import Transforms, Classifiers
 from toolbox.core.models import KerasFineClassifier
 from toolbox.core.parameters import BuiltInSettings, LocalParameters, DermatologyDataset
 from toolbox.core.transforms import OrderedEncoder

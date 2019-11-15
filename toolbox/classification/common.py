@@ -261,10 +261,15 @@ class Tools:
             dataframe[mask] = sub
 
     @staticmethod
-    def fit_predict(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None, cpu=-1):
+    def fit_predict(dataframe, tags, model, out, mask=None, predict_mode='others', grid=None, distribution=None, unbalanced=None, cpu=-1):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
+
+        # Check mandatory fields
+        mandatory = ['others', 'current']
+        if predict_mode not in mandatory:
+            raise Exception(f'Expected predict mode: {mandatory}, but found: {predict_mode}.')
 
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
@@ -306,9 +311,15 @@ class Tools:
             fitted_model = Tools.fit(sub[~test_mask], tags, model=deepcopy(model), grid=grid, distribution=distribution,
                                      unbalanced=unbalanced, cpu=cpu)
 
+            # Useful in semi supervised mode to increase training
+            if predict_mode is 'others':
+                predict_mask = test_mask
+            else:
+                predict_mask = ~test_mask
+
             # Fill new data
-            Tools.predict(sub, {'datum': tags['datum']}, out_preds, fitted_model, mask=test_mask)
-            Tools.predict_proba(sub, {'datum': tags['datum']}, out_probas, fitted_model, mask=test_mask)
+            Tools.predict(sub, {'datum': tags['datum']}, out_preds, fitted_model, mask=predict_mask)
+            Tools.predict_proba(sub, {'datum': tags['datum']}, out_probas, fitted_model, mask=predict_mask)
 
         if mask is not None:
             dataframe[mask] = sub
