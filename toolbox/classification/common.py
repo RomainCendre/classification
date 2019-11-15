@@ -276,19 +276,17 @@ class Tools:
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
-        # Check valid labels, at least several classes
-        if not Tools.__check_labels(dataframe, {'label_encode': tags['label_encode']}):
-            raise ValueError('Not enough unique labels where found, at least 2.')
-
         # Out fields
-        out_preds = f'{out}_{Tools.PREDICTION}'
-        out_probas = f'{out}_{Tools.PROBABILITY}'
+        out_predict = f'{out}_{Tools.PREDICTION}'
+        out_proba = f'{out}_{Tools.PROBABILITY}'
 
         # Manage columns
-        if out_preds not in dataframe:
-            dataframe[out_preds] = np.nan
-        if out_probas not in dataframe:
-            dataframe[out_probas] = np.nan
+        if out not in dataframe and hasattr(model, 'transform'):
+            dataframe[out] = np.nan
+        if out_predict not in dataframe and hasattr(model, 'predict'):
+            dataframe[out_predict] = np.nan
+        if out_proba not in dataframe and hasattr(model, 'predict_proba'):
+            dataframe[out_proba] = np.nan
 
         # Mask dataframe
         if mask is None:
@@ -318,9 +316,12 @@ class Tools:
                 predict_mask = ~test_mask
 
             # Fill new data
-            Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out, mask=predict_mask)
-            Tools.predict(sub, {'datum': tags['datum']}, out_preds, fitted_model, mask=predict_mask)
-            Tools.predict_proba(sub, {'datum': tags['datum']}, out_probas, fitted_model, mask=predict_mask)
+            if hasattr(model, 'transform'):
+                Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out, mask=predict_mask)
+            if hasattr(model, 'predict'):
+                Tools.predict(sub, {'datum': tags['datum']}, fitted_model, out_predict, mask=predict_mask)
+            if hasattr(model, 'predict_proba'):
+                Tools.predict_proba(sub, {'datum': tags['datum']}, fitted_model, out_proba, mask=predict_mask)
 
         if mask is not None:
             dataframe[mask] = sub
@@ -343,14 +344,18 @@ class Tools:
             dataframe[mask] = sub
 
     @staticmethod
-    def predict(dataframe, tags, out, model, mask=None):
+    def predict(dataframe, tags, model, out, mask=None):
         # Check mandatory fields
         mandatory = ['datum']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
+        method = 'predict'
+        if not hasattr(model, method):
+            raise Exception(f'No method {method} found.')
+
         # Create column if doesnt exist
-        if out not in dataframe:
+        if out not in dataframe and hasattr(model, 'predict'):
             dataframe[out] = np.nan
 
         # Mask dataframe
@@ -358,14 +363,6 @@ class Tools:
             sub = dataframe
         else:
             sub = dataframe[mask]
-
-        # Check predict_proba field
-        if not hasattr(model, 'predict'):
-            warnings.warn('No method predict found.')
-            sub[out] = np.nan
-            if mask is not None:
-                dataframe[mask] = sub
-            return
 
         # Set de predict values
         data = np.array(sub[tags['datum']].to_list())
@@ -376,11 +373,15 @@ class Tools:
             dataframe[mask] = sub
 
     @staticmethod
-    def predict_proba(dataframe, tags, out, model, mask=None):
+    def predict_proba(dataframe, tags, model, out, mask=None):
         # Check mandatory fields
         mandatory = ['datum']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        method = 'predict_proba'
+        if not hasattr(model, method):
+            raise Exception(f'No method {method} found.')
 
         # Create column if doesnt exist
         if out not in dataframe:
@@ -391,14 +392,6 @@ class Tools:
             sub = dataframe
         else:
             sub = dataframe[mask]
-
-        # Check predict_proba field
-        if not hasattr(model, 'predict_proba'):
-            warnings.warn('No method predict_proba found.')
-            sub[out] = np.nan
-            if mask is not None:
-                dataframe[mask] = sub
-            return
 
         # Set de predict probas values
         data = np.array(sub[tags['datum']].to_list())
@@ -415,6 +408,11 @@ class Tools:
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
+        # Check transform field
+        method = 'transform'
+        if not hasattr(model, method):
+            raise Exception(f'No method {method} found.')
+
         # Create column if doesnt exist
         if out not in dataframe:
             dataframe[out] = np.nan
@@ -424,14 +422,6 @@ class Tools:
             sub = dataframe
         else:
             sub = dataframe[mask]
-
-        # Check predict_proba field
-        if not hasattr(model, 'transform'):
-            warnings.warn('No method predict_proba found.')
-            sub[out] = np.nan
-            if mask is not None:
-                dataframe[mask] = sub
-            return
 
         data = np.array(sub[tags['datum']].to_list())
         features = model.transform(data)

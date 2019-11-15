@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 import tensorflow as tf
 from keras.backend.tensorflow_backend import set_session
@@ -87,7 +88,10 @@ class Dermatology:
     @staticmethod
     def test_sliding_images(size, overlap, modality=None):
         work_folder = Path(gettempdir()) / '.research'
+        if work_folder.exists():
+            shutil.rmtree(work_folder)
         work_folder.mkdir(exist_ok=True)
+
         return Dermatology.__sliding_images(None, work_folder, size, overlap, modality)
 
     @staticmethod
