@@ -56,25 +56,25 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
     def fit(self, x, y=None):
         self.number_labels = max(y) + 1
         if self.mode == 'dynamic_thresh':
-            self._fit_dynamic_thresh(x, y)
+            self.__fit_dynamic_thresh(x, y)
             print(self.thresholds)
         return self
 
     def predict(self, x, y=None, copy=True):
         if self.mode == 'max':
-            x = self._get_decisions_probas(x)
-            return self._get_predictions_max(x)
+            probas = self.__get_probas(x)
+            return self.__get_predictions_max(probas)
         elif self.mode == 'at_least_one':
-            return self._get_predictions_at_least_one(x)
+            return self.__get_predictions_at_least_one(x)
         elif self.mode == 'dynamic_thresh':
-            x = self._get_decisions_probas(x)
-            return self._get_predictions_dynamic(x, self.thresholds)
+            probas = self.__get_probas(x)
+            return self.__get_predictions_dynamic(probas, self.thresholds)
 
     def predict_proba(self, x, y=None, copy=True):
-        return self._get_decisions_probas(x)
+        return self.__get_probas(x)
 
-    def _fit_dynamic_thresh(self, x, y):
-        probabilities = self._get_decisions_probas(x)
+    def __fit_dynamic_thresh(self, x, y):
+        probabilities = self.__get_probas(x)
         self.thresholds = np.zeros(self.number_labels)
 
         if self.is_prior_class_max:
@@ -94,43 +94,47 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
                     score = tmp_score
                     self.thresholds[hierarchy] = thresh
 
-    def _get_decisions_probas(self, x):
+    def __get_probas(self, x):
         x_probas = np.zeros((len(x), self.number_labels))
         patches_number = x.shape[1]
         for label in range(self.number_labels):
             x_probas[:, label] = np.sum(x == label, axis=1) / patches_number
         return x_probas
 
-    def _get_predictions_at_least_one(self, x):
+    def __get_predictions_at_least_one(self, x):
         if self.is_prior_class_max:
             return np.amax(x, axis=1)
         else:
             return np.amin(x, axis=1)
 
-    def _get_predictions_max(self, x):
+    def __get_predictions_max(self, x):
         maximum = x.max(axis=1, keepdims=1) == x
-        return (maximum * self._get_prior_coefficients()).argmax(axis=1)
+        return (maximum * self.__get_prior_coefficients()).argmax(axis=1)
 
-    def _get_prior_coefficients(self):
+    def __get_prior_coefficients(self):
         coefficients = range(self.number_labels)
         if not self.is_prior_class_max:
             coefficients = reversed(coefficients)
 
         return np.array(list(coefficients))
 
-    def _get_predictions_dynamic(self, x, thresholds):
-        return np.argmax((x > thresholds) * self._get_prior_coefficients(), axis=1)
+    def __get_predictions_dynamic(self, x, thresholds):
+        return np.argmax((x > thresholds) * self.__get_prior_coefficients(), axis=1)
 
 
 class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
-    def __init__(self, mode='average_max', metric=None, prior_class_max=True):
+    def __init__(self, low='max', high='max', metric=None, prior_class_max=True, p_norm=None):
         # Check mandatory mode
-        mandatory = ['at_least_one', 'max_dynamic', 'average_max']
-        if mode not in mandatory:
-            raise Exception(f'Expected modes: {mandatory}, but found: {mode}.')
+        mandatory = ['dynamic', 'max']
+        if high not in mandatory:
+            raise Exception(f'Expected modes: {mandatory}, but found: {high}.')
+        mandatory = ['mean', 'max', 'p-norm']
+        if low not in mandatory:
+            raise Exception(f'Expected modes: {mandatory}, but found: {low}.')
 
-        self.mode = mode
+        self.low = low
+        self.high = high
         # Set metric mode used for evaluation
         if metric:
             self.metric = metric
@@ -142,50 +146,71 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
         # Init to default values other properties
         self.number_labels = 0
         self.thresholds = None
+        self.p_norm = p_norm
 
     def fit(self, x, y=None):
         self.number_labels = max(y) + 1
-        if self.mode == 'dynamic_thresh':
-            self._fit_dynamic_thresh(x, y)
-            print(self.thresholds)
+        if self.high == 'dynamic':
+            self.__fit_dynamic_thresh(x, y)
         return self
 
     def predict(self, x, y=None, copy=True):
-        if self.mode == 'average_max':
-            x = self._get_probas(x)
-            return np.argmax(x, axis=1)
-        elif self.mode == 'max_dynamic':
-            np.max(x, axis=1)
-            return self._get_predictions_at_least_one(x)
-        elif self.mode == 'dynamic_thresh':
-            x = self._get_probas(x)
-            return self._get_predictions(x, self.thresholds)
+        probas = self.__get_probas(x)
+        if self.high == 'max':
+            return np.argmax(probas, axis=1)
+        else: #self.high == 'dynamic':
+            return self.__get_predictions_dynamic(probas, self.thresholds)
 
     def predict_proba(self, x, y=None, copy=True):
-        return self._get_probas(x)
+        return self.__get_probas(x)
 
-    def _fit_dynamic_thresh(self, x, y):
-        probabilities = self._get_decisions_probas(x)
+    def __fit_dynamic_thresh(self, x, y):
+        probabilities = self.__get_probas(x)
         self.thresholds = np.zeros(self.number_labels)
 
-    def _get_predictions_at_least_one(self, x):
+        if self.is_prior_class_max:
+            iterator = reversed(range(self.number_labels))
+        else:
+            iterator = range(self.number_labels)
+
+        for hierarchy in iterator:
+            score = 0
+            potential_thresholds = np.sort(np.unique(probabilities[:, hierarchy]))
+            label = y == hierarchy
+            probability = probabilities[:, hierarchy]
+            for thresh in potential_thresholds:
+                threshed = probability > thresh
+                tmp_score = self.metric(label, threshed)
+                if tmp_score > score:
+                    score = tmp_score
+                    self.thresholds[hierarchy] = thresh
+
+    def __get_predictions(self, x, thresholds):
+        return np.argmax((x > thresholds) * self.__get_prior_coefficients(), axis=1)
+
+    def __get_predictions_at_least_one(self, x):
         if self.is_prior_class_max:
             return np.amax(x, axis=1)
         else:
             return np.amin(x, axis=1)
 
-    def _get_probas(self, x):
-        return np.mean(x, axis=1)
+    def __get_predictions_dynamic(self, x, thresholds):
+        return np.argmax((x > thresholds) * self.__get_prior_coefficients(), axis=1)
 
-    def _get_predictions(self, x, thresholds):
-        return np.argmax((x > thresholds) * self._get_prior_coefficients(), axis=1)
-
-    def _get_prior_coefficients(self):
+    def __get_prior_coefficients(self):
         coefficients = range(self.number_labels)
         if not self.is_prior_class_max:
             coefficients = reversed(coefficients)
 
         return np.array(list(coefficients))
+
+    def __get_probas(self, x):
+        if self.low == 'mean':
+            return np.mean(x, axis=1)
+        elif self.low == 'max':
+            return np.max(x, axis=1)
+        else:
+            return np.linalg.norm(x, ord=self.p_norm, axis=1)
 
 
 # Deep Learning classifier
