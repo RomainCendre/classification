@@ -18,14 +18,23 @@ class ArgMaxTransform(BaseEstimator, TransformerMixin):
 
 class FlattenTransform(BaseEstimator, TransformerMixin):
 
-    def __init__(self, axis=False):
-        self.axis = axis
-
     def fit(self, x, y=None):
         return self
 
     def transform(self, x, y=None, copy=True):
         return x.reshape((x.shape[0], -1))
+
+
+class ReshapeTrickTransform(BaseEstimator, TransformerMixin):
+
+    def __init__(self, shape):
+        self.shape = shape
+
+    def fit(self, x, y=None):
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        return x.reshape(self.shape)
 
 
 class PLSTransform(PLSRegression):
