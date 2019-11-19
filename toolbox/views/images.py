@@ -169,13 +169,13 @@ class PatchViews:
             start = (center_x-width/2+1, center_y-height/2+1)
             end = (center_x+width/2+1, center_y+height/2+1)
             prediction = row[prediction_tag]
-            if len(prediction) == 1:
-                prediction = int(prediction)
-                intensity = 0.5
-            else:
+            if isinstance(prediction, np.ndarray) and len(prediction) != 1:
                 temp = prediction.argmax()
                 intensity = prediction[temp]
                 prediction = temp
+            else:
+                prediction = int(prediction)
+                intensity = 0.5
             color = settings.get_color(encode.inverse_transform(np.array([prediction]))[0]) + (intensity,)  # Add alpha
             color = tuple(np.multiply(color, 255).astype(int))
             draw.rectangle((start, end), fill=color)
