@@ -45,7 +45,7 @@ class Views:
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Prediction tag
-        tag_pred = f'{tags["result"]}_Predictions'
+        tag_pred = f'{tags["result"]}_{Tools.PREDICTION}'
 
         # Mask
         mask = (inputs[tags['label_encode']] == inputs[tag_pred])
@@ -136,7 +136,7 @@ class Views:
 
         # Inputs
         labels = np.array(inputs[tags['label_encode']].tolist())
-        predictions = np.array(inputs[f'{tags["eval"]}_Predictions'].tolist())
+        predictions = np.array(inputs[f'{tags["eval"]}_{Tools.PREDICTION}'].tolist())
         folds = np.array(inputs['Fold'].tolist())
 
         # Mean score
