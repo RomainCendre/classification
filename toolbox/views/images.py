@@ -14,29 +14,7 @@ from vis.visualization import overlay, visualize_cam, visualize_saliency
 class ImagesViews:
 
     @staticmethod
-    def svm_activation_map(inputs, tags, extractor, model, index=0):
-        # Check mandatory fields
-        mandatory = ['datum', 'label_encode']
-        if not isinstance(tags, dict) or not all(elem in tags.keys() for elem in mandatory):
-            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
-
-        # Coeffcients
-        coefficients = model.coef_
-
-        # model suppose to be svm
-        data = inputs.loc[index, tags['datum']]
-        image = utils.load_img(data)
-        features = extractor.transform([data])
-
-        labels = inputs.loc[index, tags['label_encode']]
-        heatmap = np.squeeze((coefficients[labels] * features), axis=0)
-        heatmap = np.resize(np.squeeze(normalize(np.expand_dims(heatmap.ravel(), axis=0), norm='max'), axis=0),
-                               heatmap.shape)
-        heatmap = np.sum(heatmap, axis=2)
-        return ImagesViews.__add(np.array(image), heatmap)
-
-    @staticmethod
-    def deep_activation_map(inputs, tags, network, layer, modifier=None, index=0):
+    def activation_map_deep(inputs, tags, network, layer, modifier=None, index=0):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in tags.keys() for elem in mandatory):
@@ -65,7 +43,29 @@ class ImagesViews:
         plt.show()
 
     @staticmethod
-    def deep_saliency_map(inputs, tags, network, modifier=None, index=0):
+    def activation_map_svm(inputs, tags, extractor, model, index=0):
+        # Check mandatory fields
+        mandatory = ['datum', 'label_encode']
+        if not isinstance(tags, dict) or not all(elem in tags.keys() for elem in mandatory):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        # Coeffcients
+        coefficients = model.coef_
+
+        # model suppose to be svm
+        data = inputs.loc[index, tags['datum']]
+        image = utils.load_img(data)
+        features = extractor.transform([data])
+
+        labels = inputs.loc[index, tags['label_encode']]
+        heatmap = np.squeeze((coefficients[labels] * features), axis=0)
+        heatmap = np.resize(np.squeeze(normalize(np.expand_dims(heatmap.ravel(), axis=0), norm='max'), axis=0),
+                               heatmap.shape)
+        heatmap = np.sum(heatmap, axis=2)
+        return ImagesViews.__add(np.array(image), heatmap)
+
+    @staticmethod
+    def saliency_map_deep(inputs, tags, network, modifier=None, index=0):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in tags.keys() for elem in mandatory):
@@ -144,36 +144,43 @@ class ImagesViews:
         return skimage.exposure.histogram(skimage.io.imread(x).flatten(), source_range='dtype')[0]
 
 
-class Patchs:
+class PatchViews:
 
-    def __init__(self, inputs, settings):
-        self.inputs = inputs
-        self.settings = settings
+    @staticmethod
+    def display(inputs, prediction_tag, settings, encode, index=0):
+        # Full
+        fulls = inputs[inputs.Type == 'Full']
+        data = fulls.iloc[index]
 
-    def write_patch(self, output_folder):
-        # Check output folder
-        output_folder = Path(output_folder)
-        output_folder.mkdir(exist_ok=True)
+        # Instances
+        instances = inputs[inputs.Type == 'Instance']
+        instances = instances[instances.Source == data.loc['Reference']]
 
-        output_folder = output_folder / self.inputs.name
-        output_folder.mkdir(exist_ok=True)
+        # Colorize image
+        # image = utils.load_img(data.loc['Datum'])
+        original = Image.open(data.loc['Datum']).convert('RGBA')
+        patch = Image.open(data.loc['Datum']).convert('RGBA')
+        draw = ImageDraw.Draw(patch)
+        for index, row in instances.iterrows():
+            center_x = row['Center_X']
+            center_y = row['Center_Y']
+            height = row['Height']
+            width = row['Width']
+            start = (center_x-width/2+1, center_y-height/2+1)
+            end = (center_x+width/2+1, center_y+height/2+1)
+            prediction = row[prediction_tag]
+            if len(prediction) == 1:
+                prediction = int(prediction)
+                intensity = 0.5
+            else:
+                temp = prediction.argmax()
+                intensity = prediction[temp]
+                prediction = temp
+            color = settings.get_color(encode.inverse_transform(np.array([prediction]))[0]) + (intensity,)  # Add alpha
+            color = tuple(np.multiply(color, 255).astype(int))
+            draw.rectangle((start, end), fill=color)
 
-        references = list(set(self.inputs.get_from_key('Reference')))
-
-        for index, reference in enumerate(references):
-            work_input = self.inputs.sub_inputs({'Reference': [reference]})
-            path = list(set(work_input.get_from_key('Full_path')))
-            label = list(set(work_input.get_from_key('Label')))
-            image = Image.open(path[0]).convert('RGBA')
-            for sub_index, entity in work_input.data.iterrows():
-                start = entity['Patch_Start']
-                end = entity['Patch_End']
-                center = ((end[0] + start[0]) / 2, (end[1] + start[1]) / 2)
-                center = tuple(np.subtract(center, 10)), tuple(np.add(center, 10))
-                predict = entity['PredictorTransform']
-                color = self.settings.get_color(self.inputs.decode('label', predict)) + (0.5,)  # Add alpha
-                color = tuple(np.multiply(color, 255).astype(int))
-                draw = ImageDraw.Draw(image)
-                draw.rectangle(center, fill=color)
-                # draw.rectangle((start, end), outline="white")
-            image.save(output_folder / '{ref}_{lab}.png'.format(ref=reference, lab=label[0]))
+        # display
+        plt.imshow(Image.alpha_composite(original, patch).convert("RGB"))
+        plt.axis('off')
+        plt.show()
