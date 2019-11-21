@@ -91,12 +91,12 @@ class Folds:
 class IO:
 
     @staticmethod
-    def load(input_file, key):
-        return pd.read_hdf(input_file, key)
+    def load(input_file):
+        return pd.read_pickle(input_file)
 
     @staticmethod
-    def save(dataframe, save, key):
-        dataframe.to_hdf(save, key)
+    def save(dataframe, save):
+        dataframe.to_pickle(save)
 
 
 class Tools:
