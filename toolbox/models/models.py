@@ -1,18 +1,179 @@
 import types
 import numpy as np
 from copy import deepcopy
+
+from joblib import delayed, Parallel
 from keras import Sequential, Model
 from keras.callbacks import EarlyStopping
 from keras.engine.saving import load_model
 from keras.optimizers import SGD
 from keras.utils.generic_utils import has_arg, to_list
 from keras.wrappers.scikit_learn import KerasClassifier
-from misvm import SIL
+from misvm import SIL, MISVM
 from numpy import hstack
-from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin
 from sklearn.metrics import accuracy_score
-from sklearn.utils.multiclass import unique_labels
+from sklearn.multiclass import _fit_ovo_binary, _predict_binary
+from sklearn.utils.multiclass import unique_labels, _ovr_decision_function
 from toolbox.models.generators import ResourcesGenerator
+
+
+class OVOClassifier(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
+
+    def __init__(self, estimator, n_jobs=None):
+        self.estimator = estimator
+        self.n_jobs = n_jobs
+
+    def fit(self, X, y):
+        self.classes_ = np.unique(y)
+        if len(self.classes_) == 1:
+            raise ValueError("OneVsOneClassifier can not be fit when only one"
+                             " class is present.")
+        n_classes = self.classes_.shape[0]
+        estimators_indices = list(zip(*(Parallel(n_jobs=self.n_jobs)(
+            delayed(_fit_ovo_binary)
+            (self.estimator, X, y, self.classes_[i], self.classes_[j])
+            for i in range(n_classes) for j in range(i + 1, n_classes)))))
+
+        self.estimators_ = estimators_indices[0]
+        try:
+            self.pairwise_indices_ = (
+                estimators_indices[1] if self._pairwise else None)
+        except AttributeError:
+            self.pairwise_indices_ = None
+
+        return self
+    #
+    # @if_delegate_has_method(delegate='estimator')
+    # def partial_fit(self, X, y, classes=None):
+    #     """Partially fit underlying estimators
+    #
+    #     Should be used when memory is inefficient to train all data. Chunks
+    #     of data can be passed in several iteration, where the first call
+    #     should have an array of all target variables.
+    #
+    #
+    #     Parameters
+    #     ----------
+    #     X : (sparse) array-like, shape = [n_samples, n_features]
+    #         Data.
+    #
+    #     y : array-like, shape = [n_samples]
+    #         Multi-class targets.
+    #
+    #     classes : array, shape (n_classes, )
+    #         Classes across all calls to partial_fit.
+    #         Can be obtained via `np.unique(y_all)`, where y_all is the
+    #         target vector of the entire dataset.
+    #         This argument is only required in the first call of partial_fit
+    #         and can be omitted in the subsequent calls.
+    #
+    #     Returns
+    #     -------
+    #     self
+    #     """
+    #     if _check_partial_fit_first_call(self, classes):
+    #         self.estimators_ = [clone(self.estimator) for i in
+    #                             range(self.n_classes_ *
+    #                                   (self.n_classes_ - 1) // 2)]
+    #
+    #     if len(np.setdiff1d(y, self.classes_)):
+    #         raise ValueError("Mini-batch contains {0} while it "
+    #                          "must be subset of {1}".format(np.unique(y),
+    #                                                         self.classes_))
+    #
+    #     X, y = check_X_y(X, y, accept_sparse=['csr', 'csc'])
+    #     check_classification_targets(y)
+    #     combinations = itertools.combinations(range(self.n_classes_), 2)
+    #     self.estimators_ = Parallel(
+    #         n_jobs=self.n_jobs)(
+    #             delayed(_partial_fit_ovo_binary)(
+    #                 estimator, X, y, self.classes_[i], self.classes_[j])
+    #             for estimator, (i, j) in izip(self.estimators_,
+    #                                           (combinations)))
+    #
+    #     self.pairwise_indices_ = None
+    #
+    #     return self
+
+    def predict(self, X):
+        """Estimate the best class label for each sample in X.
+
+        This is implemented as ``argmax(decision_function(X), axis=1)`` which
+        will return the label of the class with most votes by estimators
+        predicting the outcome of a decision for each possible class pair.
+
+        Parameters
+        ----------
+        X : (sparse) array-like, shape = [n_samples, n_features]
+            Data.
+
+        Returns
+        -------
+        y : numpy array of shape [n_samples]
+            Predicted multi-class targets.
+        """
+        Y = self.decision_function(X)
+        if self.n_classes_ == 2:
+            return self.classes_[(Y > 0).astype(np.int)]
+        return self.classes_[Y.argmax(axis=1)]
+
+    def decision_function(self, X):
+        """Decision function for the OneVsOneClassifier.
+
+        The decision values for the samples are computed by adding the
+        normalized sum of pair-wise classification confidence levels to the
+        votes in order to disambiguate between the decision values when the
+        votes for all the classes are equal leading to a tie.
+
+        Parameters
+        ----------
+        X : array-like, shape = [n_samples, n_features]
+
+        Returns
+        -------
+        Y : array-like, shape = [n_samples, n_classes]
+        """
+        indices = self.pairwise_indices_
+        if indices is None:
+            Xs = [X] * len(self.estimators_)
+        else:
+            Xs = [X[:, idx] for idx in indices]
+
+        predictions = np.vstack([est.predict(Xi)
+                                 for est, Xi in zip(self.estimators_, Xs)]).T
+        confidences = np.vstack([_predict_binary(est, Xi)
+                                 for est, Xi in zip(self.estimators_, Xs)]).T
+        Y = _ovr_decision_function(predictions,
+                                   confidences, len(self.classes_))
+        if self.n_classes_ == 2:
+            return Y[:, 1]
+        return Y
+
+    @property
+    def n_classes_(self):
+        return len(self.classes_)
+
+    @property
+    def _pairwise(self):
+        """Indicate if wrapped estimator is using a precomputed Gram matrix"""
+        return getattr(self.estimator, "_pairwise", False)
+
+
+class CustomMISVM(MISVM):
+
+    def fit(self, bags, y):
+        y = 2 * y - 1
+        super().fit(bags, y)
+
+    def predict(self, bags, instancePrediction = None):
+        return np.argmax(self.predict_proba(bags, instancePrediction), axis=1)
+
+    def predict_proba(self, bags, instancePrediction=None):
+        predictions = super().predict(bags, instancePrediction)
+        max_value = np.max(np.abs(predictions))
+        predictions = ((predictions/max_value)*0.5)+0.5
+        return np.array([1-predictions, predictions]).T
 
 
 class CustomSIL(SIL):
