@@ -10,7 +10,7 @@ from keras.optimizers import SGD
 from keras.utils.generic_utils import has_arg, to_list
 from keras.wrappers.scikit_learn import KerasClassifier
 from misvm import SIL, MISVM
-from misvm.smil import sMIL2
+from misvm.smil import sMIL
 from numpy import hstack
 from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin
 from sklearn.metrics import accuracy_score
@@ -193,7 +193,7 @@ class CustomSIL(SIL):
         return np.array([1-predictions, predictions]).T
 
 
-class CustomSMIL(sMIL2):
+class CustomSMIL(sMIL):
 
     def fit(self, bags, y):
         y = 2 * y - 1
