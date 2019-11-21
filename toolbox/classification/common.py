@@ -64,7 +64,6 @@ class Folds:
         for index, fold in enumerate(current_folds, 1):
             folds[fold[1]] = index
         dataframe['Fold'] = folds.tolist()  # Add tests to folds
-        return dataframe
 
     @staticmethod
     def build_group_folds(dataframe, tags, split=5):
@@ -85,7 +84,6 @@ class Folds:
         for index, fold in enumerate(current_folds, 1):
             folds[fold[1]] = index
         dataframe['Fold'] = folds.tolist()  # Add
-        return dataframe
 
 
 class IO:
