@@ -165,7 +165,9 @@ class CustomMISVM(MISVM):
 
     def fit(self, bags, y):
         y = 2 * y - 1
-        super().fit(bags, y)
+        LIMIT = 20000
+        BAG_LIMIT = int(LIMIT/bags.shape[1])
+        super().fit(bags[:BAG_LIMIT, :, :], y)
 
     def predict(self, bags, instancePrediction = None):
         return np.argmax(self.predict_proba(bags, instancePrediction), axis=1)
@@ -181,7 +183,9 @@ class CustomSIL(SIL):
 
     def fit(self, bags, y):
         y = 2 * y - 1
-        super().fit(bags, y)
+        LIMIT = 20000
+        BAG_LIMIT = int(LIMIT/bags.shape[1])
+        super().fit(bags[:BAG_LIMIT, :, :], y)
 
     def predict(self, bags, instancePrediction = None):
         return np.argmax(self.predict_proba(bags, instancePrediction), axis=1)
@@ -197,7 +201,9 @@ class CustomSMIL(sMIL):
 
     def fit(self, bags, y):
         y = 2 * y - 1
-        super().fit(bags, y)
+        LIMIT = 20000
+        BAG_LIMIT = int(LIMIT/bags.shape[1])
+        super().fit(bags[:BAG_LIMIT, :, :], y)
 
     def predict(self, bags):
         return np.argmax(self.predict_proba(bags), axis=1)
