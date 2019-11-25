@@ -96,7 +96,7 @@ class Views:
         # Data
         labels = np.array(inputs[tags['label_encode']].to_list())
         unique = np.unique(inputs[tags['label_encode']])
-        probabilities = np.array(inputs[f'{tags["eval"]}_Probabilities'].to_list())
+        probabilities = np.array(inputs[f'{tags["eval"]}_{Tools.PROBABILITY}'].to_list())
 
         figure, axe = pyplot.subplots()
         # Plot luck
