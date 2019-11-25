@@ -165,8 +165,10 @@ class CustomMISVM(MISVM):
 
     def fit(self, bags, y):
         y = 2 * y - 1
+        unique_labels = np.unique(y)
         LIMIT = 20000
         BAG_LIMIT = int(LIMIT/bags.shape[1])
+        LAB_BAG_LIMIT = BAG_LIMIT/len(unique_labels)
         super().fit(bags[:BAG_LIMIT, :, :], y)
 
     def predict(self, bags, instancePrediction = None):
@@ -183,9 +185,18 @@ class CustomSIL(SIL):
 
     def fit(self, bags, y):
         y = 2 * y - 1
+        unique_labels = np.unique(y)
         LIMIT = 20000
         BAG_LIMIT = int(LIMIT/bags.shape[1])
-        super().fit(bags[:BAG_LIMIT, :, :], y)
+        LAB_BAG_LIMIT = int(BAG_LIMIT/len(unique_labels))
+        new_bags = []
+        new_y = []
+        for label in unique_labels:
+            current_bags = bags[label == y, :, :]
+            current_y = y[label == y]
+            new_bags.append(current_bags[:LAB_BAG_LIMIT, :, :])
+            new_y.append(current_y[:LAB_BAG_LIMIT])
+        super().fit(np.concatenate(new_bags), np.concatenate(new_y))
 
     def predict(self, bags, instancePrediction = None):
         return np.argmax(self.predict_proba(bags, instancePrediction), axis=1)
@@ -201,8 +212,10 @@ class CustomSMIL(sMIL):
 
     def fit(self, bags, y):
         y = 2 * y - 1
+        unique_labels = np.unique(y)
         LIMIT = 20000
         BAG_LIMIT = int(LIMIT/bags.shape[1])
+        LAB_BAG_LIMIT = BAG_LIMIT/len(unique_labels)
         super().fit(bags[:BAG_LIMIT, :, :], y)
 
     def predict(self, bags):
