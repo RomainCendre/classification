@@ -9,31 +9,30 @@ from keras.engine.saving import load_model
 from keras.optimizers import SGD
 from keras.utils.generic_utils import has_arg, to_list
 from keras.wrappers.scikit_learn import KerasClassifier
-from misvm import SIL, MISVM
-from misvm.smil import sMIL
 from numpy import hstack
 from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin
 from sklearn.metrics import accuracy_score
-from sklearn.multiclass import _fit_ovo_binary, _predict_binary
+from sklearn.multiclass import _fit_binary
+from sklearn.utils.metaestimators import _safe_split
 from sklearn.utils.multiclass import unique_labels, _ovr_decision_function
 from toolbox.models.generators import ResourcesGenerator
 
 
-class OVOClassifier(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
+class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on OneVsOne
 
     def __init__(self, estimator, n_jobs=None):
         self.estimator = estimator
         self.n_jobs = n_jobs
 
-    def fit(self, X, y):
+    def fit(self, bags, y):
         self.classes_ = np.unique(y)
         if len(self.classes_) == 1:
             raise ValueError("OneVsOneClassifier can not be fit when only one"
                              " class is present.")
         n_classes = self.classes_.shape[0]
         estimators_indices = list(zip(*(Parallel(n_jobs=self.n_jobs)(
-            delayed(_fit_ovo_binary)
-            (self.estimator, X, y, self.classes_[i], self.classes_[j])
+            delayed(CustomMIL.__est_fit_ovo_binary)
+            (self.estimator, bags, y, self.classes_[i], self.classes_[j])
             for i in range(n_classes) for j in range(i + 1, n_classes)))))
 
         self.estimators_ = estimators_indices[0]
@@ -44,109 +43,23 @@ class OVOClassifier(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
             self.pairwise_indices_ = None
 
         return self
-    #
-    # @if_delegate_has_method(delegate='estimator')
-    # def partial_fit(self, X, y, classes=None):
-    #     """Partially fit underlying estimators
-    #
-    #     Should be used when memory is inefficient to train all data. Chunks
-    #     of data can be passed in several iteration, where the first call
-    #     should have an array of all target variables.
-    #
-    #
-    #     Parameters
-    #     ----------
-    #     X : (sparse) array-like, shape = [n_samples, n_features]
-    #         Data.
-    #
-    #     y : array-like, shape = [n_samples]
-    #         Multi-class targets.
-    #
-    #     classes : array, shape (n_classes, )
-    #         Classes across all calls to partial_fit.
-    #         Can be obtained via `np.unique(y_all)`, where y_all is the
-    #         target vector of the entire dataset.
-    #         This argument is only required in the first call of partial_fit
-    #         and can be omitted in the subsequent calls.
-    #
-    #     Returns
-    #     -------
-    #     self
-    #     """
-    #     if _check_partial_fit_first_call(self, classes):
-    #         self.estimators_ = [clone(self.estimator) for i in
-    #                             range(self.n_classes_ *
-    #                                   (self.n_classes_ - 1) // 2)]
-    #
-    #     if len(np.setdiff1d(y, self.classes_)):
-    #         raise ValueError("Mini-batch contains {0} while it "
-    #                          "must be subset of {1}".format(np.unique(y),
-    #                                                         self.classes_))
-    #
-    #     X, y = check_X_y(X, y, accept_sparse=['csr', 'csc'])
-    #     check_classification_targets(y)
-    #     combinations = itertools.combinations(range(self.n_classes_), 2)
-    #     self.estimators_ = Parallel(
-    #         n_jobs=self.n_jobs)(
-    #             delayed(_partial_fit_ovo_binary)(
-    #                 estimator, X, y, self.classes_[i], self.classes_[j])
-    #             for estimator, (i, j) in izip(self.estimators_,
-    #                                           (combinations)))
-    #
-    #     self.pairwise_indices_ = None
-    #
-    #     return self
 
     def predict(self, X):
-        """Estimate the best class label for each sample in X.
-
-        This is implemented as ``argmax(decision_function(X), axis=1)`` which
-        will return the label of the class with most votes by estimators
-        predicting the outcome of a decision for each possible class pair.
-
-        Parameters
-        ----------
-        X : (sparse) array-like, shape = [n_samples, n_features]
-            Data.
-
-        Returns
-        -------
-        y : numpy array of shape [n_samples]
-            Predicted multi-class targets.
-        """
         Y = self.decision_function(X)
         if self.n_classes_ == 2:
             return self.classes_[(Y > 0).astype(np.int)]
         return self.classes_[Y.argmax(axis=1)]
 
     def decision_function(self, X):
-        """Decision function for the OneVsOneClassifier.
-
-        The decision values for the samples are computed by adding the
-        normalized sum of pair-wise classification confidence levels to the
-        votes in order to disambiguate between the decision values when the
-        votes for all the classes are equal leading to a tie.
-
-        Parameters
-        ----------
-        X : array-like, shape = [n_samples, n_features]
-
-        Returns
-        -------
-        Y : array-like, shape = [n_samples, n_classes]
-        """
         indices = self.pairwise_indices_
         if indices is None:
             Xs = [X] * len(self.estimators_)
         else:
             Xs = [X[:, idx] for idx in indices]
 
-        predictions = np.vstack([est.predict(Xi)
-                                 for est, Xi in zip(self.estimators_, Xs)]).T
-        confidences = np.vstack([_predict_binary(est, Xi)
-                                 for est, Xi in zip(self.estimators_, Xs)]).T
-        Y = _ovr_decision_function(predictions,
-                                   confidences, len(self.classes_))
+        predictions = np.vstack([self.__est_predict(est, Xi) for est, Xi in zip(self.estimators_, Xs)]).T
+        confidences = np.vstack([self.__est_predict_binary(est, Xi) for est, Xi in zip(self.estimators_, Xs)]).T
+        Y = _ovr_decision_function(predictions, confidences, len(self.classes_))
         if self.n_classes_ == 2:
             return Y[:, 1]
         return Y
@@ -160,10 +73,37 @@ class OVOClassifier(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
         """Indicate if wrapped estimator is using a precomputed Gram matrix"""
         return getattr(self.estimator, "_pairwise", False)
 
+    def __est_predict(self, estimator, bags, instancePrediction = None):
+        return np.argmax(self.__est_predict_proba(estimator, bags, instancePrediction), axis=1)
 
-class CustomMISVM(MISVM):
+    def __est_predict_binary(self, estimator, bags, instancePrediction = None):
+        return self.__est_predict_proba(estimator, bags, instancePrediction)[:, 1]
 
-    def fit(self, bags, y):
+    def __est_predict_proba(self, estimator, bags, instancePrediction=None):
+        predictions = estimator.predict(bags, instancePrediction)
+        max_value = np.max(np.abs(predictions))
+        predictions = np.nan_to_num(predictions/max_value)*0.5+0.5
+        return np.array([1-predictions, predictions]).T
+
+    @staticmethod
+    def __est_fit_ovo_binary(estimator, bags, y, i, j):
+        #
+        # return _fit_ovo_binary(estimator, bags, y, classes_1, classes_2)
+
+        cond = np.logical_or(y == i, y == j)
+        y = y[cond]
+        y_binary = np.empty(y.shape, np.int)
+        y_binary[y == i] = 0
+        y_binary[y == j] = 1
+        indcond = np.arange(bags.shape[0])[cond]
+
+        # bags, y = CustomMIL.__prepare_fit(bags, y_binary)
+        return _fit_binary(estimator,
+                           *CustomMIL.__prepare_fit(_safe_split(estimator, bags, None, indices=indcond)[0], y_binary),
+                           classes=[i, j]), indcond
+
+    @staticmethod
+    def __prepare_fit(bags, y):
         y = 2 * y - 1
         unique_labels = np.unique(y)
         LIMIT = 20000
@@ -176,73 +116,9 @@ class CustomMISVM(MISVM):
             current_y = y[label == y]
             new_bags.append(current_bags[:LAB_BAG_LIMIT, :, :])
             new_y.append(current_y[:LAB_BAG_LIMIT])
-        super().fit(bags[:BAG_LIMIT, :, :], y)
-
-    def predict(self, bags, instancePrediction = None):
-        return np.argmax(self.predict_proba(bags, instancePrediction), axis=1)
-
-    def predict_proba(self, bags, instancePrediction=None):
-        predictions = super().predict(bags, instancePrediction)
-        max_value = np.max(np.abs(predictions))
-        predictions = ((predictions/max_value)*0.5)+0.5
-        return np.array([1-predictions, predictions]).T
+        return np.concatenate(new_bags), np.concatenate(new_y)
 
 
-class CustomSIL(SIL):
-
-    def fit(self, bags, y):
-        y = 2 * y - 1
-        unique_labels = np.unique(y)
-        LIMIT = 20000
-        BAG_LIMIT = int(LIMIT/bags.shape[1])
-        LAB_BAG_LIMIT = int(BAG_LIMIT/len(unique_labels))
-        new_bags = []
-        new_y = []
-        for label in unique_labels:
-            current_bags = bags[label == y, :, :]
-            current_y = y[label == y]
-            new_bags.append(current_bags[:LAB_BAG_LIMIT, :, :])
-            new_y.append(current_y[:LAB_BAG_LIMIT])
-        super().fit(np.concatenate(new_bags), np.concatenate(new_y))
-
-    def predict(self, bags, instancePrediction = None):
-        return np.argmax(self.predict_proba(bags, instancePrediction), axis=1)
-
-    def predict_proba(self, bags, instancePrediction=None):
-        predictions = super().predict(bags, instancePrediction)
-        max_value = np.max(np.abs(predictions))
-        predictions = ((predictions/max_value)*0.5)+0.5
-        return np.array([1-predictions, predictions]).T
-
-
-class CustomSMIL(sMIL):
-
-    def fit(self, bags, y):
-        y = 2 * y - 1
-        unique_labels = np.unique(y)
-        LIMIT = 20000
-        BAG_LIMIT = int(LIMIT/bags.shape[1])
-        LAB_BAG_LIMIT = int(BAG_LIMIT/len(unique_labels))
-        new_bags = []
-        new_y = []
-        for label in unique_labels:
-            current_bags = bags[label == y, :, :]
-            current_y = y[label == y]
-            new_bags.append(current_bags[:LAB_BAG_LIMIT, :, :])
-            new_y.append(current_y[:LAB_BAG_LIMIT])
-        super().fit(bags[:BAG_LIMIT, :, :], y)
-
-    def predict(self, bags):
-        return np.argmax(self.predict_proba(bags), axis=1)
-
-    def predict_proba(self, bags):
-        predictions = super().predict(bags)
-        max_value = np.max(np.abs(predictions))
-        predictions = ((predictions/max_value)*0.5)+0.5
-        return np.array([1-predictions, predictions]).T
-
-
-# Decision taking based on predictions
 class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
 
     def __init__(self, mode='max', metric=None, is_prior_max=True):
