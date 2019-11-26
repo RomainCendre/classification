@@ -5,6 +5,7 @@ import numpy as np
 from pandas.errors import PerformanceWarning
 from sklearn.model_selection import GridSearchCV, GroupKFold, StratifiedKFold, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
+from sklearn.semi_supervised import LabelSpreading, LabelPropagation
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
@@ -215,8 +216,8 @@ class Tools:
             else:
                 Exception(f'Expected valid unbalanced property {unbalanced}.')
 
-        # Check for supervised stuff if in supervised mode
-        if not hasattr(model, 'is_semi'):
+        # Check for unsupervised stuff during fit mode
+        if not isinstance(model, LabelSpreading) or not isinstance(model, LabelPropagation):
             labelled = labels != -1
             data = data[labelled]
             labels = labels[labelled]
