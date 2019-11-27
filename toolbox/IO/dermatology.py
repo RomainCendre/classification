@@ -37,8 +37,8 @@ class Reader:
         dataframe = pandas.concat(data, sort=False, ignore_index=True).drop(columns='Path')
         # Set pathological label
         dataframe = dataframe[~(dataframe['Label'] == 'Draw')].reset_index(drop=True)  # Remove unused images
-        dataframe['Pathological'] = ~(dataframe['Label'] == 'Normal')  # Set new label
-        dataframe['Malignant'] = (dataframe['Label'] == 'Malignant')  # Set new label
+        dataframe['Pathological'] = dataframe['Label'] != 'Normal'    # Set new label
+        dataframe['Malignant'] = dataframe['Label'] == 'Malignant'  # Set new label
         return dataframe
 
     @staticmethod
