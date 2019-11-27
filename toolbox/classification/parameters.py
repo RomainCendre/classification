@@ -267,15 +267,6 @@ class Dermatology:
     def get_statistics_keys():
         return ['Sex', 'Diagnosis', 'Binary_Diagnosis', 'Area', 'Label']
 
-    @staticmethod
-    def get_filters():
-        return [('All', {'Label': ['Normal', 'Benign', 'Malignant', 'Unknown']},
-                 ['Normal', 'Benign', 'Malignant'], {}),
-                ('NvsP', {'Label': ['Normal', 'Pathology', 'Unknown']},
-                 ['Normal', 'Pathology'], {'Label': (['Benign', 'Malignant'], 'Pathology')}),
-                ('MvsR', {'Label': ['Rest', 'Malignant', 'Unknown']},
-                 ['Rest', 'Malignant'], {'Label': (['Normal', 'Benign'], 'Rest')})]
-
 
 class Settings:
 
