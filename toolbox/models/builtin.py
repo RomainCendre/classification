@@ -42,11 +42,12 @@ class Applications:
             return applications.inception_v3.preprocess_input
 
     @staticmethod
-    def get_transfer_learning(architecture='InceptionV3', pooling='avg', batch_size=32):
+    def get_transfer_learning(architecture='InceptionV3', pooling='avg', batch_size=32, additional={}):
         extractor_params = {'architecture': architecture,
                             'batch_size': batch_size,
                             'pooling': pooling,
                             'preprocessing_function': Applications.get_preprocessing_application(architecture=architecture)}
+        extractor_params.update(additional)
         return KerasBatchClassifier(Applications.get_application, **extractor_params)
 
 
