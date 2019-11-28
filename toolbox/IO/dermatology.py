@@ -51,13 +51,13 @@ class Reader:
         param_type = parameters.get('type', None)
 
         # Read patient and images data
-        images = Reader.read_data_file(subdir, 'images', modality=parameters.get('modality', None))
+        images = Reader.read_data_file(subdir, 'images', filter_modality=parameters.get('modality', None))
         images = images.drop(columns='Depth(um)', errors='ignore')
-        patches = Reader.read_data_file(subdir, 'patches', modality=parameters.get('modality', None))
+        patches = Reader.read_data_file(subdir, 'patches', filter_modality=parameters.get('modality', None))
 
         # Patch filter
         if images is not None:
-            images['Reference'] = images.apply(lambda row: f'{subdir.stem}_{row.name}_F', axis=1)
+            images['Reference'] = images.apply(lambda row: f'{subdir.stem}_{row.ImageID}_F', axis=1)
             images['Source'] = images['Reference']
 
         # Only return images
@@ -65,7 +65,7 @@ class Reader:
             return images
 
         if images is not None and patches is not None:
-            patches['Reference'] = patches.apply(lambda row: f'{subdir.stem}_{row.name}_P', axis=1)
+            patches['Reference'] = patches.apply(lambda row: f'{subdir.stem}_{row.PatchID}_P', axis=1)
             patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0],
                                               axis=1)
 
@@ -76,7 +76,7 @@ class Reader:
             return pandas.concat([images, patches], sort=False, ignore_index=True)
 
     @staticmethod
-    def read_data_file(subdir, ftype='images', modality=None):
+    def read_data_file(subdir, ftype='images', filter_modality=None):
         # Patient file
         data_file = subdir / f'{ftype}.csv'
         if not data_file.is_file():
@@ -86,13 +86,20 @@ class Reader:
         data = pandas.read_csv(data_file, dtype=str)
         if len(data) == 0:
             return None
-        data = data.reindex(index=order_by_index(data.index, index_natsorted(data.Path)))
+
+        # Reindex by modality
+        for modality in np.unique(data['Modality']):
+            mask = data['Modality'] == modality
+            data[mask] = data[mask].reindex(index=order_by_index(data.index, index_natsorted(data.Path)))
+
         if ftype == 'images':
             data['Type'] = 'Full'
             data['Datum'] = data.apply(lambda row: str(subdir / row['Modality'] / row['Path']), axis=1)
+            data['ImageID'] = data.apply(lambda row: f'{row.name}{row.Modality[0]}', axis=1)
         else:
             data['Type'] = 'Patch'
             data['Datum'] = data.apply(lambda row: str(subdir / 'patches' / row['Path']), axis=1)
+            data['PatchID'] = data.apply(lambda row: f'{row.name}{row.Modality[0]}', axis=1)
 
         if modality is not None:
             data = data[data.Modality == modality]
