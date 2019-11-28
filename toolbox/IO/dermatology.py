@@ -35,9 +35,8 @@ class Reader:
 
         # Merge all data
         dataframe = pandas.concat(data, sort=False, ignore_index=True).drop(columns='Path')
-        # Set pathological label
-        dataframe = dataframe[~(dataframe['Label'] == 'Draw')].reset_index(drop=True)  # Remove unused images
 
+        # Set pathological label
         dataframe['Pathological'] = dataframe['Label'].apply(lambda x: 'Pathological' if x in ['Benign', 'Malignant'] else x)
         dataframe['Malignant'] = dataframe['Label'].apply(lambda x: 'Rest' if x in ['Normal', 'Benign'] else x)
         return dataframe
