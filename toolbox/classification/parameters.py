@@ -47,53 +47,53 @@ class ORL:
 class Dermatology:
 
     @staticmethod
-    def images(modality=None, data_type=None, removes=['Doubtful', 'Draw']):
+    def images(modality=None, data_type=None, use_unknown=False):
         home_path = Path().home()
         location = home_path / 'Data/Skin/'
         input_folders = [location / 'Elisa.csv', location / 'JeanLuc.csv']
-        return Dermatology.__images(input_folders, modality, data_type, removes)
+        return Dermatology.__images(input_folders, modality, data_type, use_unknown)
 
     @staticmethod
-    def multiple_resolution(coefficients, modality=None, removes=['Doubtful', 'Draw']):
-        home_path = Path().home()
-        location = home_path / 'Data/Skin/'
-        input_folders = [location / 'Elisa.csv', location / 'JeanLuc.csv']
-        # Create temporary folder
-        work_folder = home_path / '.research'
-        work_folder.mkdir(exist_ok=True)
-        return Dermatology.__multi_images(input_folders, work_folder, coefficients, modality, removes)
-
-    @staticmethod
-    def sliding_images(size, overlap, modality=None, removes=['Doubtful', 'Draw']):
+    def multiple_resolution(coefficients, modality=None, use_unknown=False):
         home_path = Path().home()
         location = home_path / 'Data/Skin/'
         input_folders = [location / 'Elisa.csv', location / 'JeanLuc.csv']
         # Create temporary folder
         work_folder = home_path / '.research'
         work_folder.mkdir(exist_ok=True)
-        return Dermatology.__sliding_images(input_folders, work_folder, size, overlap, modality, removes)
+        return Dermatology.__multi_images(input_folders, work_folder, coefficients, modality, use_unknown)
 
     @staticmethod
-    def test_images(modality=None, data_type=None, removes=['Doubtful', 'Draw']):
-        return Dermatology.__images(None, modality, data_type, removes)
+    def sliding_images(size, overlap, modality=None, use_unknown=False):
+        home_path = Path().home()
+        location = home_path / 'Data/Skin/'
+        input_folders = [location / 'Elisa.csv', location / 'JeanLuc.csv']
+        # Create temporary folder
+        work_folder = home_path / '.research'
+        work_folder.mkdir(exist_ok=True)
+        return Dermatology.__sliding_images(input_folders, work_folder, size, overlap, modality, use_unknown)
 
     @staticmethod
-    def test_multiresolution(coefficients, modality=None, removes=['Doubtful', 'Draw']):
+    def test_images(modality=None, data_type=None, use_unknown=False):
+        return Dermatology.__images(None, modality, data_type, use_unknown)
+
+    @staticmethod
+    def test_multiresolution(coefficients, modality=None, use_unknown=False):
         work_folder = Path(gettempdir()) / '.research'
         work_folder.mkdir(exist_ok=True)
-        return Dermatology.__multi_images(None, work_folder, coefficients, modality, removes)
+        return Dermatology.__multi_images(None, work_folder, coefficients, modality, use_unknown)
 
     @staticmethod
-    def test_sliding_images(size, overlap, modality=None, removes=['Doubtful', 'Draw']):
+    def test_sliding_images(size, overlap, modality=None, use_unknown=False):
         work_folder = Path(gettempdir()) / '.research'
         if work_folder.exists():
             shutil.rmtree(work_folder)
         work_folder.mkdir(exist_ok=True)
 
-        return Dermatology.__sliding_images(None, work_folder, size, overlap, modality, removes)
+        return Dermatology.__sliding_images(None, work_folder, size, overlap, modality, use_unknown)
 
     @staticmethod
-    def __images(folder, modality, data_type=None, removes=[]):
+    def __images(folder, modality, data_type=None, use_unknown=False):
         if folder is None:
             generator = dermatology.Generator((5, 10), 20)
             dataframe = generator.generate_study(data_type=data_type)
@@ -101,19 +101,19 @@ class Dermatology:
             dataframe = Dermatology.__scan(folder, data_type=data_type, modality=modality)
 
         # Filtering
-        for remove in removes:
-            dataframe = dataframe[dataframe['Label'] != remove].reset_index(drop=True)
+        if not use_unknown:
+            dataframe = dataframe[dataframe['Label'] != 'Unknown'].reset_index(drop=True)
 
         return dataframe
 
     @staticmethod
-    def __multi_images(folder, work_folder, coefficients, modality, removes=[]):
-        dataframe = Dermatology.__images(folder, modality=modality, data_type='Full', removes=removes)
+    def __multi_images(folder, work_folder, coefficients, modality, use_unknown=False):
+        dataframe = Dermatology.__images(folder, modality=modality, data_type='Full', use_unknown=use_unknown)
         return Dermatology.__to_multi(dataframe, coefficients, work_folder)
 
     @staticmethod
-    def __sliding_images(folder, work_folder, size, overlap, modality, removes=[]):
-        dataframe = Dermatology.__images(folder, modality=modality, removes=removes)
+    def __sliding_images(folder, work_folder, size, overlap, modality, use_unknown=False):
+        dataframe = Dermatology.__images(folder, modality=modality, use_unknown=use_unknown)
         return Dermatology.__to_patch(dataframe, size, overlap, work_folder)
 
     @staticmethod

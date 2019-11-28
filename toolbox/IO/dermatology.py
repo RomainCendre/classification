@@ -36,8 +36,13 @@ class Reader:
         # Merge all data
         dataframe = pandas.concat(data, sort=False, ignore_index=True).drop(columns='Path')
 
+        # Everything different from Normal Benign Malignant switch to Unknown
+        mask = ~dataframe['Label'].isin(['Normal', 'Benign', 'Malignant'])
+        dataframe.loc[mask, 'Label'] = 'Unknown'
+
         # Set pathological label
-        dataframe['Pathological'] = dataframe['Label'].apply(lambda x: 'Pathological' if x in ['Benign', 'Malignant'] else x)
+        dataframe['Pathological'] = dataframe['Label'].apply(
+            lambda x: 'Pathological' if x in ['Benign', 'Malignant'] else x)
         dataframe['Malignant'] = dataframe['Label'].apply(lambda x: 'Rest' if x in ['Normal', 'Benign'] else x)
         return dataframe
 
