@@ -207,20 +207,23 @@ class Tools:
         if not Tools.__check_labels(dataframe, {'label_encode': tags['label_encode']}):
             raise ValueError('Not enough unique labels where found, at least 2.')
 
-        data = np.array(dataframe[tags['datum']].to_list())
+        # Check for unsupervised stuff during fit mode
+        if not isinstance(model, LabelSpreading) or not isinstance(model, LabelPropagation):
+            dataframe = dataframe[dataframe[tags['label_encode']] != -1]
+
+        # Used in case of higher predictions levels (inconsistent data)
+        if not hasattr(model, 'is_inconsistent'):
+            data = np.array(dataframe[tags['datum']].to_list())
+        else:
+            data = dataframe[tags['datum']].to_list()
         labels = np.array(dataframe[tags['label_encode']].to_list())
 
+        # Rules for unbalancing solutions
         if unbalanced is not None:
             if callable(getattr(unbalanced, 'fit_resample', None)):
                 data, labels = unbalanced.fit_resample(data, labels)
             else:
                 Exception(f'Expected valid unbalanced property {unbalanced}.')
-
-        # Check for unsupervised stuff during fit mode
-        if not isinstance(model, LabelSpreading) or not isinstance(model, LabelPropagation):
-            labelled = labels != -1
-            data = data[labelled]
-            labels = labels[labelled]
 
         if grid is not None:
             grid_search = GridSearchCV(model, param_grid=grid, cv=2, iid=False, n_jobs=cpu)
@@ -365,8 +368,13 @@ class Tools:
         else:
             sub = dataframe[mask]
 
+        # Used in case of higher predictions levels (inconsistent data)
+        if not hasattr(model, 'is_inconsistent'):
+            data = np.array(dataframe[tags['datum']].to_list())
+        else:
+            data = dataframe[tags['datum']].to_list()
+
         # Set de predict values
-        data = np.array(sub[tags['datum']].to_list())
         predictions = model.predict(data)
         sub[out] = pd.Series([p for p in predictions], index=sub.index)
 
