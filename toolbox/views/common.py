@@ -27,7 +27,7 @@ class Views:
 
         # Tags
         features = f'{tags["eval"]}_{Tools.FEATURES}'
-        parameters = f'{tags["eval"]}_{Tools.FEATURES}'
+        parameters = f'{tags["eval"]}_{Tools.PARAMETERS}'
 
         unique_folds = np.unique(inputs['Fold'])
         data = {'Fold': [], 'Features': [], 'Parameters': []}
