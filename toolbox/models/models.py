@@ -73,14 +73,14 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
         """Indicate if wrapped estimator is using a precomputed Gram matrix"""
         return getattr(self.estimator, "_pairwise", False)
 
-    def __est_predict(self, estimator, bags, instancePrediction = None):
+    def __est_predict(self, estimator, bags, instancePrediction=None):
         return np.argmax(self.__est_predict_proba(estimator, bags, instancePrediction), axis=1)
 
-    def __est_predict_binary(self, estimator, bags, instancePrediction = None):
+    def __est_predict_binary(self, estimator, bags, instancePrediction=None):
         return self.__est_predict_proba(estimator, bags, instancePrediction)[:, 1]
 
     def __est_predict_proba(self, estimator, bags, instancePrediction=None):
-        predictions = estimator.predict(bags, instancePrediction)
+        predictions = estimator.predict(bags)
         max_value = np.max(np.abs(predictions))
         predictions = np.nan_to_num(predictions/max_value)*0.5+0.5
         return np.array([1-predictions, predictions]).T
@@ -95,7 +95,7 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
         y_binary = np.empty(y.shape, np.int)
         y_binary[y == i] = 0
         y_binary[y == j] = 1
-        indcond = np.arange(bags.shape[0])[cond]
+        indcond = np.arange(len(bags))[cond]
 
         # bags, y = CustomMIL.__prepare_fit(bags, y_binary)
         return _fit_binary(estimator,
@@ -105,18 +105,19 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
     @staticmethod
     def __prepare_fit(bags, y):
         y = 2 * y - 1
-        unique_labels = np.unique(y)
-        LIMIT = 20000
-        BAG_LIMIT = int(LIMIT/bags.shape[1])
-        LAB_BAG_LIMIT = int(BAG_LIMIT/len(unique_labels))
-        new_bags = []
-        new_y = []
-        for label in unique_labels:
-            current_bags = bags[label == y, :, :]
-            current_y = y[label == y]
-            new_bags.append(current_bags[:LAB_BAG_LIMIT, :, :])
-            new_y.append(current_y[:LAB_BAG_LIMIT])
-        return np.concatenate(new_bags), np.concatenate(new_y)
+        # unique_labels = np.unique(y)
+        # LIMIT = 20000
+        # BAG_LIMIT = int(LIMIT/bags.shape[1])
+        # LAB_BAG_LIMIT = int(BAG_LIMIT/len(unique_labels))
+        # new_bags = []
+        # new_y = []
+        # for label in unique_labels:
+        #     current_bags = bags[label == y, :, :]
+        #     current_y = y[label == y]
+        #     new_bags.append(current_bags[:LAB_BAG_LIMIT, :, :])
+        #     new_y.append(current_y[:LAB_BAG_LIMIT])
+        # return np.concatenate(new_bags), np.concatenate(new_y)
+        return bags, y
 
 
 class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
@@ -183,9 +184,11 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
 
     def __get_probas(self, x):
         x_probas = np.zeros((len(x), self.number_labels))
-        patches_number = x.shape[1]
-        for label in range(self.number_labels):
-            x_probas[:, label] = np.sum(x == label, axis=1) / patches_number
+        # patches_number = x.shape[1]
+        for group in x:
+            nb_elements = group.shape[1]
+            for label in range(self.number_labels):
+                x_probas[:, label] = np.sum(group == label, axis=0) / nb_elements
         return x_probas
 
     def __get_predictions_at_least_one(self, x):
