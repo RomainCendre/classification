@@ -46,9 +46,15 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
 
     def predict(self, X):
         Y = self.decision_function(X)
-        if self.n_classes_ == 2:
-            return self.classes_[(Y > 0).astype(np.int)]
+        # if self.n_classes_ == 2:
+        #     return self.classes_[(Y > 0).astype(np.int)]
         return self.classes_[Y.argmax(axis=1)]
+
+    def predict_proba(self, X):
+        Y = self.decision_function(X)
+        Y = (Y - np.min(Y))
+        Y = Y / np.max(Y)
+        return Y
 
     def decision_function(self, X):
         indices = self.pairwise_indices_
@@ -60,8 +66,8 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
         predictions = np.vstack([self.__est_predict(est, Xi) for est, Xi in zip(self.estimators_, Xs)]).T
         confidences = np.vstack([self.__est_predict_binary(est, Xi) for est, Xi in zip(self.estimators_, Xs)]).T
         Y = _ovr_decision_function(predictions, confidences, len(self.classes_))
-        if self.n_classes_ == 2:
-            return Y[:, 1]
+        # if self.n_classes_ == 2:
+        #     return Y[:, 1]
         return Y
 
     @property
@@ -79,7 +85,8 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
     def __est_predict_binary(self, estimator, bags, instancePrediction=None):
         return self.__est_predict_proba(estimator, bags, instancePrediction)[:, 1]
 
-    def __est_predict_proba(self, estimator, bags, instancePrediction=None):
+    @staticmethod
+    def __est_predict_proba(estimator, bags, instancePrediction=None):
         predictions = estimator.predict(bags)
         max_value = np.max(np.abs(predictions))
         predictions = np.nan_to_num(predictions/max_value)*0.5+0.5
