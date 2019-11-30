@@ -98,6 +98,11 @@ class Views:
         unique = np.unique(inputs[tags['label_encode']])
         probabilities = np.array(inputs[f'{tags["eval"]}_{Tools.PROBABILITY}'].to_list())
 
+        # Check if Nan values
+        if np.isnan(probabilities).any():
+            raise Exception(f'Unexpected values (NaN) found in probabilities.')
+
+
         figure, axe = pyplot.subplots()
         # Plot luck
         axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color=settings.get_color('Luck'), label='Luck', alpha=.8)
