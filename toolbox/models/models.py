@@ -21,6 +21,7 @@ from toolbox.models.generators import ResourcesGenerator
 class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on OneVsOne
 
     def __init__(self, estimator, n_jobs=None):
+        self.is_inconsistent = True
         self.estimator = estimator
         self.n_jobs = n_jobs
 
@@ -135,6 +136,7 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
         if mode not in mandatory:
             raise Exception(f'Expected modes: {mandatory}, but found: {mode}.')
 
+        self.is_inconsistent = True
         self.mode = mode
         # Set metric mode used for evaluation
         if metric:
@@ -156,13 +158,12 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
         return self
 
     def predict(self, x, y=None, copy=True):
+        probas = self.__get_probas(x)  # Go through probas of elements as it's a contant array
         if self.mode == 'max':
-            probas = self.__get_probas(x)
             return self.__get_predictions_max(probas)
         elif self.mode == 'at_least_one':
-            return self.__get_predictions_at_least_one(x)
+            return self.__get_predictions_at_least_one(probas)
         elif self.mode == 'dynamic_thresh':
-            probas = self.__get_probas(x)
             return self.__get_predictions_dynamic(probas, self.thresholds)
 
     def predict_proba(self, x, y=None, copy=True):
@@ -192,17 +193,14 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
     def __get_probas(self, x):
         x_probas = np.zeros((len(x), self.number_labels))
         # patches_number = x.shape[1]
-        for group in x:
-            nb_elements = group.shape[1]
+        for index, group in enumerate(x):
+            nb_elements = group.size
             for label in range(self.number_labels):
-                x_probas[:, label] = np.sum(group == label, axis=0) / nb_elements
+                x_probas[index, label] = np.sum(group == label, axis=0) / nb_elements
         return x_probas
 
     def __get_predictions_at_least_one(self, x):
-        if self.is_prior_max:
-            return np.amax(x, axis=1)
-        else:
-            return np.amin(x, axis=1)
+        return np.argmax((x > 0) * self.__get_prior_coefficients(), axis=1)
 
     def __get_predictions_max(self, x):
         maximum = x.max(axis=1, keepdims=1) == x
