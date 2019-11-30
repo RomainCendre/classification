@@ -297,15 +297,18 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
         return np.array(list(coefficients))
 
     def __get_probas(self, x):
-        if self.low == 'mean':
-            return np.mean(x, axis=1)
-        elif self.low == 'max':
-            return np.max(x, axis=1)
-        else:
-            return np.linalg.norm(x, ord=self.p_norm, axis=1)
+        x_probas = np.zeros((len(x), self.number_labels))
+        # patches_number = x.shape[1]
+        for index, group in enumerate(x):
+            if self.low == 'mean':
+                x_probas[index, :] = np.mean(group, axis=0)
+            elif self.low == 'max':
+                x_probas[index, :] = np.max(group, axis=0)
+            else:
+                x_probas[index, :] = np.linalg.norm(group, ord=self.p_norm, axis=0)
+        return x_probas
 
 
-# Deep Learning classifier
 class KerasBatchClassifier(KerasClassifier):
 
     def check_params(self, params):
