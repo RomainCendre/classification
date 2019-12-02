@@ -12,6 +12,7 @@ from sklearn.manifold import TSNE
 from sklearn.metrics import auc, roc_curve, classification_report
 from toolbox.classification.common import Tools
 
+
 class Views:
 
     @staticmethod
@@ -36,6 +37,54 @@ class Views:
             data['Features'].append(int(inputs.at[0, f'{features}_{fold}']))
             data['Parameters'].append(inputs.at[0, f'{parameters}_{fold}'])
         return pandas.DataFrame(data)
+
+    @staticmethod
+    def fold_visualization(inputs, tags, lw=10):
+        # Fold needed for evaluation
+        if 'Fold' not in inputs:
+            raise Exception('Need to build fold.')
+
+        # Check mandatory fields
+        mandatory = ['label_encode', 'group_encode']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        folds = np.array(inputs['Fold'].tolist())
+        groups = np.array(inputs[tags['group_encode']].tolist())
+        labels = np.array(inputs[tags['label_encode']].tolist())
+
+        figure, axe = pyplot.subplots()
+        unique_foldes = np.unique(folds)
+        # Generate the training/testing visualizations for each CV split
+        for index, fold in enumerate(unique_foldes):
+            # Fill in indices with the training/test groups
+            indices = np.array([np.nan] * len(folds))
+            indices[folds == fold] = 1
+            indices[folds != fold] = 0
+
+            # Visualize the results
+            axe.scatter(range(len(indices)), [index + .5] * len(indices),
+                        c=indices, marker='_', lw=lw, cmap=pyplot.cm.coolwarm,
+                        vmin=-.2, vmax=1.2)
+
+        nb_folds = len(unique_foldes)
+        # Plot the data classes and groups at the end
+        axe.scatter(range(len(labels)), [nb_folds + .5] * len(labels),
+                    c=labels, marker='_', lw=lw, cmap=pyplot.cm.Paired)
+
+        axe.scatter(range(len(groups)), [nb_folds + 1.5] * len(groups),
+                    c=groups, marker='_', lw=lw, cmap=pyplot.cm.Paired)
+
+        # Formatting
+        yticklabels = list(range(nb_folds)) + ['class', 'group']
+        axe.set(yticks=np.arange(nb_folds + 2) + .5,
+                yticklabels=yticklabels,
+                xlabel='Sample index',
+                ylabel="CV iteration",
+                ylim=[nb_folds + 2.2, -.2])
+        axe.set_title('{}'.format('Folds'), fontsize=15)
+        figure.show()
+        return figure
 
     @staticmethod
     def misclassified(inputs, tags):
@@ -102,7 +151,6 @@ class Views:
         if np.isnan(probabilities).any():
             raise Exception(f'Unexpected values (NaN) found in probabilities.')
 
-
         figure, axe = pyplot.subplots()
         # Plot luck
         axe.plot([0, 1], [0, 1], linestyle='--', lw=2, color=settings.get_color('Luck'), label='Luck', alpha=.8)
@@ -145,13 +193,15 @@ class Views:
         folds = np.array(inputs['Fold'].tolist())
 
         # Mean score
-        report = pandas.DataFrame(classification_report(labels, predictions, output_dict=True, target_names=encode.map_list)).transpose()
+        report = pandas.DataFrame(
+            classification_report(labels, predictions, output_dict=True, target_names=encode.map_list)).transpose()
         # Std score
         scores = []
         for fold in np.unique(folds):
             # Create mask
             mask = folds == fold
-            scores.append(classification_report(labels[mask], predictions[mask], output_dict=True, target_names=encode.map_list))
+            scores.append(
+                classification_report(labels[mask], predictions[mask], output_dict=True, target_names=encode.map_list))
         report = report.apply(lambda x: pandas.DataFrame(x).apply(lambda y: Views.__format_std(x, y, scores), axis=1))
         return report
 
@@ -181,12 +231,11 @@ class Views:
 
 
 class ViewsTools:
-
     class DataframeStyler(Styler):
         env = Environment(loader=ChoiceLoader([
-                                    FileSystemLoader(searchpath=str(Path(__file__).parent/'templates')),
-                                    Styler.loader,  # the default
-                                    ]))
+            FileSystemLoader(searchpath=str(Path(__file__).parent / 'templates')),
+            Styler.loader,  # the default
+        ]))
         template = env.get_template('dataframe.tpl')
 
     @staticmethod
@@ -234,7 +283,7 @@ class ViewsTools:
 
         html = ''
         for df, tit in zip(dataframe, title):
-            html += ViewsTools.DataframeStyler(df).render(table_title=tit)+'<br/>'
+            html += ViewsTools.DataframeStyler(df).render(table_title=tit) + '<br/>'
         return html
 
     @staticmethod
