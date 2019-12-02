@@ -4,6 +4,7 @@ import pandas
 import numpy as np
 from collections import Counter
 from jinja2 import Environment, ChoiceLoader, FileSystemLoader
+from matplotlib.colors import ListedColormap
 from pandas.io.formats.style import Styler
 from matplotlib import pyplot
 from matplotlib.backends.backend_pdf import PdfPages
@@ -39,24 +40,26 @@ class Views:
         return pandas.DataFrame(data)
 
     @staticmethod
-    def fold_visualization(inputs, tags, lw=10):
+    def fold_visualization(inputs, tags, encoder, settings, lw=20, sub_encoder=None):
         # Fold needed for evaluation
         if 'Fold' not in inputs:
             raise Exception('Need to build fold.')
 
         # Check mandatory fields
         mandatory = ['label_encode', 'group_encode']
-        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+        # if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+        #     raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         folds = np.array(inputs['Fold'].tolist())
-        groups = np.array(inputs[tags['group_encode']].tolist())
+        if 'sub_encode' in tags:
+            sub = np.array(inputs[tags['sub_encode']].tolist())
         labels = np.array(inputs[tags['label_encode']].tolist())
+        groups = np.array(inputs[tags['group_encode']].tolist())
 
         figure, axe = pyplot.subplots()
-        unique_foldes = np.unique(folds)
+        unique_folds = np.unique(folds)
         # Generate the training/testing visualizations for each CV split
-        for index, fold in enumerate(unique_foldes):
+        for index, fold in enumerate(unique_folds):
             # Fill in indices with the training/test groups
             indices = np.array([np.nan] * len(folds))
             indices[folds == fold] = 1
@@ -67,22 +70,34 @@ class Views:
                         c=indices, marker='_', lw=lw, cmap=pyplot.cm.coolwarm,
                         vmin=-.2, vmax=1.2)
 
-        nb_folds = len(unique_foldes)
-        # Plot the data classes and groups at the end
-        axe.scatter(range(len(labels)), [nb_folds + .5] * len(labels),
-                    c=labels, marker='_', lw=lw, cmap=pyplot.cm.Paired)
+        nb_folds = len(unique_folds)
 
-        axe.scatter(range(len(groups)), [nb_folds + 1.5] * len(groups),
-                    c=groups, marker='_', lw=lw, cmap=pyplot.cm.Paired)
+        elements = []
+        # Plot the data classes and groups at the end
+        if 'sub_encode' in tags:
+            axe.scatter(range(len(sub)), [nb_folds + .5 + len(elements)] * len(sub),
+                        c=sub, marker='_', lw=lw, cmap=Views.__get_color_map(sub, sub_encoder, settings))
+            elements.append('sub')
+
+
+        # settings.get_color(positive_class)
+        axe.scatter(range(len(labels)), [nb_folds + .5 + len(elements)] * len(labels),
+                    c=labels, marker='_', lw=lw, cmap=Views.__get_color_map(labels, encoder, settings))
+        elements.append('class')
+
+        axe.scatter(range(len(groups)), [nb_folds + .5 + len(elements)] * len(groups),
+                    c=groups%9, marker='_', lw=lw, cmap=pyplot.cm.Paired)
+        elements.append('group')
 
         # Formatting
-        yticklabels = list(range(nb_folds)) + ['class', 'group']
-        axe.set(yticks=np.arange(nb_folds + 2) + .5,
+        yticklabels = list(range(1, nb_folds+1)) + elements
+
+        axe.set(yticks=np.arange(nb_folds + len(elements)) + .5,
                 yticklabels=yticklabels,
                 xlabel='Sample index',
                 ylabel="CV iteration",
-                ylim=[nb_folds + 2.2, -.2])
-        axe.set_title('{}'.format('Folds'), fontsize=15)
+                ylim=[nb_folds + len(elements) + .2, -.2])
+        axe.set_title('Folds', fontsize=15)
         figure.show()
         return figure
 
@@ -223,6 +238,14 @@ class Views:
         if name:
             figure.suptitle(name)
         return figure
+
+    @staticmethod
+    def __get_color_map(values, encoder, settings):
+        unique_values = np.unique(values)
+        colors = []
+        for value in unique_values:
+            colors.append(settings.get_color(encoder.inverse_transform(value)[0]))
+        return ListedColormap(colors)
 
     @staticmethod
     def __format_std(x, y, scores):
