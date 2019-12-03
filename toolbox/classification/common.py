@@ -106,10 +106,15 @@ class Tools:
     PROBABILITY = 'Probability'
 
     @staticmethod
-    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None, cpu=-1, path=None):
+    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None, cpu=-1, predict_mode='on_train', path=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
+
+        # Check mandatory fields
+        mandatory = ['on_train', 'on_validation']
+        if predict_mode not in mandatory:
+            raise Exception(f'Expected predict mode: {mandatory}, but found: {predict_mode}.')
 
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
@@ -156,7 +161,8 @@ class Tools:
 
         # Browse folds
         folds = sub['Fold']
-        for fold in np.unique(folds):
+        unique_folds = np.unique(folds)
+        for fold in unique_folds:
             # Out fields
             fold_preds = f'{out_predict}_{fold}'
             fold_probas = f'{out_proba}_{fold}'
@@ -164,16 +170,23 @@ class Tools:
             fold_params = f'{out_params}_{fold}'
 
             # Create mask
-            test_mask = folds == fold
+            if predict_mode is 'on_train':
+                train_mask = folds != fold
+                predict_mask = folds == fold
+            else:
+                validation = (list(unique_folds).index(fold) - 1) % len(unique_folds)
+                train_mask = folds == unique_folds[validation]
+                predict_mask = folds == fold
+
             print(f'Fold {fold} performed...', end='\r')
 
             # Check that current fold respect labels
-            if not Tools.__check_labels(sub[~test_mask], {'label_encode': tags['label_encode']}):
+            if not Tools.__check_labels(sub[train_mask], {'label_encode': tags['label_encode']}):
                 warnings.warn(f'Invalid fold, missing labels for fold {fold}')
                 continue
 
             # Clone model
-            fitted_model = Tools.fit(sub[~test_mask], tags, deepcopy(model),
+            fitted_model = Tools.fit(sub[train_mask], tags, deepcopy(model),
                                      grid=grid, distribution=distribution, unbalanced=unbalanced, cpu=cpu)
 
             # Save if needed
@@ -265,13 +278,13 @@ class Tools:
             dataframe[mask] = sub
 
     @staticmethod
-    def fit_predict(dataframe, tags, model, out, mask=None, predict_mode='others', grid=None, distribution=None, unbalanced=None, cpu=-1):
+    def fit_predict(dataframe, tags, model, out, mask=None, predict_mode='test', grid=None, distribution=None, unbalanced=None, cpu=-1):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
 
         # Check mandatory fields
-        mandatory = ['others', 'current']
+        mandatory = ['train', 'validation', 'test']
         if predict_mode not in mandatory:
             raise Exception(f'Expected predict mode: {mandatory}, but found: {predict_mode}.')
 
@@ -300,24 +313,29 @@ class Tools:
 
         # Browse folds
         folds = sub['Fold']
-        for fold in np.unique(folds):
+        unique_folds = np.unique(folds)
+        for fold in unique_folds:
             # Create mask
-            test_mask = folds == fold
+            if predict_mode is 'current':
+                train_mask = folds != fold
+                predict_mask = train_mask
+            elif predict_mode is 'validation':
+                validation = (list(unique_folds).index(fold) - 1) % len(unique_folds)
+                predict_mask = folds == unique_folds[validation]
+                train_mask = ~(predict_mask | (folds == fold))
+            else:
+                train_mask = folds != fold
+                predict_mask = ~train_mask
 
             # Check that current fold respect labels
-            if not Tools.__check_labels(sub[~test_mask], {'label_encode': tags['label_encode']}):
+            if not Tools.__check_labels(sub[train_mask], {'label_encode': tags['label_encode']}):
                 warnings.warn(f'Invalid fold, missing labels for fold {fold}')
                 continue
 
             # Clone model
-            fitted_model = Tools.fit(sub[~test_mask], tags, model=deepcopy(model), grid=grid, distribution=distribution,
+            fitted_model = Tools.fit(sub[train_mask], tags, model=deepcopy(model), grid=grid, distribution=distribution,
                                      unbalanced=unbalanced, cpu=cpu)
 
-            # Useful in semi supervised mode to increase training
-            if predict_mode is 'others':
-                predict_mask = test_mask
-            else:
-                predict_mask = ~test_mask
 
             # Fill new data
             if hasattr(model, 'transform'):
