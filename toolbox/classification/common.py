@@ -388,7 +388,7 @@ class Tools:
 
         # Used in case of higher predictions levels (inconsistent data)
         if not hasattr(model, 'is_inconsistent'):
-            data = np.array(dataframe[tags['datum']].to_list())
+            data = np.array(sub[tags['datum']].to_list())
         else:
             data = dataframe[tags['datum']].to_list()
 
