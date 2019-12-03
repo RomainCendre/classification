@@ -2,6 +2,7 @@ import types
 import numpy as np
 from copy import deepcopy
 
+import inspect
 from joblib import delayed, Parallel
 from keras import Sequential, Model
 from keras.callbacks import EarlyStopping
@@ -18,12 +19,21 @@ from sklearn.utils.multiclass import unique_labels, _ovr_decision_function
 from toolbox.models.generators import ResourcesGenerator
 
 
-class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on OneVsOne
+class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):
 
-    def __init__(self, estimator, n_jobs=None):
+    def __init__(self, estimator, instance_prediction=False):
+        self.is_inconsistent = True
+        self.estimator = estimator
+        self.instance_prediction = instance_prediction
+
+
+class OvOMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on OneVsOne
+
+    def __init__(self, estimator, instance_prediction=False, n_jobs=None):
         self.is_inconsistent = True
         self.estimator = estimator
         self.n_jobs = n_jobs
+        self.instance_prediction = instance_prediction
 
     def fit(self, bags, y):
         self.classes_ = np.unique(y)
@@ -32,7 +42,7 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
                              " class is present.")
         n_classes = self.classes_.shape[0]
         estimators_indices = list(zip(*(Parallel(n_jobs=self.n_jobs)(
-            delayed(CustomMIL.__est_fit_ovo_binary)
+            delayed(OvOMIL.__est_fit_ovo_binary)
             (self.estimator, bags, y, self.classes_[i], self.classes_[j])
             for i in range(n_classes) for j in range(i + 1, n_classes)))))
 
@@ -66,10 +76,38 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
 
         predictions = np.vstack([self.__est_predict(est, Xi) for est, Xi in zip(self.estimators_, Xs)]).T
         confidences = np.vstack([self.__est_predict_binary(est, Xi) for est, Xi in zip(self.estimators_, Xs)]).T
-        Y = _ovr_decision_function(predictions, confidences, len(self.classes_))
-        # if self.n_classes_ == 2:
-        #     return Y[:, 1]
+        Y = OvOMIL._ovr_decision_function(predictions, confidences, len(self.classes_))
         return Y
+
+    @staticmethod
+    def _ovr_decision_function(predictions, confidences, n_classes):
+        n_samples = predictions.shape[0]
+        votes = np.zeros((n_samples, n_classes))
+        sum_of_confidences = np.zeros((n_samples, n_classes))
+
+        k = 0
+        for i in range(n_classes):
+            for j in range(i + 1, n_classes):
+                sum_of_confidences[:, i] -= confidences[:, k]
+                sum_of_confidences[:, j] += confidences[:, k]
+                votes[predictions[:, k] == 0, i] += 1
+                votes[predictions[:, k] == 1, j] += 1
+                k += 1
+
+        max_confidences = sum_of_confidences.max()
+        min_confidences = sum_of_confidences.min()
+
+        if max_confidences == min_confidences:
+            return votes
+
+        # Scale the sum_of_confidences to (-0.5, 0.5) and add it with votes.
+        # The motivation is to use confidence levels as a way to break ties in
+        # the votes without switching any decision made based on a difference
+        # of 1 vote.
+        eps = np.finfo(sum_of_confidences.dtype).eps
+        max_abs_confidence = max(abs(max_confidences), abs(min_confidences))
+        scale = (0.5 - eps) / max_abs_confidence
+        return votes + sum_of_confidences * scale
 
     @property
     def n_classes_(self):
@@ -80,18 +118,44 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
         """Indicate if wrapped estimator is using a precomputed Gram matrix"""
         return getattr(self.estimator, "_pairwise", False)
 
-    def __est_predict(self, estimator, bags, instancePrediction=None):
-        return np.argmax(self.__est_predict_proba(estimator, bags, instancePrediction), axis=1)
+    def __est_predict(self, estimator, bags):
+        max_prediction = []
+        predictions_list = self.__est_predict_proba(estimator, bags)
+        for predictions in predictions_list:
+            if len(predictions.shape) == 1:
+                max_prediction.append(np.argmax(predictions))
+            else:
+                max_prediction.append(np.argmax(predictions, axis=1))
+        return max_prediction
 
-    def __est_predict_binary(self, estimator, bags, instancePrediction=None):
-        return self.__est_predict_proba(estimator, bags, instancePrediction)[:, 1]
+    def __est_predict_binary(self, estimator, bags):
+        bin_prediction = []
+        predictions_list = self.__est_predict_proba(estimator, bags)
+        for predictions in predictions_list:
+            if len(predictions.shape) == 1:
+                bin_prediction.append(predictions[1])
+            else:
+                bin_prediction.append(predictions[:, 1])
+        return bin_prediction
 
-    @staticmethod
-    def __est_predict_proba(estimator, bags, instancePrediction=None):
-        predictions = estimator.predict(bags)
-        max_value = np.max(np.abs(predictions))
-        predictions = np.nan_to_num(predictions/max_value)*0.5+0.5
-        return np.array([1-predictions, predictions]).T
+    def __est_predict_proba(self, estimator, bags):
+        if self.instance_prediction and 'instancePrediction' in list(inspect.signature(estimator.predict).parameters):
+            _, predictions = estimator.predict(bags, self.instance_prediction)
+            max_value = np.max(np.abs(predictions))
+            predictions = np.nan_to_num(predictions/max_value)*0.5+0.5
+            predictions = np.array([1 - predictions, predictions]).T
+            predictions_list = []
+            count = 0
+            for bag in bags:
+                predictions_list.append(predictions[count:count + len(bag)])
+                count += len(bag)
+        else:
+            predictions = estimator.predict(bags)
+            max_value = np.max(np.abs(predictions))
+            predictions = np.nan_to_num(predictions/max_value)*0.5+0.5
+            predictions = np.array([1 - predictions, predictions]).T
+            predictions_list = list(predictions)
+        return predictions_list
 
     @staticmethod
     def __est_fit_ovo_binary(estimator, bags, y, i, j):
@@ -107,7 +171,7 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
 
         # bags, y = CustomMIL.__prepare_fit(bags, y_binary)
         return _fit_binary(estimator,
-                           *CustomMIL.__prepare_fit(_safe_split(estimator, bags, None, indices=indcond)[0], y_binary),
+                           *OvOMIL.__prepare_fit(_safe_split(estimator, bags, None, indices=indcond)[0], y_binary),
                            classes=[i, j]), indcond
 
     @staticmethod
