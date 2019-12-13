@@ -40,6 +40,20 @@ class Views:
         return pandas.DataFrame(data)
 
     @staticmethod
+    def group_statistics(inputs, tags):
+        mandatory = ['group']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        images = []
+        for group in inputs.groupby(tags['group']):
+            images.append(len(group[1]))
+
+        images = np.array(images)
+        statistics = f'[{np.min(images)}, {np.max(images)}] {np.mean(images)}±{np.std(images)}'
+        return statistics
+
+    @staticmethod
     def fold_visualization(inputs, tags, encoder, settings, lw=20, sub_encoder=None):
         # Fold needed for evaluation
         if 'Fold' not in inputs:
