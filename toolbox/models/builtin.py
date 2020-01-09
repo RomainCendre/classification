@@ -50,27 +50,25 @@ class Applications:
         extractor_params.update(additional)
         return KerasBatchClassifier(Applications.get_application, **extractor_params)
 
-
     @staticmethod
-    def get_fine_tuning(output_classes, trained_layer, extractor_layer, architecture='InceptionV3', batch_size=32):
+    def get_fine_tuning(output_classes, trained_layer, extractor_layer, architecture='InceptionV3', batch_size=32, additional={}):
 
         def fine_tune_model():
             # We get the deep extractor part as include_top is false
             base_model = Applications.get_application(architecture, pooling='avg')
 
-            x = base_model.output
             # let's add a fully-connected layer
-            x = Dense(1024, activation='relu', name='prediction_1')(x)
-            # and a logistic layer -- let's say we have 200 classes
-            predictions = Dense(output_classes, activation='softmax', name='prediction_2')(x)
+            x = base_model.output
+            predictions = Dense(output_classes, activation='linear', name='prediction')(x)
+            # x = Dense(1024, activation='relu', name='prediction_1')(x)
+            # # and a logistic layer -- let's say we have 200 classes
+            # predictions = Dense(output_classes, activation='softmax', name='prediction_2')(x)
             return Model(inputs=base_model.inputs, outputs=predictions)
 
-        extractor_params = {'epochs': 50,
-                            'batch_size': batch_size,
-                            'extractor_layer': extractor_layer,
+        extractor_params = {'extractor_layer': extractor_layer,
                             'trainable_layer': trained_layer,
                             'preprocessing_function': Applications.get_preprocessing_application(architecture=architecture)}
-
+        extractor_params.update(additional)
         return KerasFineClassifier(fine_tune_model, **extractor_params)
 
     @staticmethod

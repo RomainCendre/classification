@@ -336,7 +336,6 @@ class Tools:
             fitted_model = Tools.fit(sub[train_mask], tags, model=deepcopy(model), grid=grid, distribution=distribution,
                                      unbalanced=unbalanced, cpu=cpu)
 
-
             # Fill new data
             if hasattr(model, 'transform'):
                 Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out, mask=predict_mask)
