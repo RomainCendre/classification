@@ -1,5 +1,6 @@
 import os
 
+import numpy
 import pandas as pd
 from pathlib import Path
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
@@ -44,20 +45,9 @@ class QDemo(QMainWindow):
         images_layout.addWidget(self.images)
         process_layout.addWidget(images_widget)
 
-        # Build compute
-        icon_folder = Path(__file__).parent.parent / 'images'
-        self.compute = QPushButton()
-        self.compute.setFlat(True)
-        self.compute.setIcon(QIcon(str(icon_folder / 'process.svg')))
-        self.compute.setMinimumSize(QSize(60, 60))
-        self.compute.pressed.connect(self.process)
-        process_layout.addWidget(self.compute)
-
         # Build scorer
         self.score = QRoundProgressBar()
         dark_palette = QtGui.QPalette()
-        dark_palette.setColor(QtGui.QPalette.Window, QtGui.QColor(53, 53, 53))
-        dark_palette.setColor(QtGui.QPalette.Base, QtGui.QColor(25, 25, 25))
         dark_palette.setColor(QtGui.QPalette.AlternateBase, QtGui.QColor(25, 35, 45))
         dark_palette.setColor(QtGui.QPalette.Text, QtCore.Qt.white)
         self.score.setPalette(dark_palette)
@@ -72,11 +62,11 @@ class QDemo(QMainWindow):
         self.score.setDataColors([(0., QColor.fromRgb(0, 0, 0)), (1, QColor.fromRgb(40, 255, 220))])
         self.score.setRange(0, 1)
         self.score.setValue(0)
+        # self.score.mouseReleaseEvent = self.process
         process_layout.addWidget(self.score)
 
         # Build viewer
         self.viewer = QtImageViewer()
-
 
         # Build parent
         parent_widget = QWidget()
@@ -90,51 +80,33 @@ class QDemo(QMainWindow):
         data_file, filter = QFileDialog.getOpenFileName(self, 'Choose file', str(Path().home()), 'Pickle files (*.pickle)')
         if data_file:
             self.data = IO.load(data_file)
-        self.patients.addItems(self.data['ID'].unique())
-
-    def process(self):
-        print('lol')
+            self.patients.addItems(self.data['ID'].unique())
+            self.patients.setCurrentRow(0)
 
     def set_current_parent(self, parent):
+        # Set images
+        self.images.clear()
         self.images.addItems(self.data[self.data['ID'] == parent]['Datum'].unique())
+
+        # Set values
+        current = self.data[self.data['ID'] == self.patients.currentItem().text()]
+        single_record = current[current['ImageID'] == '0M']
+        fold = single_record['Fold'].values[0]
+        self.score.setValue(single_record[f'D_ALO_Probability_{fold}'].values[0][1])
+        for index, row in enumerate(current.iterrows()):
+            # Prediction
+            image_prediction = row[1]['Supervised_Prediction']
+            if isinstance(image_prediction, numpy.ndarray):
+                image_prediction = image_prediction[0]
+            # Truth
+            image_truth = row[1]['MalignantEncode']
+            # Color!
+            if image_prediction == image_truth == 1:
+                self.images.item(index).setBackground(QColor.fromRgb(10, 60, 50))
+            if image_prediction != image_truth == 0:
+                self.images.item(index).setBackground(QColor.fromRgb(200, 100, 0))
+            if image_prediction != image_truth == 1:
+                self.images.item(index).setBackground(QColor.fromRgb(200, 100, 0))
 
     def set_current_image(self, path):
         self.viewer.loadImageFromFile(str(Path().home()/path.replace('/home/rcendre/', '')))
-
-
-#
-# class CircularProgressBar(QWidget):
-#
-#     CircularProgressBar(QWidget * p = 0) : QWidget(p), p(0) {
-#       setMinimumSize(208, 208);
-#     }
-#
-#     void upd(qreal pp) {
-#       if (p == pp) return;
-#       p = pp;
-#       update();
-#     }
-#   void paintEvent(QPaintEvent *) {
-#     qreal pd = p * 360;
-#     qreal rd = 360 - pd;
-#     QPainter p(this);
-#     p.fillRect(rect(), Qt::white);
-#     p.translate(4, 4);
-#     p.setRenderHint(QPainter::Antialiasing);
-#     QPainterPath path, path2;
-#     path.moveTo(100, 0);
-#     path.arcTo(QRectF(0, 0, 200, 200), 90, -pd);
-#     QPen pen, pen2;
-#     pen.setCapStyle(Qt::FlatCap);
-#     pen.setColor(QColor("#30b7e0"));
-#     pen.setWidth(8);
-#     p.strokePath(path, pen);
-#     path2.moveTo(100, 0);
-#     pen2.setWidth(8);
-#     pen2.setColor(QColor("#d7d7d7"));
-#     pen2.setCapStyle(Qt::FlatCap);
-#     pen2.setDashPattern(QVector<qreal>{0.5, 1.105});
-#     path2.arcTo(QRectF(0, 0, 200, 200), 90, rd);
-#     pen2.setDashOffset(2.2);
-#     p.strokePath(path2, pen2);
-#   }
