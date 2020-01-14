@@ -408,7 +408,7 @@ class QRoundProgressBar(QtWidgets.QWidget):
     def valueToText(self, value):
         textToDraw = self.format
 
-        format_string = '{' + ':.{}f'.format(self.decimals) + '}'
+        format_string = '{' + ':0'+str(3+self.decimals)+'.{}f'.format(self.decimals) + '}'
 
         if self.updateFlags & self.UF_VALUE:
             textToDraw = textToDraw.replace("%v", format_string.format(value))

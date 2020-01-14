@@ -92,7 +92,17 @@ class QDemo(QMainWindow):
         current = self.data[self.data['ID'] == self.patients.currentItem().text()]
         single_record = current[current['ImageID'] == '0M']
         fold = single_record['Fold'].values[0]
-        self.score.setValue(single_record[f'D_ALO_Probability_{fold}'].values[0][1])
+
+        # Check patient prediction
+        dark_palette = self.score.palette()
+        if single_record[f'D_DYN_Prediction_{fold}'].values[0] == 1:
+            dark_palette.setColor(QtGui.QPalette.Text, QColor.fromRgb(40, 255, 220))
+        else:
+            dark_palette.setColor(QtGui.QPalette.Text, QtCore.Qt.white)
+        self.score.setPalette(dark_palette)
+
+        # Set patient probability
+        self.score.setValue(single_record[f'D_DYN_Probability_{fold}'].values[0][1])
         for index, row in enumerate(current.iterrows()):
             # Prediction
             image_prediction = row[1]['Supervised_Prediction']
