@@ -1,1 +1,1 @@
-conda env create -f D:\Romain\classification\toolbox\environment\environment.yml
+conda env create -f D:\Romain\classification\toolbox\environment\%0.yml
