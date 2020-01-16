@@ -360,9 +360,10 @@ class LocalParameters:
             config.gpu_options.allow_growth = allow_growth
             config.gpu_options.per_process_gpu_memory_fraction = percent_gpu
             session = tf.Session(config=config)
+            set_session(session)
         else:
             config = tf.compat.v1.ConfigProto()
             config.gpu_options.allow_growth = allow_growth
             config.gpu_options.per_process_gpu_memory_fraction = percent_gpu
             session = tf.compat.v1.Session(config=config)
-        set_session(session)
+            tf.compat.v1.keras.backend.set_session(session)
