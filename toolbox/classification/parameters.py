@@ -357,8 +357,12 @@ class LocalParameters:
         # Change GPU usage
         if hasattr('tf', 'ConfigProto'):
             config = tf.ConfigProto()
+            config.gpu_options.allow_growth = allow_growth
+            config.gpu_options.per_process_gpu_memory_fraction = percent_gpu
+            session = tf.Session(config=config)
         else:
             config = tf.compat.v1.ConfigProto()
-        config.gpu_options.allow_growth = allow_growth
-        config.gpu_options.per_process_gpu_memory_fraction = percent_gpu
-        set_session(tf.Session(config=config))
+            config.gpu_options.allow_growth = allow_growth
+            config.gpu_options.per_process_gpu_memory_fraction = percent_gpu
+            session = tf.compat.v1.Session(config=config)
+        set_session(session)
