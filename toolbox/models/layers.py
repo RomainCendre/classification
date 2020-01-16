@@ -1,5 +1,5 @@
 from keras.engine import Layer
-from keras.layers import K
+from keras import backend as K
 from numpy.linalg import norm
 
 
