@@ -1,5 +1,4 @@
-import keras
-from keras.layers import Dense
+from tensorflow.keras.layers import Dense
 from keras import applications
 from keras import Sequential, Model
 from sklearn.dummy import DummyClassifier
