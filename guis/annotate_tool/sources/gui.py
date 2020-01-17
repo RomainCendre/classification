@@ -184,12 +184,12 @@ class QPatchExtractor(QMainWindow):
 
     def close_images(self, save=True):
         if self.images is not None and save:
-            self.images.drop(columns=['Full_Path', 'Type', 'Reference2'], errors='ignore').to_csv(self.get_patient_folder()/'images.csv', index=False)
+            self.images.drop(columns=['Datum', 'Type'], errors='ignore').to_csv(self.get_patient_folder()/'images.csv', index=False)
         self.images = None
 
     def close_patches(self, save=False):
         if self.patches is not None and save:
-            self.patches.drop(columns=['Full_Path', 'Type'], errors='ignore').to_csv(self.get_patient_folder()/'patches.csv', index=False)
+            self.patches.drop(columns=['Datum', 'Type'], errors='ignore').to_csv(self.get_patient_folder()/'patches.csv', index=False)
         self.patches = None
 
     def closeEvent(self, event):
