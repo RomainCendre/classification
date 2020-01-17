@@ -22,3 +22,4 @@ dependencies:
     - pytesseract
     - pywavelets
     - textile
+    - qdarkstyle

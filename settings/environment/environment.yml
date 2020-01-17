@@ -22,4 +22,6 @@ dependencies:
     - pyocr
     - pypdf2
     - pytesseract
-    - pywavele
+    - pywavelet
+    - textile
+    - qdarkstyle
