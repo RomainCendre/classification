@@ -1,16 +1,14 @@
 import types
 import numpy as np
 from copy import deepcopy
-
-import inspect
 from joblib import delayed, Parallel
-from keras import Sequential, Model
-from keras.callbacks import EarlyStopping
-from keras.engine.saving import load_model
-from keras.optimizers import SGD
-from keras.utils.generic_utils import has_arg, to_list
-from keras.wrappers.scikit_learn import KerasClassifier
 from numpy import hstack
+from tensorflow.keras import Sequential, Model
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.engine.saving import load_model
+from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.utils.generic_utils import has_arg, to_list
+from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin
 from sklearn.metrics import accuracy_score
 from sklearn.multiclass import _fit_binary
