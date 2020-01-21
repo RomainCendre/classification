@@ -87,6 +87,10 @@ class Reader:
         if len(data) == 0:
             return None
 
+        # Modalities as list
+        if modalities is not None and not isinstance(modalities, list):
+            modalities = [modalities]
+
         # Reindex by modality
         mask = [True] * len(data.index)
         if modalities is not None:
