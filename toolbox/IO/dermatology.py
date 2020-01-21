@@ -51,9 +51,9 @@ class Reader:
         param_type = parameters.get('type', None)
 
         # Read patient and images data
-        images = Reader.read_data_file(subdir, 'images', modality=parameters.get('modality', None))
+        images = Reader.read_data_file(subdir, 'images', modalities=parameters.get('modality', None))
         images = images.drop(columns='Depth(um)', errors='ignore')
-        patches = Reader.read_data_file(subdir, 'patches', modality=parameters.get('modality', None))
+        patches = Reader.read_data_file(subdir, 'patches', modalities=parameters.get('modality', None))
 
         # Patch filter
         if images is not None:
@@ -76,7 +76,7 @@ class Reader:
             return pandas.concat([images, patches], sort=False, ignore_index=True)
 
     @staticmethod
-    def read_data_file(subdir, ftype='images', modality=None):
+    def read_data_file(subdir, ftype='images', modalities=None):
         # Patient file
         data_file = subdir / f'{ftype}.csv'
         if not data_file.is_file():
@@ -88,9 +88,10 @@ class Reader:
             return None
 
         # Reindex by modality
-        for modality in np.unique(data['Modality']):
-            mask = data['Modality'] == modality
-            data[mask] = data[mask].reindex(index=order_by_index(data.index, index_natsorted(data.Path)))
+        mask = [True] * len(data.index)
+        if modalities is not None:
+            mask = data['Modality'].isin(modalities)
+        data[mask] = data[mask].reindex(index=order_by_index(data.index, index_natsorted(data.Path)))
 
         if ftype == 'images':
             data['Type'] = 'Full'
@@ -101,8 +102,8 @@ class Reader:
             data['Datum'] = data.apply(lambda row: str(subdir / ftype / row['Modality'] / row['Path']), axis=1)
             data['PatchID'] = data.apply(lambda row: f'{row.name}{row.Modality[0]}', axis=1)
 
-        if modality is not None:
-            data = data[data.Modality == modality]
+        if modalities is not None:
+            data = data[mask]
         return data
 
     @staticmethod

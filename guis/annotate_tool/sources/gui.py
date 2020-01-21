@@ -260,10 +260,10 @@ class QPatchExtractor(QMainWindow):
         return self.root/self.metas.loc[self.patient_index, 'ID']
 
     def open_images(self):
-        self.images = dermatology.Reader.read_data_file(self.get_patient_folder(), ftype='images', modality='Microscopy')
+        self.images = dermatology.Reader.read_data_file(self.get_patient_folder(), ftype='images', modalities=['Photography', 'Dermoscopy', 'Microscopy'])
 
     def open_patches(self):
-        self.patches = dermatology.Reader.read_data_file(self.get_patient_folder(), ftype='patches', modality='Microscopy')
+        self.patches = dermatology.Reader.read_data_file(self.get_patient_folder(), ftype='patches', modalities=['Photography', 'Dermoscopy', 'Microscopy'])
 
     def load_root_and_metas(self, root, patient_files):
         patients = []
