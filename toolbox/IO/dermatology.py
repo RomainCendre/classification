@@ -1,9 +1,9 @@
 import warnings
 import numpy as np
 import pandas as pandas
-import pyocr
+# import pyocr
+# from pyocr import builders
 from PIL import Image
-from pyocr import builders
 from pathlib import Path
 from natsort import index_natsorted, order_by_index
 
@@ -189,11 +189,11 @@ class Generator:
                               'Label': label, 'Modality': 'Microscopy', 'Type': type})
 
 
-class ConfocalBuilder(builders.TextBuilder):
-
-    def __init__(self):
-        super().__init__()
-        self.tesseract_configs += ["-c", "tessedit_char_whitelist=0123456789.-um"]
+# class ConfocalBuilder(builders.TextBuilder):
+#
+#     def __init__(self):
+#         super().__init__()
+#         self.tesseract_configs += ["-c", "tessedit_char_whitelist=0123456789.-um"]
 
 
 class DataManager:

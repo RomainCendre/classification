@@ -1,8 +1,6 @@
 import shutil
 from pathlib import Path
 import tensorflow as tf
-from keras.backend.tensorflow_backend import set_session
-from keras import backend as K
 from tempfile import gettempdir
 import numpy as np
 import pandas as pd

@@ -1,3 +1,5 @@
+import inspect
+import sys
 import types
 import numpy as np
 from copy import deepcopy
@@ -5,9 +7,8 @@ from joblib import delayed, Parallel
 from numpy import hstack
 from tensorflow.keras import Sequential, Model
 from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.engine.saving import load_model
+from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import SGD
-from tensorflow.keras.utils.generic_utils import has_arg, to_list
 from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin
 from sklearn.metrics import accuracy_score
@@ -497,7 +498,7 @@ class KerasBatchClassifier(KerasClassifier):
         found_params = set()
         for param_name in params:
             for fn in legal_params_fns:
-                if has_arg(fn, param_name):
+                if Utils.has_arg(fn, param_name):
                     found_params.add(param_name)
         if not len(found_params) == 0:
             [local_param.pop(key) for key in list(found_params)]
@@ -635,7 +636,7 @@ class KerasBatchClassifier(KerasClassifier):
         override = override or {}
         res = {}
         for name, value in params.items():
-            if has_arg(fn, name):
+            if Utils.has_arg(fn, name):
                 res.update({name: value})
         res.update(override)
         return res
@@ -738,3 +739,61 @@ class KerasFineClassifier(KerasBatchClassifier):
             # first column is probability of class 0 and second is of class 1
             probs = hstack([1 - probs, probs])
         return probs
+
+
+class Utils:
+    def has_arg(fn, name, accept_all=False):
+        """Checks if a callable accepts a given keyword argument.
+        For Python 2, checks if there is an argument with the given name.
+        For Python 3, checks if there is an argument with the given name, and
+        also whether this argument can be called with a keyword (i.e. if it is
+        not a positional-only argument).
+        # Arguments
+            fn: Callable to inspect.
+            name: Check if `fn` can be called with `name` as a keyword argument.
+            accept_all: What to return if there is no parameter called `name`
+                        but the function accepts a `**kwargs` argument.
+        # Returns
+            bool, whether `fn` accepts a `name` keyword argument.
+        """
+        if sys.version_info < (3,):
+            arg_spec = inspect.getargspec(fn)
+            if accept_all and arg_spec.keywords is not None:
+                return True
+            return (name in arg_spec.args)
+        elif sys.version_info < (3, 3):
+            arg_spec = inspect.getfullargspec(fn)
+            if accept_all and arg_spec.varkw is not None:
+                return True
+            return (name in arg_spec.args or
+                    name in arg_spec.kwonlyargs)
+        else:
+            signature = inspect.signature(fn)
+            parameter = signature.parameters.get(name)
+            if parameter is None:
+                if accept_all:
+                    for param in signature.parameters.values():
+                        if param.kind == inspect.Parameter.VAR_KEYWORD:
+                            return True
+                return False
+            return (parameter.kind in (inspect.Parameter.POSITIONAL_OR_KEYWORD,
+                                       inspect.Parameter.KEYWORD_ONLY))
+
+    def to_list(x, allow_tuple=False):
+            """Normalizes a list/tensor into a list.
+            If a tensor is passed, we return
+            a list of size 1 containing the tensor.
+            # Arguments
+                x: target object to be normalized.
+                allow_tuple: If False and x is a tuple,
+                    it will be converted into a list
+                    with a single element (the tuple).
+                    Else converts the tuple to a list.
+            # Returns
+                A list.
+            """
+            if isinstance(x, list):
+                return x
+            if allow_tuple and isinstance(x, tuple):
+                return list(x)
+            return [x]

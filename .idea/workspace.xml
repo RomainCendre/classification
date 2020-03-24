@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/guis/demo_food/launch.bat" description="set PYTHONPATH=%CURRENT%" line="1" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
+    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Update gui dermatology reader.">
       <change afterPath="$PROJECT_DIR$/redaction/introduction/dermatologists.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -68,149 +64,12 @@
     <SUITE FILE_PATH="coverage/classification$decisions_level__2_.coverage" NAME="decisions_level (2) Coverage Results" MODIFIED="1559574107377" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/dermatology/microscopy/multiscale" />
     <SUITE FILE_PATH="coverage/classification$processes.coverage" NAME="processes Coverage Results" MODIFIED="1556788809937" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments" />
   </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/guis/annotate_tool/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="24" column="51" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="51" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/models/generators.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3009">
-              <caret line="184" column="8" selection-start-line="184" selection-start-column="8" selection-end-line="184" selection-end-column="8" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/guis/annotate_tool/sources/gui.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4301">
-              <caret line="262" column="23" selection-start-line="262" selection-start-column="22" selection-end-line="262" selection-end-column="154" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/IO/images.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/models/builtin.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1020">
-              <caret line="66" column="40" selection-start-line="66" selection-start-column="40" selection-end-line="66" selection-end-column="40" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/models/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="65" selection-start-line="9" selection-start-column="65" selection-end-line="9" selection-end-column="65" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/redaction/introduction/dermatologists.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="26" lean-forward="true" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
-              <folding>
-                <element signature="e#57#100#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1479">
-              <caret line="94" selection-start-line="94" selection-end-line="94" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
-  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>rbf_kernel</find>
-      <find>Spre</find>
-      <find>parameters</find>
-      <find>grid</find>
-      <find>Optimal solution found</find>
-      <find>Optimal solution foun</find>
-      <find>OVOClassifier</find>
-      <find>__images</find>
-      <find>_predict_binary</find>
-      <find>save</find>
-      <find>Parra</find>
-      <find>is_inconsist</find>
-      <find>predict_mode</find>
-      <find>comp</find>
-      <find>compile</find>
-      <find>darr</find>
-      <find>Color</find>
-      <find>set_current_parent</find>
-      <find>bar</find>
-      <find>_apply_palette_fix</find>
-      <find>self.format</find>
-      <find>NormPooling2D</find>
-      <find>from keras</find>
-      <find>Imputer</find>
-      <find>Flatten</find>
-      <find>Environment</find>
-      <find>val_accuracy</find>
-      <find>filter_modality</find>
-      <find>ImageID</find>
-      <find>Parallel</find>
-    </findStrings>
-    <replaceStrings>
-      <replace />
-      <replace>'</replace>
-      <replace>'datum'</replace>
-      <replace>'label_encode'</replace>
-      <replace>score</replace>
-    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -219,146 +78,42 @@
       <GitPushTagMode />
     </option>
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/toolbox/gui_tools/annotate_tool/sources/gui.py" />
-        <option value="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/main.py" />
-        <option value="$PROJECT_DIR$/toolbox_jupyter/gui_tools/annotate_tool/sources/gui.py" />
-        <option value="$PROJECT_DIR$/toolbox/classification/generators.py" />
-        <option value="$PROJECT_DIR$/settings/data/prepare.py" />
-        <option value="$PROJECT_DIR$/settings/cluster_local/send_data.bat" />
-        <option value="$PROJECT_DIR$/settings/cluster_ub/send_data.bat" />
-        <option value="$PROJECT_DIR$/toolbox/transforms/signals.py" />
-        <option value="$PROJECT_DIR$/toolbox/transforms/images.py" />
-        <option value="$PROJECT_DIR$/experiments/dermatology/microscopy/a_deep.py" />
-        <option value="$PROJECT_DIR$/toolbox/IO/images.py" />
-        <option value="$PROJECT_DIR$/settings/jupyter_server/launch.sh" />
-        <option value="$PROJECT_DIR$/toolbox/misvmio.py" />
-        <option value="$PROJECT_DIR$/toolbox/test2.py" />
-        <option value="$PROJECT_DIR$/toolbox/views/images.py" />
-        <option value="$PROJECT_DIR$/toolbox/test_sil_2.py" />
-        <option value="$USER_HOME$/src/misvm/misvm/smil.py" />
-        <option value="$USER_HOME$/src/misvm/misvm/nsk.py" />
-        <option value="$PROJECT_DIR$/toolbox/environment/environment.yml" />
-        <option value="$PROJECT_DIR$/toolbox/environment/environmentGPU.yml" />
-        <option value="$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/misvm/nsk.py" />
-        <option value="$PROJECT_DIR$/toolbox/semi.py" />
-        <option value="$PROJECT_DIR$/toolbox/SemiSupervised.py" />
-        <option value="$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/misvm/stk.py" />
-        <option value="$PROJECT_DIR$/toolbox/test_sil.py" />
-        <option value="$PROJECT_DIR$/toolbox/classification/common.py" />
-        <option value="$PROJECT_DIR$/toolbox/test.py" />
-        <option value="$PROJECT_DIR$/toolbox/views/common.py" />
-        <option value="$PROJECT_DIR$/experiments/scripts/image_transforms.py" />
-        <option value="$PROJECT_DIR$/guis/demo_food/style/palette.py" />
-        <option value="$PROJECT_DIR$/guis/demo_food/main.py" />
-        <option value="$PROJECT_DIR$/guis/demo_food/launch.bat" />
-        <option value="$PROJECT_DIR$/guis/demo_food/sources/gui.py" />
-        <option value="$PROJECT_DIR$/guis/demo_food/sources/others.py" />
-        <option value="$PROJECT_DIR$/settings/environment/deploy.bat" />
-        <option value="$PROJECT_DIR$/settings/environment/deploy.sh" />
-        <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/toolbox/models/layers.py" />
-        <option value="$PROJECT_DIR$/toolbox/transforms/common.py" />
-        <option value="$PROJECT_DIR$/toolbox/models/builtin.py" />
-        <option value="$PROJECT_DIR$/toolbox/classification/parameters.py" />
-        <option value="$PROJECT_DIR$/settings/environment/environmentGPU.yml" />
-        <option value="$PROJECT_DIR$/settings/environment/environment.yml" />
-        <option value="$PROJECT_DIR$/guis/annotate_tool/main.py" />
-        <option value="$PROJECT_DIR$/toolbox/Tuner.py" />
-        <option value="$PROJECT_DIR$/guis/annotate_tool/sources/gui.py" />
-        <option value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
-        <option value="$PROJECT_DIR$/toolbox/models/models.py" />
-        <option value="$PROJECT_DIR$/toolbox/views/Temp.py" />
-        <option value="$PROJECT_DIR$/redaction/introduction/Temp.py" />
-        <option value="$PROJECT_DIR$/redaction/introduction/dermatologists.py" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-2569" />
-    <option name="y" value="-369" />
-    <option name="width" value="2578" />
-    <option name="height" value="1408" />
-  </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="redaction" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="redaction" type="462c0819:PsiDirectoryNode" />
-              <item name="introduction" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="classification" type="b2602c69:ProjectViewProjectNode" />
-              <item name="classification" type="462c0819:PsiDirectoryNode" />
-              <item name="toolbox" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+  <component name="ProjectId" id="1WqMEOenTmumwTDdCyqxuhma0La" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/redaction/statistics" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo_food" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo_food\images" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo\sources" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\romai\Projets\classification\redaction\statistics" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\redaction\introduction" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\settings" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\settings\data" />
       <recent name="C:\Users\Romain\PycharmProjects\classification" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\toolbox\models" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\romai\Projets\classification\redaction\statistics" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo_food" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo_food\images" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo\sources" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="Python.dermatologists">
+  <component name="RunManager" selected="Python.dataset">
     <configuration name="Temp" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -381,7 +136,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Tuner" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="common" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -389,12 +144,34 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/toolbox" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/toolbox/views" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/toolbox/Tuner.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/toolbox/views/common.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="dataset" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="classification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/redaction/statistics" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/redaction/statistics/dataset.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -416,29 +193,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/redaction/introduction/dermatologists.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="classification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/guis/demo_food" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/guis/demo_food/main.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\romai\Projets\classification\redaction\statistics\dermatologists.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -471,11 +226,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.dataset" />
+        <item itemvalue="Python.common" />
         <item itemvalue="Python.dermatologists" />
         <item itemvalue="Python.Temp" />
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.Tuner" />
-        <item itemvalue="Python.main (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -619,6 +374,13 @@
       <workItem from="1579258942770" duration="15006000" />
       <workItem from="1579598510142" duration="4661000" />
       <workItem from="1579707090159" duration="2549000" />
+      <workItem from="1579872569316" duration="1454000" />
+      <workItem from="1580997361506" duration="645000" />
+      <workItem from="1581586961468" duration="1288000" />
+      <workItem from="1581667157238" duration="4372000" />
+      <workItem from="1582534719324" duration="6668000" />
+      <workItem from="1583241967955" duration="2985000" />
+      <workItem from="1585060296052" duration="3522000" />
     </task>
     <task id="LOCAL-00418" summary="Quick fix for MIL.">
       <created>1574674463830</created>
@@ -966,41 +728,6 @@
     <option name="localTasksCounter" value="467" />
     <servers />
   </component>
-  <component name="TestHistory">
-    <history-entry file="Unittests_for_test_experiments_TestMicroscopySliding_test_features - 2019.09.13 at 17h 13m 23s.xml">
-      <configuration name="Unittests for test_experiments.TestMicroscopySliding.test_features" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_experiments_TestMicroscopySliding_test_features - 2019.09.13 at 17h 18m 57s.xml">
-      <configuration name="Unittests for test_experiments.TestMicroscopySliding.test_features" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_experiments_TestMicroscopySliding_test_features - 2019.09.13 at 17h 20m 31s.xml">
-      <configuration name="Unittests for test_experiments.TestMicroscopySliding.test_features" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_experiments_TestMicroscopyWhole_test_manual - 2019.09.16 at 11h 32m 01s.xml">
-      <configuration name="Unittests for test_experiments.TestMicroscopyWhole.test_manual" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_experiments_TestMicroscopyWhole_test_manual - 2019.09.16 at 11h 33m 42s.xml">
-      <configuration name="Unittests for test_experiments.TestMicroscopyWhole.test_manual" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_experiments_TestMicroscopyWhole_test_manual - 2019.09.16 at 11h 46m 13s.xml">
-      <configuration name="Unittests for test_experiments.TestMicroscopyWhole.test_manual" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_experiments_TestMicroscopyWhole_test_manual - 2019.09.16 at 11h 46m 59s.xml">
-      <configuration name="Unittests for test_experiments.TestMicroscopyWhole.test_manual" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_experiments_TestMicroscopyWhole_test_manual - 2019.09.16 at 11h 49m 34s.xml">
-      <configuration name="Unittests for test_experiments.TestMicroscopyWhole.test_manual" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_experiments_TestMicroscopyWhole_test_manual - 2019.09.16 at 12h 30m 33s.xml">
-      <configuration name="Unittests for test_experiments.TestMicroscopyWhole.test_manual" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_experiments_TestMicroscopyWhole_test_manual - 2019.09.16 at 12h 31m 34s.xml">
-      <configuration name="Unittests for test_experiments.TestMicroscopyWhole.test_manual" configurationId="tests" />
-    </history-entry>
-  </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1534616000" />
-  </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
       <is-autoscroll-to-source value="true" />
@@ -1009,35 +736,6 @@
       <are-packages-shown value="true" />
       <is-autoscroll-to-source value="true" />
     </todo-panel>
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="-2567" y="-367" width="2062" height="1126" extended-state="6" />
-    <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.88257575" visible="true" weight="0.24925075" />
-      <window_info id="Structure" order="1" sideWeight="0.11742424" side_tool="true" weight="0.12537463" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Thumbnails" order="0" weight="0.3279678" />
-      <window_info anchor="bottom" id="Message" order="1" />
-      <window_info anchor="bottom" id="Find" order="2" sideWeight="0.497003" weight="0.2977867" />
-      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.45704296" weight="0.3470825" />
-      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.6253746" weight="0.28873238" />
-      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="7" weight="0.10764588" />
-      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.499001" weight="0.26861167" />
-      <window_info anchor="bottom" id="Database Changes" order="10" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.37462538" side_tool="true" weight="0.24144869" />
-      <window_info anchor="bottom" id="Terminal" order="12" weight="0.32997987" />
-      <window_info anchor="bottom" id="Python Console" order="13" weight="0.030181086" />
-      <window_info anchor="bottom" id="Messages" order="14" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" x="557" y="161" width="421" height="502" id="SciView" order="3" sideWeight="0.8441926" visible="true" weight="0.23476523" />
-      <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" x="0" y="0" width="465" height="926" id="Documentation" order="5" sideWeight="0.15580736" side_tool="true" weight="0.23626374" />
-    </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -1048,20 +746,7 @@
         <entry key="MAIN">
           <value>
             <State>
-              <option name="RECENTLY_FILTERED_USER_GROUPS">
-                <collection />
-              </option>
-              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-                <collection />
-              </option>
-              <option name="COLUMN_ORDER">
-                <list>
-                  <option value="0" />
-                  <option value="1" />
-                  <option value="2" />
-                  <option value="3" />
-                </list>
-              </option>
+              <option name="COLUMN_ORDER" />
             </State>
           </value>
         </entry>
@@ -1109,6 +794,46 @@
     <MESSAGE value="Update gui interface and dermatology reader." />
     <MESSAGE value="Update gui dermatology reader." />
     <option name="LAST_COMMIT_MESSAGE" value="Update gui dermatology reader." />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1585068227394">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585068227394" />
+    <state x="548" y="188" key="FileChooserDialogImpl" timestamp="1579874072525">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="548" y="188" key="FileChooserDialogImpl/0.0.1536.824/-2560.-370.2560.1400@0.0.1536.824" timestamp="1579874072525" />
+    <state width="1877" height="298" key="GridCell.Tab.0.bottom" timestamp="1585068315112">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585068315112" />
+    <state width="1877" height="298" key="GridCell.Tab.0.center" timestamp="1585068315111">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="298" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585068315111" />
+    <state width="1877" height="298" key="GridCell.Tab.0.left" timestamp="1585068315111">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="298" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585068315111" />
+    <state width="1877" height="298" key="GridCell.Tab.0.right" timestamp="1585068315112">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="298" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585068315112" />
+    <state x="277" y="56" key="SettingsEditor" timestamp="1579874079124">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="277" y="56" key="SettingsEditor/0.0.1536.824/-2560.-370.2560.1400@0.0.1536.824" timestamp="1579874079124" />
+    <state x="588" y="300" key="com.intellij.ide.util.TipDialog" timestamp="1582534723976">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="470" y="238" key="com.intellij.ide.util.TipDialog/0.0.1536.824/-2560.-370.2560.1400@0.0.1536.824" timestamp="1579872569348" />
+    <state x="-1776" y="34" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-2560.-370.2560.1400@-2560.-370.2560.1400" timestamp="1581667158549" />
+    <state x="588" y="300" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-2560.-370.2560.1400@0.0.1920.1040" timestamp="1582534723976" />
+    <state x="-1584" y="-72" width="607" height="804" key="find.popup" timestamp="1582540008790">
+      <screen x="-2560" y="-370" width="2560" height="1400" />
+    </state>
+    <state x="-1584" y="-72" width="607" height="804" key="find.popup/0.0.1920.1040/-2560.-370.2560.1400@-2560.-370.2560.1400" timestamp="1582540008790" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1198,11 +923,6 @@
           <line>186</line>
           <option name="timeStamp" value="503" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/toolbox/IO/dermatology.py</url>
-          <line>94</line>
-          <option name="timeStamp" value="507" />
-        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -1212,6 +932,10 @@
         </breakpoint>
       </default-breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/classification$common.coverage" NAME="common Coverage Results" MODIFIED="1585062709565" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/views" />
+    <SUITE FILE_PATH="coverage/classification$dataset.coverage" NAME="dataset Coverage Results" MODIFIED="1585068166394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/statistics" />
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
@@ -1266,361 +990,5 @@ for modality in np.unique(data['Modality']):
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
     </expressions>
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/keras_applications/imagenet_utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3094">
-          <caret line="190" column="40" selection-start-line="190" selection-start-column="39" selection-end-line="190" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/keras_applications/inception_resnet_v2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="46" column="36" selection-start-line="46" selection-start-column="36" selection-end-line="46" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/keras/applications/inception_resnet_v2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="20" column="44" selection-start-line="20" selection-start-column="44" selection-end-line="20" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/vis/utils/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="246" column="24" lean-forward="true" selection-start-line="246" selection-start-column="24" selection-end-line="246" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/experiments/scripts/image_transforms.py" />
-    <entry file="file://$PROJECT_DIR$/toolbox/views/images.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1173">
-          <caret line="79" column="25" selection-start-line="79" selection-start-column="25" selection-end-line="79" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings/cluster_ub/tool.sh">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings/cluster_ub/config_cluster.sh">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/guis/demo_food/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/guis/demo_food/sources/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/guis/annotate_tool/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/guis/demo_food/images/process.svg" />
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/pathlib.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="693" selection-start-line="693" selection-end-line="693" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/guis/demo_food/style/style.qss" />
-    <entry file="file://$PROJECT_DIR$/guis/demo_food/style/palette.py" />
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/qdarkstyle/pyside2_style_rc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/qdarkstyle/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="179" column="25" selection-start-line="179" selection-start-column="25" selection-end-line="179" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/qdarkstyle/palette.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="4" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/guis/demo_food/launch.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="2" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/guis/demo_food/sources/others.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="420" column="39" selection-start-line="420" selection-start-column="39" selection-end-line="420" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/guis/demo_food/sources/gui.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="57" column="27" selection-start-line="57" selection-start-column="27" selection-end-line="57" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings/jupyter_server/launch.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings/environment/deploy.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="67" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings/environment/deploy.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="1" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py" />
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Skin/Lib/site-packages/keras/layers/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="22" lean-forward="true" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/transforms/common.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/models/layers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings/jupyter_server/configure.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="24" selection-start-line="4" selection-start-column="24" selection-end-line="5" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/views/common.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="11" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Research/Lib/site-packages/tensorflow_core/python/eager/execute.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="66" selection-start-line="66" selection-end-line="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Research/Lib/site-packages/kerastuner/engine/multi_execution_tuner.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="94" column="36" selection-start-line="94" selection-start-column="36" selection-end-line="94" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Research/Lib/site-packages/tensorflow_core/python/eager/monitoring.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="333" selection-start-line="333" selection-end-line="333" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Research/Lib/site-packages/tensorflow_core/python/keras/engine/training.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="516">
-          <caret line="722" column="40" selection-start-line="722" selection-start-column="40" selection-end-line="722" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Research/Lib/site-packages/kerastuner/tuners/hyperband.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="491">
-          <caret line="360" column="21" selection-start-line="360" selection-start-column="21" selection-end-line="360" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/envs/Research/Lib/site-packages/kerastuner/engine/base_tuner.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="108" column="8" selection-start-line="108" selection-start-column="8" selection-end-line="108" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/classification/parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="49" column="28" selection-start-line="49" selection-start-column="24" selection-end-line="49" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings/environment/environmentGPU.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="16" selection-start-line="22" selection-start-column="16" selection-end-line="23" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings/environment/environment.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/settings/data/prepare.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="17" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="9" column="66" lean-forward="true" selection-start-line="9" selection-start-column="66" selection-end-line="9" selection-end-column="66" />
-          <folding>
-            <element signature="e#1627#1651#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/Tuner.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="51" column="34" selection-start-line="51" selection-start-column="34" selection-end-line="51" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/guis/demo_food/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" selection-start-line="16" selection-end-line="17" selection-end-column="16" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/guis/annotate_tool/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="24" column="51" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="51" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/models/generators.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3009">
-          <caret line="184" column="8" selection-start-line="184" selection-start-column="8" selection-end-line="184" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/guis/annotate_tool/sources/gui.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4301">
-          <caret line="262" column="23" selection-start-line="262" selection-start-column="22" selection-end-line="262" selection-end-column="154" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/IO/images.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/models/builtin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1020">
-          <caret line="66" column="40" selection-start-line="66" selection-start-column="40" selection-end-line="66" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/IO/dermatology.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1479">
-          <caret line="94" selection-start-line="94" selection-end-line="94" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toolbox/models/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="65" selection-start-line="9" selection-start-column="65" selection-end-line="9" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/redaction/introduction/dermatologists.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="26" lean-forward="true" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
-          <folding>
-            <element signature="e#57#100#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
   </component>
 </project>
