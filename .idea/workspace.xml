@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Update gui dermatology reader.">
-      <change afterPath="$PROJECT_DIR$/redaction/introduction/dermatologists.py" afterDir="false" />
+    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/redaction/statistics/dataset.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/redaction/statistics/dermatologists.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/IO/dermatology.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/dermatology.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -381,13 +383,7 @@
       <workItem from="1582534719324" duration="6668000" />
       <workItem from="1583241967955" duration="2985000" />
       <workItem from="1585060296052" duration="3522000" />
-    </task>
-    <task id="LOCAL-00418" summary="Quick fix for MIL.">
-      <created>1574674463830</created>
-      <option name="number" value="00418" />
-      <option name="presentableId" value="LOCAL-00418" />
-      <option name="project" value="LOCAL" />
-      <updated>1574674463831</updated>
+      <workItem from="1585068367568" duration="11936000" />
     </task>
     <task id="LOCAL-00419" summary="Quick fix for MIL (v2).">
       <created>1574686598990</created>
@@ -725,7 +721,14 @@
       <option name="project" value="LOCAL" />
       <updated>1579602616434</updated>
     </task>
-    <option name="localTasksCounter" value="467" />
+    <task id="LOCAL-00467" summary="Migrate some call to tf.keras">
+      <created>1585068439934</created>
+      <option name="number" value="00467" />
+      <option name="presentableId" value="LOCAL-00467" />
+      <option name="project" value="LOCAL" />
+      <updated>1585068439935</updated>
+    </task>
+    <option name="localTasksCounter" value="468" />
     <servers />
   </component>
   <component name="TodoView">
@@ -768,7 +771,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Adding fold visualization tool." />
     <MESSAGE value="Adding fix on fold visualization." />
     <MESSAGE value="Add new prediction mode for fit_predict." />
     <MESSAGE value="Add mode for evaluation." />
@@ -793,37 +795,62 @@
     <MESSAGE value="Update data structure" />
     <MESSAGE value="Update gui interface and dermatology reader." />
     <MESSAGE value="Update gui dermatology reader." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update gui dermatology reader." />
+    <MESSAGE value="Migrate some call to tf.keras" />
+    <option name="LAST_COMMIT_MESSAGE" value="Migrate some call to tf.keras" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1585068227394">
+    <state x="2635" y="218" key="#xdebugger.evaluate" timestamp="1585124492938">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585068227394" />
+    <state x="2635" y="218" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585124492938" />
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1585068438666">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585068438666" />
     <state x="548" y="188" key="FileChooserDialogImpl" timestamp="1579874072525">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="548" y="188" key="FileChooserDialogImpl/0.0.1536.824/-2560.-370.2560.1400@0.0.1536.824" timestamp="1579874072525" />
-    <state width="1877" height="298" key="GridCell.Tab.0.bottom" timestamp="1585068315112">
+    <state width="1877" height="298" key="GridCell.Tab.0.bottom" timestamp="1585142852346">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585068315112" />
-    <state width="1877" height="298" key="GridCell.Tab.0.center" timestamp="1585068315111">
+    <state width="1877" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585142852346" />
+    <state width="1877" height="298" key="GridCell.Tab.0.center" timestamp="1585142852346">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="298" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585068315111" />
-    <state width="1877" height="298" key="GridCell.Tab.0.left" timestamp="1585068315111">
+    <state width="1877" height="298" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585142852346" />
+    <state width="1877" height="298" key="GridCell.Tab.0.left" timestamp="1585142852345">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="298" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585068315111" />
-    <state width="1877" height="298" key="GridCell.Tab.0.right" timestamp="1585068315112">
+    <state width="1877" height="298" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585142852345" />
+    <state width="1877" height="298" key="GridCell.Tab.0.right" timestamp="1585142852346">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="298" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585068315112" />
+    <state width="1877" height="298" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585142852346" />
+    <state width="1877" height="243" key="GridCell.Tab.1.bottom" timestamp="1585124501560">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="243" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585124501560" />
+    <state width="1877" height="243" key="GridCell.Tab.1.center" timestamp="1585124501560">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="243" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585124501560" />
+    <state width="1877" height="243" key="GridCell.Tab.1.left" timestamp="1585124501560">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="243" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585124501560" />
+    <state width="1877" height="243" key="GridCell.Tab.1.right" timestamp="1585124501560">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="243" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585124501560" />
     <state x="277" y="56" key="SettingsEditor" timestamp="1579874079124">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="277" y="56" key="SettingsEditor/0.0.1536.824/-2560.-370.2560.1400@0.0.1536.824" timestamp="1579874079124" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1585068442174">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585068442174" />
     <state x="588" y="300" key="com.intellij.ide.util.TipDialog" timestamp="1582534723976">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -935,60 +962,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/classification$common.coverage" NAME="common Coverage Results" MODIFIED="1585062709565" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/views" />
-    <SUITE FILE_PATH="coverage/classification$dataset.coverage" NAME="dataset Coverage Results" MODIFIED="1585068166394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/statistics" />
-  </component>
-  <component name="debuggerHistoryManager">
-    <expressions id="evaluateCodeFragment">
-      <expression>
-        <expression-string>dermatology.Reader.read_data_file(self.get_patient_folder(), ftype='images', modalities='Photography')</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>dermatology.Reader.read_data_file(self.get_patient_folder(), ftype='images', modalities=['Photography', 'Dermoscopy'])</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>dermatology.Reader.read_data_file(self.get_patient_folder(), ftype='images', modalities=['Photography', 'Dermoscopy', 'Microscopy'])</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>data['Modality'].isin(modality)</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>data[data['Modality'].isin(modality)]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>np.unique(data['Modality'])</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>mask = [False] * len(data.index)
-for modality in np.unique(data['Modality']):
-    mask |= data['Modality'] == modality</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>mask = [False]* len(data.index)
-for modality in np.unique(data['Modality']):
-    mask |= data['Modality'] == modality</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>for modality in np.unique(data['Modality']):
-    mask = data['Modality'] == modality</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-    </expressions>
+    <SUITE FILE_PATH="coverage/classification$dataset.coverage" NAME="dataset Coverage Results" MODIFIED="1585142852337" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/statistics" />
   </component>
 </project>

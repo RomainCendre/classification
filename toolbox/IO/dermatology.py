@@ -15,6 +15,7 @@ class Reader:
         data = []
         for table_path in table_paths:
             meta_patient = pandas.read_csv(table_path, dtype=str).fillna('')
+            meta_patient['TableID'] = table_path.stem
             for ind, row in meta_patient.iterrows():
                 # Parse patient directory
                 current_folder = table_path.parent / 'Patients' / row['ID']
