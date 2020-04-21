@@ -14,25 +14,25 @@ class Reader:
         # Read csv
         data = []
         for table_path in table_paths:
-            meta_patient = pandas.read_csv(table_path, dtype=str).fillna('')
-            meta_patient['TableID'] = table_path.stem
-            for ind, row in meta_patient.iterrows():
+            meta_lesions = pandas.read_csv(table_path, dtype=str).fillna('')
+            meta_lesions['ID_Table'] = table_path.stem
+            for ind, row in meta_lesions.iterrows():
                 # Parse patient directory
-                current_folder = table_path.parent / 'Patients' / row['ID']
+                current_folder = table_path.parent / 'Lesions' / row['ID_Lesion']
                 if not current_folder or not current_folder.is_dir():
                     warnings.warn(f'Folder {str(current_folder)} not found.')
                     continue
 
                 # Read patient data
-                patient_data = Reader.read_patient(current_folder, parameters)
+                patient_lesions = Reader.read_patient(current_folder, parameters)
                 # In case of there is no patches
-                if patient_data is None:
+                if patient_lesions is None:
                     continue
 
-                patient_data['ID'] = row['ID']
-                patient_data = patient_data.set_index('ID').join(pandas.DataFrame(row).transpose().set_index('ID'))
-                patient_data = patient_data.reset_index()
-                data.append(patient_data)
+                patient_lesions['ID_Lesion'] = row['ID_Lesion']
+                patient_lesions = patient_lesions.set_index('ID_Lesion').join(pandas.DataFrame(row).transpose().set_index('ID_Lesion'))
+                patient_lesions = patient_lesions.reset_index()
+                data.append(patient_lesions)
 
         # Merge all data
         dataframe = pandas.concat(data, sort=False, ignore_index=True).drop(columns='Path')
@@ -58,7 +58,7 @@ class Reader:
 
         # Patch filter
         if images is not None:
-            images['Reference'] = images.apply(lambda row: f'{subdir.stem}_{row.ImageID}_F', axis=1)
+            images['Reference'] = images.apply(lambda row: f'{subdir.stem}_{row.ID_Image}_F', axis=1)
             images['Source'] = images['Reference']
 
         # Only return images
@@ -66,7 +66,7 @@ class Reader:
             return images
 
         if images is not None and patches is not None:
-            patches['Reference'] = patches.apply(lambda row: f'{subdir.stem}_{row.PatchID}_P', axis=1)
+            patches['Reference'] = patches.apply(lambda row: f'{subdir.stem}_{row.ID_Patch}_P', axis=1)
             patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0],
                                               axis=1)
 
@@ -101,11 +101,11 @@ class Reader:
         if ftype == 'images':
             data['Type'] = 'Full'
             data['Datum'] = data.apply(lambda row: str(subdir / ftype / row['Modality'] / row['Path']), axis=1)
-            data['ImageID'] = data.apply(lambda row: f'{row.name}{row.Modality[0]}', axis=1)
+            data['ID_Image'] = data.apply(lambda row: f'{row.name}{row.Modality[0]}', axis=1)
         else:
             data['Type'] = 'Patch'
             data['Datum'] = data.apply(lambda row: str(subdir / ftype / row['Modality'] / row['Path']), axis=1)
-            data['PatchID'] = data.apply(lambda row: f'{row.name}{row.Modality[0]}', axis=1)
+            data['ID_Patch'] = data.apply(lambda row: f'{row.name}{row.Modality[0]}', axis=1)
 
         if modalities is not None:
             data = data[mask]
