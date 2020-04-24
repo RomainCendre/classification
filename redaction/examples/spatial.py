@@ -22,7 +22,7 @@ images = ['Benin', 'Malin']
 directions = ['Horizontal', 'Diagonale_1', 'Vertical', 'Diagonale_2']
 
 fig = pyplot.figure()
-fig, axes = pyplot.subplots(2, 5, figsize=(8,4), dpi=300)
+fig, axes = pyplot.subplots(2, 5, figsize=(8, 4), dpi=1200)
 for im_index, image in enumerate(images):
     axes[im_index, 0].imshow(originales[im_index], cmap='gray', vmin=0, vmax=255)
     axes[im_index, 0].axis('off')
@@ -35,4 +35,4 @@ fig.subplots_adjust(right=0.8)
 pyplot.axis('off')
 pyplot.show()
 
-fig.savefig("GLCM.pdf", bbox_inches='tight')
+fig.savefig('example_GLCM.pdf', bbox_inches='tight')
