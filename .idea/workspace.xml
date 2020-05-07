@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
+    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Update data access.">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/redaction/examples/benin.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/redaction/examples/malin.bmp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/redaction/statistics/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/redaction/statistics/dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/dermatology.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/dermatology.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/transforms/images.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/transforms/images.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +89,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/redaction/statistics" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/redaction/examples" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -99,44 +101,22 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\romai\Projets\classification\redaction\statistics" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\redaction\introduction" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\settings" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\settings\data" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\romai\Projets\classification\redaction\examples" />
       <recent name="C:\Users\romai\Projets\classification\redaction\statistics" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo_food" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo_food\images" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo\sources" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\romai\Projets\classification\redaction\examples" />
+      <recent name="C:\Users\romai\Projets\classification\redaction\statistics" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\redaction\introduction" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\settings" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\settings\data" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.dataset">
-    <configuration name="Temp" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="classification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/redaction/introduction" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\Romain\PycharmProjects\classification\redaction\introduction\dermatologists.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.frequency">
     <configuration name="common" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -181,7 +161,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="dermatologists" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="frequency" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -189,12 +169,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/redaction/introduction" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/redaction/examples" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\romai\Projets\classification\redaction\statistics\dermatologists.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/redaction/examples/frequency.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -225,13 +205,35 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="spatial" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="classification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/redaction/examples" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/redaction/examples/spatial.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.frequency" />
+        <item itemvalue="Python.spatial" />
         <item itemvalue="Python.dataset" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.common" />
-        <item itemvalue="Python.dermatologists" />
-        <item itemvalue="Python.Temp" />
       </list>
     </recent_temporary>
   </component>
@@ -386,27 +388,8 @@
       <workItem from="1585815263846" duration="237000" />
       <workItem from="1585816340462" duration="1548000" />
       <workItem from="1585829925790" duration="6341000" />
-    </task>
-    <task id="LOCAL-00420" summary="Fix roc curves.">
-      <created>1574696276077</created>
-      <option name="number" value="00420" />
-      <option name="presentableId" value="LOCAL-00420" />
-      <option name="project" value="LOCAL" />
-      <updated>1574696276077</updated>
-    </task>
-    <task id="LOCAL-00421" summary="Quick fix for MIL.">
-      <created>1574758284280</created>
-      <option name="number" value="00421" />
-      <option name="presentableId" value="LOCAL-00421" />
-      <option name="project" value="LOCAL" />
-      <updated>1574758284280</updated>
-    </task>
-    <task id="LOCAL-00422" summary="Fix MIL models to be pushed into a specific model that compute on it.">
-      <created>1574787509894</created>
-      <option name="number" value="00422" />
-      <option name="presentableId" value="LOCAL-00422" />
-      <option name="project" value="LOCAL" />
-      <updated>1574787509894</updated>
+      <workItem from="1587496368998" duration="24176000" />
+      <workItem from="1588777854446" duration="7525000" />
     </task>
     <task id="LOCAL-00423" summary="Fix semisupervised fit method.">
       <created>1574788432831</created>
@@ -730,7 +713,28 @@
       <option name="project" value="LOCAL" />
       <updated>1585142885461</updated>
     </task>
-    <option name="localTasksCounter" value="469" />
+    <task id="LOCAL-00469" summary="Update data access.">
+      <created>1587496409276</created>
+      <option name="number" value="00469" />
+      <option name="presentableId" value="LOCAL-00469" />
+      <option name="project" value="LOCAL" />
+      <updated>1587496409277</updated>
+    </task>
+    <task id="LOCAL-00470" summary="Code generative examples">
+      <created>1587749223323</created>
+      <option name="number" value="00470" />
+      <option name="presentableId" value="LOCAL-00470" />
+      <option name="project" value="LOCAL" />
+      <updated>1587749223324</updated>
+    </task>
+    <task id="LOCAL-00471" summary="Update functions">
+      <created>1587759828256</created>
+      <option name="number" value="00471" />
+      <option name="presentableId" value="LOCAL-00471" />
+      <option name="project" value="LOCAL" />
+      <updated>1587759828256</updated>
+    </task>
+    <option name="localTasksCounter" value="472" />
     <servers />
   </component>
   <component name="TodoView">
@@ -773,9 +777,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add new prediction mode for fit_predict." />
-    <MESSAGE value="Add mode for evaluation." />
-    <MESSAGE value="Cancel commit on CustomMIL." />
     <MESSAGE value="Add group statistics function." />
     <MESSAGE value="Update fine tune method." />
     <MESSAGE value="Add demo project." />
@@ -798,70 +799,79 @@
     <MESSAGE value="Update gui dermatology reader." />
     <MESSAGE value="Migrate some call to tf.keras" />
     <MESSAGE value="Update statistics" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update statistics" />
+    <MESSAGE value="Update data access." />
+    <MESSAGE value="Code generative examples" />
+    <MESSAGE value="Update functions" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update functions" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2635" y="218" key="#xdebugger.evaluate" timestamp="1585832696895">
+    <state x="2496" y="98" key="#xdebugger.evaluate" timestamp="1587743015584">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2635" y="218" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585832696895" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1585142884678">
+    <state x="2496" y="98" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587743015584" />
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1587759827513">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585142884678" />
+    <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496408343" />
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587759827513" />
     <state x="548" y="188" key="FileChooserDialogImpl" timestamp="1579874072525">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="548" y="188" key="FileChooserDialogImpl/0.0.1536.824/-2560.-370.2560.1400@0.0.1536.824" timestamp="1579874072525" />
-    <state width="1877" height="243" key="GridCell.Tab.0.bottom" timestamp="1586442511478">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="298" key="GridCell.Tab.0.bottom" timestamp="1587759410452">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511478" />
-    <state width="1877" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585835817497" />
-    <state width="1877" height="243" key="GridCell.Tab.0.center" timestamp="1586442511477">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587759410452" />
+    <state width="1877" height="298" key="GridCell.Tab.0.center" timestamp="1587759410452">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511477" />
-    <state width="1877" height="298" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585835817497" />
-    <state width="1877" height="243" key="GridCell.Tab.0.left" timestamp="1586442511477">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="298" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587759410452" />
+    <state width="1877" height="298" key="GridCell.Tab.0.left" timestamp="1587759410452">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511477" />
-    <state width="1877" height="298" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585835817497" />
-    <state width="1877" height="243" key="GridCell.Tab.0.right" timestamp="1586442511477">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="298" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587759410452" />
+    <state width="1877" height="298" key="GridCell.Tab.0.right" timestamp="1587759410452">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511477" />
-    <state width="1877" height="298" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585835817497" />
-    <state width="1877" height="243" key="GridCell.Tab.1.bottom" timestamp="1586442511480">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="298" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587759410452" />
+    <state width="1877" height="243" key="GridCell.Tab.1.bottom" timestamp="1587743020344">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511479" />
-    <state width="1877" height="243" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585833001431" />
-    <state width="1877" height="243" key="GridCell.Tab.1.center" timestamp="1586442511479">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="243" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587743020344" />
+    <state width="1877" height="243" key="GridCell.Tab.1.center" timestamp="1587743020344">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511479" />
-    <state width="1877" height="243" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585833001431" />
-    <state width="1877" height="243" key="GridCell.Tab.1.left" timestamp="1586442511478">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="243" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587743020344" />
+    <state width="1877" height="243" key="GridCell.Tab.1.left" timestamp="1587743020344">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511478" />
-    <state width="1877" height="243" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585833001431" />
-    <state width="1877" height="243" key="GridCell.Tab.1.right" timestamp="1586442511479">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="243" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587743020344" />
+    <state width="1877" height="243" key="GridCell.Tab.1.right" timestamp="1587743020344">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511479" />
-    <state width="1877" height="243" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585833001431" />
-    <state x="2266" y="71" key="SettingsEditor" timestamp="1585498345157">
+    <state width="1877" height="243" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587743020344" />
+    <state x="2266" y="71" key="SettingsEditor" timestamp="1587718451493">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="277" y="56" key="SettingsEditor/0.0.1536.824/-2560.-370.2560.1400@0.0.1536.824" timestamp="1579874079124" />
-    <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585498345157" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1585142886537">
+    <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587718451493" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1587759829534">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1585142886537" />
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496410710" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587759829534" />
+    <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1587719805002">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587719805002" />
     <state x="588" y="300" key="com.intellij.ide.util.TipDialog" timestamp="1582534723976">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -974,6 +984,8 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1585815299128" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/guis/annotate_tool" />
     <SUITE FILE_PATH="coverage/classification$common.coverage" NAME="common Coverage Results" MODIFIED="1585062709565" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/views" />
+    <SUITE FILE_PATH="coverage/classification$frequency.coverage" NAME="frequency Coverage Results" MODIFIED="1587759253864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$dataset.coverage" NAME="dataset Coverage Results" MODIFIED="1585835817486" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/statistics" />
+    <SUITE FILE_PATH="coverage/classification$spatial.coverage" NAME="spatial Coverage Results" MODIFIED="1587749632031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
   </component>
 </project>

@@ -162,8 +162,9 @@ class DWTGGDImageTransform(BaseEstimator, TransformerMixin):
 
 class HaralickImageTransform(BaseEstimator, TransformerMixin):
 
-    def __init__(self, mean=False):
-        self.mean = mean
+    def __init__(self, return_mean=False, compute_14th_feature=False):
+        self.return_mean = return_mean
+        self.compute_14th_feature = compute_14th_feature
 
     def fit(self, x, y=None):
         """
@@ -189,11 +190,9 @@ class HaralickImageTransform(BaseEstimator, TransformerMixin):
         haralick = []
         for index, data in enumerate(x):
             image = np.array(Image.open(data).convert('L'))
-            features = mahotas.features.haralick(image)
-            if self.mean:
-                haralick.append(features.mean(axis=0))
-            else:
-                haralick.append(features.flatten())
+            features = mahotas.features.haralick(image, return_mean=self.return_mean,
+                                                 compute_14th_feature=self.compute_14th_feature)
+            haralick.append(features.flatten())
         return np.array(haralick)
 
 
@@ -268,6 +267,9 @@ class FourierImageTransform(BaseEstimator, TransformerMixin):
 
 class SpatialImageTransform(BaseEstimator, TransformerMixin):
 
+    def __init__(self, wiltgen=True):
+        self.wiltgen = True
+
     def fit(self, x, y=None):
         """
         This should fit this transformer, but DWT doesn't need to fit to train data
@@ -293,7 +295,12 @@ class SpatialImageTransform(BaseEstimator, TransformerMixin):
         for index, data in enumerate(x):
             image = np.array(Image.open(data).convert('L'))
             current_features = []
-            current_features.extend(mahotas.features.haralick(image).mean(axis=0))
+            if self.wiltgen:
+                haralick = mahotas.features.haralick(image, return_mean=True)
+                haralick = np.delete(haralick, 9, 0)  # The nine feature is not used by Wiltgen
+            else:
+                haralick = mahotas.features.haralick(image, return_mean=True, compute_14th_feature=True)
+            current_features.extend(haralick)
             current_features.extend(SpatialImageTransform.histogram_features(image))
             features.append(current_features)
         return np.array(features)
@@ -307,3 +314,40 @@ class SpatialImageTransform(BaseEstimator, TransformerMixin):
         features.append(sstats.kurtosis(images.flatten()))
         features.append(sstats.entropy(images.flatten()))
         return features
+
+
+class FirstOrderImageTransform(BaseEstimator, TransformerMixin):
+
+    def fit(self, x, y=None):
+        """
+        This should fit this transformer, but DWT doesn't need to fit to train data
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+        """
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        """
+        This method is the main part of this transformer.
+        Return a wavelet transform, as specified mode.
+
+        Args:
+             x (:obj): Not used.
+             y (:obj): Not used.
+             copy (:obj): Not used.
+        """
+
+        features = []
+        for index, data in enumerate(x):
+            image = np.array(Image.open(data).convert('L'))
+            image = image.flatten()
+            features = []
+            features.append(np.mean(image))  # Moyenne
+            features.append(np.var(image))  # Variance
+            features.append(sstats.entropy(image))  # Entropie
+            features.append(sstats.kurtosis(image))  # Kurtosis
+            features.append(sstats.skew(image))  # Skewness
+        return np.array(features)
+
