@@ -343,11 +343,12 @@ class FirstOrderImageTransform(BaseEstimator, TransformerMixin):
         for index, data in enumerate(x):
             image = np.array(Image.open(data).convert('L'))
             image = image.flatten()
-            features = []
-            features.append(np.mean(image))  # Moyenne
-            features.append(np.var(image))  # Variance
-            features.append(sstats.entropy(image))  # Entropie
-            features.append(sstats.kurtosis(image))  # Kurtosis
-            features.append(sstats.skew(image))  # Skewness
+            current_features = []
+            current_features.append(np.mean(image))  # Moyenne
+            current_features.append(np.var(image))  # Variance
+            current_features.append(sstats.entropy(image))  # Entropie
+            current_features.append(sstats.kurtosis(image))  # Kurtosis
+            current_features.append(sstats.skew(image))  # Skewness
+            features.append(current_features)
         return np.array(features)
 

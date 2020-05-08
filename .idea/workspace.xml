@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Update data access.">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/redaction/examples/benin.bmp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/redaction/examples/malin.bmp" afterDir="false" />
+    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toolbox/transforms/images.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/transforms/images.py" afterDir="false" />
     </list>
@@ -389,14 +386,7 @@
       <workItem from="1585816340462" duration="1548000" />
       <workItem from="1585829925790" duration="6341000" />
       <workItem from="1587496368998" duration="24176000" />
-      <workItem from="1588777854446" duration="7525000" />
-    </task>
-    <task id="LOCAL-00423" summary="Fix semisupervised fit method.">
-      <created>1574788432831</created>
-      <option name="number" value="00423" />
-      <option name="presentableId" value="LOCAL-00423" />
-      <option name="project" value="LOCAL" />
-      <updated>1574788432831</updated>
+      <workItem from="1588777854446" duration="11982000" />
     </task>
     <task id="LOCAL-00424" summary="Fix data loading and change sub categories">
       <created>1574863956681</created>
@@ -734,7 +724,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587759828256</updated>
     </task>
-    <option name="localTasksCounter" value="472" />
+    <task id="LOCAL-00472" summary="Update spatials transforms.">
+      <created>1588868108245</created>
+      <option name="number" value="00472" />
+      <option name="presentableId" value="LOCAL-00472" />
+      <option name="project" value="LOCAL" />
+      <updated>1588868108246</updated>
+    </task>
+    <option name="localTasksCounter" value="473" />
     <servers />
   </component>
   <component name="TodoView">
@@ -777,7 +774,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add group statistics function." />
     <MESSAGE value="Update fine tune method." />
     <MESSAGE value="Add demo project." />
     <MESSAGE value="Move to dark theme package." />
@@ -802,22 +798,19 @@
     <MESSAGE value="Update data access." />
     <MESSAGE value="Code generative examples" />
     <MESSAGE value="Update functions" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update functions" />
+    <MESSAGE value="Update spatials transforms." />
+    <option name="LAST_COMMIT_MESSAGE" value="Update spatials transforms." />
   </component>
   <component name="WindowStateProjectService">
     <state x="2496" y="98" key="#xdebugger.evaluate" timestamp="1587743015584">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2496" y="98" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587743015584" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1587759827513">
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1588868107274">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496408343" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587759827513" />
-    <state x="548" y="188" key="FileChooserDialogImpl" timestamp="1579874072525">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="548" y="188" key="FileChooserDialogImpl/0.0.1536.824/-2560.-370.2560.1400@0.0.1536.824" timestamp="1579874072525" />
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1588868107274" />
     <state width="1877" height="298" key="GridCell.Tab.0.bottom" timestamp="1587759410452">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -861,13 +854,12 @@
     <state x="2266" y="71" key="SettingsEditor" timestamp="1587718451493">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="277" y="56" key="SettingsEditor/0.0.1536.824/-2560.-370.2560.1400@0.0.1536.824" timestamp="1579874079124" />
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587718451493" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1587759829534">
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1588868110114">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496410710" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587759829534" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1588868110114" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1587719805002">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -875,7 +867,6 @@
     <state x="588" y="300" key="com.intellij.ide.util.TipDialog" timestamp="1582534723976">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="470" y="238" key="com.intellij.ide.util.TipDialog/0.0.1536.824/-2560.-370.2560.1400@0.0.1536.824" timestamp="1579872569348" />
     <state x="-1776" y="34" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-2560.-370.2560.1400@-2560.-370.2560.1400" timestamp="1581667158549" />
     <state x="588" y="300" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-2560.-370.2560.1400@0.0.1920.1040" timestamp="1582534723976" />
     <state x="-1584" y="-72" width="607" height="804" key="find.popup" timestamp="1582540008790">
