@@ -148,7 +148,7 @@ class Views:
         if mode == 'PCA':
             method = PCA(n_components=2, whiten=True)  # project to 2 dimensions
         else:
-            method = TSNE(n_components=2)
+            method = TSNE(n_components=2, perplexity=5)
 
         projected = method.fit_transform(np.array(inputs[tags['datum']].tolist()))
         figure = pyplot.figure()
