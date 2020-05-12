@@ -1,6 +1,6 @@
 from tensorflow.keras.layers import Dense
-from keras import applications
-from keras import Sequential, Model
+from tensorflow.keras import applications
+from tensorflow.keras import Sequential, Model
 from sklearn.dummy import DummyClassifier
 from sklearn.pipeline import Pipeline
 from toolbox.models.layers import RandomLayer
