@@ -222,15 +222,15 @@ class Views:
         folds = np.array(inputs['Fold'].tolist())
 
         # Mean score
-        report = pandas.DataFrame(
-            classification_report(labels, predictions, output_dict=True, target_names=encode.map_list)).transpose()
+        report = pandas.DataFrame(classification_report(labels, predictions, output_dict=True, target_names=encode.map_list)).transpose()
+
         # Std score
         scores = []
         for fold in np.unique(folds):
             # Create mask
             mask = folds == fold
-            scores.append(
-                classification_report(labels[mask], predictions[mask], output_dict=True, target_names=encode.map_list))
+            scores.append(classification_report(labels[mask], predictions[mask], output_dict=True, target_names=encode.map_list))
+
         report = report.apply(lambda x: pandas.DataFrame(x).apply(lambda y: Views.__format_std(x, y, scores), axis=1))
         return report
 
@@ -263,7 +263,11 @@ class Views:
 
     @staticmethod
     def __format_std(x, y, scores):
-        std = np.std([score[y.name][x.name] for score in scores])
+        try:
+            std = np.std([score[y.name][x.name] for score in scores])
+        # Manage case of accuracy, no second property
+        except:
+            std = np.std([score[y.name] for score in scores])
         return f'{y[x.name]:0.2f}±{std:0.2f}'
 
 
