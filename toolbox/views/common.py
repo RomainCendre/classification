@@ -156,15 +156,14 @@ class Views:
         for label in ulabels:
             color = np.expand_dims(np.array(settings.get_color(label)), axis=0)
             pyplot.scatter(projected[labels == label, 0], projected[labels == label, 1],
-                           c=color,
-                           alpha=0.5, label=label, edgecolor='none')
+                           c=color, alpha=0.5, label=label, edgecolor='none')
 
         for label in ulabels:
             color = np.expand_dims(np.array(settings.get_color(label)), axis=0)
             mean_x = np.mean(projected[labels == label, 0])
             mean_y = np.mean(projected[labels == label, 1])
-            pyplot.scatter(mean_x, mean_y, c=color, marker='x',
-                           linewidths=3, zorder=10, s=85,  alpha=0.75, edgecolor='gray', label='Centroids')
+            pyplot.scatter(mean_x, mean_y, c=color, marker='x', zorder=10,
+                           s=150, linewidths=3, edgecolor='black', label=f'Centroid {label}')
 
         pyplot.axis('off')
         pyplot.legend(loc='lower right')
