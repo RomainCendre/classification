@@ -157,6 +157,10 @@ class Views:
             pyplot.scatter(projected[labels == label, 0], projected[labels == label, 1],
                            c=np.expand_dims(np.array(settings.get_color(label)), axis=0),
                            alpha=0.5, label=label, edgecolor='none')
+            mean_x = np.mean(projected[labels == label, 0])
+            mean_y = np.mean(projected[labels == label, 1])
+            pyplot.scatter(mean_x, mean_y, c=np.expand_dims(np.array(settings.get_color(label))), marker='x', linewidths=3, zorder=10)
+
         pyplot.axis('off')
         pyplot.legend(loc='lower right')
         if name:

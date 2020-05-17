@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/redaction/examples/frequency.py" beforeDir="false" afterPath="$PROJECT_DIR$/redaction/examples/frequency.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toolbox/views/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/views/common.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -390,14 +389,7 @@
       <workItem from="1588777854446" duration="14513000" />
       <workItem from="1589013858155" duration="5962000" />
       <workItem from="1589702640281" duration="1052000" />
-      <workItem from="1589712616457" duration="600000" />
-    </task>
-    <task id="LOCAL-00427" summary="Inverted colors.">
-      <created>1574877972201</created>
-      <option name="number" value="00427" />
-      <option name="presentableId" value="LOCAL-00427" />
-      <option name="project" value="LOCAL" />
-      <updated>1574877972201</updated>
+      <workItem from="1589712616457" duration="2181000" />
     </task>
     <task id="LOCAL-00428" summary="Fix data loading.">
       <created>1574955027379</created>
@@ -735,7 +727,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589291400722</updated>
     </task>
-    <option name="localTasksCounter" value="476" />
+    <task id="LOCAL-00476" summary="Add explained variance">
+      <created>1589713247335</created>
+      <option name="number" value="00476" />
+      <option name="presentableId" value="LOCAL-00476" />
+      <option name="project" value="LOCAL" />
+      <updated>1589713247336</updated>
+    </task>
+    <option name="localTasksCounter" value="477" />
     <servers />
   </component>
   <component name="TodoView">
@@ -778,7 +777,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Remove style file." />
     <MESSAGE value="Fix score tool" />
     <MESSAGE value="Adding stuff for identification." />
     <MESSAGE value="Update interface" />
@@ -803,18 +801,19 @@
     <MESSAGE value="Update first order" />
     <MESSAGE value="Update tsne" />
     <MESSAGE value="Migration of keras modules" />
-    <option name="LAST_COMMIT_MESSAGE" value="Migration of keras modules" />
+    <MESSAGE value="Add explained variance" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add explained variance" />
   </component>
   <component name="WindowStateProjectService">
     <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate" timestamp="1589315747099">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589315747099" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1589315813039">
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1589713246126">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496408343" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589315813039" />
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589713246126" />
     <state width="1028" height="298" key="GridCell.Tab.0.bottom" timestamp="1589703693443">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -859,11 +858,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587718451493" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1589315814930">
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1589713248832">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496410710" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589315814930" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589713248832" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1589315018624">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
