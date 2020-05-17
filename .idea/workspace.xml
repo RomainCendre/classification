@@ -389,14 +389,7 @@
       <workItem from="1588777854446" duration="14513000" />
       <workItem from="1589013858155" duration="5962000" />
       <workItem from="1589702640281" duration="1052000" />
-      <workItem from="1589712616457" duration="3444000" />
-    </task>
-    <task id="LOCAL-00431" summary="Fix parameters field.">
-      <created>1575024440238</created>
-      <option name="number" value="00431" />
-      <option name="presentableId" value="LOCAL-00431" />
-      <option name="project" value="LOCAL" />
-      <updated>1575024440238</updated>
+      <workItem from="1589712616457" duration="3745000" />
     </task>
     <task id="LOCAL-00432" summary="Update common module to add support of inconsistent data.">
       <created>1575031870954</created>
@@ -734,7 +727,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589722183920</updated>
     </task>
-    <option name="localTasksCounter" value="480" />
+    <task id="LOCAL-00480" summary="Adding centroids to projections">
+      <created>1589722821204</created>
+      <option name="number" value="00480" />
+      <option name="presentableId" value="LOCAL-00480" />
+      <option name="project" value="LOCAL" />
+      <updated>1589722821204</updated>
+    </task>
+    <option name="localTasksCounter" value="481" />
     <servers />
   </component>
   <component name="TodoView">
@@ -809,11 +809,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589315747099" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1589722183192">
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1589722820519">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496408343" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589722183192" />
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589722820519" />
     <state width="1028" height="298" key="GridCell.Tab.0.bottom" timestamp="1589703693443">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -858,11 +858,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587718451493" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1589722184980">
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1589722822772">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496410710" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589722184980" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589722822772" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1589315018624">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>

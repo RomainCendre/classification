@@ -163,7 +163,7 @@ class Views:
             mean_x = np.mean(projected[labels == label, 0])
             mean_y = np.mean(projected[labels == label, 1])
             pyplot.scatter(mean_x, mean_y, c=color, marker='x', zorder=10,
-                           s=150, linewidths=3, edgecolor='black', label=f'Centroid {label}')
+                           s=150, linewidth=3, edgecolor='black', label=f'Centroid {label}')
 
         pyplot.axis('off')
         pyplot.legend(loc='lower right')
