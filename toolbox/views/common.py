@@ -162,8 +162,8 @@ class Views:
             color = np.expand_dims(np.array(settings.get_color(label)), axis=0)
             mean_x = np.mean(projected[labels == label, 0])
             mean_y = np.mean(projected[labels == label, 1])
-            pyplot.scatter(mean_x, mean_y, facecolor=color, marker='x', zorder=10,
-                           s=150, linewidth=3, edgecolor='black', label=f'Centroid {label}')
+            pyplot.scatter(mean_x, mean_y, marker='X', c=color,
+                           s=150, linewidth=3, edgecolor='gray', label=f'Centroid {label}')
 
         pyplot.axis('off')
         pyplot.legend(loc='lower right')
