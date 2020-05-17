@@ -389,14 +389,7 @@
       <workItem from="1588777854446" duration="14513000" />
       <workItem from="1589013858155" duration="5962000" />
       <workItem from="1589702640281" duration="1052000" />
-      <workItem from="1589712616457" duration="2501000" />
-    </task>
-    <task id="LOCAL-00429" summary="Fix reading unknown data">
-      <created>1574965310987</created>
-      <option name="number" value="00429" />
-      <option name="presentableId" value="LOCAL-00429" />
-      <option name="project" value="LOCAL" />
-      <updated>1574965310988</updated>
+      <workItem from="1589712616457" duration="2869000" />
     </task>
     <task id="LOCAL-00430" summary="Update index and how they are made.">
       <created>1574967224411</created>
@@ -734,7 +727,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589721505389</updated>
     </task>
-    <option name="localTasksCounter" value="478" />
+    <task id="LOCAL-00478" summary="Adding centroids to projections">
+      <created>1589721822704</created>
+      <option name="number" value="00478" />
+      <option name="presentableId" value="LOCAL-00478" />
+      <option name="project" value="LOCAL" />
+      <updated>1589721822704</updated>
+    </task>
+    <option name="localTasksCounter" value="479" />
     <servers />
   </component>
   <component name="TodoView">
@@ -809,11 +809,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589315747099" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1589721504616">
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1589721821887">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496408343" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589721504616" />
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589721821887" />
     <state width="1028" height="298" key="GridCell.Tab.0.bottom" timestamp="1589703693443">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -858,11 +858,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587718451493" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1589721506485">
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1589721823960">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496410710" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589721506485" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589721823960" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1589315018624">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
