@@ -151,6 +151,7 @@ class Views:
             method = TSNE(n_components=2, perplexity=5)
 
         projected = method.fit_transform(np.array(inputs[tags['datum']].tolist()))
+
         figure = pyplot.figure()
         for label in ulabels:
             pyplot.scatter(projected[labels == label, 0], projected[labels == label, 1],
@@ -159,9 +160,15 @@ class Views:
         pyplot.axis('off')
         pyplot.legend(loc='lower right')
         if name:
-            figure.suptitle(name)
+            title = name
         else:
-            figure.suptitle(tags['datum'])
+            title = tags['datum']
+
+        if mode == 'PCA':
+            variance_explained = method.explained_variance_ratio_.cumsum()[1]
+            title = f'{title} (Variance : {variance_explained:.1%})'
+
+        figure.suptitle(title)
         return figure
 
     @staticmethod

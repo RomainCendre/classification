@@ -50,7 +50,7 @@ label_levels = 3  # how many levels to explicitly label on the plots
 fig, axes = pyplot.subplots(2, 4, figsize=[14, 8], dpi=600)
 for level in range(0, max_lev + 1):
     # compute the 2D DWT
-    c = pywt.wavedec2(benin, 'db4', mode='periodization', level=level)
+    c = pywt.wavedec2(benin, 'haar', level=level)
     # normalize each coefficient array independently for better visibility
     c[0] /= numpy.abs(c[0]).max()
     for detail_level in range(level):
@@ -63,7 +63,7 @@ for level in range(0, max_lev + 1):
 
 for level in range(0, max_lev + 1):
     # compute the 2D DWT
-    c = pywt.wavedec2(malin, 'db4', mode='periodization', level=level)
+    c = pywt.wavedec2(malin, 'haar', level=level)
     # normalize each coefficient array independently for better visibility
     c[0] /= numpy.abs(c[0]).max()
     for detail_level in range(level):
