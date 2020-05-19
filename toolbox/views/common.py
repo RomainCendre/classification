@@ -224,7 +224,7 @@ class Views:
                            s=150, linewidth=3, edgecolor='gray', label=f'Centroid {label}')
             # Ellipsis
             Views.confidence_ellipse(projected[labels == label, 0], projected[labels == label, 1], axis,
-                                      edgecolor=color, linewidth=3, zorder=0)
+                                      edgecolor=color, linewidth=3, zorder=10)
 
         pyplot.axis('off')
         pyplot.legend(loc='lower right')

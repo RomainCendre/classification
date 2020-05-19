@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
+    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Adding ellipsis.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toolbox/views/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/views/common.py" afterDir="false" />
     </list>
@@ -390,14 +390,7 @@
       <workItem from="1589013858155" duration="5962000" />
       <workItem from="1589702640281" duration="1052000" />
       <workItem from="1589712616457" duration="6593000" />
-      <workItem from="1589891142787" duration="3873000" />
-    </task>
-    <task id="LOCAL-00435" summary="Add predict_proba methods and fix some stuff.">
-      <created>1575132169321</created>
-      <option name="number" value="00435" />
-      <option name="presentableId" value="LOCAL-00435" />
-      <option name="project" value="LOCAL" />
-      <updated>1575132169321</updated>
+      <workItem from="1589891142787" duration="5478000" />
     </task>
     <task id="LOCAL-00436" summary="Fix DecisionVotingModel">
       <created>1575135717383</created>
@@ -735,7 +728,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589725682574</updated>
     </task>
-    <option name="localTasksCounter" value="484" />
+    <task id="LOCAL-00484" summary="Adding ellipsis.">
+      <created>1589909430692</created>
+      <option name="number" value="00484" />
+      <option name="presentableId" value="LOCAL-00484" />
+      <option name="project" value="LOCAL" />
+      <updated>1589909430693</updated>
+    </task>
+    <option name="localTasksCounter" value="485" />
     <servers />
   </component>
   <component name="TodoView">
@@ -778,7 +778,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Adding stuff for identification." />
     <MESSAGE value="Update interface" />
     <MESSAGE value="Manage project files" />
     <MESSAGE value="Update environment" />
@@ -803,38 +802,39 @@
     <MESSAGE value="Migration of keras modules" />
     <MESSAGE value="Add explained variance" />
     <MESSAGE value="Adding centroids to projections" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding centroids to projections" />
+    <MESSAGE value="Adding ellipsis." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding ellipsis." />
   </component>
   <component name="WindowStateProjectService">
     <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate" timestamp="1589315747099">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589315747099" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1589725681854">
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1589909812392">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496408343" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589725681854" />
-    <state width="1027" height="298" key="GridCell.Tab.0.bottom" timestamp="1589909401147">
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589909812392" />
+    <state width="1027" height="298" key="GridCell.Tab.0.bottom" timestamp="1589921277889">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1028" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589703693443" />
-    <state width="1027" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589909401147" />
-    <state width="1027" height="298" key="GridCell.Tab.0.center" timestamp="1589909401147">
+    <state width="1027" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589921277889" />
+    <state width="1027" height="298" key="GridCell.Tab.0.center" timestamp="1589921277889">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1028" height="298" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589703693443" />
-    <state width="1027" height="298" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589909401147" />
-    <state width="1027" height="298" key="GridCell.Tab.0.left" timestamp="1589909401147">
+    <state width="1027" height="298" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589921277889" />
+    <state width="1027" height="298" key="GridCell.Tab.0.left" timestamp="1589921277889">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1028" height="298" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589703693443" />
-    <state width="1027" height="298" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589909401147" />
-    <state width="1027" height="298" key="GridCell.Tab.0.right" timestamp="1589909401147">
+    <state width="1027" height="298" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589921277889" />
+    <state width="1027" height="298" key="GridCell.Tab.0.right" timestamp="1589921277889">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1028" height="298" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589703693443" />
-    <state width="1027" height="298" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589909401147" />
+    <state width="1027" height="298" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589921277889" />
     <state width="1518" height="243" key="GridCell.Tab.1.bottom" timestamp="1589315683185">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -859,11 +859,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587718451493" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1589725684065">
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1589909432444">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496410710" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589725684065" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589909432444" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1589315018624">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -982,6 +982,6 @@
     <SUITE FILE_PATH="coverage/classification$frequency.coverage" NAME="frequency Coverage Results" MODIFIED="1589703164897" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$dataset.coverage" NAME="dataset Coverage Results" MODIFIED="1585835817486" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/statistics" />
     <SUITE FILE_PATH="coverage/classification$spatial.coverage" NAME="spatial Coverage Results" MODIFIED="1587749632031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
-    <SUITE FILE_PATH="coverage/classification$Test.coverage" NAME="Test Coverage Results" MODIFIED="1589909401133" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
+    <SUITE FILE_PATH="coverage/classification$Test.coverage" NAME="Test Coverage Results" MODIFIED="1589921277864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
   </component>
 </project>
