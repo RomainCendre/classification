@@ -22,7 +22,7 @@ class Applications:
             model = applications.ResNet50(weights='imagenet', include_top=False, pooling=pooling)
         else:
             model = applications.InceptionV3(weights='imagenet', include_top=False, pooling=pooling)
-        model.name = architecture
+        # model.name = architecture
 
         return model
 
