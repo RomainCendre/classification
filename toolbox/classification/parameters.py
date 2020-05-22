@@ -161,6 +161,7 @@ class Dermatology:
         metas = []
         for index, coefficient in enumerate(coefficients):
             new_size = np.multiply(image.size, coefficient)
+            new_size = new_size.astype(int)
 
             # Location of file
             filepath = multi_folder / '{ref}_{coef}.png'.format(ref=reference, coef=coefficient)
@@ -177,7 +178,7 @@ class Dermatology:
             # Check if need to write patch
             if not filepath.is_file():
                 new_image = image.copy()
-                new_image.thumbnail(size=new_size, resample=3)
+                new_image.thumbnail(size=new_size.tolist(), resample=3)
                 new_image.save(filepath)
 
         return pd.DataFrame(metas)
