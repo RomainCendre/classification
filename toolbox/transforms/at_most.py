@@ -22,7 +22,7 @@ class LDAAtRatio(LinearDiscriminantAnalysis):
         ratio = self.n_components
         self.n_components = None
         super().fit(X, y)
-        self._max_components = self.__select_n_components(ratio)
+        self._max_components = self.__select_n_compo nents(ratio)
         return self
         # lda_fitted = super().fit(X, y)
         # test = lda_fitted.__select_n_components(ratio)

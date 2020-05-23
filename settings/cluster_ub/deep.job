@@ -15,4 +15,4 @@
 # Lancement du calcul
 export PYTHONPATH=/work/le2i/rc621381/classification
 export XDG_RUNTIME_DIR=/work/le2i/rc621381/XDG
-~/envs/GPU/bin/python /work/le2i/rc621381/classification/experiments/dermatology/microscopy/a_deep.py
+~/envs/GPU/bin/python /work/le2i/rc621381/classification/manuscript/dermatology/microscopy/a_deep.py

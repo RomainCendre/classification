@@ -3,7 +3,21 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/classification/parameters.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/classification/parameters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/FrequencyExtraction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/FrequencyExtraction.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/FrequencyPrediction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/FrequencyPrediction.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/SpatialExtraction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/SpatialExtraction.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/SpatialPrediction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/SpatialPrediction.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/TransferExtraction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/TransferExtraction.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/TransfertPrediction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/TransfertPrediction.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/TransfertPredictionReduction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/TransfertPredictionReduction.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/ImageImprovement/MultiResolutionExtraction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageImprovement/MultiResolutionExtraction.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/redaction/examples/benin.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/redaction/examples/frequency.py" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/examples/frequency.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/redaction/examples/malin.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/redaction/examples/spatial.py" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/examples/spatial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/redaction/statistics/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/statistics/dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/redaction/statistics/dermatologists.py" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/statistics/dermatologists.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/transforms/at_most.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/transforms/at_most.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +92,7 @@
       <GitPushTagMode />
     </option>
   </component>
+  <component name="JupyterTrust" id="a6303c2e-27bb-4b6d-912a-228d09e58c3e" />
   <component name="ProjectId" id="1WqMEOenTmumwTDdCyqxuhma0La" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -113,7 +128,7 @@
       <recent name="C:\Users\Romain\PycharmProjects\classification\settings\data" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Test">
+  <component name="RunManager" selected="Python.Testlda">
     <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -136,7 +151,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="dataset" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Testlda" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -144,12 +159,34 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/redaction/statistics" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/redaction/examples" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/redaction/statistics/dataset.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/redaction/examples/Testlda.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="at_most" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="classification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/toolbox/transforms" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/toolbox/transforms/at_most.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -172,28 +209,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/redaction/examples/frequency.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="classification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/guis/annotate_tool" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/guis/annotate_tool/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -226,11 +241,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Testlda" />
+        <item itemvalue="Python.at_most" />
         <item itemvalue="Python.Test" />
         <item itemvalue="Python.frequency" />
         <item itemvalue="Python.spatial" />
-        <item itemvalue="Python.dataset" />
-        <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>
@@ -392,28 +407,7 @@
       <workItem from="1589712616457" duration="6593000" />
       <workItem from="1589891142787" duration="6130000" />
       <workItem from="1589960148196" duration="2995000" />
-      <workItem from="1590134683727" duration="4735000" />
-    </task>
-    <task id="LOCAL-00439" summary="Adding fix on fold visualization.">
-      <created>1575309981151</created>
-      <option name="number" value="00439" />
-      <option name="presentableId" value="LOCAL-00439" />
-      <option name="project" value="LOCAL" />
-      <updated>1575309981151</updated>
-    </task>
-    <task id="LOCAL-00440" summary="Add new prediction mode for fit_predict.">
-      <created>1575385441136</created>
-      <option name="number" value="00440" />
-      <option name="presentableId" value="LOCAL-00440" />
-      <option name="project" value="LOCAL" />
-      <updated>1575385441136</updated>
-    </task>
-    <task id="LOCAL-00441" summary="Add mode for evaluation.">
-      <created>1575386093983</created>
-      <option name="number" value="00441" />
-      <option name="presentableId" value="LOCAL-00441" />
-      <option name="project" value="LOCAL" />
-      <updated>1575386093983</updated>
+      <workItem from="1590134683727" duration="9544000" />
     </task>
     <task id="LOCAL-00442" summary="Cancel commit on CustomMIL.">
       <created>1575386202456</created>
@@ -737,7 +731,28 @@
       <option name="project" value="LOCAL" />
       <updated>1590135894481</updated>
     </task>
-    <option name="localTasksCounter" value="488" />
+    <task id="LOCAL-00488" summary="Update multi resolution.">
+      <created>1590150424037</created>
+      <option name="number" value="00488" />
+      <option name="presentableId" value="LOCAL-00488" />
+      <option name="project" value="LOCAL" />
+      <updated>1590150424037</updated>
+    </task>
+    <task id="LOCAL-00489" summary="Add LDA ratio function.">
+      <created>1590168623011</created>
+      <option name="number" value="00489" />
+      <option name="presentableId" value="LOCAL-00489" />
+      <option name="project" value="LOCAL" />
+      <updated>1590168623011</updated>
+    </task>
+    <task id="LOCAL-00490" summary="Adding jupyter experiments notebooks.">
+      <created>1590226130180</created>
+      <option name="number" value="00490" />
+      <option name="presentableId" value="LOCAL-00490" />
+      <option name="project" value="LOCAL" />
+      <updated>1590226130180</updated>
+    </task>
+    <option name="localTasksCounter" value="491" />
     <servers />
   </component>
   <component name="TodoView">
@@ -780,9 +795,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Manage project files" />
-    <MESSAGE value="Update environment" />
-    <MESSAGE value="Update K backend" />
     <MESSAGE value="Solve imputer error." />
     <MESSAGE value="Solve configproto" />
     <MESSAGE value="Update environment files." />
@@ -805,67 +817,70 @@
     <MESSAGE value="Adding centroids to projections" />
     <MESSAGE value="Adding ellipsis." />
     <MESSAGE value="Remove model.name due to bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove model.name due to bug" />
+    <MESSAGE value="Update multi resolution." />
+    <MESSAGE value="Add LDA ratio function." />
+    <MESSAGE value="Adding jupyter experiments notebooks." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding jupyter experiments notebooks." />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate" timestamp="1590150261401">
+    <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate" timestamp="1590168371870">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590150261401" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1590135893437">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168371870" />
+    <state x="585" y="105" key="CommitChangelistDialog2" timestamp="1590226129075">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496408343" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590135893437" />
-    <state width="1515" height="247" key="GridCell.Tab.0.bottom" timestamp="1590150272238">
+    <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1590226129075" />
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168622165" />
+    <state width="1023" height="298" key="GridCell.Tab.0.bottom" timestamp="1590226304921">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1028" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589703693443" />
-    <state width="1515" height="247" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590150272238" />
-    <state width="1515" height="247" key="GridCell.Tab.0.center" timestamp="1590150272238">
+    <state width="1023" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590226304921" />
+    <state width="1023" height="298" key="GridCell.Tab.0.center" timestamp="1590226304921">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1028" height="298" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589703693443" />
-    <state width="1515" height="247" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590150272238" />
-    <state width="1515" height="247" key="GridCell.Tab.0.left" timestamp="1590150272237">
+    <state width="1023" height="298" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590226304921" />
+    <state width="1023" height="298" key="GridCell.Tab.0.left" timestamp="1590226304921">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1028" height="298" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589703693443" />
-    <state width="1515" height="247" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590150272237" />
-    <state width="1515" height="247" key="GridCell.Tab.0.right" timestamp="1590150272238">
+    <state width="1023" height="298" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590226304921" />
+    <state width="1023" height="298" key="GridCell.Tab.0.right" timestamp="1590226304921">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1028" height="298" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589703693443" />
-    <state width="1515" height="247" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590150272238" />
-    <state width="1515" height="247" key="GridCell.Tab.1.bottom" timestamp="1590150272081">
+    <state width="1023" height="298" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590226304921" />
+    <state width="1514" height="247" key="GridCell.Tab.1.bottom" timestamp="1590168466764">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511479" />
-    <state width="1515" height="247" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590150272081" />
-    <state width="1515" height="247" key="GridCell.Tab.1.center" timestamp="1590150272080">
+    <state width="1514" height="247" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168466764" />
+    <state width="1514" height="247" key="GridCell.Tab.1.center" timestamp="1590168466764">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511479" />
-    <state width="1515" height="247" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590150272080" />
-    <state width="1515" height="247" key="GridCell.Tab.1.left" timestamp="1590150272080">
+    <state width="1514" height="247" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168466764" />
+    <state width="1514" height="247" key="GridCell.Tab.1.left" timestamp="1590168466764">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511478" />
-    <state width="1515" height="247" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590150272080" />
-    <state width="1515" height="247" key="GridCell.Tab.1.right" timestamp="1590150272081">
+    <state width="1514" height="247" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168466764" />
+    <state width="1514" height="247" key="GridCell.Tab.1.right" timestamp="1590168466764">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511479" />
-    <state width="1515" height="247" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590150272081" />
+    <state width="1514" height="247" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168466764" />
     <state x="2266" y="71" key="SettingsEditor" timestamp="1587718451493">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587718451493" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1590135896031">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2" timestamp="1590226131637">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587496410710" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590135896031" />
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1590226131637" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168624163" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1589315018624">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -875,22 +890,22 @@
     </state>
     <state x="-1776" y="34" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-2560.-370.2560.1400@-2560.-370.2560.1400" timestamp="1581667158549" />
     <state x="588" y="300" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-2560.-370.2560.1400@0.0.1920.1040" timestamp="1582534723976" />
-    <state x="2652" y="221" width="607" height="598" key="find.popup" timestamp="1590148905227">
+    <state x="2652" y="221" width="607" height="598" key="find.popup" timestamp="1590167550596">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="-1584" y="-72" width="607" height="804" key="find.popup/0.0.1920.1040/-2560.-370.2560.1400@-2560.-370.2560.1400" timestamp="1582540008790" />
-    <state x="2652" y="221" width="607" height="598" key="find.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590148905227" />
+    <state x="2652" y="221" width="607" height="598" key="find.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590167550596" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/experiments/dermatology/microscopy/d_features.py</url>
+          <url>file://$PROJECT_DIR$/manuscript/dermatology/microscopy/d_features.py</url>
           <line>99</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/experiments/dermatology/microscopy/d_features.py</url>
+          <url>file://$PROJECT_DIR$/manuscript/dermatology/microscopy/d_features.py</url>
           <line>93</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
@@ -940,7 +955,7 @@
           <option name="timeStamp" value="478" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/experiments/scripts/image_transforms.py</url>
+          <url>file://$PROJECT_DIR$/manuscript/scripts/image_transforms.py</url>
           <line>88</line>
           <option name="timeStamp" value="489" />
         </line-breakpoint>
@@ -970,9 +985,23 @@
           <option name="timeStamp" value="503" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/redaction/examples/Test.py</url>
+          <url>file://$PROJECT_DIR$/manuscript/examples/Test.py</url>
           <line>32</line>
           <option name="timeStamp" value="504" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/manuscript/examples/Testlda.py</url>
+          <line>49</line>
+          <option name="timeStamp" value="508" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/manuscript/examples/Testlda.py</url>
+          <line>16</line>
+          <option name="timeStamp" value="509" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/manuscript/statistics/dermatologists.py</url>
+          <option name="timeStamp" value="511" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -988,6 +1017,8 @@
     <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1585815299128" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/guis/annotate_tool" />
     <SUITE FILE_PATH="coverage/classification$common.coverage" NAME="common Coverage Results" MODIFIED="1585062709565" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/views" />
     <SUITE FILE_PATH="coverage/classification$frequency.coverage" NAME="frequency Coverage Results" MODIFIED="1589703164897" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
+    <SUITE FILE_PATH="coverage/classification$Testlda.coverage" NAME="Testlda Coverage Results" MODIFIED="1590168578960" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
+    <SUITE FILE_PATH="coverage/classification$at_most.coverage" NAME="at_most Coverage Results" MODIFIED="1590168466743" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/transforms" />
     <SUITE FILE_PATH="coverage/classification$dataset.coverage" NAME="dataset Coverage Results" MODIFIED="1585835817486" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/statistics" />
     <SUITE FILE_PATH="coverage/classification$spatial.coverage" NAME="spatial Coverage Results" MODIFIED="1587749632031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$Test.coverage" NAME="Test Coverage Results" MODIFIED="1590150272032" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
