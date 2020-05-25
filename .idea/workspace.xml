@@ -3,21 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/FrequencyExtraction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/FrequencyExtraction.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/FrequencyPrediction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/FrequencyPrediction.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/SpatialExtraction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/SpatialExtraction.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/SpatialPrediction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/SpatialPrediction.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/TransferExtraction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/TransferExtraction.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/TransfertPrediction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/TransfertPrediction.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/ImageClassification/TransfertPredictionReduction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/TransfertPredictionReduction.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/ImageImprovement/MultiResolutionExtraction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageImprovement/MultiResolutionExtraction.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/redaction/examples/benin.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/redaction/examples/frequency.py" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/examples/frequency.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/redaction/examples/malin.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/redaction/examples/spatial.py" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/examples/spatial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/redaction/statistics/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/statistics/dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/redaction/statistics/dermatologists.py" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/statistics/dermatologists.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/transforms/at_most.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/transforms/at_most.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manuscript/ImageClassification/FrequencyExtraction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/FrequencyExtraction.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manuscript/ImageClassification/TransfertPredictionReduction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageClassification/TransfertPredictionReduction.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manuscript/ImageImprovement/MultiResolutionExtraction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageImprovement/MultiResolutionExtraction.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,19 +101,19 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\romai\Projets\classification\experiments" />
+      <recent name="C:\Users\romai\Projets\classification\redaction\examples" />
+      <recent name="C:\Users\romai\Projets\classification\redaction\statistics" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\redaction\introduction" />
+      <recent name="C:\Users\Romain\PycharmProjects\classification\settings" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\romai\Projets\classification\redaction\examples" />
       <recent name="C:\Users\romai\Projets\classification\redaction\statistics" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo_food" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo_food\images" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo\sources" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\romai\Projets\classification\redaction\examples" />
-      <recent name="C:\Users\romai\Projets\classification\redaction\statistics" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\redaction\introduction" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\settings" />
-      <recent name="C:\Users\Romain\PycharmProjects\classification\settings\data" />
     </key>
   </component>
   <component name="RunManager" selected="Python.Testlda">
@@ -407,14 +395,7 @@
       <workItem from="1589712616457" duration="6593000" />
       <workItem from="1589891142787" duration="6130000" />
       <workItem from="1589960148196" duration="2995000" />
-      <workItem from="1590134683727" duration="9544000" />
-    </task>
-    <task id="LOCAL-00442" summary="Cancel commit on CustomMIL.">
-      <created>1575386202456</created>
-      <option name="number" value="00442" />
-      <option name="presentableId" value="LOCAL-00442" />
-      <option name="project" value="LOCAL" />
-      <updated>1575386202456</updated>
+      <workItem from="1590134683727" duration="11862000" />
     </task>
     <task id="LOCAL-00443" summary="Add group statistics function.">
       <created>1576244525890</created>
@@ -752,7 +733,14 @@
       <option name="project" value="LOCAL" />
       <updated>1590226130180</updated>
     </task>
-    <option name="localTasksCounter" value="491" />
+    <task id="LOCAL-00491" summary="Moving directories">
+      <created>1590226339498</created>
+      <option name="number" value="00491" />
+      <option name="presentableId" value="LOCAL-00491" />
+      <option name="project" value="LOCAL" />
+      <updated>1590226339498</updated>
+    </task>
+    <option name="localTasksCounter" value="492" />
     <servers />
   </component>
   <component name="TodoView">
@@ -795,7 +783,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Solve imputer error." />
     <MESSAGE value="Solve configproto" />
     <MESSAGE value="Update environment files." />
     <MESSAGE value="Update enviro" />
@@ -820,18 +807,19 @@
     <MESSAGE value="Update multi resolution." />
     <MESSAGE value="Add LDA ratio function." />
     <MESSAGE value="Adding jupyter experiments notebooks." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding jupyter experiments notebooks." />
+    <MESSAGE value="Moving directories" />
+    <option name="LAST_COMMIT_MESSAGE" value="Moving directories" />
   </component>
   <component name="WindowStateProjectService">
     <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate" timestamp="1590168371870">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168371870" />
-    <state x="585" y="105" key="CommitChangelistDialog2" timestamp="1590226129075">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1590226338322">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1590226129075" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168622165" />
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590226338322" />
     <state width="1023" height="298" key="GridCell.Tab.0.bottom" timestamp="1590226304921">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -876,11 +864,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587718451493" />
-    <state x="552" y="254" key="Vcs.Push.Dialog.v2" timestamp="1590226131637">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1590226341186">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1590226131637" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168624163" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590226341186" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1589315018624">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
