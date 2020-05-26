@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/transforms/at_most.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/transforms/at_most.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/transforms/signals.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/transforms/signals.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +114,29 @@
       <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo\sources" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Testlda">
+  <component name="RunManager" selected="Python.Test (1)">
+    <configuration name="Test (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="classification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/manuscript/examples" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/manuscript/examples/Test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -203,35 +225,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="spatial" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="classification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/redaction/examples" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/redaction/examples/spatial.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Test (1)" />
         <item itemvalue="Python.Testlda" />
         <item itemvalue="Python.at_most" />
         <item itemvalue="Python.Test" />
         <item itemvalue="Python.frequency" />
-        <item itemvalue="Python.spatial" />
       </list>
     </recent_temporary>
   </component>
@@ -393,14 +393,8 @@
       <workItem from="1589712616457" duration="6593000" />
       <workItem from="1589891142787" duration="6130000" />
       <workItem from="1589960148196" duration="2995000" />
-      <workItem from="1590134683727" duration="13410000" />
-    </task>
-    <task id="LOCAL-00444" summary="Update fine tune method.">
-      <created>1578560516853</created>
-      <option name="number" value="00444" />
-      <option name="presentableId" value="LOCAL-00444" />
-      <option name="project" value="LOCAL" />
-      <updated>1578560516854</updated>
+      <workItem from="1590134683727" duration="14022000" />
+      <workItem from="1590497003355" duration="4776000" />
     </task>
     <task id="LOCAL-00445" summary="Add demo project.">
       <created>1578672670838</created>
@@ -738,7 +732,14 @@
       <option name="project" value="LOCAL" />
       <updated>1590409785081</updated>
     </task>
-    <option name="localTasksCounter" value="493" />
+    <task id="LOCAL-00493" summary="Adding experiments">
+      <created>1590421221418</created>
+      <option name="number" value="00493" />
+      <option name="presentableId" value="LOCAL-00493" />
+      <option name="project" value="LOCAL" />
+      <updated>1590421221418</updated>
+    </task>
+    <option name="localTasksCounter" value="494" />
     <servers />
   </component>
   <component name="TodoView">
@@ -809,64 +810,64 @@
     <option name="LAST_COMMIT_MESSAGE" value="Adding experiments" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate" timestamp="1590168371870">
+    <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate" timestamp="1590513670589">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168371870" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1590409783942">
+    <state x="2591" y="336" width="966" height="321" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590513670589" />
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1590421220588">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1590226129075" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590409783942" />
-    <state width="1023" height="298" key="GridCell.Tab.0.bottom" timestamp="1590226304921">
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590421220588" />
+    <state width="1513" height="247" key="GridCell.Tab.0.bottom" timestamp="1590513632244">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1028" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589703693443" />
-    <state width="1023" height="298" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590226304921" />
-    <state width="1023" height="298" key="GridCell.Tab.0.center" timestamp="1590226304921">
+    <state width="1513" height="247" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590513632244" />
+    <state width="1513" height="247" key="GridCell.Tab.0.center" timestamp="1590513632244">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1028" height="298" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589703693443" />
-    <state width="1023" height="298" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590226304921" />
-    <state width="1023" height="298" key="GridCell.Tab.0.left" timestamp="1590226304921">
+    <state width="1513" height="247" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590513632244" />
+    <state width="1513" height="247" key="GridCell.Tab.0.left" timestamp="1590513632244">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1028" height="298" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589703693443" />
-    <state width="1023" height="298" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590226304921" />
-    <state width="1023" height="298" key="GridCell.Tab.0.right" timestamp="1590226304921">
+    <state width="1513" height="247" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590513632244" />
+    <state width="1513" height="247" key="GridCell.Tab.0.right" timestamp="1590513632244">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1028" height="298" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589703693443" />
-    <state width="1023" height="298" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590226304921" />
-    <state width="1514" height="247" key="GridCell.Tab.1.bottom" timestamp="1590168466764">
+    <state width="1513" height="247" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590513632244" />
+    <state width="1513" height="247" key="GridCell.Tab.1.bottom" timestamp="1590513645769">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511479" />
-    <state width="1514" height="247" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168466764" />
-    <state width="1514" height="247" key="GridCell.Tab.1.center" timestamp="1590168466764">
+    <state width="1513" height="247" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590513645769" />
+    <state width="1513" height="247" key="GridCell.Tab.1.center" timestamp="1590513645769">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511479" />
-    <state width="1514" height="247" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168466764" />
-    <state width="1514" height="247" key="GridCell.Tab.1.left" timestamp="1590168466764">
+    <state width="1513" height="247" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590513645769" />
+    <state width="1513" height="247" key="GridCell.Tab.1.left" timestamp="1590513645769">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511478" />
-    <state width="1514" height="247" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168466764" />
-    <state width="1514" height="247" key="GridCell.Tab.1.right" timestamp="1590168466764">
+    <state width="1513" height="247" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590513645769" />
+    <state width="1513" height="247" key="GridCell.Tab.1.right" timestamp="1590513645769">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="243" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586442511479" />
-    <state width="1514" height="247" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590168466764" />
+    <state width="1513" height="247" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590513645769" />
     <state x="2266" y="71" key="SettingsEditor" timestamp="1587718451493">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587718451493" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1590409788364">
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1590421222800">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1590226131637" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590409788364" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590421222800" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1589315018624">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -874,13 +875,12 @@
     <state x="588" y="300" key="com.intellij.ide.util.TipDialog" timestamp="1582534723976">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="-1776" y="34" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-2560.-370.2560.1400@-2560.-370.2560.1400" timestamp="1581667158549" />
     <state x="588" y="300" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-2560.-370.2560.1400@0.0.1920.1040" timestamp="1582534723976" />
-    <state x="2652" y="221" width="607" height="598" key="find.popup" timestamp="1590167550596">
+    <state x="2652" y="221" width="607" height="598" key="find.popup" timestamp="1590508408574">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="-1584" y="-72" width="607" height="804" key="find.popup/0.0.1920.1040/-2560.-370.2560.1400@-2560.-370.2560.1400" timestamp="1582540008790" />
-    <state x="2652" y="221" width="607" height="598" key="find.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590167550596" />
+    <state x="2652" y="221" width="607" height="598" key="find.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1590508408574" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -971,11 +971,6 @@
           <option name="timeStamp" value="503" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/manuscript/examples/Test.py</url>
-          <line>32</line>
-          <option name="timeStamp" value="504" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/manuscript/examples/Testlda.py</url>
           <line>49</line>
           <option name="timeStamp" value="508" />
@@ -988,6 +983,16 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/manuscript/statistics/dermatologists.py</url>
           <option name="timeStamp" value="511" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/toolbox/transforms/signals.py</url>
+          <line>129</line>
+          <option name="timeStamp" value="513" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/Anaconda3/envs/Research/Lib/site-packages/sklearn/preprocessing/_data.py</url>
+          <line>139</line>
+          <option name="timeStamp" value="514" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1005,6 +1010,7 @@
     <SUITE FILE_PATH="coverage/classification$frequency.coverage" NAME="frequency Coverage Results" MODIFIED="1589703164897" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$Testlda.coverage" NAME="Testlda Coverage Results" MODIFIED="1590168578960" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$at_most.coverage" NAME="at_most Coverage Results" MODIFIED="1590168466743" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/transforms" />
+    <SUITE FILE_PATH="coverage/classification$Test__1_.coverage" NAME="Test (1) Coverage Results" MODIFIED="1590513632045" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/manuscript/examples" />
     <SUITE FILE_PATH="coverage/classification$dataset.coverage" NAME="dataset Coverage Results" MODIFIED="1585835817486" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/statistics" />
     <SUITE FILE_PATH="coverage/classification$spatial.coverage" NAME="spatial Coverage Results" MODIFIED="1587749632031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$Test.coverage" NAME="Test Coverage Results" MODIFIED="1590150272032" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />

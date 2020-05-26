@@ -121,13 +121,13 @@ class ScaleTransform(BaseEstimator, TransformerMixin):
 
     def transform(self, x, y=None, copy=True):
         if self.method == 'max':
-            return np.apply_along_axis((lambda x: preprocessing.maxabs_scale(x)), 1, x)
+            return np.apply_along_axis((lambda row: preprocessing.maxabs_scale(row)), 1, x)
         elif self.method == 'minmax':
-            return np.apply_along_axis((lambda x: preprocessing.minmax_scale(x)), 1, x)
+            return np.apply_along_axis((lambda row: preprocessing.minmax_scale(row)), 1, x)
         elif self.method == 'robust':
-            return np.apply_along_axis((lambda x: preprocessing.robust_scale(x)), 1, x)
+            return np.apply_along_axis((lambda row: preprocessing.robust_scale(row)), 1, x)
         else:
-            return np.apply_along_axis((lambda x: preprocessing.scale(x)), 1, x)
+            return np.apply_along_axis((lambda row: preprocessing.scale(row)), 1, x)
 
 
 class DWTTransform(BaseEstimator, TransformerMixin):
