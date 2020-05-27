@@ -690,27 +690,41 @@ class KerasFineClassifier(KerasBatchClassifier):
             if 'prediction' not in layer.name:
                 layer.trainable = False
 
-        # compile the model (should be done *after* setting layers to non-trainable)
-        self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
-        print('Pre-training...')
-        self.history = self.model.fit_generator(generator=train, validation_data=validation,
-                                                callbacks=[EarlyStopping(monitor='loss', patience=5)],
-                                                class_weight=train.get_weights(), **params_fit)
+        if hasattr(self, 'two_step_training'):
+            # compile the model (should be done *after* setting layers to non-trainable)
+            self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+            print('Pre-training...')
+            self.history = self.model.fit_generator(generator=train, validation_data=validation,
+                                                    callbacks=[EarlyStopping(monitor='loss', patience=5)],
+                                                    class_weight=train.get_weights(), **params_fit)
 
-        trainable_layer = params.get('trainable_layer', 0)
-        for layer in self.model.layers[trainable_layer:]:
-            layer.trainable = True
+            trainable_layer = params.get('trainable_layer', 0)
+            for layer in self.model.layers[trainable_layer:]:
+                layer.trainable = True
 
-        # we need to recompile the model for these modifications to take effect
-        # we use SGD with a low learning rate
-        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
+            # we need to recompile the model for these modifications to take effect
+            # we use SGD with a low learning rate
+            self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
 
-        print('Final-training...')
-        # we train our model again (this time fine-tuning the top 2 inception blocks
-        # alongside the top Dense layers
-        self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
-                                                class_weight=train.get_weights(), **params_fit)
+            print('Final-training...')
+            # we train our model again (this time fine-tuning the top 2 inception blocks
+            # alongside the top Dense layers
+            self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
+                                                    class_weight=train.get_weights(), **params_fit)
+        else:
+            trainable_layer = params.get('trainable_layer', 0)
+            for layer in self.model.layers[trainable_layer:]:
+                layer.trainable = True
 
+            # we need to recompile the model for these modifications to take effect
+            # we use SGD with a low learning rate
+            self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy',
+                               metrics=['accuracy'])
+
+            # we train our model again (this time fine-tuning the top 2 inception blocks
+            # alongside the top Dense layers
+            self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
+                                                    class_weight=train.get_weights(), **params_fit)
         return self.history
 
     def transform(self, X, **params):
