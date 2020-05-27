@@ -50,18 +50,15 @@ class Applications:
         return KerasBatchClassifier(Applications.get_application, **extractor_params)
 
     @staticmethod
-    def get_fine_tuning(output_classes, trained_layer, extractor_layer, architecture='InceptionV3', additional={}):
+    def get_fine_tuning(output_classes, trained_layer, extractor_layer, activation='relu', architecture='InceptionV3', pooling='avg', additional={}):
 
         def fine_tune_model():
             # We get the deep extractor part as include_top is false
-            base_model = Applications.get_application(architecture, pooling='avg')
+            base_model = Applications.get_application(architecture, pooling=pooling)
 
             # let's add a fully-connected layer
             x = base_model.output
-            predictions = Dense(output_classes, activation='linear', name='prediction')(x)
-            # x = Dense(1024, activation='relu', name='prediction_1')(x)
-            # # and a logistic layer -- let's say we have 200 classes
-            # predictions = Dense(output_classes, activation='softmax', name='prediction_2')(x)
+            predictions = Dense(output_classes, activation=activation, name='prediction')(x)
             return Model(inputs=base_model.inputs, outputs=predictions)
 
         extractor_params = {'extractor_layer': extractor_layer,
