@@ -50,7 +50,7 @@ class Applications:
         return KerasBatchClassifier(Applications.get_application, **extractor_params)
 
     @staticmethod
-    def get_fine_tuning(output_classes, trained_layer, extractor_layer, architecture='InceptionV3', batch_size=32, additional={}):
+    def get_fine_tuning(output_classes, trained_layer, extractor_layer, architecture='InceptionV3', additional={}):
 
         def fine_tune_model():
             # We get the deep extractor part as include_top is false
