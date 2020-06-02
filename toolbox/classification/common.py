@@ -1,6 +1,9 @@
 import pickle
+import tempfile
 import warnings
 from copy import deepcopy
+from pathlib import Path
+
 import numpy as np
 from pandas.errors import PerformanceWarning
 from sklearn.model_selection import GridSearchCV, GroupKFold, StratifiedKFold, RandomizedSearchCV
@@ -159,6 +162,11 @@ class Tools:
         else:
             sub = dataframe[mask]
 
+        # if isinstance(model, KerasBatchClassifier):
+        #     pickle.dump(model, Path.home()/'temp.pickle')
+        save_file = tempfile.NamedTemporaryFile()
+        pickle.dump(model, save_file)
+
         # Browse folds
         folds = sub['Fold']
         unique_folds = np.unique(folds)
@@ -185,25 +193,31 @@ class Tools:
                 warnings.warn(f'Invalid fold, missing labels for fold {fold}')
                 continue
 
+            # if isinstance(model, KerasBatchClassifier):
+            #     local_model = pickle.load(Path.home()/'temp.pickle')
+            # else:
+            #     local_model = deepcopy(model)
+            model = pickle.load(Path.home()/'temp.pickle')
+
             # Clone model
-            fitted_model = Tools.fit(sub[train_mask], tags, deepcopy(model),
+            model = Tools.fit(sub[train_mask], tags, save_file,
                                      grid=grid, distribution=distribution, unbalanced=unbalanced, cpu=cpu)
 
             # Save if needed
             if path is not None:
                 file = path / f'{out}_{fold}.hdf5'
-                if isinstance(fitted_model, KerasBatchClassifier):
-                    fitted_model.save(str(file))
+                if isinstance(model, KerasBatchClassifier):
+                    model.save(str(file))
                 else:
-                    pickle.dumps(fitted_model, str(file))
+                    pickle.dumps(model, str(file))
 
             # Predict
             if hasattr(model, 'predict'):
-                Tools.predict(sub, {'datum': tags['datum']}, fitted_model, fold_preds)
+                Tools.predict(sub, {'datum': tags['datum']}, model, fold_preds)
             if hasattr(model, 'predict_proba'):
-                Tools.predict_proba(sub, {'datum': tags['datum']}, fitted_model, fold_probas)
-            Tools.number_of_features(sub, fitted_model, fold_features)
-            Tools.__best_params(sub, fitted_model, fold_params)
+                Tools.predict_proba(sub, {'datum': tags['datum']}, model, fold_probas)
+            Tools.number_of_features(sub, model, fold_features)
+            Tools.__best_params(sub, model, fold_params)
 
         if mask is not None:
             dataframe[mask] = sub

@@ -1,6 +1,10 @@
+import copy
 import inspect
+import io
 import sys
 import types
+
+import h5py
 import numpy as np
 from copy import deepcopy
 from joblib import delayed, Parallel
@@ -15,6 +19,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.multiclass import _fit_binary
 from sklearn.utils.metaestimators import _safe_split
 from sklearn.utils.multiclass import unique_labels, _ovr_decision_function
+import tensorflow as tf
 from toolbox.models.generators import ResourcesGenerator
 
 
@@ -481,6 +486,35 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
 
 class KerasBatchClassifier(KerasClassifier):
+    """
+    TensorFlow Keras API neural network classifier.
+
+    Workaround the tf.keras.wrappers.scikit_learn.KerasClassifier serialization
+    issue using BytesIO and HDF5 in order to enable pickle dumps.
+
+    Adapted from: https://github.com/keras-team/keras/issues/4274#issuecomment-519226139
+    """
+
+    def __getstate__(self):
+        state = self.__dict__
+        if "model" in state:
+            model = state["model"]
+            model_hdf5_bio = io.BytesIO()
+            with h5py.File(model_hdf5_bio, mode="w") as file:
+                model.save(file)
+            state["model"] = model_hdf5_bio
+            state_copy = copy.deepcopy(state)
+            state["model"] = model
+            return state_copy
+        else:
+            return state
+
+    def __setstate__(self, state):
+        if "model" in state:
+            model_hdf5_bio = state["model"]
+            with h5py.File(model_hdf5_bio, mode="r") as file:
+                state["model"] = tf.keras.models.load_model(file)
+        self.__dict__ = state
 
     def check_params(self, params):
         """Checks for user typos in `params`.
@@ -589,7 +623,7 @@ class KerasBatchClassifier(KerasClassifier):
         # Get arguments for fit
         params_eval = self.filter_params(all_params, Sequential.evaluate_generator)
         outputs = self.model.evaluate_generator(generator=valid, **params_eval)
-        outputs = to_list(outputs)
+        outputs = Utils.to_list(outputs)
         for name, output in zip(self.model.metrics_names, outputs):
             if name == 'acc':
                 return output
