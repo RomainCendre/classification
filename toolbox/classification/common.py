@@ -162,10 +162,7 @@ class Tools:
         else:
             sub = dataframe[mask]
 
-        # if isinstance(model, KerasBatchClassifier):
-        #     pickle.dump(model, Path.home()/'temp.pickle')
-        save_file = tempfile.NamedTemporaryFile()
-        pickle.dump(model, save_file)
+        dump = pickle.dumps(model)
 
         # Browse folds
         folds = sub['Fold']
@@ -193,14 +190,10 @@ class Tools:
                 warnings.warn(f'Invalid fold, missing labels for fold {fold}')
                 continue
 
-            # if isinstance(model, KerasBatchClassifier):
-            #     local_model = pickle.load(Path.home()/'temp.pickle')
-            # else:
-            #     local_model = deepcopy(model)
-            model = pickle.load(Path.home()/'temp.pickle')
+            model = pickle.loads(dump)
 
             # Clone model
-            model = Tools.fit(sub[train_mask], tags, save_file,
+            model = Tools.fit(sub[train_mask], tags, model,
                                      grid=grid, distribution=distribution, unbalanced=unbalanced, cpu=cpu)
 
             # Save if needed
