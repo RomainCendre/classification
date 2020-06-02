@@ -1,9 +1,6 @@
-import pickle
-import tempfile
+import dill as pickle
 import warnings
 from copy import deepcopy
-from pathlib import Path
-
 import numpy as np
 from pandas.errors import PerformanceWarning
 from sklearn.model_selection import GridSearchCV, GroupKFold, StratifiedKFold, RandomizedSearchCV
