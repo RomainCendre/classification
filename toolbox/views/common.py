@@ -229,8 +229,6 @@ class Views:
         pyplot.axis('off')
         if legend:
             pyplot.legend(loc='lower right')
-        else:
-            axis.get_legend().remove()
 
         if name:
             title = name
