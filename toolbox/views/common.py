@@ -190,7 +190,7 @@ class Views:
         return pandas.DataFrame(data)
 
     @staticmethod
-    def projection(inputs, tags, settings, mode='PCA', name=None):
+    def projection(inputs, tags, settings, mode='PCA', name=None, legend=False):
         # Check mandatory fields
         mandatory = ['datum', 'label']
         if not isinstance(tags, dict) or not all(elem in tags.keys() for elem in mandatory):
@@ -227,7 +227,11 @@ class Views:
                                       edgecolor=color, linewidth=3)
 
         pyplot.axis('off')
-        pyplot.legend(loc='lower right')
+        if legend:
+            pyplot.legend(loc='lower right')
+        else:
+            axis.get_legend().remove()
+
         if name:
             title = name
         else:
