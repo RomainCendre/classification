@@ -93,7 +93,7 @@ class Folds:
             raise Exception(f'Not a dict or missing tag: {mandatory}.')
         data = dataframe[[tags['group'], 'Fold']]
         data = data.drop_duplicates()
-        data = data.reset_index()
+        data = data.reset_index(drop=True)
         return data
 
 
