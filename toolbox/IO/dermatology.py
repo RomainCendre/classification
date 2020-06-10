@@ -57,7 +57,7 @@ class Reader:
         patches = Reader.read_data_file(subdir, 'patches', modalities=parameters.get('modality', None))
 
         # Patch filter
-        if images is not None:
+        if images is not None and len(images) > 0:
             images['Reference'] = images.apply(lambda row: f'{subdir.stem}_{row.ID_Image}_F', axis=1)
             images['Source'] = images['Reference']
 
@@ -65,7 +65,7 @@ class Reader:
         if param_type == 'Full':
             return images
 
-        if images is not None and patches is not None:
+        if images is not None and patches is not None and len(patches) > 0:
             patches['Reference'] = patches.apply(lambda row: f'{subdir.stem}_{row.ID_Patch}_P', axis=1)
             patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0],
                                               axis=1)
