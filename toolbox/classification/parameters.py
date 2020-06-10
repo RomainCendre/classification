@@ -48,6 +48,8 @@ class Dermatology:
     def images(modality=None, data_type=None, use_unknown=False, location=Path().home()/'Data/Skin/'):
         if location.is_dir():
             location = sorted(location.glob('*.csv'))
+        else:
+            location = [location]
         return Dermatology.__images(location, modality, data_type, use_unknown)
 
     @staticmethod

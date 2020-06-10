@@ -86,6 +86,16 @@ class Folds:
             folds[fold[1]] = index
         dataframe['Fold'] = folds.tolist()  # Add
 
+    @staticmethod
+    def export_group_folds(dataframe, tags):
+        mandatory = ['group']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+        data = dataframe[[tags['group'], 'Fold']]
+        data = data.drop_duplicates()
+        data = data.reset_index()
+        return data
+
 
 class IO:
 
