@@ -45,11 +45,10 @@ class ORL:
 class Dermatology:
 
     @staticmethod
-    def images(modality=None, data_type=None, use_unknown=False):
-        home_path = Path().home()
-        location = home_path / 'Data/Skin/'
-        input_folders = [location / 'Elisa.csv', location / 'JeanLuc.csv']
-        return Dermatology.__images(input_folders, modality, data_type, use_unknown)
+    def images(modality=None, data_type=None, use_unknown=False, location=Path().home()/'Data/Skin/'):
+        if location.is_dir():
+            location = sorted(location.glob('*.csv'))
+        return Dermatology.__images(location, modality, data_type, use_unknown)
 
     @staticmethod
     def multiple_resolution(coefficients, modality=None, use_unknown=False):
