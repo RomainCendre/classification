@@ -96,6 +96,16 @@ class Folds:
         data = data.reset_index(drop=True)
         return data
 
+    @staticmethod
+    def restore_group_folds(dataframe, folds, tags):
+        mandatory = ['group']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Not a dict or missing tag: {mandatory}.')
+        dataframe['Fold'] = None
+        dataframe.set_index(tags['group'], inplace=True)
+        dataframe.update(folds.set_index(tags['group']))
+        dataframe.reset_index(inplace=True)
+
 
 class IO:
 
