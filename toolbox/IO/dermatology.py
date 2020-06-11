@@ -79,7 +79,7 @@ class Reader:
             return patches
 
         if images is not None and crops is not None and len(crops) > 0:
-            crops['Reference'] = crops.apply(lambda row: f'{subdir.stem}_{row.ID_Crop}_P', axis=1)
+            crops['Reference'] = crops.apply(lambda row: f'{subdir.stem}_{row.ID_Crop}_C', axis=1)
             crops['Source'] = crops.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0],
                                               axis=1)
 
