@@ -34,6 +34,9 @@ class Reader:
                 patient_lesions = patient_lesions.reset_index()
                 data.append(patient_lesions)
 
+        if not data:
+            return None
+
         # Merge all data
         dataframe = pandas.concat(data, sort=False, ignore_index=True).drop(columns='Path')
 
@@ -55,6 +58,7 @@ class Reader:
         images = Reader.read_data_file(subdir, 'images', modalities=parameters.get('modality', None))
         images = images.drop(columns='Depth(um)', errors='ignore')
         patches = Reader.read_data_file(subdir, 'patches', modalities=parameters.get('modality', None))
+        crops = Reader.read_data_file(subdir, 'crops', modalities=parameters.get('modality', None))
 
         # Patch filter
         if images is not None and len(images) > 0:
@@ -70,11 +74,20 @@ class Reader:
             patches['Source'] = patches.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0],
                                               axis=1)
 
-        # Only return patches or both
+        # Only return patches
         if param_type == 'Patch':
             return patches
-        else:
-            return pandas.concat([images, patches], sort=False, ignore_index=True)
+
+        if images is not None and crops is not None and len(crops) > 0:
+            crops['Reference'] = crops.apply(lambda row: f'{subdir.stem}_{row.ID_Crop}_P', axis=1)
+            crops['Source'] = crops.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0],
+                                              axis=1)
+
+        # Only return crops
+        if param_type == 'Crop':
+            return crops
+
+        return pandas.concat([images, patches], sort=False, ignore_index=True)
 
     @staticmethod
     def read_data_file(subdir, ftype='images', modalities=None):
@@ -102,10 +115,14 @@ class Reader:
             data['Type'] = 'Full'
             data['Datum'] = data.apply(lambda row: str(subdir / ftype / row['Modality'] / row['Path']), axis=1)
             data['ID_Image'] = data.apply(lambda row: f'{row.name}{row.Modality[0]}', axis=1)
-        else:
+        elif ftype == 'patches':
             data['Type'] = 'Patch'
             data['Datum'] = data.apply(lambda row: str(subdir / ftype / row['Modality'] / row['Path']), axis=1)
             data['ID_Patch'] = data.apply(lambda row: f'{row.name}{row.Modality[0]}', axis=1)
+        else:
+            data['Type'] = 'Crop'
+            data['Datum'] = data.apply(lambda row: str(subdir / ftype / row['Modality'] / row['Path']), axis=1)
+            data['ID_Crop'] = data.apply(lambda row: f'{row.name}{row.Modality[0]}', axis=1)
 
         if modalities is not None:
             data = data[mask]
