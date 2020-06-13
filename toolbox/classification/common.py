@@ -126,7 +126,7 @@ class Tools:
     PROBABILITY = 'Probability'
 
     @staticmethod
-    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None, cpu=-1, predict_mode='on_train', path=None):
+    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, cpu=-1, predict_mode='on_train', path=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -211,7 +211,7 @@ class Tools:
 
             # Clone model
             model = Tools.fit(sub[train_mask], tags, model,
-                                     grid=grid, distribution=distribution, unbalanced=unbalanced, cpu=cpu)
+                                     grid=grid, distribution=distribution, cpu=cpu)
 
             # Save if needed
             if path is not None:
@@ -234,7 +234,7 @@ class Tools:
         print(f'Evaluation achieved!', end='\r')
 
     @staticmethod
-    def fit(dataframe, tags, model, grid=None, distribution=None, unbalanced=None, cpu=-1):
+    def fit(dataframe, tags, model, grid=None, distribution=None, cpu=-1):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -255,13 +255,6 @@ class Tools:
             data = dataframe[tags['datum']].to_list()
         labels = np.array(dataframe[tags['label_encode']].to_list())
 
-        # Rules for unbalancing solutions
-        if unbalanced is not None:
-            if callable(getattr(unbalanced, 'fit_resample', None)):
-                data, labels = unbalanced.fit_resample(data, labels)
-            else:
-                Exception(f'Expected valid unbalanced property {unbalanced}.')
-
         if grid is not None:
             grid_search = GridSearchCV(model, param_grid=grid, cv=2, iid=False, n_jobs=cpu)
             grid_search.fit(data, y=labels)
@@ -280,7 +273,7 @@ class Tools:
             return model
 
     @staticmethod
-    def fit_transform(dataframe, tags, model, out, mask=None, grid=None, distribution=None, unbalanced=None, cpu=-1):
+    def fit_transform(dataframe, tags, model, out, mask=None, grid=None, distribution=None, cpu=-1):
         # Check mandatory fields
         mandatory = ['datum', 'label_encode']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -293,7 +286,7 @@ class Tools:
             sub = dataframe[mask]
 
         # Clone model
-        fitted_model = Tools.fit(sub, tags, deepcopy(model), grid=grid, distribution=distribution, unbalanced=unbalanced, cpu=cpu)
+        fitted_model = Tools.fit(sub, tags, deepcopy(model), grid=grid, distribution=distribution, cpu=cpu)
 
         # Transform
         sub[out] = Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out)[out]
@@ -302,7 +295,7 @@ class Tools:
             dataframe[mask] = sub
 
     @staticmethod
-    def fit_predict(dataframe, tags, model, out, mask=None, predict_mode='test', grid=None, distribution=None, unbalanced=None, cpu=-1):
+    def fit_predict(dataframe, tags, model, out, mask=None, predict_mode='test', grid=None, distribution=None, cpu=-1):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -357,8 +350,7 @@ class Tools:
                 continue
 
             # Clone model
-            fitted_model = Tools.fit(sub[train_mask], tags, model=deepcopy(model), grid=grid, distribution=distribution,
-                                     unbalanced=unbalanced, cpu=cpu)
+            fitted_model = Tools.fit(sub[train_mask], tags, model=deepcopy(model), grid=grid, distribution=distribution, cpu=cpu)
 
             # Fill new data
             if hasattr(model, 'transform'):
