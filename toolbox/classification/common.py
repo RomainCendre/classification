@@ -218,8 +218,8 @@ class Tools:
 
             # Make evaluation of calibration if needed
             if calibrate:
-                calibrate = CalibratedClassifierCV(model, cv=Tools.VAL_RATIO, method='calibrate')
-                model = Tools.fit(sub[train_mask], tags, calibrate, cpu=cpu)
+                model_calibration = CalibratedClassifierCV(model, cv=Tools.VAL_RATIO, method='calibrate')
+                model = Tools.fit(sub[train_mask], tags, model_calibration, cpu=cpu)
 
             # Predict
             if hasattr(model, 'predict'):
