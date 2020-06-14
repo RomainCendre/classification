@@ -3,6 +3,7 @@ import warnings
 from copy import deepcopy
 import numpy as np
 from pandas.errors import PerformanceWarning
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.model_selection import GridSearchCV, GroupKFold, StratifiedKFold, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.semi_supervised import LabelSpreading, LabelPropagation
@@ -124,9 +125,10 @@ class Tools:
     PARAMETERS = 'Parameters'
     PREDICTION = 'Prediction'
     PROBABILITY = 'Probability'
+    VAL_RATIO = 2
 
     @staticmethod
-    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, cpu=-1, predict_mode='on_train', path=None):
+    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, cpu=-1, predict_mode='on_train', calibrate=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -194,11 +196,9 @@ class Tools:
             # Create mask
             if predict_mode is 'on_train':
                 train_mask = folds != fold
-                predict_mask = folds == fold
             else:
                 validation = (list(unique_folds).index(fold) - 1) % len(unique_folds)
                 train_mask = folds == unique_folds[validation]
-                predict_mask = folds == fold
 
             print(f'Fold {fold} performed...', end='\r')
 
@@ -210,24 +210,22 @@ class Tools:
             model = pickle.loads(dump)
 
             # Clone model
-            model = Tools.fit(sub[train_mask], tags, model,
-                                     grid=grid, distribution=distribution, cpu=cpu)
+            model = Tools.fit(sub[train_mask], tags, model, grid=grid, distribution=distribution, cpu=cpu)
 
-            # Save if needed
-            if path is not None:
-                file = path / f'{out}_{fold}.hdf5'
-                if isinstance(model, KerasBatchClassifier):
-                    model.save(str(file))
-                else:
-                    pickle.dumps(model, str(file))
+            # Remember features and params
+            Tools.number_of_features(sub, model, fold_features)
+            Tools.__best_params(sub, model, fold_params)
+
+            # Make evaluation of calibration if needed
+            if calibrate:
+                calibrate = CalibratedClassifierCV(model, cv=Tools.VAL_RATIO, method='calibrate')
+                model = Tools.fit(sub[train_mask], tags, calibrate, cpu=cpu)
 
             # Predict
             if hasattr(model, 'predict'):
                 Tools.predict(sub, {'datum': tags['datum']}, model, fold_preds)
             if hasattr(model, 'predict_proba'):
                 Tools.predict_proba(sub, {'datum': tags['datum']}, model, fold_probas)
-            Tools.number_of_features(sub, model, fold_features)
-            Tools.__best_params(sub, model, fold_params)
 
         if mask is not None:
             dataframe[mask] = sub
@@ -262,7 +260,7 @@ class Tools:
             model.best_params = grid_search.best_params_
             return model
         elif distribution is not None:
-            random_search = RandomizedSearchCV(model, param_distributions=distribution, cv=2, iid=False, n_jobs=cpu)
+            random_search = RandomizedSearchCV(model, param_distributions=distribution, cv=Tools.VAL_RATIO, iid=False, n_jobs=cpu)
             random_search.fit(data, y=labels)
             model = random_search.best_estimator_
             model.best_params = random_search.best_params_

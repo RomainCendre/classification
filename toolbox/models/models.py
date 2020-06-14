@@ -484,6 +484,19 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
         return x_probas
 
 
+# class MultimodalClassifier(BaseEstimator, ClassifierMixin):
+#
+#     def __init__(self, threshold='max'):
+#         self.threshold = threshold
+#
+#     def fit(self, x, y=None):
+#
+#         return self
+#
+#     def predict(self, x, y=None, copy=True):
+        
+
+
 class KerasClassifier(tf.keras.wrappers.scikit_learn.KerasClassifier):
     """
     TensorFlow Keras API neural network classifier.

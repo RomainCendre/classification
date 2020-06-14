@@ -79,15 +79,16 @@ class Reader:
             return patches
 
         if images is not None and crops is not None and len(crops) > 0:
+            print(subdir)
             crops['Reference'] = crops.apply(lambda row: f'{subdir.stem}_{row.ID_Crop}_C', axis=1)
-            crops['Source'] = crops.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0],
-                                              axis=1)
+            crops['Source'] = crops.apply(lambda row: images[images.Path == row['Source']]['Reference'].iloc[0], axis=1)
 
         # Only return crops
         if param_type == 'Crop':
             return crops
-
-        return pandas.concat([images, patches], sort=False, ignore_index=True)
+        data = [images, patches, crops]
+        data = [datum for datum in data if isinstance(datum,pandas.DataFrame)]
+        return pandas.concat(data, sort=False, ignore_index=True)
 
     @staticmethod
     def read_data_file(subdir, ftype='images', modalities=None):
