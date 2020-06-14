@@ -218,7 +218,7 @@ class Tools:
 
             # Make evaluation of calibration if needed
             if calibrate:
-                model_calibration = CalibratedClassifierCV(model, cv=Tools.VAL_RATIO, method='calibrate')
+                model_calibration = CalibratedClassifierCV(model, cv=Tools.VAL_RATIO, method=calibrate)
                 model = Tools.fit(sub[train_mask], tags, model_calibration, cpu=cpu)
 
             # Predict
