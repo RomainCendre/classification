@@ -13,6 +13,8 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.metrics import auc, roc_curve, classification_report
 from toolbox.classification.common import Tools
+from sklearn.calibration import calibration_curve
+from sklearn.metrics import brier_score_loss
 
 
 class Views:
@@ -281,6 +283,40 @@ class Views:
         axe.legend(loc='lower right')  # If better than random, no curve is display on bottom right part
         if name:
             figure.suptitle(name)
+        return figure
+
+    @staticmethod
+    def reliability_curve(inputs, label_tag, names):
+        figure = pyplot.figure(figsize=(10, 10))
+        ax1 = pyplot.subplot2grid((3, 1), (0, 0), rowspan=2)
+        ax2 = pyplot.subplot2grid((3, 1), (2, 0))
+        ax1.plot([0, 1], [0, 1], "k:", label="Perfectly calibrated")
+
+        if not isinstance(names, list):
+            names = [names]
+
+        for name in names:
+            test = ViewsTools.data_as(inputs, name)
+            y_pred = np.array(test[f'{name}_Prediction'].to_list())
+            y_prob = np.array(test[f'{name}_Probability'].to_list())
+            y_pos_prob = y_prob[:, int(y_pred.max())]
+            label = np.array(test[label_tag].to_list())
+
+            brier_score = brier_score_loss(label, y_pos_prob, pos_label=y_pred.max())
+            fraction_of_positives, mean_predicted_value = calibration_curve(label, y_pos_prob, n_bins=10)
+            ax1.plot(mean_predicted_value, fraction_of_positives, "s-", label="%s (Brier %1.3f)" % (name, brier_score))
+            ax2.hist(y_pos_prob, range=(0, 1), bins=10, label=name, histtype="step", lw=2)
+
+        ax1.set_ylabel("Fraction of positives")
+        ax1.set_ylim([-0.05, 1.05])
+        ax1.legend(loc="lower right")
+        ax1.set_title('Calibration plots  (reliability curve)')
+
+        ax2.set_xlabel("Mean predicted value")
+        ax2.set_ylabel("Count")
+        ax2.legend(loc="upper center", ncol=2)
+
+        pyplot.tight_layout()
         return figure
 
     @staticmethod
