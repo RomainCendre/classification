@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/dermatology.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/dermatology.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toolbox/classification/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/classification/common.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/models/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -404,35 +402,7 @@
       <workItem from="1591263469615" duration="3954000" />
       <workItem from="1591686700581" duration="5208000" />
       <workItem from="1591797603699" duration="29042000" />
-      <workItem from="1592125446883" duration="5132000" />
-    </task>
-    <task id="LOCAL-00469" summary="Update data access.">
-      <created>1587496409276</created>
-      <option name="number" value="00469" />
-      <option name="presentableId" value="LOCAL-00469" />
-      <option name="project" value="LOCAL" />
-      <updated>1587496409277</updated>
-    </task>
-    <task id="LOCAL-00470" summary="Code generative examples">
-      <created>1587749223323</created>
-      <option name="number" value="00470" />
-      <option name="presentableId" value="LOCAL-00470" />
-      <option name="project" value="LOCAL" />
-      <updated>1587749223324</updated>
-    </task>
-    <task id="LOCAL-00471" summary="Update functions">
-      <created>1587759828256</created>
-      <option name="number" value="00471" />
-      <option name="presentableId" value="LOCAL-00471" />
-      <option name="project" value="LOCAL" />
-      <updated>1587759828256</updated>
-    </task>
-    <task id="LOCAL-00472" summary="Update spatials transforms.">
-      <created>1588868108245</created>
-      <option name="number" value="00472" />
-      <option name="presentableId" value="LOCAL-00472" />
-      <option name="project" value="LOCAL" />
-      <updated>1588868108246</updated>
+      <workItem from="1592125446883" duration="11133000" />
     </task>
     <task id="LOCAL-00473" summary="Update first order">
       <created>1588926899061</created>
@@ -749,7 +719,35 @@
       <option name="project" value="LOCAL" />
       <updated>1592061177037</updated>
     </task>
-    <option name="localTasksCounter" value="518" />
+    <task id="LOCAL-00518" summary="Add calibration to evaluation">
+      <created>1592143849550</created>
+      <option name="number" value="00518" />
+      <option name="presentableId" value="LOCAL-00518" />
+      <option name="project" value="LOCAL" />
+      <updated>1592143849551</updated>
+    </task>
+    <task id="LOCAL-00519" summary="Overwritting variable">
+      <created>1592144783303</created>
+      <option name="number" value="00519" />
+      <option name="presentableId" value="LOCAL-00519" />
+      <option name="project" value="LOCAL" />
+      <updated>1592144783304</updated>
+    </task>
+    <task id="LOCAL-00520" summary="Fix calibration bug">
+      <created>1592144875368</created>
+      <option name="number" value="00520" />
+      <option name="presentableId" value="LOCAL-00520" />
+      <option name="project" value="LOCAL" />
+      <updated>1592144875368</updated>
+    </task>
+    <task id="LOCAL-00521" summary="Addinf method for reliability curves">
+      <created>1592169120511</created>
+      <option name="number" value="00521" />
+      <option name="presentableId" value="LOCAL-00521" />
+      <option name="project" value="LOCAL" />
+      <updated>1592169120511</updated>
+    </task>
+    <option name="localTasksCounter" value="522" />
     <servers />
   </component>
   <component name="TodoView">
@@ -792,10 +790,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update multi resolution." />
-    <MESSAGE value="Add LDA ratio function." />
-    <MESSAGE value="Adding jupyter experiments notebooks." />
-    <MESSAGE value="Moving directories" />
     <MESSAGE value="Adding experiments" />
     <MESSAGE value="To avoid any confusion with variables." />
     <MESSAGE value="New fine tuning way" />
@@ -817,7 +811,11 @@
     <MESSAGE value="Adding crop function" />
     <MESSAGE value="Fix ID crop" />
     <MESSAGE value="Remove data augmentation (cf imbalanced pipeline)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Remove data augmentation (cf imbalanced pipeline)" />
+    <MESSAGE value="Add calibration to evaluation" />
+    <MESSAGE value="Overwritting variable" />
+    <MESSAGE value="Fix calibration bug" />
+    <MESSAGE value="Addinf method for reliability curves" />
+    <option name="LAST_COMMIT_MESSAGE" value="Addinf method for reliability curves" />
   </component>
   <component name="WindowStateProjectService">
     <state x="2591" y="324" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1591516612145">
@@ -828,11 +826,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2384" y="336" width="1195" height="605" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1591906444897" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1592061176203">
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1592296203890">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1591735531609" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592061176203" />
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592296203890" />
     <state width="1502" height="249" key="GridCell.Tab.0.bottom" timestamp="1592035465067">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -877,11 +875,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587718451493" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1592061178410">
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1592169121754">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1591735534579" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592061178410" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592169121754" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1589315018624">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
