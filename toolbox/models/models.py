@@ -484,6 +484,27 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
         return x_probas
 
 
+class MajorityVotingClassifier(ClassifierMixin, BaseEstimator):
+
+    def __init__(self, voting='hard', weights=None, flatten_transform=True, verbose=False):
+        self.voting = voting
+        self.weights = weights
+        self.flatten_transform = flatten_transform
+        self.verbose = verbose
+
+    def fit(self, X, y, sample_weight=None):
+        return self
+
+    def predict(self, X):
+        if self.voting == 'soft':
+            maj = np.argmax(X, axis=1)
+        else:
+            X = X.astype(int)
+            maj = np.apply_along_axis(lambda x: np.argmax(np.bincount(x)), axis=1, arr=X)
+
+        return maj
+
+
 # class MultimodalClassifier(BaseEstimator, ClassifierMixin):
 #
 #     def __init__(self, threshold='max'):
