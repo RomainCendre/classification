@@ -148,28 +148,6 @@ class Tools:
         out_features = f'{out}_{Tools.FEATURES}'
         out_params = f'{out}_{Tools.PARAMETERS}'
 
-        # Create missing fields
-        if mask is None:
-            sub = dataframe
-        else:
-            sub = dataframe[mask]
-
-        folds = sub['Fold']
-        for fold in np.unique(folds):
-            # Out fields
-            fold_preds = f'{out_predict}_{fold}'
-            fold_probas = f'{out_proba}_{fold}'
-            fold_features = f'{out_features}_{fold}'
-            fold_params = f'{out_params}_{fold}'
-            if fold_preds not in dataframe:
-                dataframe[fold_preds] = np.nan
-            if fold_probas not in dataframe:
-                dataframe[fold_probas] = np.nan
-            if fold_features not in dataframe:
-                dataframe[fold_features] = np.nan
-            if fold_params not in dataframe:
-                dataframe[fold_params] = np.nan
-
         # Mask dataframe
         if mask is None:
             sub = dataframe
@@ -183,22 +161,16 @@ class Tools:
         if folds is None:
             folds = Tools.__default_folds(list(np.unique(reference_folds)))
 
-        for fold in folds:
+        for index, (fit, predict) in enumerate(folds):
             # Create mask
-            fit_mask = reference_folds.isin(fold[0])
-            predict_mask = reference_folds.isin(fold[1])
+            fit_mask = reference_folds.isin(fit)
+            predict_mask = reference_folds.isin(predict)
 
-            # Out fields
-            fold_preds = f'{out_predict}_{fold}'
-            fold_probas = f'{out_proba}_{fold}'
-            fold_features = f'{out_features}_{fold}'
-            fold_params = f'{out_params}_{fold}'
-
-            print(f'Fold {fold} performed...', end='\r')
+            print(f'Fold {index} performed...', end='\r')
 
             # Check that current fold respect labels
             if not Tools.__check_labels(sub[fit_mask], {'label_encode': tags['label_encode']}):
-                warnings.warn(f'Invalid fold, missing labels for fold {fold}')
+                warnings.warn(f'Invalid fold, missing labels for fold {index}')
                 continue
 
             model = pickle.loads(dump)
@@ -207,8 +179,8 @@ class Tools:
             model = Tools.fit(sub[fit_mask], tags, model, grid=grid, distribution=distribution, cpu=cpu)
 
             # Remember features and params
-            Tools.number_of_features(sub, model, fold_features)
-            Tools.__best_params(sub, model, fold_params)
+            Tools.number_of_features(sub, model, out_features, mask=predict_mask)
+            Tools.__best_params(sub, model, out_params, mask=predict_mask)
 
             # Make evaluation of calibration if needed
             if calibrate:
@@ -217,9 +189,9 @@ class Tools:
 
             # Predict
             if hasattr(model, 'predict'):
-                Tools.predict(sub, {'datum': tags['datum']}, model, fold_preds)
+                Tools.predict(sub, {'datum': tags['datum']}, model, out_predict, mask=predict_mask)
             if hasattr(model, 'predict_proba'):
-                Tools.predict_proba(sub, {'datum': tags['datum']}, model, fold_probas)
+                Tools.predict_proba(sub, {'datum': tags['datum']}, model, out_proba, mask=predict_mask)
 
         if mask is not None:
             dataframe[mask] = sub
@@ -338,14 +310,14 @@ class Tools:
         if folds is None:
             folds = Tools.__default_folds(list(np.unique(reference_folds)))
 
-        for fold in folds:
+        for index, (fit, predict) in folds:
             # Create mask
-            fit_mask = reference_folds.isin(fold[0])
-            predict_mask = reference_folds.isin(fold[1])
+            fit_mask = reference_folds.isin(fit)
+            predict_mask = reference_folds.isin(predict)
 
             # Check that current fold respect labels
             if not Tools.__check_labels(sub[fit_mask], {'label_encode': tags['label_encode']}):
-                warnings.warn(f'Invalid fold, missing labels for fold {fold}')
+                warnings.warn(f'Invalid fold, missing labels for fold {index}')
                 continue
 
             # Clone model
@@ -517,5 +489,5 @@ class Tools:
         for fold in uniques:
             train = uniques.copy()
             train.remove(fold)
-            folds.append((train, uniques.copy()))
+            folds.append((train, [fold]))
         return folds
