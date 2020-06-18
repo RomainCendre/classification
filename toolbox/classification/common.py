@@ -310,7 +310,7 @@ class Tools:
         if folds is None:
             folds = Tools.__default_folds(list(np.unique(reference_folds)))
 
-        for index, (fit, predict) in folds:
+        for index, (fit, predict) in enumerate(folds):
             # Create mask
             fit_mask = reference_folds.isin(fit)
             predict_mask = reference_folds.isin(predict)
