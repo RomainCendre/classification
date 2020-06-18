@@ -147,6 +147,14 @@ class Tools:
         out_proba = f'{out}_{Tools.PROBABILITY}'
         out_features = f'{out}_{Tools.FEATURES}'
         out_params = f'{out}_{Tools.PARAMETERS}'
+        if out_predict not in dataframe:
+            dataframe[out_predict] = np.nan
+        if out_proba not in dataframe:
+            dataframe[out_proba] = np.nan
+        if out_features not in dataframe:
+            dataframe[out_features] = np.nan
+        if out_params not in dataframe:
+            dataframe[out_params] = np.nan
 
         # Mask dataframe
         if mask is None:
