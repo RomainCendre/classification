@@ -497,7 +497,8 @@ class MajorityVotingClassifier(ClassifierMixin, BaseEstimator):
 
     def predict(self, X):
         if self.voting == 'soft':
-            maj = np.argmax(X, axis=1)
+            avg = np.average(X, axis=1)
+            maj = np.argmax(avg, axis=1)
         else:
             X = X.astype(int)
             maj = np.apply_along_axis(lambda x: np.argmax(np.bincount(x)), axis=1, arr=X)
