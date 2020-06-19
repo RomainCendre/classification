@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/models/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -402,14 +401,7 @@
       <workItem from="1591263469615" duration="3954000" />
       <workItem from="1591686700581" duration="5208000" />
       <workItem from="1591797603699" duration="29042000" />
-      <workItem from="1592125446883" duration="43108000" />
-    </task>
-    <task id="LOCAL-00480" summary="Adding centroids to projections">
-      <created>1589722821204</created>
-      <option name="number" value="00480" />
-      <option name="presentableId" value="LOCAL-00480" />
-      <option name="project" value="LOCAL" />
-      <updated>1589722821204</updated>
+      <workItem from="1592125446883" duration="45933000" />
     </task>
     <task id="LOCAL-00481" summary="Adding centroids to projections">
       <created>1589723060428</created>
@@ -747,7 +739,14 @@
       <option name="project" value="LOCAL" />
       <updated>1592475613375</updated>
     </task>
-    <option name="localTasksCounter" value="529" />
+    <task id="LOCAL-00529" summary="Update fit_predict/evaluate">
+      <created>1592494841385</created>
+      <option name="number" value="00529" />
+      <option name="presentableId" value="LOCAL-00529" />
+      <option name="project" value="LOCAL" />
+      <updated>1592494841386</updated>
+    </task>
+    <option name="localTasksCounter" value="530" />
     <servers />
   </component>
   <component name="TodoView">
@@ -826,60 +825,60 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2056" y="52" width="1195" height="605" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592494802006" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1592475612570">
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1592494840542">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1591735531609" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592475612570" />
-    <state width="1494" height="215" key="GridCell.Tab.0.bottom" timestamp="1592492178228">
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592494840542" />
+    <state width="1494" height="215" key="GridCell.Tab.0.bottom" timestamp="1592495712751">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035465067" />
-    <state width="1494" height="215" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592492178228" />
-    <state width="1494" height="215" key="GridCell.Tab.0.center" timestamp="1592492178228">
+    <state width="1494" height="215" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592495712751" />
+    <state width="1494" height="215" key="GridCell.Tab.0.center" timestamp="1592495712751">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035465067" />
-    <state width="1494" height="215" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592492178228" />
-    <state width="1494" height="215" key="GridCell.Tab.0.left" timestamp="1592492178227">
+    <state width="1494" height="215" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592495712751" />
+    <state width="1494" height="215" key="GridCell.Tab.0.left" timestamp="1592495712751">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035465067" />
-    <state width="1494" height="215" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592492178227" />
-    <state width="1494" height="215" key="GridCell.Tab.0.right" timestamp="1592492178228">
+    <state width="1494" height="215" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592495712751" />
+    <state width="1494" height="215" key="GridCell.Tab.0.right" timestamp="1592495712751">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035465067" />
-    <state width="1494" height="215" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592492178228" />
-    <state width="1494" height="215" key="GridCell.Tab.1.bottom" timestamp="1592492188562">
+    <state width="1494" height="215" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592495712751" />
+    <state width="1494" height="215" key="GridCell.Tab.1.bottom" timestamp="1592495728190">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035492216" />
-    <state width="1494" height="215" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592492188562" />
-    <state width="1494" height="215" key="GridCell.Tab.1.center" timestamp="1592492188562">
+    <state width="1494" height="215" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592495728190" />
+    <state width="1494" height="215" key="GridCell.Tab.1.center" timestamp="1592495728190">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035492216" />
-    <state width="1494" height="215" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592492188562" />
-    <state width="1494" height="215" key="GridCell.Tab.1.left" timestamp="1592492188562">
+    <state width="1494" height="215" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592495728190" />
+    <state width="1494" height="215" key="GridCell.Tab.1.left" timestamp="1592495728190">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035492216" />
-    <state width="1494" height="215" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592492188562" />
-    <state width="1494" height="215" key="GridCell.Tab.1.right" timestamp="1592492188562">
+    <state width="1494" height="215" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592495728190" />
+    <state width="1494" height="215" key="GridCell.Tab.1.right" timestamp="1592495728190">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035492216" />
-    <state width="1494" height="215" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592492188562" />
+    <state width="1494" height="215" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592495728190" />
     <state x="2266" y="71" key="SettingsEditor" timestamp="1592402752225">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592402752225" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1592475614857">
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1592494843388">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1591735534579" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592475614857" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592494843388" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1589315018624">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -1007,14 +1006,9 @@
           <option name="timeStamp" value="556" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/toolbox/models/models.py</url>
-          <line>505</line>
-          <option name="timeStamp" value="564" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/manuscript/examples/Test.py</url>
-          <line>56</line>
-          <option name="timeStamp" value="580" />
+          <line>59</line>
+          <option name="timeStamp" value="582" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1032,7 +1026,7 @@
     <SUITE FILE_PATH="coverage/classification$frequency.coverage" NAME="frequency Coverage Results" MODIFIED="1589703164897" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$Testlda.coverage" NAME="Testlda Coverage Results" MODIFIED="1590168578960" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$at_most.coverage" NAME="at_most Coverage Results" MODIFIED="1590168466743" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/transforms" />
-    <SUITE FILE_PATH="coverage/classification$Test__1_.coverage" NAME="Test (1) Coverage Results" MODIFIED="1592492178036" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/manuscript/examples" />
+    <SUITE FILE_PATH="coverage/classification$Test__1_.coverage" NAME="Test (1) Coverage Results" MODIFIED="1592495712586" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/manuscript/examples" />
     <SUITE FILE_PATH="coverage/classification$dataset.coverage" NAME="dataset Coverage Results" MODIFIED="1585835817486" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/statistics" />
     <SUITE FILE_PATH="coverage/classification$spatial.coverage" NAME="spatial Coverage Results" MODIFIED="1587749632031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$Test.coverage" NAME="Test Coverage Results" MODIFIED="1590150272032" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
