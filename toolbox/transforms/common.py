@@ -36,21 +36,6 @@ class ReshapeTrickTransform(BaseEstimator, TransformerMixin):
         return x.reshape(self.shape)
 
 
-class PLSTransform(PLSRegression):
-
-    def transform(self, x, y=None, copy=True):
-        """
-        This method is the main part of this transformer.
-        Return a wavelet transform, as specified mode.
-
-        Args:
-             x (:obj): Not used.
-             y (:obj): Not used.
-             copy (:obj): Not used.
-        """
-        return super(PLSRegression, self).transform(x)
-
-
 class PredictorTransform(BaseEstimator, TransformerMixin):
 
     def __init__(self, predictor, probabilities=True):
@@ -113,6 +98,25 @@ class PNormTransform(BaseEstimator, TransformerMixin):
         return np.linalg.norm(X, ord=self.p, axis=self.axis)
 
 
+class BagScaler(TransformerMixin, BaseEstimator):
+
+    def __init__(self, scaler):
+        self.scaler = scaler
+
+    def fit(self, X, y=None):
+        return self.scaler.fit(np.concatenate(X))
+
+    def transform(self, X, copy=None):
+        transforms = []
+        for row in X:
+            transforms.append(self.scaler.transform(row))
+        return transforms
+
+    def inverse_transform(self, X, copy=None):
+        inverse_transforms = []
+        for row in X:
+            inverse_transforms.append(self.scaler.inverse_transform(row))
+        return inverse_transforms
 
 
 class CorrelationArrayTransform(BaseEstimator, TransformerMixin):

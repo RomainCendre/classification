@@ -378,6 +378,7 @@ class DecisionVotingClassifier(BaseEstimator, ClassifierMixin):
         return np.argmax((x > 0) * self.__get_prior_coefficients(), axis=1)
 
     def __get_predictions_max(self, x):
+        # Return max, in cas of equality, we return highest priority class
         maximum = x.max(axis=1, keepdims=1) == x
         return (maximum * self.__get_prior_coefficients()).argmax(axis=1)
 
@@ -426,8 +427,10 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
     def predict(self, x, y=None, copy=True):
         probas = self.__get_probas(x)
+        # Return max, in cas of equality, we return highest priority class
         if self.high == 'max':
-            return np.argmax(probas, axis=1)
+            maximum = probas.max(axis=1, keepdims=1) == probas
+            return (maximum * self.__get_prior_coefficients()).argmax(axis=1)
         else:
             return self.__get_predictions_dynamic(probas, self.thresholds)
 
@@ -473,7 +476,8 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
     def __get_probas(self, x):
         x_probas = np.zeros((len(x), self.number_labels))
-        # patches_number = x.shape[1]
+        # Why iterating and not a direct compute on matrices?
+        # Because row size can be different on X ( cf patient decision for microscopy, with varying number of images )
         for index, group in enumerate(x):
             if self.low == 'mean':
                 x_probas[index, :] = np.mean(group, axis=0)
@@ -482,28 +486,6 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
             else:
                 x_probas[index, :] = np.linalg.norm(group, ord=self.p_norm, axis=0)
         return x_probas
-
-
-class MajorityVotingClassifier(ClassifierMixin, BaseEstimator):
-
-    def __init__(self, voting='hard', weights=None, flatten_transform=True, verbose=False):
-        self.voting = voting
-        self.weights = weights
-        self.flatten_transform = flatten_transform
-        self.verbose = verbose
-
-    def fit(self, X, y, sample_weight=None):
-        return self
-
-    def predict(self, X):
-        if self.voting == 'soft':
-            avg = np.average(X, axis=1)
-            maj = np.argmax(avg, axis=1)
-        else:
-            X = X.astype(int)
-            maj = np.apply_along_axis(lambda x: np.argmax(np.bincount(x)), axis=1, arr=X)
-
-        return maj
 
 
 # class MultimodalClassifier(BaseEstimator, ClassifierMixin):
