@@ -384,7 +384,7 @@ class Tools:
         if not hasattr(model, 'is_inconsistent'):
             data = np.array(sub[tags['datum']].to_list())
         else:
-            data = dataframe[tags['datum']].to_list()
+            data = sub[tags['datum']].to_list()
 
         # Set de predict values
         predictions = model.predict(data)
