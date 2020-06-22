@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manuscript/ImageImprovement/MultiInstance.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/manuscript/ImageImprovement/MultiInstance.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/IO/dermatology.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/IO/dermatology.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -405,28 +403,7 @@
       <workItem from="1591686700581" duration="5208000" />
       <workItem from="1591797603699" duration="29042000" />
       <workItem from="1592125446883" duration="45933000" />
-      <workItem from="1592752207976" duration="9591000" />
-    </task>
-    <task id="LOCAL-00488" summary="Update multi resolution.">
-      <created>1590150424037</created>
-      <option name="number" value="00488" />
-      <option name="presentableId" value="LOCAL-00488" />
-      <option name="project" value="LOCAL" />
-      <updated>1590150424037</updated>
-    </task>
-    <task id="LOCAL-00489" summary="Add LDA ratio function.">
-      <created>1590168623011</created>
-      <option name="number" value="00489" />
-      <option name="presentableId" value="LOCAL-00489" />
-      <option name="project" value="LOCAL" />
-      <updated>1590168623011</updated>
-    </task>
-    <task id="LOCAL-00490" summary="Adding jupyter experiments notebooks.">
-      <created>1590226130180</created>
-      <option name="number" value="00490" />
-      <option name="presentableId" value="LOCAL-00490" />
-      <option name="project" value="LOCAL" />
-      <updated>1590226130180</updated>
+      <workItem from="1592752207976" duration="13202000" />
     </task>
     <task id="LOCAL-00491" summary="Moving directories">
       <created>1590226339498</created>
@@ -750,7 +727,28 @@
       <option name="project" value="LOCAL" />
       <updated>1592831189170</updated>
     </task>
-    <option name="localTasksCounter" value="537" />
+    <task id="LOCAL-00537" summary="Update image classification experiments">
+      <created>1592832736954</created>
+      <option name="number" value="00537" />
+      <option name="presentableId" value="LOCAL-00537" />
+      <option name="project" value="LOCAL" />
+      <updated>1592832736954</updated>
+    </task>
+    <task id="LOCAL-00538" summary="Update image classification experiments">
+      <created>1592842107555</created>
+      <option name="number" value="00538" />
+      <option name="presentableId" value="LOCAL-00538" />
+      <option name="project" value="LOCAL" />
+      <updated>1592842107556</updated>
+    </task>
+    <task id="LOCAL-00539" summary="Update image classification experiments">
+      <created>1592843521987</created>
+      <option name="number" value="00539" />
+      <option name="presentableId" value="LOCAL-00539" />
+      <option name="project" value="LOCAL" />
+      <updated>1592843521987</updated>
+    </task>
+    <option name="localTasksCounter" value="540" />
     <servers />
   </component>
   <component name="TodoView">
@@ -829,11 +827,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2056" y="52" width="1195" height="605" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592773021350" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1592831188184">
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1592843521035">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1591735531609" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592831188184" />
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592843521035" />
     <state width="1484" height="273" key="GridCell.Tab.0.bottom" timestamp="1592773959042">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -878,11 +876,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592402752225" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1592831190306">
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1592843523050">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1591735534579" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592831190306" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592843523050" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1589315018624">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
