@@ -504,33 +504,42 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
 
     def fit(self, x, y=None):
         if self.method == 'single':
-            for modality in arange(x.shape[2]):
+            self.thresholds = np.zeros(x.shape[1])
+            for modality in arange(x.shape[1]):
                 x_mod = x[:, modality, :]
+                highest = 0
                 for thresh in sorted(list(x_mod.flatten()), reverse=True):
-                    mask = x_mod<thresh
+                    thresholds = self.thresholds.copy()
+                    thresholds[modality] = thresh
+                    predictions = MultimodalClassifier.__get_predictions(x, thresholds)
+                    score = self.metric(y, predictions)
+                    if score > highest:
+                        highest = score
+                        self.thresholds[modality] = thresh
         else:
-            for modality in arange(x.shape[2]):
-                x[:,modality,:]
+            self.thresholds = np.zeros(x.shape[1:])
+            for modality in arange(x.shape[1]):
+                for classe in arange(x.shape[2]):
+                    x[:,modality,:]
 
         self.thresholds = [[0.5, 0.5], [0.5, 0.5], [0.5, 0.5]] # [0.5, 0.5, 0.5]
-        test = self.get_predictions(x)
         return self
 
-    def get_predictions(self, x):
-        if self.thresholds is None:
+    def __get_predictions(x, thresholds):
+        if thresholds is None:
             return np.repeat(0, len(x))
         else:
             new_x = np.zeros([x.shape[0], x.shape[2]])
             for index, sample in enumerate(x):
                 probas = None
-                for jndex, tresh in enumerate(self.thresholds):
+                for jndex, tresh in enumerate(thresholds):
                     probas = sample[jndex]
-                    mask = probas > self.thresholds[jndex]
+                    mask = probas > thresholds[jndex]
                     probas[~mask] = 0
                     if mask.any():
                         break
                 new_x[index, :] = probas
-            return np.argmax(new_x, axis=0)
+            return np.argmax(new_x, axis=1)
 
     def predict(self, x, y=None, copy=True):
         return self.get_predictions(x)
