@@ -520,7 +520,16 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
             self.thresholds = np.zeros(x.shape[1:])
             for modality in arange(x.shape[1]):
                 for classe in arange(x.shape[2]):
-                    x[:,modality,:]
+                    x_mod = x[:,modality, classe]
+                    highest = 0
+                    for thresh in sorted(list(x_mod.flatten()), reverse=True):
+                        thresholds = self.thresholds.copy()
+                        thresholds[modality, classe] = thresh
+                        predictions = MultimodalClassifier.__get_predictions(x, thresholds)
+                        score = self.metric(y, predictions)
+                        if score > highest:
+                            highest = score
+                            self.thresholds[modality, classe] = thresh
 
         self.thresholds = [[0.5, 0.5], [0.5, 0.5], [0.5, 0.5]] # [0.5, 0.5, 0.5]
         return self
