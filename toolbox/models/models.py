@@ -8,7 +8,7 @@ import h5py
 import numpy as np
 from copy import deepcopy
 from joblib import delayed, Parallel
-from numpy import hstack
+from numpy import hstack, arange
 from tensorflow.keras import Sequential, Model
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.models import load_model
@@ -488,16 +488,52 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
         return x_probas
 
 
-# class MultimodalClassifier(BaseEstimator, ClassifierMixin):
-#
-#     def __init__(self, threshold='max'):
-#         self.threshold = threshold
-#
-#     def fit(self, x, y=None):
-#
-#         return self
-#
-#     def predict(self, x, y=None, copy=True):
+class MultimodalClassifier(BaseEstimator, ClassifierMixin):
+
+    def __init__(self, method='single', metric=None):
+        mandatory = ['single', 'individual']
+        if method not in mandatory:
+            raise Exception(f'Invalid method.')
+        self.method = method
+        if metric:
+            self.metric = metric
+        else:
+            self.metric = accuracy_score
+
+        self.thresholds = None
+
+    def fit(self, x, y=None):
+        if self.method == 'single':
+            for modality in arange(x.shape[2]):
+                x_mod = x[:, modality, :]
+                for thresh in sorted(list(x_mod.flatten()), reverse=True):
+                    mask = x_mod<thresh
+        else:
+            for modality in arange(x.shape[2]):
+                x[:,modality,:]
+
+        self.thresholds = [[0.5, 0.5], [0.5, 0.5], [0.5, 0.5]] # [0.5, 0.5, 0.5]
+        test = self.get_predictions(x)
+        return self
+
+    def get_predictions(self, x):
+        if self.thresholds is None:
+            return np.repeat(0, len(x))
+        else:
+            new_x = np.zeros([x.shape[0], x.shape[2]])
+            for index, sample in enumerate(x):
+                probas = None
+                for jndex, tresh in enumerate(self.thresholds):
+                    probas = sample[jndex]
+                    mask = probas > self.thresholds[jndex]
+                    probas[~mask] = 0
+                    if mask.any():
+                        break
+                new_x[index, :] = probas
+            return np.argmax(new_x, axis=0)
+
+    def predict(self, x, y=None, copy=True):
+        return self.get_predictions(x)
         
 
 
