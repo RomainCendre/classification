@@ -244,48 +244,8 @@ class Tools:
             model.best_params = {}
             return model
 
-    # @staticmethod
-    # def fit_transform(dataframe, tags, model, out, mask=None, folds=None, grid=None, distribution=None, cpu=-1):
-    #     # Fold needed for evaluation
-    #     if 'Fold' not in dataframe:
-    #         raise Exception('Need to build fold.')
-    #
-    #     # Check mandatory fields
-    #     mandatory = ['datum', 'label_encode']
-    #     if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-    #         raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
-    #
-    #     # Manage columns
-    #     if out not in dataframe and hasattr(model, 'transform'):
-    #         dataframe[out] = np.nan
-    #
-    #     # Mask dataframe
-    #     if mask is None:
-    #         sub = dataframe
-    #     else:
-    #         sub = dataframe[mask]
-    #
-    #     # Browse folds
-    #     reference_folds = sub['Fold']
-    #     if folds is None:
-    #         folds = Tools.__default_folds(list(np.unique(reference_folds)))
-    #
-    #     for fold in folds:
-    #         # Create mask
-    #         fit_mask = reference_folds.isin(fold[0])
-    #         predict_mask = reference_folds.isin(fold[1])
-    #
-    #         # Clone model
-    #         fitted_model = Tools.fit(sub, tags, deepcopy(model), grid=grid, distribution=distribution, cpu=cpu)
-    #
-    #         # Transform
-    #         sub[out] = Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out)[out]
-    #
-    #     if mask is not None:
-    #         dataframe[mask] = sub
-
     @staticmethod
-    def fit_predict(dataframe, tags, model, out, mask=None, folds=None, grid=None, distribution=None, cpu=-1):
+    def fit_predict(dataframe, tags, model, out, mask=None, folds=None, grid=None, distribution=None, cpu=-1, calibrate=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -330,6 +290,11 @@ class Tools:
 
             # Clone model
             fitted_model = Tools.fit(sub[fit_mask], tags, model=deepcopy(model), grid=grid, distribution=distribution, cpu=cpu)
+
+            # Make evaluation of calibration if needed
+            if calibrate:
+                model_calibration = CalibratedClassifierCV(fitted_model, cv=Tools.VAL_RATIO, method=calibrate)
+                fitted_model = Tools.fit(sub[fit_mask], tags, model_calibration, cpu=cpu)
 
             # Fill new data
             if hasattr(model, 'transform'):
