@@ -534,6 +534,7 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
         self.thresholds = [[0.5, 0.5], [0.5, 0.5], [0.5, 0.5]] # [0.5, 0.5, 0.5]
         return self
 
+    @staticmethod
     def __get_predictions(x, thresholds):
         if thresholds is None:
             return np.repeat(0, len(x))
@@ -552,7 +553,6 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
 
     def predict(self, x, y=None, copy=True):
         return self.__get_predictions(x)
-        
 
 
 class KerasClassifier(tf.keras.wrappers.scikit_learn.KerasClassifier):
