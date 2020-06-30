@@ -551,7 +551,7 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
             return np.argmax(new_x, axis=1)
 
     def predict(self, x, y=None, copy=True):
-        return self.get_predictions(x)
+        return self.__get_predictions(x)
         
 
 
