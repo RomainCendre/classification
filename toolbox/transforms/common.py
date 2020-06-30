@@ -15,13 +15,28 @@ class ArgMaxTransform(BaseEstimator, TransformerMixin):
         return x.argmax(axis=1)
 
 
-class FlattenTransform(BaseEstimator, TransformerMixin):
+class LinearTransform(BaseEstimator, TransformerMixin):
 
     def fit(self, x, y=None):
         return self
 
     def transform(self, x, y=None, copy=True):
-        return x.reshape((x.shape[0], -1))
+        return x.argmax(axis=1)
+
+
+class FlattenTransform(BaseEstimator, TransformerMixin):
+
+    def __init__(self, method):
+        self.method = method
+
+    def fit(self, x, y=None):
+        return self
+
+    def transform(self, x, y=None, copy=True):
+        if self.method == 'max':
+            return x.max(axis=1)
+        else:
+            return np.average(x, axis=1)
 
 
 class ReshapeTrickTransform(BaseEstimator, TransformerMixin):
