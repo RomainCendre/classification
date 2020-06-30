@@ -17,26 +17,47 @@ class ArgMaxTransform(BaseEstimator, TransformerMixin):
 
 class LinearTransform(BaseEstimator, TransformerMixin):
 
-    def fit(self, x, y=None):
+    def __init__(self, method, axis=1):
+        self.method = method
+        self.axis = axis
+
+    def fit(self, X, y=None):
         return self
 
-    def transform(self, x, y=None, copy=True):
-        return x.argmax(axis=1)
+    def fit_transform(self, X, y=None, **fit_params):
+        return self.transform(X)
+
+    def transform(self, X, y=None, copy=True):
+        if self.method == 'max':
+            if X.dtype == object:
+                average = []
+                for x in X:
+                    average.append(x.max(axis=self.axis - 1))
+                return np.array(average)
+            return X.max(axis=self.axis)
+        elif self.method == 'average':
+            if X.dtype == object:
+                average = []
+                for x in X:
+                    average.append(np.average(x, axis=self.axis - 1))
+                return np.array(average)
+            return np.average(X, axis=self.axis)
+        else:
+            if X.dtype == object:
+                normalized = []
+                for x in X:
+                    normalized.append(np.linalg.norm(x, ord=self.method, axis=self.axis - 1))
+                return np.array(normalized)
+            return np.linalg.norm(X, ord=self.method, axis=self.axis)
 
 
 class FlattenTransform(BaseEstimator, TransformerMixin):
 
-    def __init__(self, method):
-        self.method = method
-
     def fit(self, x, y=None):
         return self
 
     def transform(self, x, y=None, copy=True):
-        if self.method == 'max':
-            return x.max(axis=1)
-        else:
-            return np.average(x, axis=1)
+        return x.reshape((x.shape[0], -1))
 
 
 class ReshapeTrickTransform(BaseEstimator, TransformerMixin):
@@ -82,35 +103,6 @@ class PredictorTransform(BaseEstimator, TransformerMixin):
             return np.array(self.predictor.predict_proba(x))
         else:
             return np.array(self.predictor.predict(x))
-
-
-class PNormTransform(BaseEstimator, TransformerMixin):
-    """Class that p-norm normalization
-
-     This class is made for sklearn and build upon scipy.
-
-     Attributes:
-         p (:obj:'int'): An integer that give the normalization coefficient.
-
-     """
-
-    def __init__(self, p=1, axis=1):
-        self.p = p
-        self.axis = axis
-
-    def fit(self, X, y=None):
-        return self
-
-    def fit_transform(self, X, y=None, **fit_params):
-        return self.transform(X)
-
-    def transform(self, X):
-        if X.dtype == object:
-            normalized = []
-            for x in X:
-                normalized.append(np.linalg.norm(x, ord=self.p, axis=self.axis - 1))
-            return np.array(normalized)
-        return np.linalg.norm(X, ord=self.p, axis=self.axis)
 
 
 class BagScaler(TransformerMixin, BaseEstimator):
