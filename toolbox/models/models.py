@@ -552,7 +552,7 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
             return np.argmax(new_x, axis=1)
 
     def predict(self, x, y=None, copy=True):
-        return self.__get_predictions(x)
+        return self.__get_predictions(x, self.thresholds)
 
 
 class KerasClassifier(tf.keras.wrappers.scikit_learn.KerasClassifier):
