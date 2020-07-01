@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
+    <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="Update image classification experiments">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/models/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +116,29 @@
       <recent name="C:\Users\Romain\PycharmProjects\classification\redaction\introduction" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.test (1)">
+    <configuration name="Temp" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="classification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/manuscript/MultimodalClassification" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/manuscript/MultimodalClassification/Temp.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Test (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -138,50 +161,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Testlda (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="classification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/manuscript/examples" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/manuscript/examples/Testlda.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="dermatology" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="classification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/toolbox/IO" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/toolbox/IO/dermatology.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="models" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -196,6 +175,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/toolbox/models/models.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="classification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/manuscript/MultimodalClassification" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/manuscript/MultimodalClassification/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -228,11 +229,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test (1)" />
+        <item itemvalue="Python.Temp" />
+        <item itemvalue="Python.models" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.Test (1)" />
-        <item itemvalue="Python.Testlda (1)" />
-        <item itemvalue="Python.dermatology" />
-        <item itemvalue="Python.models" />
       </list>
     </recent_temporary>
   </component>
@@ -403,280 +404,9 @@
       <workItem from="1591686700581" duration="5208000" />
       <workItem from="1591797603699" duration="29042000" />
       <workItem from="1592125446883" duration="45933000" />
-      <workItem from="1592752207976" duration="13202000" />
-    </task>
-    <task id="LOCAL-00491" summary="Moving directories">
-      <created>1590226339498</created>
-      <option name="number" value="00491" />
-      <option name="presentableId" value="LOCAL-00491" />
-      <option name="project" value="LOCAL" />
-      <updated>1590226339498</updated>
-    </task>
-    <task id="LOCAL-00492" summary="Adding experiments">
-      <created>1590409785081</created>
-      <option name="number" value="00492" />
-      <option name="presentableId" value="LOCAL-00492" />
-      <option name="project" value="LOCAL" />
-      <updated>1590409785081</updated>
-    </task>
-    <task id="LOCAL-00493" summary="Adding experiments">
-      <created>1590421221418</created>
-      <option name="number" value="00493" />
-      <option name="presentableId" value="LOCAL-00493" />
-      <option name="project" value="LOCAL" />
-      <updated>1590421221418</updated>
-    </task>
-    <task id="LOCAL-00494" summary="To avoid any confusion with variables.">
-      <created>1590513710938</created>
-      <option name="number" value="00494" />
-      <option name="presentableId" value="LOCAL-00494" />
-      <option name="project" value="LOCAL" />
-      <updated>1590513710939</updated>
-    </task>
-    <task id="LOCAL-00495" summary="New fine tuning way">
-      <created>1590574185738</created>
-      <option name="number" value="00495" />
-      <option name="presentableId" value="LOCAL-00495" />
-      <option name="project" value="LOCAL" />
-      <updated>1590574185739</updated>
-    </task>
-    <task id="LOCAL-00496" summary="Update fine tune">
-      <created>1590584619498</created>
-      <option name="number" value="00496" />
-      <option name="presentableId" value="LOCAL-00496" />
-      <option name="project" value="LOCAL" />
-      <updated>1590584619498</updated>
-    </task>
-    <task id="LOCAL-00497" summary="Update fine tune method">
-      <created>1590584843210</created>
-      <option name="number" value="00497" />
-      <option name="presentableId" value="LOCAL-00497" />
-      <option name="project" value="LOCAL" />
-      <updated>1590584843210</updated>
-    </task>
-    <task id="LOCAL-00498" summary="Update taskset">
-      <created>1590853472794</created>
-      <option name="number" value="00498" />
-      <option name="presentableId" value="LOCAL-00498" />
-      <option name="project" value="LOCAL" />
-      <updated>1590853472795</updated>
-    </task>
-    <task id="LOCAL-00499" summary="Try to optimize fine tune fit/predict">
-      <created>1591079494429</created>
-      <option name="number" value="00499" />
-      <option name="presentableId" value="LOCAL-00499" />
-      <option name="project" value="LOCAL" />
-      <updated>1591079494431</updated>
-    </task>
-    <task id="LOCAL-00500" summary="Try to optimize fine tune fit/predict with dumps instead duplicating model">
-      <created>1591082323889</created>
-      <option name="number" value="00500" />
-      <option name="presentableId" value="LOCAL-00500" />
-      <option name="project" value="LOCAL" />
-      <updated>1591082323889</updated>
-    </task>
-    <task id="LOCAL-00501" summary="Try to optimize fine tune fit/predict with dumps instead duplicating model">
-      <created>1591083786788</created>
-      <option name="number" value="00501" />
-      <option name="presentableId" value="LOCAL-00501" />
-      <option name="project" value="LOCAL" />
-      <updated>1591083786788</updated>
-    </task>
-    <task id="LOCAL-00502" summary="Update image classification notebooks">
-      <created>1591343414440</created>
-      <option name="number" value="00502" />
-      <option name="presentableId" value="LOCAL-00502" />
-      <option name="project" value="LOCAL" />
-      <updated>1591343414442</updated>
-    </task>
-    <task id="LOCAL-00503" summary="Update projection plot">
-      <created>1591517141872</created>
-      <option name="number" value="00503" />
-      <option name="presentableId" value="LOCAL-00503" />
-      <option name="project" value="LOCAL" />
-      <updated>1591517141872</updated>
-    </task>
-    <task id="LOCAL-00504" summary="Experiments in context of orl data">
-      <created>1591608839350</created>
-      <option name="number" value="00504" />
-      <option name="presentableId" value="LOCAL-00504" />
-      <option name="project" value="LOCAL" />
-      <updated>1591608839350</updated>
-    </task>
-    <task id="LOCAL-00505" summary="Update image classification experiments">
-      <created>1591713062752</created>
-      <option name="number" value="00505" />
-      <option name="presentableId" value="LOCAL-00505" />
-      <option name="project" value="LOCAL" />
-      <updated>1591713062753</updated>
-    </task>
-    <task id="LOCAL-00506" summary="Add removable legend for projection.">
-      <created>1591714519598</created>
-      <option name="number" value="00506" />
-      <option name="presentableId" value="LOCAL-00506" />
-      <option name="project" value="LOCAL" />
-      <updated>1591714519598</updated>
-    </task>
-    <task id="LOCAL-00507" summary="Add removable legend for projection.">
-      <created>1591714602748</created>
-      <option name="number" value="00507" />
-      <option name="presentableId" value="LOCAL-00507" />
-      <option name="project" value="LOCAL" />
-      <updated>1591714602748</updated>
-    </task>
-    <task id="LOCAL-00508" summary="Add removable legend for projection.">
-      <created>1591715297024</created>
-      <option name="number" value="00508" />
-      <option name="presentableId" value="LOCAL-00508" />
-      <option name="project" value="LOCAL" />
-      <updated>1591715297024</updated>
-    </task>
-    <task id="LOCAL-00509" summary="Update ORL">
-      <created>1591735532761</created>
-      <option name="number" value="00509" />
-      <option name="presentableId" value="LOCAL-00509" />
-      <option name="project" value="LOCAL" />
-      <updated>1591735532761</updated>
-    </task>
-    <task id="LOCAL-00510" summary="Update image reader">
-      <created>1591799290824</created>
-      <option name="number" value="00510" />
-      <option name="presentableId" value="LOCAL-00510" />
-      <option name="project" value="LOCAL" />
-      <updated>1591799290825</updated>
-    </task>
-    <task id="LOCAL-00511" summary="Update image reader to choose different location">
-      <created>1591802395105</created>
-      <option name="number" value="00511" />
-      <option name="presentableId" value="LOCAL-00511" />
-      <option name="project" value="LOCAL" />
-      <updated>1591802395105</updated>
-    </task>
-    <task id="LOCAL-00512" summary="Update image reader to choose different location + Folds management">
-      <created>1591804844935</created>
-      <option name="number" value="00512" />
-      <option name="presentableId" value="LOCAL-00512" />
-      <option name="project" value="LOCAL" />
-      <updated>1591804844935</updated>
-    </task>
-    <task id="LOCAL-00513" summary="Fix bug">
-      <created>1591807302714</created>
-      <option name="number" value="00513" />
-      <option name="presentableId" value="LOCAL-00513" />
-      <option name="project" value="LOCAL" />
-      <updated>1591807302714</updated>
-    </task>
-    <task id="LOCAL-00514" summary="Fix bug">
-      <created>1591822250557</created>
-      <option name="number" value="00514" />
-      <option name="presentableId" value="LOCAL-00514" />
-      <option name="project" value="LOCAL" />
-      <updated>1591822250557</updated>
-    </task>
-    <task id="LOCAL-00515" summary="Adding crop function">
-      <created>1591885037759</created>
-      <option name="number" value="00515" />
-      <option name="presentableId" value="LOCAL-00515" />
-      <option name="project" value="LOCAL" />
-      <updated>1591885037759</updated>
-    </task>
-    <task id="LOCAL-00516" summary="Fix ID crop">
-      <created>1591886501846</created>
-      <option name="number" value="00516" />
-      <option name="presentableId" value="LOCAL-00516" />
-      <option name="project" value="LOCAL" />
-      <updated>1591886501846</updated>
-    </task>
-    <task id="LOCAL-00517" summary="Remove data augmentation (cf imbalanced pipeline)">
-      <created>1592061177037</created>
-      <option name="number" value="00517" />
-      <option name="presentableId" value="LOCAL-00517" />
-      <option name="project" value="LOCAL" />
-      <updated>1592061177037</updated>
-    </task>
-    <task id="LOCAL-00518" summary="Add calibration to evaluation">
-      <created>1592143849550</created>
-      <option name="number" value="00518" />
-      <option name="presentableId" value="LOCAL-00518" />
-      <option name="project" value="LOCAL" />
-      <updated>1592143849551</updated>
-    </task>
-    <task id="LOCAL-00519" summary="Overwritting variable">
-      <created>1592144783303</created>
-      <option name="number" value="00519" />
-      <option name="presentableId" value="LOCAL-00519" />
-      <option name="project" value="LOCAL" />
-      <updated>1592144783304</updated>
-    </task>
-    <task id="LOCAL-00520" summary="Fix calibration bug">
-      <created>1592144875368</created>
-      <option name="number" value="00520" />
-      <option name="presentableId" value="LOCAL-00520" />
-      <option name="project" value="LOCAL" />
-      <updated>1592144875368</updated>
-    </task>
-    <task id="LOCAL-00521" summary="Addinf method for reliability curves">
-      <created>1592169120511</created>
-      <option name="number" value="00521" />
-      <option name="presentableId" value="LOCAL-00521" />
-      <option name="project" value="LOCAL" />
-      <updated>1592169120511</updated>
-    </task>
-    <task id="LOCAL-00522" summary="Fix scoring">
-      <created>1592296213404</created>
-      <option name="number" value="00522" />
-      <option name="presentableId" value="LOCAL-00522" />
-      <option name="project" value="LOCAL" />
-      <updated>1592296213404</updated>
-    </task>
-    <task id="LOCAL-00523" summary="Adding experiments charts">
-      <created>1592323022898</created>
-      <option name="number" value="00523" />
-      <option name="presentableId" value="LOCAL-00523" />
-      <option name="project" value="LOCAL" />
-      <updated>1592323022898</updated>
-    </task>
-    <task id="LOCAL-00524" summary="Ajout de classifier de majorité">
-      <created>1592408403415</created>
-      <option name="number" value="00524" />
-      <option name="presentableId" value="LOCAL-00524" />
-      <option name="project" value="LOCAL" />
-      <updated>1592408403415</updated>
-    </task>
-    <task id="LOCAL-00525" summary="Update fit_predict/evaluate">
-      <created>1592427442472</created>
-      <option name="number" value="00525" />
-      <option name="presentableId" value="LOCAL-00525" />
-      <option name="project" value="LOCAL" />
-      <updated>1592427442472</updated>
-    </task>
-    <task id="LOCAL-00526" summary="Update fit_predict/evaluate">
-      <created>1592468444572</created>
-      <option name="number" value="00526" />
-      <option name="presentableId" value="LOCAL-00526" />
-      <option name="project" value="LOCAL" />
-      <updated>1592468444572</updated>
-    </task>
-    <task id="LOCAL-00527" summary="Update fit_predict/evaluate">
-      <created>1592468699846</created>
-      <option name="number" value="00527" />
-      <option name="presentableId" value="LOCAL-00527" />
-      <option name="project" value="LOCAL" />
-      <updated>1592468699846</updated>
-    </task>
-    <task id="LOCAL-00528" summary="Update fit_predict/evaluate">
-      <created>1592475613375</created>
-      <option name="number" value="00528" />
-      <option name="presentableId" value="LOCAL-00528" />
-      <option name="project" value="LOCAL" />
-      <updated>1592475613375</updated>
-    </task>
-    <task id="LOCAL-00529" summary="Update fit_predict/evaluate">
-      <created>1592494841385</created>
-      <option name="number" value="00529" />
-      <option name="presentableId" value="LOCAL-00529" />
-      <option name="project" value="LOCAL" />
-      <updated>1592494841386</updated>
+      <workItem from="1592752207976" duration="48342000" />
+      <workItem from="1593167352067" duration="413000" />
+      <workItem from="1593498730607" duration="32284000" />
     </task>
     <task id="LOCAL-00530" summary="Update image classification experiments">
       <created>1592769313904</created>
@@ -748,7 +478,280 @@
       <option name="project" value="LOCAL" />
       <updated>1592843521987</updated>
     </task>
-    <option name="localTasksCounter" value="540" />
+    <task id="LOCAL-00540" summary="Update image classification experiments">
+      <created>1592843863367</created>
+      <option name="number" value="00540" />
+      <option name="presentableId" value="LOCAL-00540" />
+      <option name="project" value="LOCAL" />
+      <updated>1592843863367</updated>
+    </task>
+    <task id="LOCAL-00541" summary="Update image classification experiments">
+      <created>1592851263567</created>
+      <option name="number" value="00541" />
+      <option name="presentableId" value="LOCAL-00541" />
+      <option name="project" value="LOCAL" />
+      <updated>1592851263567</updated>
+    </task>
+    <task id="LOCAL-00542" summary="Update image improvement">
+      <created>1592860390604</created>
+      <option name="number" value="00542" />
+      <option name="presentableId" value="LOCAL-00542" />
+      <option name="project" value="LOCAL" />
+      <updated>1592860390604</updated>
+    </task>
+    <task id="LOCAL-00543" summary="Update image classification experiments">
+      <created>1592942184790</created>
+      <option name="number" value="00543" />
+      <option name="presentableId" value="LOCAL-00543" />
+      <option name="project" value="LOCAL" />
+      <updated>1592942184791</updated>
+    </task>
+    <task id="LOCAL-00544" summary="Update image classification experiments">
+      <created>1592985538604</created>
+      <option name="number" value="00544" />
+      <option name="presentableId" value="LOCAL-00544" />
+      <option name="project" value="LOCAL" />
+      <updated>1592985538605</updated>
+    </task>
+    <task id="LOCAL-00545" summary="Update image classification experiments">
+      <created>1592999844939</created>
+      <option name="number" value="00545" />
+      <option name="presentableId" value="LOCAL-00545" />
+      <option name="project" value="LOCAL" />
+      <updated>1592999844940</updated>
+    </task>
+    <task id="LOCAL-00546" summary="Update image improvement">
+      <created>1593001331683</created>
+      <option name="number" value="00546" />
+      <option name="presentableId" value="LOCAL-00546" />
+      <option name="project" value="LOCAL" />
+      <updated>1593001331683</updated>
+    </task>
+    <task id="LOCAL-00547" summary="Update image classification experiments">
+      <created>1593001735221</created>
+      <option name="number" value="00547" />
+      <option name="presentableId" value="LOCAL-00547" />
+      <option name="project" value="LOCAL" />
+      <updated>1593001735221</updated>
+    </task>
+    <task id="LOCAL-00548" summary="Update image classification experiments">
+      <created>1593001973159</created>
+      <option name="number" value="00548" />
+      <option name="presentableId" value="LOCAL-00548" />
+      <option name="project" value="LOCAL" />
+      <updated>1593001973159</updated>
+    </task>
+    <task id="LOCAL-00549" summary="Update image classification experiments">
+      <created>1593002152684</created>
+      <option name="number" value="00549" />
+      <option name="presentableId" value="LOCAL-00549" />
+      <option name="project" value="LOCAL" />
+      <updated>1593002152684</updated>
+    </task>
+    <task id="LOCAL-00550" summary="Update multimodal">
+      <created>1593011145245</created>
+      <option name="number" value="00550" />
+      <option name="presentableId" value="LOCAL-00550" />
+      <option name="project" value="LOCAL" />
+      <updated>1593011145245</updated>
+    </task>
+    <task id="LOCAL-00551" summary="Update image classification experiments">
+      <created>1593011418523</created>
+      <option name="number" value="00551" />
+      <option name="presentableId" value="LOCAL-00551" />
+      <option name="project" value="LOCAL" />
+      <updated>1593011418523</updated>
+    </task>
+    <task id="LOCAL-00552" summary="Update image classification experiments">
+      <created>1593029423830</created>
+      <option name="number" value="00552" />
+      <option name="presentableId" value="LOCAL-00552" />
+      <option name="project" value="LOCAL" />
+      <updated>1593029423831</updated>
+    </task>
+    <task id="LOCAL-00553" summary="Update image classification experiments">
+      <created>1593033907819</created>
+      <option name="number" value="00553" />
+      <option name="presentableId" value="LOCAL-00553" />
+      <option name="project" value="LOCAL" />
+      <updated>1593033907819</updated>
+    </task>
+    <task id="LOCAL-00554" summary="Update image classification experiments">
+      <created>1593034145347</created>
+      <option name="number" value="00554" />
+      <option name="presentableId" value="LOCAL-00554" />
+      <option name="project" value="LOCAL" />
+      <updated>1593034145347</updated>
+    </task>
+    <task id="LOCAL-00555" summary="Update image improvements experiments">
+      <created>1593073693960</created>
+      <option name="number" value="00555" />
+      <option name="presentableId" value="LOCAL-00555" />
+      <option name="project" value="LOCAL" />
+      <updated>1593073693960</updated>
+    </task>
+    <task id="LOCAL-00556" summary="Update image classification experiments">
+      <created>1593086641724</created>
+      <option name="number" value="00556" />
+      <option name="presentableId" value="LOCAL-00556" />
+      <option name="project" value="LOCAL" />
+      <updated>1593086641724</updated>
+    </task>
+    <task id="LOCAL-00557" summary="Update image classification experiments">
+      <created>1593116692349</created>
+      <option name="number" value="00557" />
+      <option name="presentableId" value="LOCAL-00557" />
+      <option name="project" value="LOCAL" />
+      <updated>1593116692350</updated>
+    </task>
+    <task id="LOCAL-00558" summary="Update image improvements experiments">
+      <created>1593116763768</created>
+      <option name="number" value="00558" />
+      <option name="presentableId" value="LOCAL-00558" />
+      <option name="project" value="LOCAL" />
+      <updated>1593116763768</updated>
+    </task>
+    <task id="LOCAL-00559" summary="Update lesion classification experiments">
+      <created>1593116842662</created>
+      <option name="number" value="00559" />
+      <option name="presentableId" value="LOCAL-00559" />
+      <option name="project" value="LOCAL" />
+      <updated>1593116842662</updated>
+    </task>
+    <task id="LOCAL-00560" summary="Update image classification experiments">
+      <created>1593154588253</created>
+      <option name="number" value="00560" />
+      <option name="presentableId" value="LOCAL-00560" />
+      <option name="project" value="LOCAL" />
+      <updated>1593154588253</updated>
+    </task>
+    <task id="LOCAL-00561" summary="Update lesion classification experiments">
+      <created>1593167443871</created>
+      <option name="number" value="00561" />
+      <option name="presentableId" value="LOCAL-00561" />
+      <option name="project" value="LOCAL" />
+      <updated>1593167443872</updated>
+    </task>
+    <task id="LOCAL-00562" summary="Update image multimodal experiments">
+      <created>1593527362552</created>
+      <option name="number" value="00562" />
+      <option name="presentableId" value="LOCAL-00562" />
+      <option name="project" value="LOCAL" />
+      <updated>1593527362552</updated>
+    </task>
+    <task id="LOCAL-00563" summary="Update image classification experiments">
+      <created>1593528584794</created>
+      <option name="number" value="00563" />
+      <option name="presentableId" value="LOCAL-00563" />
+      <option name="project" value="LOCAL" />
+      <updated>1593528584794</updated>
+    </task>
+    <task id="LOCAL-00564" summary="Update image classification experiments">
+      <created>1593528632694</created>
+      <option name="number" value="00564" />
+      <option name="presentableId" value="LOCAL-00564" />
+      <option name="project" value="LOCAL" />
+      <updated>1593528632694</updated>
+    </task>
+    <task id="LOCAL-00565" summary="Update image classification experiments">
+      <created>1593529247753</created>
+      <option name="number" value="00565" />
+      <option name="presentableId" value="LOCAL-00565" />
+      <option name="project" value="LOCAL" />
+      <updated>1593529247753</updated>
+    </task>
+    <task id="LOCAL-00566" summary="Update image classification experiments">
+      <created>1593535314575</created>
+      <option name="number" value="00566" />
+      <option name="presentableId" value="LOCAL-00566" />
+      <option name="project" value="LOCAL" />
+      <updated>1593535314575</updated>
+    </task>
+    <task id="LOCAL-00567" summary="Update image classification experiments">
+      <created>1593536414093</created>
+      <option name="number" value="00567" />
+      <option name="presentableId" value="LOCAL-00567" />
+      <option name="project" value="LOCAL" />
+      <updated>1593536414093</updated>
+    </task>
+    <task id="LOCAL-00568" summary="Add transforms">
+      <created>1593545531611</created>
+      <option name="number" value="00568" />
+      <option name="presentableId" value="LOCAL-00568" />
+      <option name="project" value="LOCAL" />
+      <updated>1593545531611</updated>
+    </task>
+    <task id="LOCAL-00569" summary="Update image classification experiments">
+      <created>1593547437671</created>
+      <option name="number" value="00569" />
+      <option name="presentableId" value="LOCAL-00569" />
+      <option name="project" value="LOCAL" />
+      <updated>1593547437671</updated>
+    </task>
+    <task id="LOCAL-00570" summary="Update multimodal classification experiments">
+      <created>1593549819709</created>
+      <option name="number" value="00570" />
+      <option name="presentableId" value="LOCAL-00570" />
+      <option name="project" value="LOCAL" />
+      <updated>1593549819709</updated>
+    </task>
+    <task id="LOCAL-00571" summary="Update image classification experiments">
+      <created>1593596046732</created>
+      <option name="number" value="00571" />
+      <option name="presentableId" value="LOCAL-00571" />
+      <option name="project" value="LOCAL" />
+      <updated>1593596046732</updated>
+    </task>
+    <task id="LOCAL-00572" summary="Update image classification experiments">
+      <created>1593596163180</created>
+      <option name="number" value="00572" />
+      <option name="presentableId" value="LOCAL-00572" />
+      <option name="project" value="LOCAL" />
+      <updated>1593596163180</updated>
+    </task>
+    <task id="LOCAL-00573" summary="Update image classification experiments">
+      <created>1593604920757</created>
+      <option name="number" value="00573" />
+      <option name="presentableId" value="LOCAL-00573" />
+      <option name="project" value="LOCAL" />
+      <updated>1593604920758</updated>
+    </task>
+    <task id="LOCAL-00574" summary="Update image improvement experiments">
+      <created>1593613075241</created>
+      <option name="number" value="00574" />
+      <option name="presentableId" value="LOCAL-00574" />
+      <option name="project" value="LOCAL" />
+      <updated>1593613075241</updated>
+    </task>
+    <task id="LOCAL-00575" summary="Update image classification experiments">
+      <created>1593614235512</created>
+      <option name="number" value="00575" />
+      <option name="presentableId" value="LOCAL-00575" />
+      <option name="project" value="LOCAL" />
+      <updated>1593614235512</updated>
+    </task>
+    <task id="LOCAL-00576" summary="Update image improvement experiments">
+      <created>1593616835761</created>
+      <option name="number" value="00576" />
+      <option name="presentableId" value="LOCAL-00576" />
+      <option name="project" value="LOCAL" />
+      <updated>1593616835761</updated>
+    </task>
+    <task id="LOCAL-00577" summary="Update image classification experiments">
+      <created>1593635210862</created>
+      <option name="number" value="00577" />
+      <option name="presentableId" value="LOCAL-00577" />
+      <option name="project" value="LOCAL" />
+      <updated>1593635210862</updated>
+    </task>
+    <task id="LOCAL-00578" summary="Update image classification experiments">
+      <created>1593635842328</created>
+      <option name="number" value="00578" />
+      <option name="presentableId" value="LOCAL-00578" />
+      <option name="project" value="LOCAL" />
+      <updated>1593635842328</updated>
+    </task>
+    <option name="localTasksCounter" value="579" />
     <servers />
   </component>
   <component name="TodoView">
@@ -791,14 +794,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update fine tune method" />
-    <MESSAGE value="Update taskset" />
-    <MESSAGE value="Try to optimize fine tune fit/predict" />
-    <MESSAGE value="Try to optimize fine tune fit/predict with dumps instead duplicating model" />
-    <MESSAGE value="Update image classification notebooks" />
-    <MESSAGE value="Update projection plot" />
-    <MESSAGE value="Experiments in context of orl data" />
-    <MESSAGE value="Add removable legend for projection." />
     <MESSAGE value="Update ORL" />
     <MESSAGE value="Update image reader" />
     <MESSAGE value="Update image reader to choose different location" />
@@ -815,6 +810,14 @@
     <MESSAGE value="Adding experiments charts" />
     <MESSAGE value="Ajout de classifier de majorité" />
     <MESSAGE value="Update fit_predict/evaluate" />
+    <MESSAGE value="Update image improvement" />
+    <MESSAGE value="Update multimodal" />
+    <MESSAGE value="Update image improvements experiments" />
+    <MESSAGE value="Update lesion classification experiments" />
+    <MESSAGE value="Update image multimodal experiments" />
+    <MESSAGE value="Add transforms" />
+    <MESSAGE value="Update multimodal classification experiments" />
+    <MESSAGE value="Update image improvement experiments" />
     <MESSAGE value="Update image classification experiments" />
     <option name="LAST_COMMIT_MESSAGE" value="Update image classification experiments" />
   </component>
@@ -823,72 +826,76 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2591" y="324" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1591516612145" />
-    <state x="2056" y="52" width="1195" height="605" key="#xdebugger.evaluate" timestamp="1592773021350">
+    <state x="2239" y="244" width="1195" height="605" key="#xdebugger.evaluate" timestamp="1593631129078">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2056" y="52" width="1195" height="605" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592773021350" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1592843521035">
+    <state x="2239" y="244" width="1195" height="605" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593631129078" />
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1593635841678">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1591735531609" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592843521035" />
-    <state width="1484" height="273" key="GridCell.Tab.0.bottom" timestamp="1592773959042">
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593635841678" />
+    <state x="2012" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1592942179628">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2012" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592942179628" />
+    <state width="1478" height="273" key="GridCell.Tab.0.bottom" timestamp="1593620196879">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035465067" />
-    <state width="1484" height="273" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592773959042" />
-    <state width="1484" height="273" key="GridCell.Tab.0.center" timestamp="1592773959042">
+    <state width="1478" height="273" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593620196879" />
+    <state width="1478" height="273" key="GridCell.Tab.0.center" timestamp="1593620196879">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035465067" />
-    <state width="1484" height="273" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592773959042" />
-    <state width="1484" height="273" key="GridCell.Tab.0.left" timestamp="1592773959042">
+    <state width="1478" height="273" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593620196879" />
+    <state width="1478" height="273" key="GridCell.Tab.0.left" timestamp="1593620196879">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035465067" />
-    <state width="1484" height="273" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592773959042" />
-    <state width="1484" height="273" key="GridCell.Tab.0.right" timestamp="1592773959042">
+    <state width="1478" height="273" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593620196879" />
+    <state width="1478" height="273" key="GridCell.Tab.0.right" timestamp="1593620196879">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035465067" />
-    <state width="1484" height="273" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592773959042" />
-    <state width="1484" height="273" key="GridCell.Tab.1.bottom" timestamp="1592773986174">
+    <state width="1478" height="273" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593620196879" />
+    <state width="1478" height="273" key="GridCell.Tab.1.bottom" timestamp="1593620208801">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035492216" />
-    <state width="1484" height="273" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592773986174" />
-    <state width="1484" height="273" key="GridCell.Tab.1.center" timestamp="1592773986174">
+    <state width="1478" height="273" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593620208801" />
+    <state width="1478" height="273" key="GridCell.Tab.1.center" timestamp="1593620208801">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035492216" />
-    <state width="1484" height="273" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592773986174" />
-    <state width="1484" height="273" key="GridCell.Tab.1.left" timestamp="1592773986174">
+    <state width="1478" height="273" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593620208801" />
+    <state width="1478" height="273" key="GridCell.Tab.1.left" timestamp="1593620208801">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035492216" />
-    <state width="1484" height="273" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592773986174" />
-    <state width="1484" height="273" key="GridCell.Tab.1.right" timestamp="1592773986174">
+    <state width="1478" height="273" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593620208801" />
+    <state width="1478" height="273" key="GridCell.Tab.1.right" timestamp="1593620208801">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1502" height="249" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592035492216" />
-    <state width="1484" height="273" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592773986174" />
+    <state width="1478" height="273" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593620208801" />
     <state x="2266" y="71" key="SettingsEditor" timestamp="1592402752225">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592402752225" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1592843523050">
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1593635843463">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1591735534579" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592843523050" />
-    <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1589315018624">
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593635843463" />
+    <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1593602426776">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589315018624" />
-    <state x="2652" y="221" width="607" height="598" key="find.popup" timestamp="1592389089523">
+    <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593602426776" />
+    <state x="2652" y="221" width="1102" height="598" key="find.popup" timestamp="1593531777737">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2652" y="221" width="607" height="598" key="find.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1592389089523" />
+    <state x="2652" y="221" width="1102" height="598" key="find.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593531777737" />
     <state x="2581" y="312" key="git4idea.merge.GitPullDialog" timestamp="1592752418324">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -998,7 +1005,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/toolbox/models/models.py</url>
-          <line>533</line>
+          <line>587</line>
           <option name="timeStamp" value="523" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1017,9 +1024,14 @@
           <option name="timeStamp" value="582" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/manuscript/test.py</url>
-          <line>5</line>
-          <option name="timeStamp" value="587" />
+          <url>file://$PROJECT_DIR$/toolbox/models/models.py</url>
+          <line>505</line>
+          <option name="timeStamp" value="597" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/toolbox/models/models.py</url>
+          <line>550</line>
+          <option name="timeStamp" value="598" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="jupyter-line">
           <url>file://$PROJECT_DIR$/manuscript/ImageClassification/VisualisationFeatures.ipynb</url>
@@ -1039,8 +1051,10 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1585815299128" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/guis/annotate_tool" />
     <SUITE FILE_PATH="coverage/classification$common.coverage" NAME="common Coverage Results" MODIFIED="1585062709565" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/views" />
+    <SUITE FILE_PATH="coverage/classification$Temp.coverage" NAME="Temp Coverage Results" MODIFIED="1593034121826" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/manuscript/MultimodalClassification" />
     <SUITE FILE_PATH="coverage/classification$Testlda.coverage" NAME="Testlda Coverage Results" MODIFIED="1590168578960" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$at_most.coverage" NAME="at_most Coverage Results" MODIFIED="1590168466743" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/transforms" />
+    <SUITE FILE_PATH="coverage/classification$test__1_.coverage" NAME="test (1) Coverage Results" MODIFIED="1593620196667" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/manuscript/MultimodalClassification" />
     <SUITE FILE_PATH="coverage/classification$Test__1_.coverage" NAME="Test (1) Coverage Results" MODIFIED="1592495712586" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/manuscript/examples" />
     <SUITE FILE_PATH="coverage/classification$dataset.coverage" NAME="dataset Coverage Results" MODIFIED="1585835817486" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/statistics" />
     <SUITE FILE_PATH="coverage/classification$dermatology.coverage" NAME="dermatology Coverage Results" MODIFIED="1591971603758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/IO" />
@@ -1049,6 +1063,6 @@
     <SUITE FILE_PATH="coverage/classification$test.coverage" NAME="test Coverage Results" MODIFIED="1592773958834" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/manuscript" />
     <SUITE FILE_PATH="coverage/classification$spatial.coverage" NAME="spatial Coverage Results" MODIFIED="1587749632031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$Test.coverage" NAME="Test Coverage Results" MODIFIED="1590150272032" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
-    <SUITE FILE_PATH="coverage/classification$models.coverage" NAME="models Coverage Results" MODIFIED="1591085158390" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/models" />
+    <SUITE FILE_PATH="coverage/classification$models.coverage" NAME="models Coverage Results" MODIFIED="1593016840588" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/models" />
   </component>
 </project>

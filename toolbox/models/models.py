@@ -811,7 +811,7 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         # we need to recompile the model for these modifications to take effect
         # we use SGD with a low learning rate
-        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
+        self.model.compile(optimizer=SGD(lr=0.001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
 
         print('Final-training...')
         # we train our model again (this time fine-tuning the top 2 inception blocks
