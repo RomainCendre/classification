@@ -56,8 +56,13 @@ class FlattenTransform(BaseEstimator, TransformerMixin):
     def fit(self, x, y=None):
         return self
 
-    def transform(self, x, y=None, copy=True):
-        return x.reshape((x.shape[0], -1))
+    def transform(self, X, y=None, copy=True):
+        if X.dtype == object:
+            flatten = []
+            for x in X:
+                flatten.append(np.concatenate(x))
+            return np.array(flatten)
+        return X.reshape((X.shape[0], -1))
 
 
 class ReshapeTrickTransform(BaseEstimator, TransformerMixin):
