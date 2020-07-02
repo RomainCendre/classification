@@ -800,7 +800,7 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         # if hasattr(self, 'two_step_training'):
         # compile the model (should be done *after* setting layers to non-trainable)
-        self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+        self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
         print('Pre-training...')
         self.history = self.model.fit_generator(generator=train, validation_data=validation,
                                                 class_weight=train.get_weights(), **params_fit)
