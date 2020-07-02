@@ -803,7 +803,7 @@ class KerasFineClassifier(KerasBatchClassifier):
         self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
         print('Pre-training...')
         self.history = self.model.fit_generator(generator=train, validation_data=validation,
-                                                callbacks=[EarlyStopping(monitor='loss', patience=5)],
+                                                # callbacks=[EarlyStopping(monitor='loss', patience=5)],
                                                 class_weight=train.get_weights(), **params_fit)
 
         trainable_layer = params.get('trainable_layer', 0)
