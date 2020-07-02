@@ -801,7 +801,7 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         # if hasattr(self, 'two_step_training'):
         # compile the model (should be done *after* setting layers to non-trainable)
-        self.model.compile(optimizer='adam', loss=Utils.macro_soft_f1, metrics=[Utils.macro_f1]) #'categorical_crossentropy'
+        self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
         print('Pre-training...')
         self.history = self.model.fit_generator(generator=train, validation_data=validation,
                                                 class_weight=train.get_weights(), **params_fit)
@@ -812,7 +812,7 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         # we need to recompile the model for these modifications to take effect
         # we use SGD with a low learning rate
-        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss=Utils.macro_soft_f1, metrics=[Utils.macro_f1])
+        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
 
         print('Final-training...')
         # we train our model again (this time fine-tuning the top 2 inception blocks
