@@ -490,8 +490,8 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
 class MultimodalClassifier(BaseEstimator, ClassifierMixin):
 
-    def __init__(self, method='single', ordered=True, metric=None):
-        mandatory = ['single', 'individual']
+    def __init__(self, method='modality', ordered=True, metric=None):
+        mandatory = ['modality', 'modality_class']
         if method not in mandatory:
             raise Exception(f'Invalid method.')
 
@@ -505,7 +505,7 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
         self.thresholds = None
 
     def fit(self, x, y=None):
-        if self.method == 'single':
+        if self.method == 'modality':
             self.thresholds = np.zeros(x.shape[1])
             for modality in arange(x.shape[1]):
                 x_mod = x[:, modality, :]
