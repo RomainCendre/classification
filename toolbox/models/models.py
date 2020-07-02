@@ -569,7 +569,6 @@ class KerasClassifier(tf.keras.wrappers.scikit_learn.KerasClassifier):
 
     def __getstate__(self):
         state = self.__dict__
-        state = copy.deepcopy(state)
         if "model" in state:
             model = state["model"]
             model_hdf5_bio = io.BytesIO()
