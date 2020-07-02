@@ -66,21 +66,3 @@ class Applications:
                             'preprocessing_function': Applications.get_preprocessing_application(architecture=architecture)}
         extractor_params.update(additional)
         return KerasFineClassifier(fine_tune_model, **extractor_params)
-
-    @staticmethod
-    def get_dummy_deep(output_classes):
-        keras.layers.RandomLayer = RandomLayer
-        # Extract labels
-        model = Sequential()
-        model.add(RandomLayer(output_classes))
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-        model.name = 'Dummy_Deep'
-        return model
-
-    @staticmethod
-    def get_dummy_simple():
-        pipe = Pipeline([('clf', DummyClassifier())])
-        pipe.name = 'Dummy_Simple'
-        # Define parameters to validate through grid CV
-        parameters = {}
-        return pipe, parameters
