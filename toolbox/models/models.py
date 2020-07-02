@@ -801,7 +801,7 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         # if hasattr(self, 'two_step_training'):
         # compile the model (should be done *after* setting layers to non-trainable)
-        self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=[Utils.f1])
+        self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=[Utils.macro_f1])
         print('Pre-training...')
         self.history = self.model.fit_generator(generator=train, validation_data=validation,
                                                 class_weight=train.get_weights(), **params_fit)
@@ -812,7 +812,7 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         # we need to recompile the model for these modifications to take effect
         # we use SGD with a low learning rate
-        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=[Utils.f1])
+        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=[Utils.macro_f1])
 
         print('Final-training...')
         # we train our model again (this time fine-tuning the top 2 inception blocks
@@ -906,33 +906,22 @@ class Utils:
                 return list(x)
             return [x]
 
-    def f1(y_true, y_pred):
-        def recall(y_true, y_pred):
-            """Recall metric.
+    @tf.function
+    def macro_f1(y, y_hat, thresh=0.5):
+        """Compute the macro F1-score on a batch of observations (average F1 across labels)
 
-            Only computes a batch-wise average of recall.
+        Args:
+            y (int32 Tensor): labels array of shape (BATCH_SIZE, N_LABELS)
+            y_hat (float32 Tensor): probability matrix from forward propagation of shape (BATCH_SIZE, N_LABELS)
+            thresh: probability value above which we predict positive
 
-            Computes the recall, a metric for multi-label classification of
-            how many relevant items are selected.
-            """
-            true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-            possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
-            recall = true_positives / (possible_positives + K.epsilon())
-            return recall
-
-        def precision(y_true, y_pred):
-            """Precision metric.
-
-            Only computes a batch-wise average of precision.
-
-            Computes the precision, a metric for multi-label classification of
-            how many selected items are relevant.
-            """
-            true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-            predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
-            precision = true_positives / (predicted_positives + K.epsilon())
-            return precision
-
-        precision = precision(y_true, y_pred)
-        recall = recall(y_true, y_pred)
-        return 2 * ((precision * recall) / (precision + recall + K.epsilon()))
+        Returns:
+            macro_f1 (scalar Tensor): value of macro F1 for the batch
+        """
+        y_pred = tf.cast(tf.greater(y_hat, thresh), tf.float32)
+        tp = tf.cast(tf.math.count_nonzero(y_pred * y, axis=0), tf.float32)
+        fp = tf.cast(tf.math.count_nonzero(y_pred * (1 - y), axis=0), tf.float32)
+        fn = tf.cast(tf.math.count_nonzero((1 - y_pred) * y, axis=0), tf.float32)
+        f1 = 2 * tp / (2 * tp + fn + fp + 1e-16)
+        macro_f1 = tf.reduce_mean(f1)
+        return macro_f1
