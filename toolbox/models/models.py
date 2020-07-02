@@ -787,10 +787,10 @@ class KerasFineClassifier(KerasBatchClassifier):
         params_fit = self.filter_params(all_params, Sequential.fit_generator)
 
         # Get generator
-        train = self.create_generator(X=X, y=y, params=params)
+        train = self.create_generator(X=X, y=y, params=all_params)
         validation = None
         if X_validation is not None:
-            validation = self.create_generator(X=X_validation, y=y_validation, params=params, prediction_mode=True)
+            validation = self.create_generator(X=X_validation, y=y_validation, params=all_params, prediction_mode=True)
 
         # first: train only the top layers (which were randomly initialized)
         # i.e. freeze all convolutional InceptionV3 layers
@@ -803,7 +803,6 @@ class KerasFineClassifier(KerasBatchClassifier):
         self.model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
         print('Pre-training...')
         self.history = self.model.fit_generator(generator=train, validation_data=validation,
-                                                # callbacks=[EarlyStopping(monitor='loss', patience=5)],
                                                 class_weight=train.get_weights(), **params_fit)
 
         trainable_layer = params.get('trainable_layer', 0)
