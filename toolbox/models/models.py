@@ -801,7 +801,7 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         # if hasattr(self, 'two_step_training'):
         # compile the model (should be done *after* setting layers to non-trainable)
-        self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=[Utils.macro_f1])
+        self.model.compile(optimizer='adam', loss=Utils.macro_soft_f1, metrics=[Utils.macro_f1]) #'categorical_crossentropy'
         print('Pre-training...')
         self.history = self.model.fit_generator(generator=train, validation_data=validation,
                                                 class_weight=train.get_weights(), **params_fit)
@@ -812,7 +812,7 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         # we need to recompile the model for these modifications to take effect
         # we use SGD with a low learning rate
-        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=[Utils.macro_f1])
+        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss=Utils.macro_soft_f1, metrics=[Utils.macro_f1])
 
         print('Final-training...')
         # we train our model again (this time fine-tuning the top 2 inception blocks
@@ -905,6 +905,28 @@ class Utils:
             if allow_tuple and isinstance(x, tuple):
                 return list(x)
             return [x]
+
+    @tf.function
+    def macro_soft_f1(y, y_hat):
+        """Compute the macro soft F1-score as a cost (average 1 - soft-F1 across all labels).
+        Use probability values instead of binary predictions.
+
+        Args:
+            y (int32 Tensor): targets array of shape (BATCH_SIZE, N_LABELS)
+            y_hat (float32 Tensor): probability matrix from forward propagation of shape (BATCH_SIZE, N_LABELS)
+
+        Returns:
+            cost (scalar Tensor): value of the cost function for the batch
+        """
+        y = tf.cast(y, tf.float32)
+        y_hat = tf.cast(y_hat, tf.float32)
+        tp = tf.reduce_sum(y_hat * y, axis=0)
+        fp = tf.reduce_sum(y_hat * (1 - y), axis=0)
+        fn = tf.reduce_sum((1 - y_hat) * y, axis=0)
+        soft_f1 = 2 * tp / (2 * tp + fn + fp + 1e-16)
+        cost = 1 - soft_f1  # reduce 1 - soft-f1 in order to increase soft-f1
+        macro_cost = tf.reduce_mean(cost)  # average on all labels
+        return macro_cost
 
     @tf.function
     def macro_f1(y, y_hat, thresh=0.5):
