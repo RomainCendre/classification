@@ -19,6 +19,7 @@ from sklearn.multiclass import _fit_binary
 from sklearn.utils.metaestimators import _safe_split
 from sklearn.utils.multiclass import unique_labels, _ovr_decision_function
 import tensorflow as tf
+from tensorflow.keras import backend as K
 from toolbox.models.generators import ResourcesGenerator
 
 
@@ -800,7 +801,7 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         # if hasattr(self, 'two_step_training'):
         # compile the model (should be done *after* setting layers to non-trainable)
-        self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=[Utils.f1])
         print('Pre-training...')
         self.history = self.model.fit_generator(generator=train, validation_data=validation,
                                                 class_weight=train.get_weights(), **params_fit)
@@ -811,27 +812,13 @@ class KerasFineClassifier(KerasBatchClassifier):
 
         # we need to recompile the model for these modifications to take effect
         # we use SGD with a low learning rate
-        self.model.compile(optimizer=SGD(lr=0.001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
+        self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics=[Utils.f1])
 
         print('Final-training...')
         # we train our model again (this time fine-tuning the top 2 inception blocks
         # alongside the top Dense layers
         self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
                                                 class_weight=train.get_weights(), **params_fit)
-        # else:
-        #     trainable_layer = params.get('trainable_layer', 0)
-        #     for layer in self.model.layers[trainable_layer:]:
-        #         layer.trainable = True
-        #
-        #     # we need to recompile the model for these modifications to take effect
-        #     # we use SGD with a low learning rate
-        #     self.model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy',
-        #                        metrics=['accuracy'])
-        #
-        #     # we train our model again (this time fine-tuning the top 2 inception blocks
-        #     # alongside the top Dense layers
-        #     self.history = self.model.fit_generator(generator=train, validation_data=validation, callbacks=callbacks,
-        #                                             class_weight=train.get_weights(), **params_fit)
         return self.history
 
     def transform(self, X, **params):
@@ -918,3 +905,34 @@ class Utils:
             if allow_tuple and isinstance(x, tuple):
                 return list(x)
             return [x]
+
+    def f1(y_true, y_pred):
+        def recall(y_true, y_pred):
+            """Recall metric.
+
+            Only computes a batch-wise average of recall.
+
+            Computes the recall, a metric for multi-label classification of
+            how many relevant items are selected.
+            """
+            true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+            possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+            recall = true_positives / (possible_positives + K.epsilon())
+            return recall
+
+        def precision(y_true, y_pred):
+            """Precision metric.
+
+            Only computes a batch-wise average of precision.
+
+            Computes the precision, a metric for multi-label classification of
+            how many selected items are relevant.
+            """
+            true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+            predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+            precision = true_positives / (predicted_positives + K.epsilon())
+            return precision
+
+        precision = precision(y_true, y_pred)
+        recall = recall(y_true, y_pred)
+        return 2 * ((precision * recall) / (precision + recall + K.epsilon()))
