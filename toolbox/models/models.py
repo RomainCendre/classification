@@ -490,16 +490,18 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
 class MultimodalClassifier(BaseEstimator, ClassifierMixin):
 
-    def __init__(self, method='single', metric=None):
+    def __init__(self, method='single', ordered=True, metric=None):
         mandatory = ['single', 'individual']
         if method not in mandatory:
             raise Exception(f'Invalid method.')
+
         self.method = method
+        self.ordered = ordered
+
         if metric:
             self.metric = metric
         else:
             self.metric = accuracy_score
-
         self.thresholds = None
 
     def fit(self, x, y=None):
@@ -508,7 +510,7 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
             for modality in arange(x.shape[1]):
                 x_mod = x[:, modality, :]
                 highest = 0
-                for thresh in sorted(list(x_mod.flatten()), reverse=True):
+                for thresh in sorted(list(x_mod.flatten()), reverse=self.ordered):
                     thresholds = self.thresholds.copy()
                     thresholds[modality] = thresh
                     predictions = MultimodalClassifier.__get_predictions(x, thresholds)
@@ -520,9 +522,9 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
             self.thresholds = np.zeros(x.shape[1:])
             for modality in arange(x.shape[1]):
                 for classe in arange(x.shape[2]):
-                    x_mod = x[:,modality, classe]
+                    x_mod = x[:, modality, classe]
                     highest = 0
-                    for thresh in sorted(list(x_mod.flatten()), reverse=True):
+                    for thresh in sorted(list(x_mod.flatten()), reverse=self.ordered):
                         thresholds = self.thresholds.copy()
                         thresholds[modality, classe] = thresh
                         predictions = MultimodalClassifier.__get_predictions(x, thresholds)
@@ -531,7 +533,6 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
                             highest = score
                             self.thresholds[modality, classe] = thresh
 
-        self.thresholds = [[0.5, 0.5], [0.5, 0.5], [0.5, 0.5]] # [0.5, 0.5, 0.5]
         return self
 
     @staticmethod
