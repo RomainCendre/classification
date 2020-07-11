@@ -186,7 +186,7 @@ class PatchViews:
         figure = plt.figure()
         plt.imshow(Image.alpha_composite(original, patch).convert("RGB"))
         plt.axis('off')
-        plt.show()
+        # plt.show()
         return figure
 
 import cv2
