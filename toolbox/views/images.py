@@ -184,9 +184,11 @@ class PatchViews:
             draw.rectangle((start, end), fill=color)
 
         # display
+        figure = plt.figure()
         plt.imshow(Image.alpha_composite(original, patch).convert("RGB"))
         plt.axis('off')
         plt.show()
+        return figure
 
 import cv2
 import numpy as np
