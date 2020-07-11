@@ -158,9 +158,8 @@ class PatchViews:
 
         # Colorize image
         # image = utils.load_img(data.loc['Datum'])
-        datum = 'C:\\Users\\romai\\Data\\Skin\\Lesions\\1AA\\images\\Microscopy\\MALAIRE DTE\\v0000000.bmp'
-        original = Image.open(datum).convert('RGBA')
-        patch = Image.open(datum).convert('RGBA')
+        original = Image.open(data.loc['Datum']).convert('RGBA')
+        patch = Image.open(data.loc['Datum']).convert('RGBA')
         draw = ImageDraw.Draw(patch)
         for index, row in instances.iterrows():
             center_x = row['Center_X']
