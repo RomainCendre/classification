@@ -128,7 +128,7 @@ class Tools:
     VAL_RATIO = 2
 
     @staticmethod
-    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, cpu=-1, folds=None, calibrate=None):
+    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, cpu=-1, folds=None, calibrate=None, weak=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -194,6 +194,9 @@ class Tools:
             if calibrate:
                 model_calibration = CalibratedClassifierCV(model, cv=Tools.VAL_RATIO, method=calibrate)
                 model = Tools.fit(sub[fit_mask], tags, model_calibration, cpu=cpu)
+
+            if weak is not None:
+                model.instancePrediction = True
 
             # Predict
             if hasattr(model, 'predict'):

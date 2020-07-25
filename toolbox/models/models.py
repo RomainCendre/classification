@@ -10,7 +10,6 @@ from copy import deepcopy
 from joblib import delayed, Parallel
 from numpy import hstack, arange
 from tensorflow.keras import Sequential, Model
-from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import SGD
 from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin
@@ -19,16 +18,15 @@ from sklearn.multiclass import _fit_binary
 from sklearn.utils.metaestimators import _safe_split
 from sklearn.utils.multiclass import unique_labels, _ovr_decision_function
 import tensorflow as tf
-from tensorflow.keras import backend as K
 from toolbox.models.generators import ResourcesGenerator
 
 
 class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on OneVsOne
 
-    def __init__(self, estimator, instances_predictions=False, n_jobs=None):
+    def __init__(self, estimator, instancePrediction=False, n_jobs=None):
         self.is_inconsistent = True
         self.estimator = estimator
-        self.instances_predictions = instances_predictions
+        self.instancePrediction = instancePrediction
         self.n_jobs = n_jobs
 
     def fit(self, bags, y):
@@ -53,9 +51,19 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
 
     def predict(self, X):
         Y = self.decision_function(X)
-        # if self.n_classes_ == 2:
-        #     return self.classes_[(Y > 0).astype(np.int)]
-        return self.classes_[Y.argmax(axis=1)]
+        Y = self.classes_[Y.argmax(axis=1)]
+
+        if self.instancePrediction:
+            Y = Y.tolist()
+            # Y = self.estimators_[0].predict(X, instancePrediction=True)[1].tolist()
+            predictions = []
+            for x in X:
+                predictions.append(Y[:len(x)])
+                del Y[:len(x)]
+            return predictions
+
+        else:
+            return Y
 
     def predict_proba(self, X):
         Y = self.decision_function(X)
@@ -63,15 +71,19 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
         Y = Y / np.max(Y)
         return Y
 
-    def decision_function(self, X):
+    def decision_function(self, X, instancePrediction=None):
         indices = self.pairwise_indices_
         if indices is None:
             Xs = [X] * len(self.estimators_)
         else:
             Xs = [X[:, idx] for idx in indices]
 
-        predictions = np.vstack([self.__est_predict(est, Xi) for est, Xi in zip(self.estimators_, Xs)]).T
-        confidences = np.vstack([self.__est_predict_binary(est, Xi) for est, Xi in zip(self.estimators_, Xs)]).T
+        predictions = np.vstack(
+            [self.__est_predict(est, Xi, instancePrediction=instancePrediction) for est, Xi in
+             zip(self.estimators_, Xs)]).T
+        confidences = np.vstack(
+            [self.__est_predict_binary(est, Xi, instancePrediction=instancePrediction) for est, Xi in
+             zip(self.estimators_, Xs)]).T
         Y = _ovr_decision_function(predictions, confidences, len(self.classes_))
         # if self.n_classes_ == 2:
         #     return Y[:, 1]
@@ -94,7 +106,10 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
 
     @staticmethod
     def __est_predict_proba(estimator, bags, instancePrediction=None):
-        predictions = estimator.predict(bags)
+        if instancePrediction is None:
+            predictions = estimator.predict(bags)
+        else:
+            predictions = estimator.predict(bags, instancePrediction)[1]
         max_value = np.max(np.abs(predictions))
         predictions = np.nan_to_num(predictions/max_value)*0.5+0.5
         return np.array([1-predictions, predictions]).T
