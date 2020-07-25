@@ -60,7 +60,7 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
             for index, bag in enumerate(bags):
                 bags[index] = self.data_preparation.transform(bag)
 
-        Y = self.decision_function(bags)
+        Y = self.decision_function(bags, instancePrediction=self.instancePrediction)
         Y = self.classes_[Y.argmax(axis=1)]
 
         if self.instancePrediction:
@@ -71,7 +71,6 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
                 predictions.append(Y[:len(x)])
                 del Y[:len(x)]
             return predictions
-
         else:
             return Y
 
@@ -80,10 +79,19 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
             for index, bag in enumerate(bags):
                 bags[index] = self.data_preparation.transform(bag)
 
-        Y = self.decision_function(bags)
+        Y = self.decision_function(bags, instancePrediction=self.instancePrediction)
         Y = (Y - np.min(Y))
         Y = Y / np.max(Y)
-        return Y
+        if self.instancePrediction:
+            Y = Y.tolist()
+            # Y = self.estimators_[0].predict(X, instancePrediction=True)[1].tolist()
+            predictions = []
+            for x in bags:
+                predictions.append(Y[:len(x)])
+                del Y[:len(x)]
+            return predictions
+        else:
+            return Y
 
     def decision_function(self, X, instancePrediction=None):
         indices = self.pairwise_indices_
