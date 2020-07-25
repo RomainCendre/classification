@@ -128,7 +128,7 @@ class Tools:
     VAL_RATIO = 2
 
     @staticmethod
-    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, cpu=-1, folds=None, calibrate=None, weak=None):
+    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, cpu=-1, folds=None, calibrate=None, instance=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -195,14 +195,11 @@ class Tools:
                 model_calibration = CalibratedClassifierCV(model, cv=Tools.VAL_RATIO, method=calibrate)
                 model = Tools.fit(sub[fit_mask], tags, model_calibration, cpu=cpu)
 
-            if weak is not None:
-                model.instancePrediction = True
-
             # Predict
             if hasattr(model, 'predict'):
-                Tools.predict(sub, {'datum': tags['datum']}, model, out_predict, mask=predict_mask)
+                Tools.predict(sub, {'datum': tags['datum']}, model, out_predict, mask=predict_mask, instance=instance)
             if hasattr(model, 'predict_proba'):
-                Tools.predict_proba(sub, {'datum': tags['datum']}, model, out_proba, mask=predict_mask)
+                Tools.predict_proba(sub, {'datum': tags['datum']}, model, out_proba, mask=predict_mask, instance=instance)
 
         if mask is not None:
             dataframe[mask] = sub
@@ -328,7 +325,7 @@ class Tools:
             dataframe[mask] = sub
 
     @staticmethod
-    def predict(dataframe, tags, model, out, mask=None):
+    def predict(dataframe, tags, model, out, mask=None, instance=None):
         # Check mandatory fields
         mandatory = ['datum']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -355,14 +352,18 @@ class Tools:
             data = sub[tags['datum']].to_list()
 
         # Set de predict values
-        predictions = model.predict(data)
+        if instance is None:
+            predictions = model.predict(data)
+        else:
+            predictions = model.predict_instance(data)
+
         sub[out] = pd.Series([p for p in predictions], index=sub.index)
 
         if mask is not None:
             dataframe[mask] = sub
 
     @staticmethod
-    def predict_proba(dataframe, tags, model, out, mask=None):
+    def predict_proba(dataframe, tags, model, out, mask=None, instance=None):
         # Check mandatory fields
         mandatory = ['datum']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -384,7 +385,12 @@ class Tools:
 
         # Set de predict probas values
         data = np.array(sub[tags['datum']].to_list())
-        probabilities = model.predict_proba(data)
+
+        if instance is None:
+            probabilities = model.predict_proba(data)
+        else:
+            probabilities = model.predict_proba_instance(data)
+
         sub[out] = pd.Series([p for p in probabilities], index=sub.index)
 
         if mask is not None:
