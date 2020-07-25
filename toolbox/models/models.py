@@ -23,13 +23,19 @@ from toolbox.models.generators import ResourcesGenerator
 
 class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on OneVsOne
 
-    def __init__(self, estimator, instancePrediction=False, n_jobs=None):
+    def __init__(self, estimator, data_preparation=None, instancePrediction=False, n_jobs=None):
         self.is_inconsistent = True
+        self.data_preparation = data_preparation
         self.estimator = estimator
         self.instancePrediction = instancePrediction
         self.n_jobs = n_jobs
 
     def fit(self, bags, y):
+        if self.data_preparation is not None:
+            self.data_preparation.fit(np.concatenate(bags))
+            for index, bag in enumerate(bags):
+                bags[index] = self.data_preparation.transform(bag)
+
         self.classes_ = np.unique(y)
         if len(self.classes_) == 1:
             raise ValueError("OneVsOneClassifier can not be fit when only one"
@@ -49,15 +55,19 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
 
         return self
 
-    def predict(self, X):
-        Y = self.decision_function(X)
+    def predict(self, bags):
+        if self.data_preparation is not None:
+            for index, bag in enumerate(bags):
+                bags[index] = self.data_preparation.transform(bag)
+
+        Y = self.decision_function(bags)
         Y = self.classes_[Y.argmax(axis=1)]
 
         if self.instancePrediction:
             Y = Y.tolist()
             # Y = self.estimators_[0].predict(X, instancePrediction=True)[1].tolist()
             predictions = []
-            for x in X:
+            for x in bags:
                 predictions.append(Y[:len(x)])
                 del Y[:len(x)]
             return predictions
@@ -65,8 +75,12 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
         else:
             return Y
 
-    def predict_proba(self, X):
-        Y = self.decision_function(X)
+    def predict_proba(self, bags):
+        if self.data_preparation is not None:
+            for index, bag in enumerate(bags):
+                bags[index] = self.data_preparation.transform(bag)
+
+        Y = self.decision_function(bags)
         Y = (Y - np.min(Y))
         Y = Y / np.max(Y)
         return Y
