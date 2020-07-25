@@ -25,9 +25,10 @@ from toolbox.models.generators import ResourcesGenerator
 
 class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on OneVsOne
 
-    def __init__(self, estimator, n_jobs=None):
+    def __init__(self, estimator, instances_predictions, n_jobs=None):
         self.is_inconsistent = True
         self.estimator = estimator
+        self.instances_predictions = instances_predictions
         self.n_jobs = n_jobs
 
     def fit(self, bags, y):
