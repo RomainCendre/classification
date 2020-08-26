@@ -414,7 +414,13 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
 
         return self
 
-    def steps(self, x, y=None):
+    def predict(self, x, y=None, copy=True):
+        return self.__get_predictions(x, self.thresholds)
+
+    def predict_proba(self, x, y=None, copy=True):
+        return self.__get_probabilities(x, self.thresholds)
+
+    def predict_steps(self, x, y=None):
         return MultimodalClassifier.__get_steps(x, self.thresholds)
 
     @staticmethod
@@ -451,12 +457,6 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
             cmask = x[:, jndex, :] > treshold
             mask[:, jndex, :] = cmask
         return mask
-
-    def predict(self, x, y=None, copy=True):
-        return self.__get_predictions(x, self.thresholds)
-
-    def predict_proba(self, x, y=None, copy=True):
-        return self.__get_probabilities(x, self.thresholds)
 
 
 class KerasClassifier(tf.keras.wrappers.scikit_learn.KerasClassifier):
