@@ -9,6 +9,7 @@ from pandas.io.formats.style import Styler
 from matplotlib import pyplot, transforms
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.patches import Ellipse
+import matplotlib.patches as patches
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.metrics import auc, roc_curve, classification_report
@@ -368,12 +369,150 @@ class Views:
         return figure
 
     @staticmethod
+    def steps_visualization(inputs, tags):
+
+        # Check mandatory fields
+        mandatory = ['label_encode', 'eval']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        # Find data
+        steps = np.array(inputs[f'{tags["eval"]}_{Tools.STEPS}'].to_list()).astype(int)
+        labels = np.array(inputs[tags["label_encode"]].to_list()).astype(int)
+        predictions = np.array(inputs[f'{tags["eval"]}_{Tools.PREDICTION}'].to_list()).astype(int)
+        well_classified = labels==predictions
+
+        # Compute data
+        remain = len(predictions)
+        data = []
+        for current in np.unique(steps):
+            current_prediction = predictions[steps == current]
+            current_well = well_classified[steps == current]
+            current_miss = ~current_well
+            remain = remain - len(current_prediction)
+
+            benign_mask = current_prediction == 0
+            malignant_mask = current_prediction == 1
+
+            data.append(np.array([len(np.where(current_well[benign_mask])[0]), # Benign
+                                  len(np.where(current_miss[benign_mask])[0]), # False benign
+                                  remain, # Remains
+                                  len(np.where(current_miss[malignant_mask])[0]),
+                                  len(np.where(current_well[malignant_mask])[0])]))
+
+        dataframe = pandas.DataFrame(data, columns=['Benign', 'FBenign', 'Remain', 'FMalignant', 'Malignant'])
+
+        return Views.__get_custom_horizontal_plot(dataframe, len(predictions))
+
+    @staticmethod
     def __get_color_map(values, encoder, settings):
         unique_values = np.unique(values)
         colors = []
         for value in unique_values:
             colors.append(settings.get_color(encoder.inverse_transform(value)[0]))
         return ListedColormap(colors)
+
+    @staticmethod
+    def __get_custom_horizontal_plot(dataframe, total):
+
+        def plot_rect(bottom, left, width, height, color='C0'):
+            ax.add_patch(patches.Rectangle(
+                (left, bottom), width, height, linewidth=1, edgecolor=color, facecolor=color))
+
+        def process_data(data):
+            left = np.zeros_like(data)
+            mid = data[2] / 2
+            left[0] = -np.sum(data[0:1]) - mid
+            left[1] = -np.sum(data[1]) - mid
+            left[2] = -mid
+            left[3] = mid
+            left[4] = np.sum(data[3]) + mid
+            width = data
+            return left, width
+
+        # Create figure and axes
+        fig, ax = pyplot.subplots(1)
+
+        # Change color of plot edges
+        ax.spines['left'].set_color('lightgray')
+        ax.spines['right'].set_color('lightgray')
+        ax.spines['top'].set_color('lightgray')
+
+        # Hide y axis ticks
+        pyplot.gca().tick_params(axis='y', colors='w')
+
+        # Turn on gridlines and set color
+        pyplot.grid(b=True, axis='both', color='lightgray', alpha=0.5, linewidth=1.5)
+
+        # Add lines
+        pyplot.axvline(x=0, c='lightgray')
+
+        # Add x label
+        pyplot.xlabel('Pourcentage', fontsize=14)
+
+        # Define color scheme from negative to positive
+        colors = ['forestgreen', 'palegreen', 'lightgray', 'salmon', 'firebrick']
+
+        # Process data to plot
+        rows = len(dataframe)
+        array = [dataframe.iloc[i, :].values for i in reversed(np.arange(rows))]
+        array_percentage = [dataframe.iloc[i, :].values / total for i in reversed(np.arange(rows))]
+
+        num_modalities = len(array)
+
+        # Define axis limits
+        pyplot.xlim(-1.125, 1.125)
+        pyplot.ylim(0.05, 0.2 * (num_modalities-1))
+
+        # Define axis ticks ticks
+        pyplot.xticks(np.arange(-1, 1.25, 0.25), np.arange(-100, 125, 25))
+        pyplot.yticks(np.arange(0, 0.2 * (num_modalities), 0.2), np.arange(0, 0.2 * (num_modalities), 0.2))
+
+        # Move gridlines to the back of the plot
+        pyplot.gca().set_axisbelow(True)
+
+        left = {}
+        width = {}
+        for i in range(num_modalities):
+            left[i], width[i] = process_data(array_percentage[i])
+
+        # Plot boxes
+        height = 0.10
+        bottom = 0.05
+        gap = 0.0125
+        for i in range(num_modalities):
+            for j in range(len(array[i])):
+                plot_rect(bottom=bottom + i * 0.2, left=left[i][j], width=width[i][j], height=height, color=colors[j])
+                # y = 0.2 * (i) + (j%2)*gap + gap
+                # pyplot.text(left[i][j]+(width[i][j]/2), y, str(array[i][j]), horizontalalignment='left',
+                #             verticalalignment='center')
+
+        # Plot percentages
+        for i in range(num_modalities):
+            pyplot.text(-1, 0.2 * (i)+gap, str(array[i][0]), horizontalalignment='left',
+                        verticalalignment='center')
+            pyplot.text(-0.5, 0.2 * (i)+gap, str(array[i][1]), horizontalalignment='center',
+                        verticalalignment='center')
+            pyplot.text(0, 0.2 * (i)+gap, str(array[i][2]), horizontalalignment='center',
+                        verticalalignment='center')
+            pyplot.text(0.5, 0.2 * (i)+gap, str(array[i][3]), horizontalalignment='right',
+                        verticalalignment='center')
+            pyplot.text(1, 0.2 * (i)+gap, str(array[i][4]), horizontalalignment='right',
+                        verticalalignment='center')
+
+        # Plot category labels
+        pyplot.text(-1.1, 0.2 * (num_modalities)+gap, 'Bénin', style='italic', horizontalalignment='left',
+                    verticalalignment='center')
+        # pyplot.text(-0.6, 0.2 * (num_modalities)+gap, 'Faux Bénin', style='italic', horizontalalignment='left',
+        #             verticalalignment='center')
+        pyplot.text(0, 0.2 * (num_modalities)+gap, 'Restant', style='italic', horizontalalignment='center',
+                    verticalalignment='center')
+        # pyplot.text(0.6, 0.2 * (num_modalities)+gap, 'Faux Malin', style='italic', horizontalalignment='right',
+        #             verticalalignment='center')
+        pyplot.text(1.1, 0.2 * (num_modalities)+gap, 'Malin', style='italic', horizontalalignment='right',
+                    verticalalignment='center')
+
+        return fig
 
     @staticmethod
     def __format_std(x, y, scores):

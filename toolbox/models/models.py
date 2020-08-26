@@ -414,22 +414,43 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
 
         return self
 
+    def steps(self, x, y=None):
+        return MultimodalClassifier.__get_steps(x, self.thresholds)
+
     @staticmethod
     def __get_predictions(x, thresholds):
-        if thresholds is None:
-            return np.repeat(0, len(x))
-        else:
-            new_x = np.zeros([x.shape[0], x.shape[2]])
-            for index, sample in enumerate(x):
-                probas = None
-                for jndex, tresh in enumerate(thresholds):
-                    probas = sample[jndex]
-                    mask = probas > thresholds[jndex]
-                    probas[~mask] = 0
-                    if mask.any():
-                        break
-                new_x[index, :] = probas
-            return np.argmax(new_x, axis=1)
+        probabilities = MultimodalClassifier.__get_probabilities(x, thresholds)
+        return np.argmax(probabilities, axis=1)
+
+    @staticmethod
+    def __get_probabilities(x, thresholds):
+        steps = MultimodalClassifier.__get_steps(x, thresholds)
+        probabilities = np.zeros([x.shape[0], x.shape[2]])
+        for sample, modality in enumerate(steps):
+            mask = x[sample, modality, :] > thresholds[modality]
+            probabilities[sample, mask] = x[sample, modality, mask]
+        return probabilities
+
+    @staticmethod
+    def __get_steps(x, thresholds):
+        # Number of classes
+        num_classes = x.shape[1]
+        # Make priority matrix on first modalities
+        modalities = np.tile(np.expand_dims(np.array(list(reversed(range(num_classes)))), axis=1), (1, x.shape[2]))
+        indices = np.tile(modalities, (x.shape[0], 1, 1))
+        # Get the mask, and put missing values to lower priority
+        mask = MultimodalClassifier.__get_mask(x, thresholds)
+        indices[~mask] = 0
+        # Return modalities
+        return (num_classes - 1) - np.amax(np.amax(indices, axis=2), axis=1)
+
+    @staticmethod
+    def __get_mask(x, thresholds):
+        mask = np.full(x.shape, False)
+        for jndex, treshold in enumerate(thresholds):
+            cmask = x[:, jndex, :] > treshold
+            mask[:, jndex, :] = cmask
+        return mask
 
     def predict(self, x, y=None, copy=True):
         return self.__get_predictions(x, self.thresholds)

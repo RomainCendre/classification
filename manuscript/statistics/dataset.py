@@ -40,11 +40,18 @@ pyplot.legend((p1[0], p2[0]), ('Commun', 'Uniques'))
 figure.show()
 figure.savefig('elisa_statistics.pdf', bbox_inches='tight')
 
-## WHOLE
+## FULL
 cat = seaborn.catplot(x='Label', order=['Malignant', 'Benign', 'Normal', 'Unknown'], kind="count", hue='ID_Table', data=inputs)
 # pyplot.legend(loc='upper left')
 pyplot.show()
 cat.savefig('full_statistics.pdf', bbox_inches='tight')
+
+## Lesions
+inputs = inputs[inputs['ID_Image']=='0M']
+cat = seaborn.catplot(x='Binary_Diagnosis', order=['Malignant', 'Benign'], kind="count", hue='ID_Table', data=inputs)
+# pyplot.legend(loc='upper left')
+pyplot.show()
+cat.savefig('lesions_statistics.pdf', bbox_inches='tight')
 
 inputs_patch = Dermatology.images(data_type='Patch', modality='Microscopy', use_unknown=True)
 ## WHOLE

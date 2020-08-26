@@ -191,7 +191,7 @@ class PatchViews:
 
 ## GRAD CAM visualisation from
 # https://www.pyimagesearch.com/2020/03/09/grad-cam-visualize-class-activation-maps-with-keras-tensorflow-and-deep-learning/
-import cv2
+# import cv2
 import numpy as np
 import tensorflow as tf
 class GradCAM:

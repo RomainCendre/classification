@@ -125,6 +125,7 @@ class Tools:
     PARAMETERS = 'Parameters'
     PREDICTION = 'Prediction'
     PROBABILITY = 'Probability'
+    STEPS = 'Steps'
     VAL_RATIO = 2
 
     @staticmethod
@@ -143,10 +144,11 @@ class Tools:
             raise ValueError('Not enough unique labels where found, at least 2.')
 
         # Out fields
+        out_features = f'{out}_{Tools.FEATURES}'
         out_predict = f'{out}_{Tools.PREDICTION}'
         out_proba = f'{out}_{Tools.PROBABILITY}'
-        out_features = f'{out}_{Tools.FEATURES}'
         out_params = f'{out}_{Tools.PARAMETERS}'
+        out_steps = f'{out}_{Tools.STEPS}'
         if out_predict not in dataframe:
             dataframe[out_predict] = np.nan
         if out_proba not in dataframe:
@@ -155,6 +157,8 @@ class Tools:
             dataframe[out_features] = np.nan
         if out_params not in dataframe:
             dataframe[out_params] = np.nan
+        if out_steps not in dataframe:
+            dataframe[out_steps] = np.nan
 
         # Mask dataframe
         if mask is None:
@@ -200,6 +204,8 @@ class Tools:
                 Tools.predict(sub, {'datum': tags['datum']}, model, out_predict, mask=predict_mask, instance=instance)
             if hasattr(model, 'predict_proba'):
                 Tools.predict_proba(sub, {'datum': tags['datum']}, model, out_proba, mask=predict_mask, instance=instance)
+            if hasattr(model, 'steps'):
+                Tools.steps(sub, {'datum': tags['datum']}, model, out_steps, mask=predict_mask, instance=instance)
 
         if mask is not None:
             dataframe[mask] = sub
@@ -303,6 +309,40 @@ class Tools:
                 Tools.predict(sub, {'datum': tags['datum']}, fitted_model, out_predict, mask=predict_mask)
             if hasattr(model, 'predict_proba'):
                 Tools.predict_proba(sub, {'datum': tags['datum']}, fitted_model, out_proba, mask=predict_mask)
+
+        if mask is not None:
+            dataframe[mask] = sub
+
+    @staticmethod
+    def steps(dataframe, tags, model, out, mask=None, instance=None):
+        # Check mandatory fields
+        mandatory = ['datum']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        method = 'steps'
+        if not hasattr(model, method):
+            raise Exception(f'No method {method} found.')
+
+        # Create column if doesnt exist
+        if out not in dataframe:
+            dataframe[out] = np.nan
+
+        # Mask dataframe
+        if mask is None:
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
+
+        # Set de predict probas values
+        data = np.array(sub[tags['datum']].to_list())
+
+        if instance is None:
+            steps = model.steps(data)
+        else:
+            steps = model.steps(data)
+
+        sub[out] = pd.Series([p for p in steps], index=sub.index)
 
         if mask is not None:
             dataframe[mask] = sub
