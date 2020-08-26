@@ -370,6 +370,9 @@ class Views:
 
     @staticmethod
     def steps_visualization(inputs, tags):
+        # Fold needed for evaluation
+        if 'Fold' not in inputs:
+            raise Exception('Need to build fold.')
 
         # Check mandatory fields
         mandatory = ['label_encode', 'eval']
@@ -377,10 +380,17 @@ class Views:
             raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
 
         # Find data
+        folds = np.array(inputs[f'Fold'].to_list()).astype(int)
         steps = np.array(inputs[f'{tags["eval"]}_{Tools.STEPS}'].to_list()).astype(int)
         labels = np.array(inputs[tags["label_encode"]].to_list()).astype(int)
         predictions = np.array(inputs[f'{tags["eval"]}_{Tools.PREDICTION}'].to_list()).astype(int)
-        well_classified = labels==predictions
+        # Process parameters
+        parameters = np.array(inputs[f'{tags["eval"]}_{Tools.PARAMETERS}'].to_list())
+        parameters = np.array([parameters[np.where(folds == fold)[0][0]] for fold in np.unique(folds)])
+        parameters = np.moveaxis(parameters, 0, (len(parameters.shape) - 1))
+        means = np.mean(parameters, axis=(len(parameters.shape)-1))
+        stds = np.std(parameters, axis=(len(parameters.shape)-1))
+        well_classified = labels == predictions
 
         # Compute data
         remain = len(predictions)
@@ -402,7 +412,7 @@ class Views:
 
         dataframe = pandas.DataFrame(data, columns=['Benign', 'FBenign', 'Remain', 'FMalignant', 'Malignant'])
 
-        return Views.__get_custom_horizontal_plot(dataframe, len(predictions))
+        return Views.__get_custom_horizontal_plot(dataframe, len(predictions), means, stds)
 
     @staticmethod
     def __get_color_map(values, encoder, settings):
@@ -413,7 +423,7 @@ class Views:
         return ListedColormap(colors)
 
     @staticmethod
-    def __get_custom_horizontal_plot(dataframe, total):
+    def __get_custom_horizontal_plot(dataframe, total, means, stds):
 
         def plot_rect(bottom, left, width, height, color='C0'):
             ax.add_patch(patches.Rectangle(
@@ -483,9 +493,6 @@ class Views:
         for i in range(num_modalities):
             for j in range(len(array[i])):
                 plot_rect(bottom=bottom + i * 0.2, left=left[i][j], width=width[i][j], height=height, color=colors[j])
-                # y = 0.2 * (i) + (j%2)*gap + gap
-                # pyplot.text(left[i][j]+(width[i][j]/2), y, str(array[i][j]), horizontalalignment='left',
-                #             verticalalignment='center')
 
         # Plot percentages
         for i in range(num_modalities):
@@ -499,6 +506,18 @@ class Views:
                         verticalalignment='center')
             pyplot.text(1, 0.2 * (i)+gap, str(array[i][4]), horizontalalignment='right',
                         verticalalignment='center')
+
+        # Plot threshs
+        for i in range(num_modalities):
+            rev_index = num_modalities-i-1
+            if len(means.shape) == 1:
+                pyplot.text(-0.15, 0.2 * (i) + gap + 1.5*height, f'{means[rev_index]:.2f}±{stds[rev_index]:.2f}', horizontalalignment='left',
+                            verticalalignment='center')
+            else:
+                pyplot.text(-0.5, 0.2 * (i) + gap +  1.5*height, f'{means[rev_index,0]:.2f}±{stds[rev_index,0]:.2f}', horizontalalignment='left',
+                            verticalalignment='center')
+                pyplot.text(0.5, 0.2 * (i) + gap +  1.5*height, f'{means[rev_index,1]:.2f}±{stds[rev_index,1]:.2f}', horizontalalignment='left',
+                            verticalalignment='center')
 
         # Plot category labels
         pyplot.text(-1.1, 0.2 * (num_modalities)+gap, 'Bénin', style='italic', horizontalalignment='left',
