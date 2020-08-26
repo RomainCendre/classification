@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/classification/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/classification/common.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/models/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -419,14 +417,7 @@
       <workItem from="1596718170506" duration="7309000" />
       <workItem from="1597251796566" duration="102000" />
       <workItem from="1597658521701" duration="1796000" />
-      <workItem from="1598348308066" duration="48523000" />
-    </task>
-    <task id="LOCAL-00585" summary="Update image classification experiments">
-      <created>1593694916442</created>
-      <option name="number" value="00585" />
-      <option name="presentableId" value="LOCAL-00585" />
-      <option name="project" value="LOCAL" />
-      <updated>1593694916442</updated>
+      <workItem from="1598348308066" duration="48601000" />
     </task>
     <task id="LOCAL-00586" summary="Update image classification experiments">
       <created>1593695358666</created>
@@ -764,7 +755,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598477519590</updated>
     </task>
-    <option name="localTasksCounter" value="634" />
+    <task id="LOCAL-00634" summary="Fix steps">
+      <created>1598478298111</created>
+      <option name="number" value="00634" />
+      <option name="presentableId" value="LOCAL-00634" />
+      <option name="project" value="LOCAL" />
+      <updated>1598478298111</updated>
+    </task>
+    <option name="localTasksCounter" value="635" />
     <servers />
   </component>
   <component name="TodoView">
@@ -807,7 +805,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update multimodal classification experiments" />
     <MESSAGE value="Update image improvement experiments" />
     <MESSAGE value="Update image classification experiments" />
     <MESSAGE value="Update improvemnts methods" />
@@ -832,7 +829,8 @@
     <MESSAGE value="Solve missing features" />
     <MESSAGE value="Add threshs" />
     <MESSAGE value="Fix cv2" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix cv2" />
+    <MESSAGE value="Fix steps" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix steps" />
   </component>
   <component name="WindowStateProjectService">
     <state x="2591" y="324" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1591516612145">
@@ -844,11 +842,11 @@
     </state>
     <state x="453" y="378" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598477782155" />
     <state x="2373" y="378" width="1195" height="377" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1598459491623" />
-    <state x="585" y="105" key="CommitChangelistDialog2" timestamp="1598477518891">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1598478297486">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="585" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598477518891" />
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1598460840388" />
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1598478297486" />
     <state x="2012" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1595684769111">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -901,11 +899,11 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2266" y="71" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1594282337807" />
-    <state x="552" y="254" key="Vcs.Push.Dialog.v2" timestamp="1598477520822">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1598478299427">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598477520822" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1598460843038" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1598478299427" />
     <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1598458414650">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>

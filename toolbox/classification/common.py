@@ -205,7 +205,7 @@ class Tools:
                 Tools.predict(sub, {'datum': tags['datum']}, model, out_predict, mask=predict_mask, instance=instance)
             if hasattr(model, 'predict_proba'):
                 Tools.predict_proba(sub, {'datum': tags['datum']}, model, out_proba, mask=predict_mask, instance=instance)
-            if hasattr(model, 'steps'):
+            if hasattr(model, 'predict_steps'):
                 Tools.predict_steps(sub, {'datum': tags['datum']}, model, out_steps, mask=predict_mask, instance=instance)
 
         if mask is not None:
