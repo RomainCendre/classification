@@ -455,6 +455,9 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
     def predict(self, x, y=None, copy=True):
         return self.__get_predictions(x, self.thresholds)
 
+    def predict_proba(self, x, y=None, copy=True):
+        return self.__get_probabilities(x, self.thresholds)
+
 
 class KerasClassifier(tf.keras.wrappers.scikit_learn.KerasClassifier):
     """

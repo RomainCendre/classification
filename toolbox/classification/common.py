@@ -10,7 +10,8 @@ from sklearn.semi_supervised import LabelSpreading, LabelPropagation
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
-from toolbox.models.models import KerasBatchClassifier
+from toolbox.models.models import KerasBatchClassifier, MultimodalClassifier
+
 warnings.filterwarnings("ignore", category=PerformanceWarning)
 pd.options.mode.chained_assignment = None
 
@@ -477,7 +478,10 @@ class Tools:
         else:
             sub = dataframe[mask]
 
-        sub[out] = [model.best_params] * len(sub)
+        if isinstance(model, MultimodalClassifier):
+            sub[out] = [model.thresholds] * len(sub)
+        else:
+            sub[out] = [model.best_params] * len(sub)
 
         if mask is not None:
             dataframe[mask] = sub
