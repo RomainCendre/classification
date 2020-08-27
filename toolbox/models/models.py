@@ -369,13 +369,14 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
 class MultimodalClassifier(BaseEstimator, ClassifierMixin):
 
-    def __init__(self, method='modality', ordered=True, metric=None):
+    def __init__(self, method='modality', ordered=True, metric=None, from_zero=True):
         mandatory = ['modality', 'modality_class']
         if method not in mandatory:
             raise Exception(f'Invalid method.')
 
         self.method = method
         self.ordered = ordered
+        self.from_zero = from_zero
 
         if metric:
             self.metric = metric
@@ -384,33 +385,63 @@ class MultimodalClassifier(BaseEstimator, ClassifierMixin):
         self.thresholds = None
 
     def fit(self, x, y=None):
-        if self.method == 'modality':
-            self.thresholds = np.zeros(x.shape[1])
-            for modality in arange(x.shape[1]):
-                x_mod = x[:, modality, :]
-                highest = 0
-                for thresh in sorted(list(x_mod.flatten()), reverse=self.ordered):
-                    thresholds = self.thresholds.copy()
-                    thresholds[modality] = thresh
-                    predictions = MultimodalClassifier.__get_predictions(x, thresholds)
-                    score = self.metric(y, predictions)
-                    if score > highest:
-                        highest = score
-                        self.thresholds[modality] = thresh
-        else:
-            self.thresholds = np.zeros(x.shape[1:])
-            for modality in arange(x.shape[1]):
-                for classe in arange(x.shape[2]):
-                    x_mod = x[:, modality, classe]
+        num_modal = x.shape[1]
+        if self.from_zero:
+            if self.method == 'modality':
+                self.thresholds = np.zeros(num_modal)
+                for modality in arange(num_modal):
+                    x_mod = x[:, modality, :]
                     highest = 0
                     for thresh in sorted(list(x_mod.flatten()), reverse=self.ordered):
                         thresholds = self.thresholds.copy()
-                        thresholds[modality, classe] = thresh
+                        thresholds[modality] = thresh
                         predictions = MultimodalClassifier.__get_predictions(x, thresholds)
                         score = self.metric(y, predictions)
                         if score > highest:
                             highest = score
-                            self.thresholds[modality, classe] = thresh
+                            self.thresholds[modality] = thresh
+            else:
+                self.thresholds = np.zeros(x.shape[1:])
+                for modality in arange(num_modal):
+                    for classe in arange(x.shape[2]):
+                        x_mod = x[:, modality, classe]
+                        highest = 0
+                        for thresh in sorted(list(x_mod.flatten()), reverse=self.ordered):
+                            thresholds = self.thresholds.copy()
+                            thresholds[modality, classe] = thresh
+                            predictions = MultimodalClassifier.__get_predictions(x, thresholds)
+                            score = self.metric(y, predictions)
+                            if score > highest:
+                                highest = score
+                                self.thresholds[modality, classe] = thresh
+        else:
+            if self.method == 'modality':
+                self.thresholds = np.ones(num_modal)
+                for modality in reversed(arange(num_modal)):
+                    x_mod = x[:, modality, :]
+                    highest = 0
+                    for thresh in sorted(list(x_mod.flatten()), reverse=self.ordered):
+                        thresholds = self.thresholds.copy()
+                        thresholds[modality] = thresh
+                        predictions = MultimodalClassifier.__get_predictions(x, thresholds)
+                        score = self.metric(y, predictions)
+                        if score > highest:
+                            highest = score
+                            self.thresholds[modality] = thresh
+            else:
+                self.thresholds = np.ones(x.shape[1:])
+                for modality in reversed(arange(num_modal)):
+                    for classe in arange(x.shape[2]):
+                        x_mod = x[:, modality, classe]
+                        highest = 0
+                        for thresh in sorted(list(x_mod.flatten()), reverse=self.ordered):
+                            thresholds = self.thresholds.copy()
+                            thresholds[modality, classe] = thresh
+                            predictions = MultimodalClassifier.__get_predictions(x, thresholds)
+                            score = self.metric(y, predictions)
+                            if score > highest:
+                                highest = score
+                                self.thresholds[modality, classe] = thresh
 
         return self
 
