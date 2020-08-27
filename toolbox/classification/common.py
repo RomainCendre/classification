@@ -315,6 +315,16 @@ class Tools:
             dataframe[mask] = sub
 
     @staticmethod
+    def generate_folds(pattern, upto):
+        outputs = []
+        for ind in np.arange(upto):
+            temp = []
+            for current in pattern:
+                temp.append(list(((np.array(current) + ind - 1) % (upto)) + 1))
+            outputs.append(temp)
+        return outputs
+
+    @staticmethod
     def number_of_features(dataframe, model, out, mask=None):
         # Create column if doesnt exist
         if out not in dataframe:
