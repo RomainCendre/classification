@@ -297,11 +297,10 @@ class Views:
             names = [names]
 
         for name in names:
-            test = ViewsTools.data_as(inputs, name)
-            y_pred = np.array(test[f'{name}_Prediction'].to_list())
-            y_prob = np.array(test[f'{name}_Probability'].to_list())
+            y_pred = np.array(inputs[f'{name}_Prediction'].to_list())
+            y_prob = np.array(inputs[f'{name}_Probability'].to_list())
             y_pos_prob = y_prob[:, int(y_pred.max())]
-            label = np.array(test[label_tag].to_list())
+            label = np.array(inputs[label_tag].to_list())
 
             brier_score = brier_score_loss(label, y_pos_prob, pos_label=y_pred.max())
             fraction_of_positives, mean_predicted_value = calibration_curve(label, y_pos_prob, n_bins=10)
