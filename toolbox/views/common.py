@@ -289,32 +289,54 @@ class Views:
     @staticmethod
     def reliability_curve(inputs, label_tag, names):
         figure = pyplot.figure(figsize=(10, 10))
-        ax1 = pyplot.subplot2grid((3, 1), (0, 0), rowspan=2)
-        ax2 = pyplot.subplot2grid((3, 1), (2, 0))
-        ax1.plot([0, 1], [0, 1], "k:", label="Perfectly calibrated")
+        axis_calib = pyplot.subplot2grid((3, 1), (0, 0), rowspan=2)
+        axis_count = pyplot.subplot2grid((3, 1), (2, 0))
+        axis_calib.plot([0, 1], [0, 1], "k:", label="Calibration parfaite")
 
         if not isinstance(names, list):
             names = [names]
 
-        for name in names:
-            y_pred = np.array(inputs[f'{name}_Prediction'].to_list())
-            y_prob = np.array(inputs[f'{name}_Probability'].to_list())
-            y_pos_prob = y_prob[:, int(y_pred.max())]
-            label = np.array(inputs[label_tag].to_list())
+        colors = ['#003f5c', '#58508d', '#bc5090']
+        folds = inputs['Fold'].unique()
 
-            brier_score = brier_score_loss(label, y_pos_prob, pos_label=y_pred.max())
-            fraction_of_positives, mean_predicted_value = calibration_curve(label, y_pos_prob, n_bins=10)
-            ax1.plot(mean_predicted_value, fraction_of_positives, "s-", label="%s (Brier %1.3f)" % (name, brier_score))
-            ax2.hist(y_pos_prob, range=(0, 1), bins=10, label=name, histtype="step", lw=2)
+        mean_interp = np.linspace(0, 1, 100)
+        for index, name in enumerate(names):
+            interp_fops = []
+            briers = []
+            color = colors[index]
+            for fold in folds:
+                sub = inputs[inputs['Fold'] == fold]
+                y_pred = np.array(sub[f'{name}_Prediction'].to_list())
+                y_prob = np.array(sub[f'{name}_Probability'].to_list())
+                y_pos_prob = y_prob[:, int(y_pred.max())]
+                label = np.array(sub[label_tag].to_list())
 
-        ax1.set_ylabel("Fraction of positives")
-        ax1.set_ylim([-0.05, 1.05])
-        ax1.legend(loc="lower right")
-        ax1.set_title('Calibration plots  (reliability curve)')
+                fraction_of_positives, mean_predicted_value = calibration_curve(label, y_pos_prob, n_bins=10)
+                interp_fops.append(np.interp(mean_interp, mean_predicted_value, fraction_of_positives))
+                briers.append(brier_score_loss(label, y_pos_prob, pos_label=y_pred.max()))
 
-        ax2.set_xlabel("Mean predicted value")
-        ax2.set_ylabel("Count")
-        ax2.legend(loc="upper center", ncol=2)
+            # Compute mean and std
+            interp_fops = np.array(interp_fops)
+            mean_fop = np.mean(interp_fops, axis=0)
+            std_fop = np.std(interp_fops, axis=0)
+            briers = np.array(briers)
+            mean_brier = np.mean(briers)
+            std_brier = np.std(briers)
+            axis_calib.plot(mean_interp, mean_fop, color=color, label=f"{name} (Brier {mean_brier:.2f}±{std_brier:.2f})")
+
+            tprs_upper = np.minimum(mean_interp + std_fop, 1)
+            tprs_lower = np.maximum(mean_interp - std_fop, 0)
+            axis_calib.fill_between(mean_interp, tprs_lower, tprs_upper, color=color, alpha=.2, label='_Hidden')
+            axis_count.hist(y_pos_prob, color=color, range=(0, 1), bins=10, label=name, histtype="step", lw=2)
+
+        axis_calib.set_ylabel("Fraction of positives")
+        axis_calib.set_ylim([-0.05, 1.05])
+        axis_calib.legend(loc="lower right")
+        axis_calib.set_title('Calibration plots  (reliability curve)')
+
+        axis_count.set_xlabel("Mean predicted value")
+        axis_count.set_ylabel("Count")
+        axis_count.legend(loc="upper center", ncol=2)
 
         pyplot.tight_layout()
         return figure
