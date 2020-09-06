@@ -39,37 +39,28 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
         if len(self.classes_) == 1:
             raise ValueError("OneVsOneClassifier can not be fit when only one"
                              " class is present.")
+        n_classes = self.classes_.shape[0]
+        estimators_indices = list(zip(*(Parallel(n_jobs=self.n_jobs)(
+            delayed(CustomMIL.__est_fit_ovo_binary)
+            (self.estimator, bags, y, self.classes_[i], self.classes_[j])
+            for i in range(n_classes) for j in range(i + 1, n_classes)))))
 
-        elif len(self.classes_) == 2:
-            self.estimator.fit(bags, y)
-            return self
+        self.estimators_ = estimators_indices[0]
+        try:
+            self.pairwise_indices_ = (
+                estimators_indices[1] if self._pairwise else None)
+        except AttributeError:
+            self.pairwise_indices_ = None
 
-        else:
-            n_classes = self.classes_.shape[0]
-            estimators_indices = list(zip(*(Parallel(n_jobs=self.n_jobs)(
-                delayed(CustomMIL.__est_fit_ovo_binary)
-                (self.estimator, bags, y, self.classes_[i], self.classes_[j])
-                for i in range(n_classes) for j in range(i + 1, n_classes)))))
-
-            self.estimators_ = estimators_indices[0]
-            try:
-                self.pairwise_indices_ = (
-                    estimators_indices[1] if self._pairwise else None)
-            except AttributeError:
-                self.pairwise_indices_ = None
-
-            return self
+        return self
 
     def predict(self, bags):
         if self.data_preparation is not None:
             for index, bag in enumerate(bags):
                 bags[index] = self.data_preparation.transform(bag)
 
-        if len(self.classes_) == 2:
-            Y = self.estimator.predict(bags)
-        else:
-            Y = self.decision_function(bags)
-            Y = self.classes_[Y.argmax(axis=1)]
+        Y = self.decision_function(bags)
+        Y = self.classes_[Y.argmax(axis=1)]
         return Y
 
     def predict_instance(self, bags):
@@ -77,17 +68,14 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
             for index, bag in enumerate(bags):
                 bags[index] = self.data_preparation.transform(bag)
 
-        if len(self.classes_) == 2:
-            predictions = self.estimator.predict(bags, instancePrediction=True)
-        else:
-            Y = self.decision_function(bags, instancePrediction=True)
-            Y = self.classes_[Y.argmax(axis=1)]
-            Y = Y.tolist()
-            # Y = self.estimators_[0].predict(X, instancePrediction=True)[1].tolist()
-            predictions = []
-            for x in bags:
-                predictions.append(Y[:len(x)])
-                del Y[:len(x)]
+        Y = self.decision_function(bags, instancePrediction=True)
+        Y = self.classes_[Y.argmax(axis=1)]
+        Y = Y.tolist()
+        # Y = self.estimators_[0].predict(X, instancePrediction=True)[1].tolist()
+        predictions = []
+        for x in bags:
+            predictions.append(Y[:len(x)])
+            del Y[:len(x)]
         return predictions
 
     def predict_proba(self, bags):
@@ -95,12 +83,9 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
             for index, bag in enumerate(bags):
                 bags[index] = self.data_preparation.transform(bag)
 
-        if len(self.classes_) == 2:
-            Y = self.predict_proba(bags)
-        else:
-            Y = self.decision_function(bags)
-            Y = (Y - np.min(Y))
-            Y = Y / np.max(Y)
+        Y = self.decision_function(bags)
+        Y = (Y - np.min(Y))
+        Y = Y / np.max(Y)
         return Y
 
     def predict_proba_instance(self, bags):
@@ -108,18 +93,15 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
             for index, bag in enumerate(bags):
                 bags[index] = self.data_preparation.transform(bag)
 
-        if len(self.classes_) == 2:
-            predictions = self.predict_proba(bags, instancePrediction=True)
-        else:
-            Y = self.decision_function(bags, instancePrediction=True)
-            Y = (Y - np.min(Y))
-            Y = Y / np.max(Y)
-            Y = Y.tolist()
-            # Y = self.estimators_[0].predict(X, instancePrediction=True)[1].tolist()
-            predictions = []
-            for x in bags:
-                predictions.append(Y[:len(x)])
-                del Y[:len(x)]
+        Y = self.decision_function(bags, instancePrediction=True)
+        Y = (Y - np.min(Y))
+        Y = Y / np.max(Y)
+        Y = Y.tolist()
+        # Y = self.estimators_[0].predict(X, instancePrediction=True)[1].tolist()
+        predictions = []
+        for x in bags:
+            predictions.append(Y[:len(x)])
+            del Y[:len(x)]
         return predictions
 
     def decision_function(self, X, instancePrediction=None):
@@ -387,7 +369,7 @@ class ScoreVotingClassifier(BaseEstimator, ClassifierMixin):
 
 class MultimodalClassifier(BaseEstimator, ClassifierMixin):
 
-    def __init__(self, method='modality', ordered=True, metric=None,  ):
+    def __init__(self, method='modality', ordered=True, metric=None, from_zero=True):
         mandatory = ['modality', 'modality_class']
         if method not in mandatory:
             raise Exception(f'Invalid method.')
