@@ -3,22 +3,139 @@ import inspect
 import io
 import sys
 import types
+import warnings
 
 import h5py
 import numpy as np
 from copy import deepcopy
 from joblib import delayed, Parallel
 from numpy import hstack, arange
+from sklearn import calibration as calib_file
+from sklearn.calibration import CalibratedClassifierCV
+from sklearn.preprocessing import LabelBinarizer
+from sklearn.svm import LinearSVC
 from tensorflow.keras import Sequential, Model
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import SGD
-from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin
+from sklearn.base import BaseEstimator, ClassifierMixin, MetaEstimatorMixin, clone
 from sklearn.metrics import accuracy_score
 from sklearn.multiclass import _fit_binary
 from sklearn.utils.metaestimators import _safe_split
 from sklearn.utils.multiclass import unique_labels, _ovr_decision_function
 import tensorflow as tf
 from toolbox.models.generators import ResourcesGenerator
+
+
+class CustomCalibrationCV(CalibratedClassifierCV):
+    def fit(self, X, y, sample_weight=None):
+        """Fit the calibrated model
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            Training data.
+
+        y : array-like, shape (n_samples,)
+            Target values.
+
+        sample_weight : array-like of shape (n_samples,), default=None
+            Sample weights. If None, then samples are equally weighted.
+
+        Returns
+        -------
+        self : object
+            Returns an instance of self.
+        """
+        # X, y = self._validate_data(X, y, accept_sparse=['csc', 'csr', 'coo'],
+        #                            force_all_finite=False, allow_nd=True)
+        X, y = calib_file.indexable(X, y)
+        le = LabelBinarizer().fit(y)
+        self.classes_ = le.classes_
+
+        # Check that each cross-validation fold can have at least one
+        # example per class
+        n_folds = self.cv if isinstance(self.cv, int) \
+            else self.cv.n_folds if hasattr(self.cv, "n_folds") else None
+        if n_folds and \
+                np.any([np.sum(y == class_) < n_folds for class_ in
+                        self.classes_]):
+            raise ValueError("Requesting %d-fold cross-validation but provided"
+                             " less than %d examples for at least one class."
+                             % (n_folds, n_folds))
+
+        self.calibrated_classifiers_ = []
+        if self.base_estimator is None:
+            # we want all classifiers that don't expose a random_state
+            # to be deterministic (and we don't want to expose this one).
+            base_estimator = LinearSVC(random_state=0)
+        else:
+            base_estimator = self.base_estimator
+
+        if self.cv == "prefit":
+            calibrated_classifier = calib_file._CalibratedClassifier(
+                base_estimator, method=self.method)
+            calibrated_classifier.fit(X, y, sample_weight)
+            self.calibrated_classifiers_.append(calibrated_classifier)
+        else:
+            cv = calib_file.check_cv(self.cv, y, classifier=True)
+            fit_parameters = calib_file.signature(base_estimator.fit).parameters
+            base_estimator_supports_sw = "sample_weight" in fit_parameters
+
+            if sample_weight is not None:
+                sample_weight = calib_file._check_sample_weight(sample_weight, X)
+
+                if not base_estimator_supports_sw:
+                    estimator_name = type(base_estimator).__name__
+                    warnings.warn("Since %s does not support sample_weights, "
+                                  "sample weights will only be used for the "
+                                  "calibration itself." % estimator_name)
+
+            for train, test in cv.split(X, y):
+                this_estimator = clone(base_estimator)
+
+                if sample_weight is not None and base_estimator_supports_sw:
+                    this_estimator.fit(X[train], y[train],
+                                       sample_weight=sample_weight[train])
+                else:
+                    this_estimator.fit(X[train], y[train])
+
+                calibrated_classifier = calib_file._CalibratedClassifier(
+                    this_estimator, method=self.method, classes=self.classes_)
+                sw = None if sample_weight is None else sample_weight[test]
+                calibrated_classifier.fit(X[test], y[test], sample_weight=sw)
+                self.calibrated_classifiers_.append(calibrated_classifier)
+
+        return self
+
+    def predict_proba(self, X):
+        """Posterior probabilities of classification
+
+        This function returns posterior probabilities of classification
+        according to each class on an array of test vectors X.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            The samples.
+
+        Returns
+        -------
+        C : array, shape (n_samples, n_classes)
+            The predicted probas.
+        """
+        calib_file.check_is_fitted(self)
+        # X = check_array(X, accept_sparse=['csc', 'csr', 'coo'],
+        #                 force_all_finite=False)
+        # Compute the arithmetic mean of the predictions of the calibrated
+        # classifiers
+        mean_proba = np.zeros((X.shape[0], len(self.classes_)))
+        for calibrated_classifier in self.calibrated_classifiers_:
+            proba = calibrated_classifier.predict_proba(X)
+            mean_proba += proba
+
+        mean_proba /= len(self.calibrated_classifiers_)
+
+        return mean_proba
 
 
 class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on OneVsOne
@@ -59,7 +176,7 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
             for index, bag in enumerate(bags):
                 bags[index] = self.data_preparation.transform(bag)
 
-        Y = self.decision_function(bags)
+        Y = self.__decision_function(bags)
         Y = self.classes_[Y.argmax(axis=1)]
         return Y
 
@@ -68,7 +185,7 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
             for index, bag in enumerate(bags):
                 bags[index] = self.data_preparation.transform(bag)
 
-        Y = self.decision_function(bags, instancePrediction=True)
+        Y = self.__decision_function(bags, instancePrediction=True)
         Y = self.classes_[Y.argmax(axis=1)]
         Y = Y.tolist()
         # Y = self.estimators_[0].predict(X, instancePrediction=True)[1].tolist()
@@ -83,7 +200,7 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
             for index, bag in enumerate(bags):
                 bags[index] = self.data_preparation.transform(bag)
 
-        Y = self.decision_function(bags)
+        Y = self.__decision_function(bags)
         Y = (Y - np.min(Y))
         Y = Y / np.max(Y)
         return Y
@@ -93,7 +210,7 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
             for index, bag in enumerate(bags):
                 bags[index] = self.data_preparation.transform(bag)
 
-        Y = self.decision_function(bags, instancePrediction=True)
+        Y = self.__decision_function(bags, instancePrediction=True)
         Y = (Y - np.min(Y))
         Y = Y / np.max(Y)
         Y = Y.tolist()
@@ -104,7 +221,7 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
             del Y[:len(x)]
         return predictions
 
-    def decision_function(self, X, instancePrediction=None):
+    def __decision_function(self, X, instancePrediction=None):
         indices = self.pairwise_indices_
         if indices is None:
             Xs = [X] * len(self.estimators_)
@@ -118,8 +235,12 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
             [self.__est_predict_binary(est, Xi, instancePrediction=instancePrediction) for est, Xi in
              zip(self.estimators_, Xs)]).T
         Y = _ovr_decision_function(predictions, confidences, len(self.classes_))
-        # if self.n_classes_ == 2:
-        #     return Y[:, 1]
+        return Y
+
+    def decision_function(self, X, instancePrediction=None):
+        Y = self.__decision_function(X, instancePrediction)
+        if self.n_classes_ == 2:
+            return Y[:, 0]
         return Y
 
     @property

@@ -3,14 +3,13 @@ import warnings
 from copy import deepcopy
 import numpy as np
 from pandas.errors import PerformanceWarning
-from sklearn.calibration import CalibratedClassifierCV
 from sklearn.model_selection import GridSearchCV, GroupKFold, StratifiedKFold, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.semi_supervised import LabelSpreading, LabelPropagation
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
-from toolbox.models.models import KerasBatchClassifier, MultimodalClassifier
+from toolbox.models.models import KerasBatchClassifier, MultimodalClassifier, CustomCalibrationCV
 
 warnings.filterwarnings("ignore", category=PerformanceWarning)
 pd.options.mode.chained_assignment = None
@@ -197,7 +196,7 @@ class Tools:
 
             # Make evaluation of calibration if needed
             if calibrate:
-                model_calibration = CalibratedClassifierCV(model, cv=Tools.VAL_RATIO, method=calibrate)
+                model_calibration = CustomCalibrationCV(model, cv=Tools.VAL_RATIO, method=calibrate)
                 model = Tools.fit(sub[fit_mask], tags, model_calibration, cpu=cpu)
 
             # Predict
@@ -300,7 +299,7 @@ class Tools:
 
             # Make evaluation of calibration if needed
             if calibrate:
-                model_calibration = CalibratedClassifierCV(fitted_model, cv=Tools.VAL_RATIO, method=calibrate)
+                model_calibration = CustomCalibrationCV(fitted_model, cv=Tools.VAL_RATIO, method=calibrate)
                 fitted_model = Tools.fit(sub[fit_mask], tags, model_calibration, cpu=cpu)
 
             # Fill new data
