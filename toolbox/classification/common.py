@@ -173,10 +173,9 @@ class Tools:
         if folds is None:
             folds = Tools.__default_folds(list(np.unique(reference_folds)))
 
-        for index, (fit, predict) in enumerate(folds):
-            # Create mask
-            fit_mask = reference_folds.isin(fit)
-            predict_mask = reference_folds.isin(predict)
+        for index, current in enumerate(folds):
+            # Create fit mask
+            fit_mask = reference_folds.isin(current[0])
 
             print(f'Fold {index} performed...', end='\r')
 
@@ -190,14 +189,18 @@ class Tools:
             # Clone model
             model = Tools.fit(sub[fit_mask], tags, model, grid=grid, distribution=distribution, cpu=cpu)
 
+            # Make evaluation of calibration if needed
+            if calibrate:
+                calibrate_mask = reference_folds.isin(current[1]) # Prepare mask for calibration
+                model_calibration = CustomCalibrationCV(model, cv=Tools.VAL_RATIO, method=calibrate)
+                model = Tools.fit(sub[calibrate_mask], tags, model_calibration, cpu=cpu)
+
+            # Prepare the prediction mask
+            predict_mask = reference_folds.isin(current[-1])
+
             # Remember features and params
             Tools.number_of_features(sub, model, out_features, mask=predict_mask)
             Tools.__best_params(sub, model, out_params, mask=predict_mask)
-
-            # Make evaluation of calibration if needed
-            if calibrate:
-                model_calibration = CustomCalibrationCV(model, cv=Tools.VAL_RATIO, method=calibrate)
-                model = Tools.fit(sub[fit_mask], tags, model_calibration, cpu=cpu)
 
             # Predict
             if hasattr(model, 'predict'):
@@ -284,10 +287,9 @@ class Tools:
         if folds is None:
             folds = Tools.__default_folds(list(np.unique(reference_folds)))
 
-        for index, (fit, predict) in enumerate(folds):
+        for index, current in enumerate(folds):
             # Create mask
-            fit_mask = reference_folds.isin(fit)
-            predict_mask = reference_folds.isin(predict)
+            fit_mask = reference_folds.isin(current[0])
 
             # Check that current fold respect labels
             if not Tools.__check_labels(sub[fit_mask], {'label_encode': tags['label_encode']}):
@@ -299,8 +301,12 @@ class Tools:
 
             # Make evaluation of calibration if needed
             if calibrate:
+                calibrate_mask = reference_folds.isin(current[1]) # Prepare mask for calibration
                 model_calibration = CustomCalibrationCV(fitted_model, cv=Tools.VAL_RATIO, method=calibrate)
-                fitted_model = Tools.fit(sub[fit_mask], tags, model_calibration, cpu=cpu)
+                fitted_model = Tools.fit(sub[calibrate_mask], tags, model_calibration, cpu=cpu)
+
+            # Prepare the prediction mask
+            predict_mask = reference_folds.isin(current[-1])
 
             # Fill new data
             if hasattr(model, 'transform'):
@@ -403,7 +409,7 @@ class Tools:
         data = np.array(sub[tags['datum']].to_list())
 
         if instance is None:
-            probabilities = model.predict_proba(data)
+            probabilities = np.argmax(model.predict_proba(data), axis=1)
         else:
             probabilities = model.predict_proba_instance(data)
 
