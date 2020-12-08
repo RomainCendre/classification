@@ -363,8 +363,8 @@ class Tools:
 
             # Fill new data
             if hasattr(model, 'decision_function'):
-                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_raw_score, mask=predict_mask)
-                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_score, mask=predict_mask, norm=True)
+                Tools.decision_function(sub, {'datum': tags['datum']}, fitted_model, out_raw_score, mask=predict_mask)
+                Tools.decision_function(sub, {'datum': tags['datum']}, fitted_model, out_score, mask=predict_mask, norm=True)
             if hasattr(model, 'transform'):
                 Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out, mask=predict_mask)
             if hasattr(model, 'predict'):
