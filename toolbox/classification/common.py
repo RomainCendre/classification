@@ -120,7 +120,6 @@ class IO:
 
 
 class Tools:
-
     FEATURES = 'Features'
     PARAMETERS = 'Parameters'
     PREDICTION = 'Prediction'
@@ -153,14 +152,15 @@ class Tools:
         # Set values
         data = np.array(sub[tags['datum']].to_list())
 
-        if instance is None:
-            scores = np.argmax(model.decision_function(data), axis=1)
-        else:
-            scores = model.decision_function(data)
+        scores = model.decision_function(data)
 
         # Normalisation des scores
         if norm:
-            scores = (scores - scores.min()) / (scores.max() - scores.min())
+            if len(scores.shape) == 1:
+                scores = (scores - scores.min()) / (scores.max() - scores.min())
+            else:
+                scores = (scores - np.expand_dims(scores.min(axis=1), axis=-1)) / (
+                    np.expand_dims(scores.max(axis=1) - scores.min(axis=1), axis=-1))
 
         sub[out] = pd.Series([s for s in scores], index=sub.index)
 
@@ -168,7 +168,8 @@ class Tools:
             dataframe[mask] = sub
 
     @staticmethod
-    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, cpu=-1, folds=None, calibrate=None, instance=None):
+    def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, cpu=-1, folds=None,
+                 calibrate=None, instance=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -233,7 +234,7 @@ class Tools:
 
             # Make evaluation of calibration if needed
             if calibrate:
-                calibrate_mask = reference_folds.isin(current[1]) # Prepare mask for calibration
+                calibrate_mask = reference_folds.isin(current[1])  # Prepare mask for calibration
                 model_calibration = CustomCalibrationCV(model, cv=Tools.VAL_RATIO, method=calibrate)
                 model = Tools.fit(sub[calibrate_mask], tags, model_calibration, cpu=cpu)
 
@@ -246,12 +247,15 @@ class Tools:
 
             # Predict
             if hasattr(model, 'decision_function'):
-                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_raw_score, mask=predict_mask, instance=instance)
-                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_score, mask=predict_mask, instance=instance, norm=True)
+                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_raw_score, mask=predict_mask,
+                                        instance=instance)
+                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_score, mask=predict_mask,
+                                        instance=instance, norm=True)
             if hasattr(model, 'predict'):
                 Tools.predict(sub, {'datum': tags['datum']}, model, out_predict, mask=predict_mask, instance=instance)
             if hasattr(model, 'predict_steps'):
-                Tools.predict_steps(sub, {'datum': tags['datum']}, model, out_steps, mask=predict_mask, instance=instance)
+                Tools.predict_steps(sub, {'datum': tags['datum']}, model, out_steps, mask=predict_mask,
+                                    instance=instance)
 
         if mask is not None:
             dataframe[mask] = sub
@@ -286,7 +290,8 @@ class Tools:
             model.best_params = grid_search.best_params_
             return model
         elif distribution is not None:
-            random_search = RandomizedSearchCV(model, scoring='f1_weighted', param_distributions=distribution, cv=Tools.VAL_RATIO, iid=False, n_jobs=cpu)
+            random_search = RandomizedSearchCV(model, scoring='f1_weighted', param_distributions=distribution,
+                                               cv=Tools.VAL_RATIO, iid=False, n_jobs=cpu)
             random_search.fit(data, y=labels)
             model = random_search.best_estimator_
             model.best_params = random_search.best_params_
@@ -297,7 +302,8 @@ class Tools:
             return model
 
     @staticmethod
-    def fit_predict(dataframe, tags, model, out, mask=None, folds=None, grid=None, distribution=None, cpu=-1, calibrate=None):
+    def fit_predict(dataframe, tags, model, out, mask=None, folds=None, grid=None, distribution=None, cpu=-1,
+                    calibrate=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
             raise Exception('Need to build fold.')
@@ -343,11 +349,12 @@ class Tools:
                 continue
 
             # Clone model
-            fitted_model = Tools.fit(sub[fit_mask], tags, model=deepcopy(model), grid=grid, distribution=distribution, cpu=cpu)
+            fitted_model = Tools.fit(sub[fit_mask], tags, model=deepcopy(model), grid=grid, distribution=distribution,
+                                     cpu=cpu)
 
             # Make evaluation of calibration if needed
             if calibrate:
-                calibrate_mask = reference_folds.isin(current[1]) # Prepare mask for calibration
+                calibrate_mask = reference_folds.isin(current[1])  # Prepare mask for calibration
                 model_calibration = CustomCalibrationCV(fitted_model, cv=Tools.VAL_RATIO, method=calibrate)
                 fitted_model = Tools.fit(sub[calibrate_mask], tags, model_calibration, cpu=cpu)
 
@@ -356,8 +363,10 @@ class Tools:
 
             # Fill new data
             if hasattr(model, 'decision_function'):
-                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_raw_score, mask=predict_mask, instance=instance)
-                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_score, mask=predict_mask, instance=instance, norm=True)
+                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_raw_score, mask=predict_mask,
+                                        instance=instance)
+                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_score, mask=predict_mask,
+                                        instance=instance, norm=True)
             if hasattr(model, 'transform'):
                 Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out, mask=predict_mask)
             if hasattr(model, 'predict'):
