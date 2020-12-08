@@ -153,9 +153,9 @@ class Tools:
         data = np.array(sub[tags['datum']].to_list())
 
         if instance is None:
-            scores = np.argmax(model.score(data), axis=1)
+            scores = np.argmax(model.decision_function(data), axis=1)
         else:
-            scores = model.score(data)
+            scores = model.decision_function(data)
 
         sub[out] = pd.Series([s for s in scores], index=sub.index)
 
