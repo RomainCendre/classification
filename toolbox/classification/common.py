@@ -157,7 +157,8 @@ class Tools:
         # Normalisation des scores
         if norm:
             if len(scores.shape) == 1:
-                scores = (scores - scores.min()) / (scores.max() - scores.min())
+                temp = (scores - scores.min()) / (scores.max() - scores.min())
+                scores = np.array([1 - temp, temp])
             else:
                 scores = (scores - np.expand_dims(scores.min(axis=1), axis=-1)) / (
                     np.expand_dims(scores.max(axis=1) - scores.min(axis=1), axis=-1))
