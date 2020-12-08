@@ -159,6 +159,7 @@ class Tools:
             if len(scores.shape) == 1:
                 temp = (scores - scores.min()) / (scores.max() - scores.min())
                 scores = np.array([1 - temp, temp])
+                scores = np.swapaxes(scores, 0, 1)
             else:
                 scores = (scores - np.expand_dims(scores.min(axis=1), axis=-1)) / (
                     np.expand_dims(scores.max(axis=1) - scores.min(axis=1), axis=-1))
