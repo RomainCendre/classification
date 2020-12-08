@@ -123,6 +123,7 @@ class Tools:
     FEATURES = 'Features'
     PARAMETERS = 'Parameters'
     PREDICTION = 'Prediction'
+    PROBABILITY = 'Probability'
     RAW_SCORE = 'Raw_Score'
     SCORE = 'Score'
     STEPS = 'Steps'
@@ -188,6 +189,7 @@ class Tools:
         # Out fields
         out_features = f'{out}_{Tools.FEATURES}'
         out_predict = f'{out}_{Tools.PREDICTION}'
+        out_probability = f'{out}_{Tools.PROBABILITY}'
         out_raw_score = f'{out}_{Tools.RAW_SCORE}'
         out_score = f'{out}_{Tools.SCORE}'
         out_params = f'{out}_{Tools.PARAMETERS}'
@@ -198,6 +200,8 @@ class Tools:
             dataframe[out_params] = np.nan
         if out_predict not in dataframe:
             dataframe[out_predict] = np.nan
+        if out_probability not in dataframe:
+            dataframe[out_probability] = np.nan
         if out_raw_score not in dataframe:
             dataframe[out_raw_score] = np.nan
         if out_score not in dataframe:
@@ -258,6 +262,8 @@ class Tools:
             if hasattr(model, 'predict_steps'):
                 Tools.predict_steps(sub, {'datum': tags['datum']}, model, out_steps, mask=predict_mask,
                                     instance=instance)
+            if hasattr(model, 'predict_proba'):
+                Tools.predict_proba(sub, {'datum': tags['datum']}, model, out_probability, mask=predict_mask, instance=instance)
 
         if mask is not None:
             dataframe[mask] = sub
@@ -317,6 +323,7 @@ class Tools:
 
         # Out fields
         out_predict = f'{out}_{Tools.PREDICTION}'
+        out_probability = f'{out}_{Tools.PROBABILITY}'
         out_raw_score = f'{out}_{Tools.RAW_SCORE}'
         out_score = f'{out}_{Tools.SCORE}'
 
@@ -367,10 +374,12 @@ class Tools:
             if hasattr(model, 'decision_function'):
                 Tools.decision_function(sub, {'datum': tags['datum']}, fitted_model, out_raw_score, mask=predict_mask)
                 Tools.decision_function(sub, {'datum': tags['datum']}, fitted_model, out_score, mask=predict_mask, norm=True)
-            if hasattr(model, 'transform'):
-                Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out, mask=predict_mask)
             if hasattr(model, 'predict'):
                 Tools.predict(sub, {'datum': tags['datum']}, fitted_model, out_predict, mask=predict_mask)
+            if hasattr(model, 'predict_proba'):
+                Tools.predict_proba(sub, {'datum': tags['datum']}, fitted_model, out_probability, mask=predict_mask)
+            if hasattr(model, 'transform'):
+                Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out, mask=predict_mask)
 
         if mask is not None:
             dataframe[mask] = sub
@@ -436,6 +445,40 @@ class Tools:
             predictions = model.predict_instance(data)
 
         sub[out] = pd.Series([p for p in predictions], index=sub.index)
+
+        if mask is not None:
+            dataframe[mask] = sub
+
+    @staticmethod
+    def predict_proba(dataframe, tags, model, out, mask=None, instance=None):
+        # Check mandatory fields
+        mandatory = ['datum']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        method = 'predict_proba'
+        if not hasattr(model, method):
+            raise Exception(f'No method {method} found.')
+
+        # Create column if doesnt exist
+        if out not in dataframe:
+            dataframe[out] = np.nan
+
+        # Mask dataframe
+        if mask is None:
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
+
+        # Set de predict probas values
+        data = np.array(sub[tags['datum']].to_list())
+
+        if instance is None:
+            probabilities = model.predict_proba(data)
+        else:
+            probabilities = model.predict_proba_instance(data)
+
+        sub[out] = pd.Series([p for p in probabilities], index=sub.index)
 
         if mask is not None:
             dataframe[mask] = sub
