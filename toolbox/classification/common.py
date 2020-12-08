@@ -124,12 +124,13 @@ class Tools:
     FEATURES = 'Features'
     PARAMETERS = 'Parameters'
     PREDICTION = 'Prediction'
+    RAW_SCORE = 'Raw_Score'
     SCORE = 'Score'
     STEPS = 'Steps'
     VAL_RATIO = 2
 
     @staticmethod
-    def decision_function(dataframe, tags, model, out, mask=None, instance=None):
+    def decision_function(dataframe, tags, model, out, mask=None, instance=None, norm=False):
         # Check mandatory fields
         mandatory = ['datum']
         if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
@@ -157,6 +158,10 @@ class Tools:
         else:
             scores = model.decision_function(data)
 
+        # Normalisation des scores
+        if norm:
+            scores = (scores - scores.min()) / (scores.max() - scores.min())
+
         sub[out] = pd.Series([s for s in scores], index=sub.index)
 
         if mask is not None:
@@ -180,17 +185,20 @@ class Tools:
         # Out fields
         out_features = f'{out}_{Tools.FEATURES}'
         out_predict = f'{out}_{Tools.PREDICTION}'
+        out_raw_score = f'{out}_{Tools.RAW_SCORE}'
         out_score = f'{out}_{Tools.SCORE}'
         out_params = f'{out}_{Tools.PARAMETERS}'
         out_steps = f'{out}_{Tools.STEPS}'
-        if out_predict not in dataframe:
-            dataframe[out_predict] = np.nan
-        if out_score not in dataframe:
-            dataframe[out_score] = np.nan
         if out_features not in dataframe:
             dataframe[out_features] = np.nan
         if out_params not in dataframe:
             dataframe[out_params] = np.nan
+        if out_predict not in dataframe:
+            dataframe[out_predict] = np.nan
+        if out_raw_score not in dataframe:
+            dataframe[out_raw_score] = np.nan
+        if out_score not in dataframe:
+            dataframe[out_score] = np.nan
         if out_steps not in dataframe:
             dataframe[out_steps] = np.nan
 
@@ -237,12 +245,13 @@ class Tools:
             Tools.__best_params(sub, model, out_params, mask=predict_mask)
 
             # Predict
+            if hasattr(model, 'decision_function'):
+                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_raw_score, mask=predict_mask, instance=instance)
+                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_score, mask=predict_mask, instance=instance, norm=True)
             if hasattr(model, 'predict'):
                 Tools.predict(sub, {'datum': tags['datum']}, model, out_predict, mask=predict_mask, instance=instance)
             if hasattr(model, 'predict_steps'):
                 Tools.predict_steps(sub, {'datum': tags['datum']}, model, out_steps, mask=predict_mask, instance=instance)
-            if hasattr(model, 'decision_function'):
-                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_score, mask=predict_mask, instance=instance)
 
         if mask is not None:
             dataframe[mask] = sub
@@ -300,6 +309,7 @@ class Tools:
 
         # Out fields
         out_predict = f'{out}_{Tools.PREDICTION}'
+        out_raw_score = f'{out}_{Tools.RAW_SCORE}'
         out_score = f'{out}_{Tools.SCORE}'
 
         # Manage columns
@@ -307,6 +317,8 @@ class Tools:
             dataframe[out] = np.nan
         if out_predict not in dataframe and hasattr(model, 'predict'):
             dataframe[out_predict] = np.nan
+        if out_raw_score not in dataframe and hasattr(model, 'raw_score'):
+            dataframe[out_raw_score] = np.nan
         if out_score not in dataframe and hasattr(model, 'score'):
             dataframe[out_score] = np.nan
 
@@ -343,12 +355,13 @@ class Tools:
             predict_mask = reference_folds.isin(current[-1])
 
             # Fill new data
+            if hasattr(model, 'decision_function'):
+                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_raw_score, mask=predict_mask, instance=instance)
+                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_score, mask=predict_mask, instance=instance, norm=True)
             if hasattr(model, 'transform'):
                 Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out, mask=predict_mask)
             if hasattr(model, 'predict'):
                 Tools.predict(sub, {'datum': tags['datum']}, fitted_model, out_predict, mask=predict_mask)
-            if hasattr(model, 'decision_function'):
-                Tools.decision_function(sub, {'datum': tags['datum']}, fitted_model, out_score, mask=predict_mask)
 
         if mask is not None:
             dataframe[mask] = sub
