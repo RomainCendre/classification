@@ -129,6 +129,40 @@ class Tools:
     VAL_RATIO = 2
 
     @staticmethod
+    def decision_function(dataframe, tags, model, out, mask=None, instance=None):
+        # Check mandatory fields
+        mandatory = ['datum']
+        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
+            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
+
+        method = 'decision_function'
+        if not hasattr(model, method):
+            raise Exception(f'No method {method} found.')
+
+        # Create column if doesnt exist
+        if out not in dataframe:
+            dataframe[out] = np.nan
+
+        # Mask dataframe
+        if mask is None:
+            sub = dataframe
+        else:
+            sub = dataframe[mask]
+
+        # Set values
+        data = np.array(sub[tags['datum']].to_list())
+
+        if instance is None:
+            scores = np.argmax(model.score(data), axis=1)
+        else:
+            scores = model.score(data)
+
+        sub[out] = pd.Series([s for s in scores], index=sub.index)
+
+        if mask is not None:
+            dataframe[mask] = sub
+
+    @staticmethod
     def evaluate(dataframe, tags, model, out, mask=None, grid=None, distribution=None, cpu=-1, folds=None, calibrate=None, instance=None):
         # Fold needed for evaluation
         if 'Fold' not in dataframe:
@@ -207,8 +241,8 @@ class Tools:
                 Tools.predict(sub, {'datum': tags['datum']}, model, out_predict, mask=predict_mask, instance=instance)
             if hasattr(model, 'predict_steps'):
                 Tools.predict_steps(sub, {'datum': tags['datum']}, model, out_steps, mask=predict_mask, instance=instance)
-            if hasattr(model, 'predict_score'):
-                Tools.predict_score(sub, {'datum': tags['datum']}, model, out_score, mask=predict_mask, instance=instance)
+            if hasattr(model, 'decision_function'):
+                Tools.decision_function(sub, {'datum': tags['datum']}, model, out_score, mask=predict_mask, instance=instance)
 
         if mask is not None:
             dataframe[mask] = sub
@@ -313,8 +347,8 @@ class Tools:
                 Tools.transform(sub, {'datum': tags['datum']}, fitted_model, out, mask=predict_mask)
             if hasattr(model, 'predict'):
                 Tools.predict(sub, {'datum': tags['datum']}, fitted_model, out_predict, mask=predict_mask)
-            if hasattr(model, 'predict_score'):
-                Tools.predict_score(sub, {'datum': tags['datum']}, fitted_model, out_score, mask=predict_mask)
+            if hasattr(model, 'decision_function'):
+                Tools.decision_function(sub, {'datum': tags['datum']}, fitted_model, out_score, mask=predict_mask)
 
         if mask is not None:
             dataframe[mask] = sub
@@ -414,40 +448,6 @@ class Tools:
             steps = model.predict_steps(data)
 
         sub[out] = pd.Series([p for p in steps], index=sub.index)
-
-        if mask is not None:
-            dataframe[mask] = sub
-
-    @staticmethod
-    def predict_score(dataframe, tags, model, out, mask=None, instance=None):
-        # Check mandatory fields
-        mandatory = ['datum']
-        if not isinstance(tags, dict) or not all(elem in mandatory for elem in tags.keys()):
-            raise Exception(f'Expected tags: {mandatory}, but found: {tags}.')
-
-        method = 'predict_score'
-        if not hasattr(model, method):
-            raise Exception(f'No method {method} found.')
-
-        # Create column if doesnt exist
-        if out not in dataframe:
-            dataframe[out] = np.nan
-
-        # Mask dataframe
-        if mask is None:
-            sub = dataframe
-        else:
-            sub = dataframe[mask]
-
-        # Set values
-        data = np.array(sub[tags['datum']].to_list())
-
-        if instance is None:
-            scores = np.argmax(model.score(data), axis=1)
-        else:
-            scores = model.score(data)
-
-        sub[out] = pd.Series([s for s in scores], index=sub.index)
 
         if mask is not None:
             dataframe[mask] = sub
