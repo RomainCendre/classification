@@ -4,7 +4,7 @@
     <list default="true" id="155e4d6f-9a0f-48ad-9044-b957d14aa741" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/toolbox/classification/common.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/classification/common.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/toolbox/views/images.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/views/images.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/toolbox/models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/toolbox/models/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,6 +102,13 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\romai\Projets\classification\manuscript\MultimodalClassification" />
+      <recent name="C:\Users\romai\Projets\classification" />
+      <recent name="C:\Users\romai\Projets\classification\manuscript\examples" />
+      <recent name="C:\Users\romai\Projets\classification\experiments" />
+      <recent name="C:\Users\romai\Projets\classification\redaction\examples" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\romai\Projets\classification\article\orl" />
       <recent name="C:\Users\romai\Projets\classification\redaction\examples" />
@@ -109,15 +116,8 @@
       <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo_food" />
       <recent name="C:\Users\Romain\PycharmProjects\classification\guis\demo_food\images" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\romai\Projets\classification" />
-      <recent name="C:\Users\romai\Projets\classification\manuscript\examples" />
-      <recent name="C:\Users\romai\Projets\classification\experiments" />
-      <recent name="C:\Users\romai\Projets\classification\redaction\examples" />
-      <recent name="C:\Users\romai\Projets\classification\redaction\statistics" />
-    </key>
   </component>
-  <component name="RunManager" selected="Python.Test (1)">
+  <component name="RunManager" selected="Python.test">
     <configuration name="ExampleOfPhotos" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -162,28 +162,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="QMain" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="classification" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\romai\Projets\classification\QMain.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="Test (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -206,7 +184,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="common" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="classification" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -214,12 +192,34 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/guis/demo_food" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/toolbox/classification" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/guis/demo_food/main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/toolbox/classification/common.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="classification" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/manuscript/MultimodalClassification" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/manuscript/MultimodalClassification/test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -230,11 +230,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.common" />
         <item itemvalue="Python.Test (1)" />
         <item itemvalue="Python.QMain (1)" />
         <item itemvalue="Python.ExampleOfPhotos" />
-        <item itemvalue="Python.QMain" />
-        <item itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>
@@ -429,98 +429,8 @@
       <workItem from="1604481319458" duration="23432000" />
       <workItem from="1605872022106" duration="5689000" />
       <workItem from="1606404347336" duration="1955000" />
-      <workItem from="1607339905404" duration="4839000" />
-    </task>
-    <task id="LOCAL-00599" summary="Update visualisation methods">
-      <created>1594111269269</created>
-      <option name="number" value="00599" />
-      <option name="presentableId" value="LOCAL-00599" />
-      <option name="project" value="LOCAL" />
-      <updated>1594111269269</updated>
-    </task>
-    <task id="LOCAL-00600" summary="Save predictor">
-      <created>1594113726589</created>
-      <option name="number" value="00600" />
-      <option name="presentableId" value="LOCAL-00600" />
-      <option name="project" value="LOCAL" />
-      <updated>1594113726589</updated>
-    </task>
-    <task id="LOCAL-00601" summary="Update visualisation methods">
-      <created>1594114120061</created>
-      <option name="number" value="00601" />
-      <option name="presentableId" value="LOCAL-00601" />
-      <option name="project" value="LOCAL" />
-      <updated>1594114120061</updated>
-    </task>
-    <task id="LOCAL-00602" summary="Update visualisation methods">
-      <created>1594201675155</created>
-      <option name="number" value="00602" />
-      <option name="presentableId" value="LOCAL-00602" />
-      <option name="project" value="LOCAL" />
-      <updated>1594201675156</updated>
-    </task>
-    <task id="LOCAL-00603" summary="Update improvements methods">
-      <created>1594313631903</created>
-      <option name="number" value="00603" />
-      <option name="presentableId" value="LOCAL-00603" />
-      <option name="project" value="LOCAL" />
-      <updated>1594313631906</updated>
-    </task>
-    <task id="LOCAL-00604" summary="Update improvements methods">
-      <created>1594313694718</created>
-      <option name="number" value="00604" />
-      <option name="presentableId" value="LOCAL-00604" />
-      <option name="project" value="LOCAL" />
-      <updated>1594313694718</updated>
-    </task>
-    <task id="LOCAL-00605" summary="Update improvements methods">
-      <created>1594313751824</created>
-      <option name="number" value="00605" />
-      <option name="presentableId" value="LOCAL-00605" />
-      <option name="project" value="LOCAL" />
-      <updated>1594313751824</updated>
-    </task>
-    <task id="LOCAL-00606" summary="Update improvements methods">
-      <created>1594314070862</created>
-      <option name="number" value="00606" />
-      <option name="presentableId" value="LOCAL-00606" />
-      <option name="project" value="LOCAL" />
-      <updated>1594314070862</updated>
-    </task>
-    <task id="LOCAL-00607" summary="Update FT methods">
-      <created>1594470015415</created>
-      <option name="number" value="00607" />
-      <option name="presentableId" value="LOCAL-00607" />
-      <option name="project" value="LOCAL" />
-      <updated>1594470015415</updated>
-    </task>
-    <task id="LOCAL-00608" summary="Update visualization methods">
-      <created>1594481830630</created>
-      <option name="number" value="00608" />
-      <option name="presentableId" value="LOCAL-00608" />
-      <option name="project" value="LOCAL" />
-      <updated>1594481830630</updated>
-    </task>
-    <task id="LOCAL-00609" summary="Update vis methods">
-      <created>1594482815444</created>
-      <option name="number" value="00609" />
-      <option name="presentableId" value="LOCAL-00609" />
-      <option name="project" value="LOCAL" />
-      <updated>1594482815444</updated>
-    </task>
-    <task id="LOCAL-00610" summary="Update vis methods">
-      <created>1594483163525</created>
-      <option name="number" value="00610" />
-      <option name="presentableId" value="LOCAL-00610" />
-      <option name="project" value="LOCAL" />
-      <updated>1594483163525</updated>
-    </task>
-    <task id="LOCAL-00611" summary="Update improvements methods">
-      <created>1594484221605</created>
-      <option name="number" value="00611" />
-      <option name="presentableId" value="LOCAL-00611" />
-      <option name="project" value="LOCAL" />
-      <updated>1594484221605</updated>
+      <workItem from="1607339905404" duration="27970000" />
+      <workItem from="1607506597673" duration="2176000" />
     </task>
     <task id="LOCAL-00612" summary="Update improvements methods">
       <created>1594484259906</created>
@@ -774,7 +684,98 @@
       <option name="project" value="LOCAL" />
       <updated>1604568962646</updated>
     </task>
-    <option name="localTasksCounter" value="648" />
+    <task id="LOCAL-00648" summary="Add validation for calibration">
+      <created>1607362585821</created>
+      <option name="number" value="00648" />
+      <option name="presentableId" value="LOCAL-00648" />
+      <option name="project" value="LOCAL" />
+      <updated>1607362585822</updated>
+    </task>
+    <task id="LOCAL-00649" summary="Convert into scores">
+      <created>1607366341560</created>
+      <option name="number" value="00649" />
+      <option name="presentableId" value="LOCAL-00649" />
+      <option name="project" value="LOCAL" />
+      <updated>1607366341560</updated>
+    </task>
+    <task id="LOCAL-00650" summary="Convert into scores">
+      <created>1607367098661</created>
+      <option name="number" value="00650" />
+      <option name="presentableId" value="LOCAL-00650" />
+      <option name="project" value="LOCAL" />
+      <updated>1607367098662</updated>
+    </task>
+    <task id="LOCAL-00651" summary="Some modification on scores (aka df)">
+      <created>1607423571266</created>
+      <option name="number" value="00651" />
+      <option name="presentableId" value="LOCAL-00651" />
+      <option name="project" value="LOCAL" />
+      <updated>1607423571266</updated>
+    </task>
+    <task id="LOCAL-00652" summary="Some modification on scores (aka df)">
+      <created>1607425157795</created>
+      <option name="number" value="00652" />
+      <option name="presentableId" value="LOCAL-00652" />
+      <option name="project" value="LOCAL" />
+      <updated>1607425157795</updated>
+    </task>
+    <task id="LOCAL-00653" summary="Some modification on scores (aka df)">
+      <created>1607435943334</created>
+      <option name="number" value="00653" />
+      <option name="presentableId" value="LOCAL-00653" />
+      <option name="project" value="LOCAL" />
+      <updated>1607435943335</updated>
+    </task>
+    <task id="LOCAL-00654" summary="Some modification on scores (aka df)">
+      <created>1607447131207</created>
+      <option name="number" value="00654" />
+      <option name="presentableId" value="LOCAL-00654" />
+      <option name="project" value="LOCAL" />
+      <updated>1607447131207</updated>
+    </task>
+    <task id="LOCAL-00655" summary="Some modification on scores (aka df)">
+      <created>1607450288248</created>
+      <option name="number" value="00655" />
+      <option name="presentableId" value="LOCAL-00655" />
+      <option name="project" value="LOCAL" />
+      <updated>1607450288248</updated>
+    </task>
+    <task id="LOCAL-00656" summary="Some modification on scores (aka df)">
+      <created>1607450684780</created>
+      <option name="number" value="00656" />
+      <option name="presentableId" value="LOCAL-00656" />
+      <option name="project" value="LOCAL" />
+      <updated>1607450684780</updated>
+    </task>
+    <task id="LOCAL-00657" summary="Some modification on scores (aka df)">
+      <created>1607451558324</created>
+      <option name="number" value="00657" />
+      <option name="presentableId" value="LOCAL-00657" />
+      <option name="project" value="LOCAL" />
+      <updated>1607451558324</updated>
+    </task>
+    <task id="LOCAL-00658" summary="Some modification on scores (aka df)">
+      <created>1607452046518</created>
+      <option name="number" value="00658" />
+      <option name="presentableId" value="LOCAL-00658" />
+      <option name="project" value="LOCAL" />
+      <updated>1607452046518</updated>
+    </task>
+    <task id="LOCAL-00659" summary="Some modification on scores (aka df)">
+      <created>1607453287737</created>
+      <option name="number" value="00659" />
+      <option name="presentableId" value="LOCAL-00659" />
+      <option name="project" value="LOCAL" />
+      <updated>1607453287738</updated>
+    </task>
+    <task id="LOCAL-00660" summary="Update main experiments">
+      <created>1607464793372</created>
+      <option name="number" value="00660" />
+      <option name="presentableId" value="LOCAL-00660" />
+      <option name="project" value="LOCAL" />
+      <updated>1607464793372</updated>
+    </task>
+    <option name="localTasksCounter" value="661" />
     <servers />
   </component>
   <component name="TodoView">
@@ -817,10 +818,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update improvement methods" />
-    <MESSAGE value="Update models" />
-    <MESSAGE value="Update toolbox" />
-    <MESSAGE value="Update toolbox methods" />
     <MESSAGE value="Update to manage instances classifications" />
     <MESSAGE value="Update mil" />
     <MESSAGE value="Update weakly" />
@@ -842,74 +839,86 @@
     <MESSAGE value="Try fix calibration on customMil" />
     <MESSAGE value="Fix ORL since update of framework" />
     <MESSAGE value="Add Gorge as asked by doctors..." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add Gorge as asked by doctors..." />
+    <MESSAGE value="Add validation for calibration" />
+    <MESSAGE value="Convert into scores" />
+    <MESSAGE value="Some modification on scores (aka df)" />
+    <MESSAGE value="Update main experiments" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update main experiments" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2591" y="324" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1601036358721">
+    <state x="2591" y="324" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1607379991588">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="671" y="324" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599229965640" />
-    <state x="2591" y="324" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1601036358721" />
-    <state x="2424" y="372" width="781" height="668" key="#xdebugger.evaluate" timestamp="1604915340919">
+    <state x="2591" y="324" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607379991588" />
+    <state x="2356" y="190" width="781" height="779" key="#xdebugger.evaluate" timestamp="1607510845485">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2424" y="372" width="781" height="668" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1604915340919" />
-    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1604568961835">
+    <state x="2356" y="190" width="781" height="779" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607510845485" />
+    <state x="2505" y="105" key="CommitChangelistDialog2" timestamp="1607464792127">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1604568961835" />
+    <state x="2505" y="105" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607464792127" />
     <state x="2012" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1607353263138">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2012" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607353263138" />
-    <state width="1448" height="227" key="GridCell.Tab.0.bottom" timestamp="1607362024602">
+    <state x="2660" y="276" key="FileChooserDialogImpl" timestamp="1607434125504">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2660" y="276" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607434125504" />
+    <state width="1445" height="227" key="GridCell.Tab.0.bottom" timestamp="1607510724149">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="313" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599508333147" />
-    <state width="1448" height="227" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607362024602" />
-    <state width="1448" height="227" key="GridCell.Tab.0.center" timestamp="1607362024602">
+    <state width="1445" height="227" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607510724149" />
+    <state width="1445" height="227" key="GridCell.Tab.0.center" timestamp="1607510724149">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="313" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599508333147" />
-    <state width="1448" height="227" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607362024602" />
-    <state width="1448" height="227" key="GridCell.Tab.0.left" timestamp="1607362024602">
+    <state width="1445" height="227" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607510724149" />
+    <state width="1445" height="227" key="GridCell.Tab.0.left" timestamp="1607510724149">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="313" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599508333147" />
-    <state width="1448" height="227" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607362024602" />
-    <state width="1448" height="227" key="GridCell.Tab.0.right" timestamp="1607362024602">
+    <state width="1445" height="227" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607510724149" />
+    <state width="1445" height="227" key="GridCell.Tab.0.right" timestamp="1607510724149">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="313" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599508333147" />
-    <state width="1448" height="227" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607362024602" />
-    <state width="1448" height="227" key="GridCell.Tab.1.bottom" timestamp="1607362032911">
+    <state width="1445" height="227" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607510724149" />
+    <state width="1445" height="227" key="GridCell.Tab.1.bottom" timestamp="1607510736080">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="400" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599508333001" />
-    <state width="1448" height="227" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607362032911" />
-    <state width="1448" height="227" key="GridCell.Tab.1.center" timestamp="1607362032911">
+    <state width="1445" height="227" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607510736080" />
+    <state width="1445" height="227" key="GridCell.Tab.1.center" timestamp="1607510736080">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="400" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599508333000" />
-    <state width="1448" height="227" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607362032911" />
-    <state width="1448" height="227" key="GridCell.Tab.1.left" timestamp="1607362032911">
+    <state width="1445" height="227" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607510736080" />
+    <state width="1445" height="227" key="GridCell.Tab.1.left" timestamp="1607510736080">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="400" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599508333000" />
-    <state width="1448" height="227" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607362032911" />
-    <state width="1448" height="227" key="GridCell.Tab.1.right" timestamp="1607362032911">
+    <state width="1445" height="227" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607510736080" />
+    <state width="1445" height="227" key="GridCell.Tab.1.right" timestamp="1607510736080">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="400" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1599508333001" />
-    <state width="1448" height="227" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607362032911" />
+    <state width="1445" height="227" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607510736080" />
     <state x="2381" y="163" key="SettingsEditor" timestamp="1604594311097">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2381" y="163" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1604594311097" />
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1604568963697">
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2" timestamp="1607464794681">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1604568963697" />
+    <state x="2472" y="254" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607464794681" />
+    <state width="968" height="528" key="XDebugger.FullValuePopup" timestamp="1607437741906">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state width="968" height="528" key="XDebugger.FullValuePopup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1607437741906" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1069,11 +1078,6 @@
           <option name="timeStamp" value="713" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/manuscript/MultimodalClassification/test.py</url>
-          <line>51</line>
-          <option name="timeStamp" value="717" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/toolbox/views/common.py</url>
           <line>596</line>
           <option name="timeStamp" value="718" />
@@ -1092,6 +1096,11 @@
           <url>file://$PROJECT_DIR$/toolbox/Test.py</url>
           <line>8</line>
           <option name="timeStamp" value="763" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/toolbox/classification/common.py</url>
+          <line>373</line>
+          <option name="timeStamp" value="780" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="jupyter-line">
           <url>file://$PROJECT_DIR$/manuscript/ImageClassification/VisualisationFeatures.ipynb</url>
@@ -1115,8 +1124,8 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/classification$main.coverage" NAME="main Coverage Results" MODIFIED="1605872195466" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/guis/demo_food" />
-    <SUITE FILE_PATH="coverage/classification$common.coverage" NAME="common Coverage Results" MODIFIED="1598445337826" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/views" />
     <SUITE FILE_PATH="coverage/classification$temp.coverage" NAME="temp Coverage Results" MODIFIED="1599230074327" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/manuscript/MultimodalClassification" />
+    <SUITE FILE_PATH="coverage/classification$common.coverage" NAME="common Coverage Results" MODIFIED="1607510604523" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/classification" />
     <SUITE FILE_PATH="coverage/classification$Temp.coverage" NAME="Temp Coverage Results" MODIFIED="1593034121826" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/manuscript/MultimodalClassification" />
     <SUITE FILE_PATH="coverage/classification$Testlda.coverage" NAME="Testlda Coverage Results" MODIFIED="1590168578960" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$at_most.coverage" NAME="at_most Coverage Results" MODIFIED="1590168466743" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/transforms" />
@@ -1130,7 +1139,7 @@
     <SUITE FILE_PATH="coverage/classification$frequency.coverage" NAME="frequency Coverage Results" MODIFIED="1589703164897" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$IHM.coverage" NAME="IHM Coverage Results" MODIFIED="1605872323002" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/classification$QMain__1_.coverage" NAME="QMain (1) Coverage Results" MODIFIED="1605876858307" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/classification$test.coverage" NAME="test Coverage Results" MODIFIED="1596790354177" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/manuscript/LesionClassification" />
+    <SUITE FILE_PATH="coverage/classification$test.coverage" NAME="test Coverage Results" MODIFIED="1607510723904" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/manuscript/MultimodalClassification" />
     <SUITE FILE_PATH="coverage/classification$spatial.coverage" NAME="spatial Coverage Results" MODIFIED="1587749632031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/redaction/examples" />
     <SUITE FILE_PATH="coverage/classification$Test.coverage" NAME="Test Coverage Results" MODIFIED="1604915385542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/article/orl" />
     <SUITE FILE_PATH="coverage/classification$models.coverage" NAME="models Coverage Results" MODIFIED="1595680092252" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/toolbox/models" />

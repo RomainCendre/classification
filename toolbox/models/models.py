@@ -195,31 +195,31 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
             del Y[:len(x)]
         return predictions
 
-    def predict_proba(self, bags):
-        if self.data_preparation is not None:
-            for index, bag in enumerate(bags):
-                bags[index] = self.data_preparation.transform(bag)
-
-        Y = self.__decision_function(bags)
-        Y = (Y - np.min(Y))
-        Y = Y / np.max(Y)
-        return Y
-
-    def predict_proba_instance(self, bags):
-        if self.data_preparation is not None:
-            for index, bag in enumerate(bags):
-                bags[index] = self.data_preparation.transform(bag)
-
-        Y = self.__decision_function(bags, instancePrediction=True)
-        Y = (Y - np.min(Y))
-        Y = Y / np.max(Y)
-        Y = Y.tolist()
-        # Y = self.estimators_[0].predict(X, instancePrediction=True)[1].tolist()
-        predictions = []
-        for x in bags:
-            predictions.append(Y[:len(x)])
-            del Y[:len(x)]
-        return predictions
+    # def predict_proba(self, bags):
+    #     if self.data_preparation is not None:
+    #         for index, bag in enumerate(bags):
+    #             bags[index] = self.data_preparation.transform(bag)
+    #
+    #     Y = self.__decision_function(bags)
+    #     Y = (Y - np.min(Y))
+    #     Y = Y / np.max(Y)
+    #     return Y
+    #
+    # def predict_proba_instance(self, bags):
+    #     if self.data_preparation is not None:
+    #         for index, bag in enumerate(bags):
+    #             bags[index] = self.data_preparation.transform(bag)
+    #
+    #     Y = self.__decision_function(bags, instancePrediction=True)
+    #     Y = (Y - np.min(Y))
+    #     Y = Y / np.max(Y)
+    #     Y = Y.tolist()
+    #     # Y = self.estimators_[0].predict(X, instancePrediction=True)[1].tolist()
+    #     predictions = []
+    #     for x in bags:
+    #         predictions.append(Y[:len(x)])
+    #         del Y[:len(x)]
+    #     return predictions
 
     def __decision_function(self, X, instancePrediction=None):
         indices = self.pairwise_indices_
@@ -240,7 +240,7 @@ class CustomMIL(BaseEstimator, ClassifierMixin, MetaEstimatorMixin):  # Based on
     def decision_function(self, X, instancePrediction=None):
         Y = self.__decision_function(X, instancePrediction)
         if self.n_classes_ == 2:
-            return Y[:, 0]
+            return Y[:, 1]
         return Y
 
     @property
