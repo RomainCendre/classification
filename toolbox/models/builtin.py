@@ -12,31 +12,34 @@ class Applications:
     @staticmethod
     def get_application(architecture='InceptionV3', pooling='max'):
         # We get the deep extractor part as include_top is false
-        if architecture == 'VGG16':
-            model = applications.VGG16(weights='imagenet', include_top=False, pooling=pooling)
+        if architecture == 'DenseNet201':
+            model = applications.DenseNet201(weights='imagenet', include_top=False, pooling=pooling)
         elif architecture == 'InceptionResNetV2':
             model = applications.InceptionResNetV2(weights='imagenet', include_top=False, pooling=pooling)
         elif architecture == 'NASNet':
             model = applications.NASNetMobile(weights='imagenet', include_top=False, pooling=pooling)
         elif architecture == 'ResNet':
             model = applications.ResNet50(weights='imagenet', include_top=False, pooling=pooling)
+        elif architecture == 'VGG16':
+            model = applications.VGG16(weights='imagenet', include_top=False, pooling=pooling)
         else:
             model = applications.InceptionV3(weights='imagenet', include_top=False, pooling=pooling)
-        # model.name = architecture
 
         return model
 
     @staticmethod
     def get_preprocessing_application(architecture='InceptionV3'):
         # We get the deep extractor part as include_top is false
-        if architecture == 'VGG16':
-            return applications.vgg16.preprocess_input
+        if architecture == 'DenseNet201':
+            return applications.densenet.preprocess_input
         elif architecture == 'InceptionResNetV2':
             return applications.inception_resnet_v2.preprocess_input
         elif architecture == 'NASNet':
             return applications.nasnet.preprocess_input
         elif architecture == 'ResNet':
             return applications.resnet50.preprocess_input
+        elif architecture == 'VGG16':
+            return applications.vgg16.preprocess_input
         else:
             return applications.inception_v3.preprocess_input
 
